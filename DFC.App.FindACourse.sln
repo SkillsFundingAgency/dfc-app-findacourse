@@ -13,17 +13,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Solution Items", "_Solutio
 		UnitTests.CodeAnalysis.ruleset = UnitTests.CodeAnalysis.ruleset
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{B065BD9B-B185-433F-9593-2D8D8E3BAB82}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DFC.App.FindACourse", "src\DFC.App.FindACourse\DFC.App.FindACourse.csproj", "{733DFD5B-AC11-4DFC-A60F-BB5DF21C32C0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DFC.App.FindACourse", "DFC.App.FindACourse\DFC.App.FindACourse.csproj", "{733DFD5B-AC11-4DFC-A60F-BB5DF21C32C0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{1981B87B-552A-421C-AFF6-7E85814B5C0F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DFC.App.FindACourse.Services", "src\DFC.App.FindACourse.Services\DFC.App.FindACourse.Services.csproj", "{92EFAAA8-DAE4-4F6A-8B3B-234DC26227AC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DFC.App.FindACourse.Services", "DFC.App.FindACourse.Services\DFC.App.FindACourse.Services.csproj", "{92EFAAA8-DAE4-4F6A-8B3B-234DC26227AC}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Repositories", "Repositories", "{5BD81015-8CC4-4DFD-9C90-80127EFF095E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DFC.App.FindACourse.Repository", "src\DFC.App.FindACourse.Repositories\DFC.App.FindACourse.Repository.csproj", "{511B5D77-5D63-4954-82B4-D93A886B8ABA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DFC.App.FindACourse.Repository", "DFC.App.FindACourse.Repositories\DFC.App.FindACourse.Repository.csproj", "{511B5D77-5D63-4954-82B4-D93A886B8ABA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
