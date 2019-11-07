@@ -1,0 +1,42 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29209.62
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DFC.App.FindACourse", "DFC.App.FindACourse\DFC.App.FindACourse.csproj", "{733DFD5B-AC11-4DFC-A60F-BB5DF21C32C0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{1D72879C-DAB8-401B-834D-E13DF126D44B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTests", "UnitTests", "{059D9703-4368-40BC-B887-83B4748582E9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{E8996351-9EAC-4F13-A225-2E0C47585E4D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DFC.App.FindACourse.UnitTests", "DFC.App.FindACourse.UnitTests\DFC.App.FindACourse.UnitTests.csproj", "{84788D59-022E-46DB-964F-213E57F17E25}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{733DFD5B-AC11-4DFC-A60F-BB5DF21C32C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{733DFD5B-AC11-4DFC-A60F-BB5DF21C32C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{733DFD5B-AC11-4DFC-A60F-BB5DF21C32C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{733DFD5B-AC11-4DFC-A60F-BB5DF21C32C0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{84788D59-022E-46DB-964F-213E57F17E25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{84788D59-022E-46DB-964F-213E57F17E25}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{84788D59-022E-46DB-964F-213E57F17E25}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{84788D59-022E-46DB-964F-213E57F17E25}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{059D9703-4368-40BC-B887-83B4748582E9} = {1D72879C-DAB8-401B-834D-E13DF126D44B}
+		{E8996351-9EAC-4F13-A225-2E0C47585E4D} = {059D9703-4368-40BC-B887-83B4748582E9}
+		{84788D59-022E-46DB-964F-213E57F17E25} = {E8996351-9EAC-4F13-A225-2E0C47585E4D}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D6DBD643-48A4-42B8-AEFC-D7C10F4907F7}
+	EndGlobalSection
+EndGlobal
