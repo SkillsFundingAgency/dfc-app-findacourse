@@ -1,4 +1,5 @@
-﻿using DFC.App.FindACourse.Repository;
+﻿using System.Collections.Generic;
+using DFC.App.FindACourse.Repository;
 using System.Threading.Tasks;
 
 namespace DFC.App.FindACourse.Services
@@ -15,6 +16,11 @@ namespace DFC.App.FindACourse.Services
         public async Task<bool> PingAsync()
         {
             return await repository.PingAsync().ConfigureAwait(false);
+        }
+
+        public IList<T> GetFilterByName<T>()
+        {
+            return repository.GetFilter<T>();
         }
     }
 }

@@ -1,0 +1,40 @@
+﻿@model DFC.App.FindACourse.ViewModels.SideBarViewModel
+
+    <div class="filters filters">
+
+        <div class="govuk-form-group">
+            <label class="govuk-label govuk-!-font-weight-bold" for="location">
+                Location
+            </label>
+            <span id="location-hint" class="govuk-hint">
+                Enter a town or postcode
+            </span>
+            <input class="govuk-input govuk-input--width-10" id="location" name="location" type="text">
+        </div>
+
+        <div id="distanceForm" class="govuk-form-group">
+            <div id="distance">
+                <label class="govuk-label govuk-!-font-weight-bold" for="CurrentSearchRequest_LocationDistance">Distance</label>
+                <select class="govuk-select" id="CurrentSearchRequest_LocationDistance" name="CurrentSearchRequest.LocationDistance">
+                    <option value="5">5 miles</option>
+                    <option value="10">10 miles</option>
+                    <option value="15">15 miles</option>
+                    <option value="30">30 miles</option>
+                    <option value="45">45 miles</option>
+                    <option value="60">60 miles</option>
+                    <option value="75">75 miles</option>
+                </select>
+            </div>
+        </div>
+
+
+        @Html.Partial("_filterList", Model.CourseFilter)
+        @Html.Partial("_filterList", Model.CourseHours)
+        @Html.Partial("_filterList", Model.CourseStudyTime)
+        @Html.Partial("_filterList", Model.StartDate)
+
+        <noscript>
+            <button data-module="govuk-button" class="govuk-button" type="submit">Apply filters</button>
+        </noscript>
+        <p><a href="">Clear search</a></p>
+    </div>

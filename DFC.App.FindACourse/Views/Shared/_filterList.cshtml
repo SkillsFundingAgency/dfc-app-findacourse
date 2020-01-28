@@ -1,0 +1,19 @@
+﻿@model DFC.App.FindACourse.ViewModels.FiltersListViewModel
+
+<div id="@Model.FilterText-Group" class="govuk-form-group">
+    <div id="@Model.FilterText">
+        <fieldset class="govuk-fieldset">
+            <legend class="govuk-label govuk-!-font-weight-bold">@Model.FilterTitle</legend>
+            <div class="govuk-checkboxes govuk-checkboxes--small">
+                @foreach (var filter in Model.LstFilter) { 
+                <div class="govuk-checkboxes__item">
+                    <input class="govuk-checkboxes__input" id="CurrentSearchRequest_@Model.FilterText" name="CurrentSearchRequest.@Model.FilterText" type="checkbox" value="@filter.Text">
+                    <label class="govuk-label govuk-checkboxes__label" for="CurrentSearchRequest_@Model.FilterText">
+                        @filter.Text
+                    </label>
+                </div>
+                }
+            </div>
+        </fieldset>
+    </div>
+</div>
