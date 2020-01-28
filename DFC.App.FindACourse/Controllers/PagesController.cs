@@ -143,5 +143,12 @@ namespace DFC.App.FindACourse.Controllers
         {
             return NoContent();
         }
+
+        [HttpPost]
+        [Route("pages/filter-results")]
+        public async Task<IActionResult> FilterResults()
+        {
+            return null;
+        }
     }
 }
