@@ -8,6 +8,7 @@ using DFC.App.FindACourse.Data.Enums;
 using DFC.App.FindACourse.Services;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections;
 using DFC.App.FindACourse.Data.Domain;
 
 namespace DFC.App.FindACourse.Controllers
@@ -148,6 +149,28 @@ namespace DFC.App.FindACourse.Controllers
         [Route("pages/filter-results")]
         public async Task<IActionResult> FilterResults()
         {
+            // lcoation
+            // distance
+            // course type
+            // course hours
+            // course study time
+            // start date
+
+         //   var filteredResults = findACourseService.GetFilteredCourse()
+            
+            return null;
+        }
+
+        [HttpPost]
+        [Route("pages/sort-results")]
+        public async Task<IActionResult> SortBy(string criteria)
+        {
+            if (criteria == null)
+            {
+                // return error message
+            }
+
+            var sortedResult = findACourseService.GetSortedData(criteria);
             return null;
         }
     }

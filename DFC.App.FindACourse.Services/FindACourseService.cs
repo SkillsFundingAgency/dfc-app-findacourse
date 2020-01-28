@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using DFC.App.FindACourse.Repository;
 using System.Threading.Tasks;
+using System.Collections;
 
 namespace DFC.App.FindACourse.Services
 {
@@ -21,6 +22,16 @@ namespace DFC.App.FindACourse.Services
         public IList<T> GetFilterByName<T>()
         {
             return repository.GetFilter<T>();
+        }
+
+        public async Task<IList> GetFilteredData()
+        {
+            return await repository.RetrieveData();
+        }
+
+        public async Task<IList> GetSortedData(string criteria)
+        {
+            return await repository.RetrieveSortedData(criteria);
         }
     }
 }
