@@ -38,6 +38,18 @@
         "sharedAppServicePlanResourceGroup": {
             "type": "string",
             "defaultValue": ""
+        },
+        "courseProviderServiceEndpoint": {
+            "type": "string",
+            "metadata": {
+                "description": "Url for course provider service"
+            }
+        },
+        "courseProviderServiceApiKey": {
+            "type": "securestring",
+            "metadata": {
+                "description": "Access token for course provider service"
+            }
         }
     },
     "variables": {
@@ -140,6 +152,26 @@
                             {
                                 "name": "AzureWebJobsStorage",
                                 "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',parameters('appSharedStorageAccountName'),';AccountKey=',listKeys(resourceId(parameters('appSharedResourceGroup'), 'Microsoft.Storage/storageAccounts', parameters('appSharedStorageAccountName')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value, ';EndpointSuffix=core.windows.net')]"
+                            },
+                            {
+                                "name": "Configuration__CourseSearchClient__CourseSearchSvc__ServiceEndpoint",
+                                "value": "[Parameters('courseProviderServiceEndpoint')]"
+                            },
+                            {
+                                "name": "Configuration__CourseSearchClient__CourseSearchSvc__APIKey",
+                                "value": "[Parameters('courseProviderServiceApiKey')]"
+                            },
+                            {
+                                "name": "Configuration__CourseSearchClient__CourseSearchSvc__SearchPageSize",
+                                "value": "20"
+                            },
+                            {
+                                "name": "Configuration__CourseSearchClient__CourseSearchSvc__RequestTimeOutSeconds",
+                                "value": "10"
+                            },
+                            {
+                                "name": "Configuration__CourseSearchClient__CourseSearchSvc__TransientErrorsNumberOfRetries",
+                                "value": "3"
                             },
                             {
                                 "name": "Logging__ApplicationInsights__LogLevel__Default",

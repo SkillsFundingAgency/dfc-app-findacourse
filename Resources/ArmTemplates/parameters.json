@@ -25,6 +25,12 @@
         },
         "sharedAppServicePlanResourceGroup": {
             "value": "__appSharedResourceGroup__"
+        },
+        "courseProviderServiceEndpoint": {
+            "value": "__courseProviderServiceEndpoint__"
+        },
+        "courseProviderServiceApiKey": {
+            "value": "__courseProviderServiceApiKey__"
         }
     }
 }
