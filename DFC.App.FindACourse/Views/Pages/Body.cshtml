@@ -2,7 +2,6 @@
 
 @if (Model.Content != null)
 {
-    <div class="govuk-width-container">
         @Html.Partial("_counter")
 
         <div class="govuk-form-group">
@@ -16,5 +15,4 @@
         </div>
         <hr class="govuk-section-break govuk-section-break--visible">
         @Html.Partial("_results")
-    </div>
 }
