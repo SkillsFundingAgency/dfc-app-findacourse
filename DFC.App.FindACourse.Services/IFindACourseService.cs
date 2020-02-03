@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using DFC.FindACourseClient;
 
 namespace DFC.App.FindACourse.Services
 {
@@ -10,8 +11,8 @@ namespace DFC.App.FindACourse.Services
 
         IList<T> GetFilterByName<T>();
 
-        Task<IList> GetFilteredData();
+        Task<CourseSearchResult> GetFilteredData(CourseSearchFilters filters, CourseSearchOrderBy orderBy, int pageSize);
 
-        Task<IList> GetSortedData(string criteria);
+        Task<CourseSearchResult> GetSortedData(CourseSearchOrderBy orderBy, int pageSize);
     }
 }

@@ -1,8 +1,13 @@
+using System.Collections.Generic;
+using AutoMapper;
+using DFC.App.FindACourse.Data.Domain;
 using DFC.App.FindACourse.Repository;
 using DFC.App.FindACourse.Services;
+using DFC.FindACourseClient;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Internal;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,6 +17,12 @@ namespace DFC.App.FindACourse
 {
     public class Startup
     {
+        public const string CourseSearchAppSettings = "Configuration:CourseSearch";
+        public const string CourseSearchClientSvcSettings = "Configuration:CourseSearchClient:CourseSearchSvc";
+        public const string CourseSearchClientAuditSettings = "Configuration:CourseSearchClient:CosmosAuditConnection";
+        public const string CourseSearchClientPolicySettings = "Configuration:CourseSearchClient:Policies";
+        private const string Prefix = "find-a-course/";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -32,7 +43,31 @@ namespace DFC.App.FindACourse
             services.AddScoped<IFindACourseService, FindACourseService>();
             services.AddScoped<IFindACourseRepository, FindACourseRepository>();
 
+            var courseSearchSettings = Configuration.GetSection(CourseSearchAppSettings).Get<CourseSearchSettings>();
+            services.AddSingleton(courseSearchSettings ?? new CourseSearchSettings());
+
+            var courseSearchClientSettings = new CourseSearchClientSettings
+            {
+                CourseSearchSvcSettings = Configuration.GetSection(CourseSearchClientSvcSettings).Get<CourseSearchSvcSettings>() ?? new CourseSearchSvcSettings(),
+                CourseSearchAuditCosmosDbSettings = Configuration.GetSection(CourseSearchClientAuditSettings).Get<CourseSearchAuditCosmosDbSettings>() ?? new CourseSearchAuditCosmosDbSettings(),
+                PolicyOptions = Configuration.GetSection(CourseSearchClientPolicySettings).Get<PolicyOptions>() ?? new PolicyOptions(),
+            };
+            services.AddSingleton(courseSearchClientSettings);
+            services.AddScoped<ICourseSearchApiService, CourseSearchApiService>();
+            services.AddFindACourseServices(courseSearchClientSettings);
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddSingleton(serviceProvider =>
+            {
+                return new MapperConfiguration(cfg =>
+                {
+                    cfg.AddProfiles(
+                        new List<Profile>
+                        {
+                            new FindACourseProfile(),
+                        });
+                }).CreateMapper();
+            });
 
             services.AddSwaggerGen(c =>
             {
@@ -80,7 +115,7 @@ namespace DFC.App.FindACourse
                 // add the default route
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Pages}/{action=Index}");
+                    template: "{controller=Course}/{action=Index}");
             });
 
             app.UseSwagger();

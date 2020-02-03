@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using DFC.App.FindACourse.Data.Enums;
+using DFC.FindACourseClient;
 
 namespace DFC.App.FindACourse.Repository
 {
@@ -11,8 +12,6 @@ namespace DFC.App.FindACourse.Repository
 
         IList<T> GetFilter<T>();
 
-        Task<IList> RetrieveData();
-        
-        Task<IList> RetrieveSortedData(string criteria);
+        Task<CourseSearchResult> RetrieveData(CourseSearchProperties properties);
     }
 }

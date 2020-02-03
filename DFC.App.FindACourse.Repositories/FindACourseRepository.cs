@@ -4,11 +4,19 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DFC.FindACourseClient;
 
 namespace DFC.App.FindACourse.Repository
 {
     public class FindACourseRepository : IFindACourseRepository
     {
+        private readonly ICourseSearchApiService courseSearchApiService;
+
+        public FindACourseRepository(ICourseSearchApiService courseSearchApiService)
+        {
+            this.courseSearchApiService = courseSearchApiService;
+        }
+
         public async Task<bool> PingAsync()
         {
             return true;
@@ -19,23 +27,9 @@ namespace DFC.App.FindACourse.Repository
             return Enum.GetValues(typeof(T)).Cast<T>().ToList();
         }
 
-        public async Task<IList> RetrieveData()
+        public async Task<CourseSearchResult> RetrieveData(CourseSearchProperties properties)
         {
-
-
-            // filter the results
-            throw new NotImplementedException();
-        }
-
-        public Task<IList> RetrieveSortedData(string criteria)
-        {
-            if (criteria == null)
-            {
-                throw new NullReferenceException("Search criteria is empty");
-            }
-
-            // sort the results here
-            throw new NotImplementedException();
+            return await courseSearchApiService.SearchCoursesAsync(properties).ConfigureAwait(false);
         }
     }
 }

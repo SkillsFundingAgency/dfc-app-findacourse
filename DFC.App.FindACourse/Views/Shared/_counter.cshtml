@@ -1,4 +1,8 @@
-﻿
-    <div>
-        <p class="govuk-body">Showing all xxx courses</p>
-    </div>
+﻿@model BodyViewModel
+
+@if (Model.Results != null)
+{
+<div>
+    <p class="govuk-body">Showing all @Model.Results.ResultProperties.TotalResultCount courses</p>
+</div>
+}

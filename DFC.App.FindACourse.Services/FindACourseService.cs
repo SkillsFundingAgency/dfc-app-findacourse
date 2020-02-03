@@ -2,6 +2,7 @@
 using DFC.App.FindACourse.Repository;
 using System.Threading.Tasks;
 using System.Collections;
+using DFC.FindACourseClient;
 
 namespace DFC.App.FindACourse.Services
 {
@@ -24,14 +25,39 @@ namespace DFC.App.FindACourse.Services
             return repository.GetFilter<T>();
         }
 
-        public async Task<IList> GetFilteredData()
+        public async Task<CourseSearchResult> GetFilteredData(CourseSearchFilters filters, CourseSearchOrderBy orderBy, int pageSize)
         {
-            return await repository.RetrieveData();
+            var criteriaProperties = new CourseSearchProperties
+            {
+                Filters = filters,
+                OrderedBy = orderBy,
+                Page = pageSize
+            };
+
+            return await repository.RetrieveData(criteriaProperties).ConfigureAwait(true);
         }
 
-        public async Task<IList> GetSortedData(string criteria)
+        public Task<CourseSearchResult> GetSortedData(CourseSearchOrderBy orderBy, int pageSize)
         {
-            return await repository.RetrieveSortedData(criteria);
+            throw new System.NotImplementedException();
+        }
+
+        public async Task<CourseSearchResult> GetFilteredData()
+        {
+         //   return await repository.RetrieveData
+         return null;
+        }
+
+        public async Task<CourseSearchResult> GetSortedData(CourseSearchFilters filters, CourseSearchOrderBy orderBy, int pageSize)
+        {
+            var criteriaProperties = new CourseSearchProperties
+            {
+                Filters = filters,
+                OrderedBy = orderBy,
+                Page = pageSize
+            };
+
+            return await repository.RetrieveData(criteriaProperties).ConfigureAwait(true);
         }
     }
 }

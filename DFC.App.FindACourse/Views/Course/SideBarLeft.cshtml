@@ -1,0 +1,70 @@
+﻿@model DFC.App.FindACourse.ViewModels.SideBarViewModel
+
+
+        <div class="filters filters">
+
+            <div class="govuk-form-group">
+                <label class="govuk-label govuk-!-font-weight-bold" for="location">
+                    Location
+                </label>
+                <span id="location-hint" class="govuk-hint">
+                    Enter a town or postcode
+                </span>
+                <input type="text" asp-for="TownOrPostcode" name="SideBar.TownOrPostcode" class="govuk-input govuk-input--width-10" id="location" />
+            </div>
+
+            <div id="distanceForm" class="govuk-form-group">
+                <div id="distance">
+                    <label class="govuk-label govuk-!-font-weight-bold" for="CurrentSearchRequest_LocationDistance">Distance</label>
+                    <select asp-for="DistanceValue" asp-items="Model.DistanceOptions" class="form-control" name="SideBar.DistanceValue"></select>
+                </div>
+            </div>
+
+            <div id="@Model.CourseType.FilterText" class="govuk-form-group">
+                <div id="@Model.CourseType.FilterText">
+                    <fieldset class="govuk-fieldset">
+                        <legend class="govuk-label govuk-!-font-weight-bold">@Model.CourseType.FilterTitle</legend>
+                        <div class="govuk-checkboxes govuk-checkboxes--small">
+                            <check-box-list name="SideBar.CourseType.selectedIds" items="Model.CourseType.lstChkFilter" template="Bootstrap3Basic"></check-box-list>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+
+            <div id="@Model.CourseHours.FilterText" class="govuk-form-group">
+                <div id="@Model.CourseHours.FilterText">
+                    <fieldset class="govuk-fieldset">
+                        <legend class="govuk-label govuk-!-font-weight-bold">@Model.CourseHours.FilterTitle</legend>
+                        <div class="govuk-checkboxes govuk-checkboxes--small">
+                            <check-box-list name="SideBar.CourseHours.selectedIds" items="Model.CourseHours.lstChkFilter" template="Bootstrap3Basic"></check-box-list>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+
+            <div id="@Model.CourseStudyTime.FilterText" class="govuk-form-group">
+                <div id="@Model.CourseStudyTime.FilterText">
+                    <fieldset class="govuk-fieldset">
+                        <legend class="govuk-label govuk-!-font-weight-bold">@Model.CourseStudyTime.FilterTitle</legend>
+                        <div class="govuk-checkboxes govuk-checkboxes--small">
+                            <check-box-list name="SideBar.CourseStudyTime.selectedIds" items="Model.CourseStudyTime.lstChkFilter" template="Bootstrap3Basic"></check-box-list>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+
+            <div id="@Model.StartDate.FilterText" class="govuk-form-group">
+                <div id="@Model.StartDate.FilterText">
+                    <fieldset class="govuk-fieldset">
+                        <legend class="govuk-label govuk-!-font-weight-bold">@Model.StartDate.FilterTitle</legend>
+                        <div class="govuk-checkboxes govuk-checkboxes--small">
+                            <check-box-list name="SideBar.StartDate.selectedIds" items="Model.StartDate.lstChkFilter" template="Bootstrap3Basic"></check-box-list>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+
+            <button data-module="govuk-button" class="govuk-button" type="submit">Apply filters</button>
+            @*</noscript>*@
+            <p><a href="">Clear search</a></p>
+        </div>
