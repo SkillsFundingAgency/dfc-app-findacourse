@@ -115,7 +115,7 @@ namespace DFC.App.FindACourse
                 // add the default route
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Course}/{action=Index}");
+                    template: "find-a-course/{controller=Course}/{action=Index}");
             });
 
             app.UseSwagger();

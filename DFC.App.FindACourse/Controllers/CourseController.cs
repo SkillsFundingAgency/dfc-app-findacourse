@@ -29,8 +29,6 @@ namespace DFC.App.FindACourse.Controllers
         }
 
         [HttpGet]
-        [Route("/")]
-        [Route("course")]
         public async Task<IActionResult> Index()
         {
             var viewModel = new IndexViewModel
@@ -67,6 +65,7 @@ namespace DFC.App.FindACourse.Controllers
         }
 
         [HttpGet]
+        [Route("course/herobanner")]
         public async Task<IActionResult> HeroBanner()
         {
             return View();
@@ -87,12 +86,14 @@ namespace DFC.App.FindACourse.Controllers
         }
 
         [HttpGet]
+        [Route("course/bodytop")]
         public async Task<IActionResult> BodyTop()
         {
             return View();
         }
 
         [HttpGet]
+        [Route("course/body")]
         public async Task<IActionResult> Body()
         {
             logger.LogInformation($"{nameof(this.Body)} has been called");
@@ -114,13 +115,13 @@ namespace DFC.App.FindACourse.Controllers
         }
 
         [HttpGet]
+        [Route("course/bodyfooter")]
         public IActionResult BodyFooter(string article)
         {
             return NoContent();
         }
 
         [HttpPost]
-        [Route("filter-results")]
         public async Task<IActionResult> FilterResults(BodyViewModel model)
         {
             CourseType courseTypeCriteria = CourseType.All;

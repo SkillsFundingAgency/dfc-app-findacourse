@@ -16,7 +16,7 @@
             <div id="distanceForm" class="govuk-form-group">
                 <div id="distance">
                     <label class="govuk-label govuk-!-font-weight-bold" for="CurrentSearchRequest_LocationDistance">Distance</label>
-                    <select asp-for="DistanceValue" asp-items="Model.DistanceOptions" class="form-control" name="SideBar.DistanceValue"></select>
+                    <select asp-for="DistanceValue" asp-items="Model.DistanceOptions" class="govuk-select" name="SideBar.DistanceValue"></select>
                 </div>
             </div>
 
@@ -25,7 +25,7 @@
                     <fieldset class="govuk-fieldset">
                         <legend class="govuk-label govuk-!-font-weight-bold">@Model.CourseType.FilterTitle</legend>
                         <div class="govuk-checkboxes govuk-checkboxes--small">
-                            <check-box-list name="SideBar.CourseType.selectedIds" items="Model.CourseType.lstChkFilter" template="Bootstrap3Basic"></check-box-list>
+                            <check-box-list name="SideBar.CourseType.selectedIds" items="Model.CourseType.lstChkFilter" template="Bootstrap3Basic" class="govuk-checkboxes__input"></check-box-list>
                         </div>
                     </fieldset>
                 </div>

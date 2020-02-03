@@ -2,21 +2,29 @@
 
 @if (Model.Content != null)
 {
-    <form asp-action="filterresults" method="post">
-        @Html.HiddenFor(m => m.CurrentSearchTerm)
-        <div class="govuk-width-container">
-            <partial name="_counter" model="Model" />
+    <main class="govuk-main-wrapper govuk-main-wrapper--auto-spacing" id="main-content" role="main">
+        <form asp-action="filterresults" method="post">
+            @Html.HiddenFor(m => m.CurrentSearchTerm)
+            <div class="govuk-grid-row">
 
-            <div id="distanceForm" class="govuk-form-group">
-                <div id="distance">
-                    <label class="govuk-label govuk-!-font-weight-bold">Order By</label>
-                    <select asp-for="SelectedOrderByValue" asp-items="Model.OrderByOptions" class="form-control" name="SelectedOrderByValue"></select>
+                <div class="govuk-grid-column-one-third">
+                    <partial name="sideBarLeft" model="Model.SideBar" />
+                </div>
+
+                <div class="govuk-grid-column-two-thirds">
+                    <partial name="_counter" model="Model" />
+
+                    <div id="distanceForm" class="govuk-form-group">
+                        <div id="distance">
+                            <label class="govuk-label govuk-!-font-weight-bold">Order By</label>
+                            <select asp-for="SelectedOrderByValue" asp-items="Model.OrderByOptions" class="govuk-select" name="SelectedOrderByValue"></select>
+                        </div>
+                    </div>
+                    <hr class="govuk-section-break govuk-section-break--visible">
+
+                    <partial name="_results" model="Model" />
                 </div>
             </div>
-            <hr class="govuk-section-break govuk-section-break--visible">
-
-            <partial name="sideBarLeft" model="Model.SideBar" />
-            <partial name="_results" model="Model" />
-        </div>
-    </form>
+        </form>
+    </main>
 }
