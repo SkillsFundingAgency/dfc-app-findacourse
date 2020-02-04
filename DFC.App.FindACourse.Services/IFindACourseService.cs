@@ -12,7 +12,5 @@ namespace DFC.App.FindACourse.Services
         IList<T> GetFilterByName<T>();
 
         Task<CourseSearchResult> GetFilteredData(CourseSearchFilters filters, CourseSearchOrderBy orderBy, int pageSize);
-
-        Task<CourseSearchResult> GetSortedData(CourseSearchOrderBy orderBy, int pageSize);
     }
 }

@@ -100,13 +100,7 @@ namespace DFC.App.FindACourse.Controllers
             var model = new BodyViewModel();
 
             model = new BodyViewModel { Content = new HtmlString("Find a course: Body element") };
-            var sideBarViewModel = new SideBarViewModel();
-            sideBarViewModel.CourseType = MapFilter("courseType", "Course type", ListFilters.GetCourseTypeList());
-            sideBarViewModel.CourseHours = MapFilter("courseHours", "Course hours", ListFilters.GetHoursList());
-            sideBarViewModel.CourseStudyTime = MapFilter("courseStudyTime", "Course study time", ListFilters.GetStudyTimeList());
-            sideBarViewModel.StartDate = MapFilter("courseStartDate", "Start date", ListFilters.GetStartDateList());
-            sideBarViewModel.DistanceOptions = ListFilters.GetDistanceList();
-            model.SideBar = sideBarViewModel;
+            model.SideBar = GetSideBarViewModel();
             model.OrderByOptions = ListFilters.GetOrderByOptions();
 
             logger.LogInformation($"{nameof(this.Body)} generated the model and ready to pass to the view");
@@ -116,7 +110,7 @@ namespace DFC.App.FindACourse.Controllers
 
         [HttpGet]
         [Route("course/bodyfooter")]
-        public IActionResult BodyFooter(string article)
+        public async Task<IActionResult> BodyFooter(string article)
         {
             return NoContent();
         }
@@ -188,13 +182,7 @@ namespace DFC.App.FindACourse.Controllers
             courseSearchFilters.StartDate = StartDate.Anytime;
             courseSearchFilters.SearchTerm = searchTerm;
 
-            var sideBarViewModel = new SideBarViewModel();
-            sideBarViewModel.CourseType = MapFilter("courseType", "Course type", ListFilters.GetCourseTypeList());
-            sideBarViewModel.CourseHours = MapFilter("courseHours", "Course hours", ListFilters.GetHoursList());
-            sideBarViewModel.CourseStudyTime = MapFilter("courseStudyTime", "Course study time", ListFilters.GetStudyTimeList());
-            sideBarViewModel.StartDate = MapFilter("courseStartDate", "Start date", ListFilters.GetStartDateList());
-            sideBarViewModel.DistanceOptions = ListFilters.GetDistanceList();
-            model.SideBar = sideBarViewModel;
+            model.SideBar = GetSideBarViewModel();
             model.OrderByOptions = ListFilters.GetOrderByOptions();
             model.CurrentSearchTerm = searchTerm;
 
@@ -208,12 +196,7 @@ namespace DFC.App.FindACourse.Controllers
         {
             logger.LogInformation($"{nameof(this.Body)} has been called");
 
-            var sideBarViewModel = new SideBarViewModel();
-            sideBarViewModel.CourseType = MapFilter("courseType", "Course type", ListFilters.GetCourseTypeList());
-            sideBarViewModel.CourseHours = MapFilter("courseHours", "Course hours", ListFilters.GetHoursList());
-            sideBarViewModel.CourseStudyTime = MapFilter("courseStudyTime", "Course study time", ListFilters.GetStudyTimeList());
-            sideBarViewModel.StartDate = MapFilter("courseStartDate", "Start date", ListFilters.GetStartDateList());
-            sideBarViewModel.DistanceOptions = ListFilters.GetDistanceList();
+            var sideBarViewModel = GetSideBarViewModel();
             foreach (var item in sideBarViewModel.DistanceOptions)
             {
                 if (item.Value == model.SideBar.DistanceValue)
@@ -250,22 +233,6 @@ namespace DFC.App.FindACourse.Controllers
             return View("Body", model);
         }
 
-        [HttpPost]
-        [Route("pages/sort-results")]
-        public async Task<IActionResult> SortBy(string criteria)
-        {
-            if (criteria == null)
-            {
-                // return error message
-            }
-
-            Enum.TryParse("REPLACE POST VARIABLE", out CourseSearchOrderBy sortedByCriteria);
-
-            var sortedResult = findACourseService.GetSortedData(sortedByCriteria, 25);
-
-            return null;
-        }
-
         private FiltersListViewModel MapFilter(string text, string title, List<Filter> lstFilter)
         {
             this.logger.LogInformation($"{nameof(this.MapFilter)} has been called for {title}");
@@ -300,6 +267,18 @@ namespace DFC.App.FindACourse.Controllers
                 }
             }
             return model;
+        }
+
+        private SideBarViewModel GetSideBarViewModel()
+        {
+            var sideBarViewModel = new SideBarViewModel();
+            sideBarViewModel.CourseType = MapFilter("courseType", "Course type", ListFilters.GetCourseTypeList());
+            sideBarViewModel.CourseHours = MapFilter("courseHours", "Course hours", ListFilters.GetHoursList());
+            sideBarViewModel.CourseStudyTime = MapFilter("courseStudyTime", "Course study time", ListFilters.GetStudyTimeList());
+            sideBarViewModel.StartDate = MapFilter("courseStartDate", "Start date", ListFilters.GetStartDateList());
+            sideBarViewModel.DistanceOptions = ListFilters.GetDistanceList();
+
+            return sideBarViewModel;
         }
     }
 }

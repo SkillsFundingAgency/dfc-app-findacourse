@@ -34,30 +34,8 @@ namespace DFC.App.FindACourse.Services
                 Page = pageSize
             };
 
-            return await repository.RetrieveData(criteriaProperties).ConfigureAwait(true);
-        }
-
-        public Task<CourseSearchResult> GetSortedData(CourseSearchOrderBy orderBy, int pageSize)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public async Task<CourseSearchResult> GetFilteredData()
-        {
-         //   return await repository.RetrieveData
-         return null;
-        }
-
-        public async Task<CourseSearchResult> GetSortedData(CourseSearchFilters filters, CourseSearchOrderBy orderBy, int pageSize)
-        {
-            var criteriaProperties = new CourseSearchProperties
-            {
-                Filters = filters,
-                OrderedBy = orderBy,
-                Page = pageSize
-            };
-
-            return await repository.RetrieveData(criteriaProperties).ConfigureAwait(true);
+            var test = await repository.RetrieveData(criteriaProperties).ConfigureAwait(true);
+            return test;
         }
     }
 }
