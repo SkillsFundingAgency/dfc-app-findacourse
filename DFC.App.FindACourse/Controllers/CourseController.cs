@@ -81,6 +81,7 @@ namespace DFC.App.FindACourse.Controllers
         }
 
         [HttpGet]
+        [Route("find-a-course/{controller}/herobanner/{**data}")]
         public async Task<IActionResult> HeroBanner()
         {
             logger.LogInformation($"{nameof(this.HeroBanner)} has been called");
@@ -106,6 +107,7 @@ namespace DFC.App.FindACourse.Controllers
         }
 
         [HttpGet]
+        [Route("find-a-course/{controller}/bodytop/{**data}")]
         public async Task<IActionResult> BodyTop()
         {
             logger.LogInformation($"{nameof(this.BodyTop)} has been called");
@@ -114,6 +116,7 @@ namespace DFC.App.FindACourse.Controllers
         }
 
         [HttpGet]
+        [Route("find-a-course/{controller}/body/{**data}")]
         public async Task<IActionResult> Body()
         {
             logger.LogInformation($"{nameof(this.Body)} has been called");
@@ -129,6 +132,7 @@ namespace DFC.App.FindACourse.Controllers
         }
 
         [HttpGet]
+        [Route("find-a-course/{controller}/bodyfooter/{**data}")]
         public async Task<IActionResult> BodyFooter(string article)
         {
             logger.LogInformation($"{nameof(this.BodyFooter)} has been called");
@@ -140,7 +144,8 @@ namespace DFC.App.FindACourse.Controllers
 
         #region Filtering and Searching
         [HttpGet]
-        public async Task<IActionResult> Page(string searchTerm, string town, string distance, string courseType, string courseHours, string courseStudyTime, string startDate, int page)
+        [Route("find-a-course/course/body/course/page")]
+        public async Task<IActionResult> Page(string searchTerm, string town, string distance, string courseType, string courseHours, string studyTime, string startDate, int page)
         {
             logger.LogInformation($"{nameof(this.Page)} has been called");
 
@@ -150,9 +155,9 @@ namespace DFC.App.FindACourse.Controllers
             model.SideBar.TownOrPostcode = town;
             model.SideBar.DistanceValue = distance;
             model.SideBar.CourseType = ConvertStringToFiltersListViewModel(courseType);
-            //model.SideBar.CourseHours = ConvertStringToFiltersListViewModel(courseHours);
-            //model.SideBar.CourseStudyTime = ConvertStringToFiltersListViewModel(courseStudyTime);
-            //model.SideBar.StartDate = ConvertStringToFiltersListViewModel(startDate);
+            model.SideBar.CourseHours = ConvertStringToFiltersListViewModel(courseHours);
+            model.SideBar.CourseStudyTime = ConvertStringToFiltersListViewModel(studyTime);
+            model.SideBar.StartDate = ConvertStringToFiltersListViewModel(startDate);
             model.RequestPage = page;
 
             logger.LogInformation($"{nameof(this.Page)} generated the model and ready to pass to the view");
@@ -161,6 +166,7 @@ namespace DFC.App.FindACourse.Controllers
         }
 
         [HttpGet]
+        [Route("find-a-course/course/body/course/filterresults")]
         public async Task<IActionResult> FilterResults(BodyViewModel model)
         {
             logger.LogInformation($"{nameof(this.FilterResults)} has been called");
@@ -226,6 +232,7 @@ namespace DFC.App.FindACourse.Controllers
         }
 
         [HttpGet]
+        [Route("find-a-course/course/body/course/searchcourse")]
         public async Task<IActionResult> SearchCourse(string searchTerm)
         {
             logger.LogInformation($"{nameof(this.SearchCourse)} has been called");
@@ -256,6 +263,7 @@ namespace DFC.App.FindACourse.Controllers
         }
 
         [HttpGet]
+        [NonAction]
         public async Task<IActionResult> Results(BodyViewModel model)
         {
             logger.LogInformation($"{nameof(this.Results)} has been called");

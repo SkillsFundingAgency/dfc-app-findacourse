@@ -3,7 +3,7 @@
 @if (Model.Content != null)
 {
     <main class="govuk-main-wrapper govuk-main-wrapper--auto-spacing" id="main-content" role="main">
-        <form asp-action="filterresults" method="get">
+        <form action="/find-a-course/course/filterresults" method="get">
             @Html.HiddenFor(m => m.CurrentSearchTerm)
             <div class="govuk-grid-row">
 

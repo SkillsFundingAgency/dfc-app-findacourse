@@ -10,6 +10,10 @@
     var courseStudyTime = Html.Raw(Json.Serialize(Model.SideBar.CourseStudyTime.selectedIds));
     var courseStartDate = Html.Raw(Json.Serialize(Model.SideBar.StartDate.selectedIds));
     var searchTerm = Model.CurrentSearchTerm;
+
+    var parameters = $"searchTerm={searchTerm}&town={town}&courseType={courseType}&courseHours={courseHours}&studyTime={courseStudyTime}&startDate={courseStartDate}&distance={distance}";
+    var nextLinkParams = $"{parameters}&page={nextPage}";
+    var previousLinkParams = $"{parameters}&page={previousPage}";
 }
 
 @if (Model.Results != null)
@@ -57,7 +61,7 @@
         @if (Model.Results.ResultProperties.Page < Model.Results.ResultProperties.TotalPages)
         {
         <li class="next">
-            <a href="@Url.Action("Page", "Course", new { searchTerm = searchTerm, town = town, courseType = courseType, courseHours = courseHours, studyTime = courseStudyTime, startDate = courseStartDate, distance = distance, page = nextPage })">
+            <a href="/find-a-course/course/page?@nextLinkParams">
                 <span class="pagination-label">Next</span>
                 <span class="govuk-visually-hidden">page</span>
                 <span class="page-numbers">@nextPage of @Model.Results.ResultProperties.TotalPages</span>
@@ -68,7 +72,7 @@
         @if (Model.Results.ResultProperties.Page > 1)
         {
             <li class="previous">
-                <a href="@Url.Action("Page", "Course", new { searchTerm = searchTerm, town = town, courseType = courseType, courseHours = courseHours, studyTime = courseStudyTime, startDate = courseStartDate, distance = distance, page = previousPage })">
+                <a href="/find-a-course/course/page?@previousLinkParams">
                     <span class="pagination-label">Previous</span>
                     <span class="govuk-visually-hidden">page</span>
                     <span class="page-numbers">@previousPage of @Model.Results.ResultProperties.TotalPages</span>
