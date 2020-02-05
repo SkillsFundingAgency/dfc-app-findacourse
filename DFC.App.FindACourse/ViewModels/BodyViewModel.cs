@@ -19,6 +19,6 @@ namespace DFC.App.FindACourse.ViewModels
 
         public List<SelectListItem> OrderByOptions { get; set; }
 
-        public int CurrentPageNumber { get; set; }
+        public int RequestPage { get; set; }
     }
 }

@@ -34,8 +34,7 @@ namespace DFC.App.FindACourse.Services
                 Page = pageSize
             };
 
-            var test = await repository.RetrieveData(criteriaProperties).ConfigureAwait(true);
-            return test;
+            return await repository.RetrieveData(criteriaProperties).ConfigureAwait(true);
         }
     }
 }
