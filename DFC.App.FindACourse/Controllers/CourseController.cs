@@ -353,8 +353,7 @@ namespace DFC.App.FindACourse.Controllers
 
             listView = listView.Replace('"', ' ').Replace('[', ' ').Replace(']', ' ').Trim();
 
-            var list = listView.Split(",").ToList();
-            list = list.Select(t => t.Trim()).ToList();
+            var list = listView.Split(",").ToList().Select(x => x.Trim()).ToList();
 
             model.selectedIds = list;
             return model;
