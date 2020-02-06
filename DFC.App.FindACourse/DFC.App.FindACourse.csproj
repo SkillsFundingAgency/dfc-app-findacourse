@@ -12,7 +12,6 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
-    <PackageReference Include="CheckBoxList.Core" Version="1.1.0" />
     <PackageReference Include="DFC.FindACourseClient" Version="2.1.17" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.7.1" />
     <PackageReference Include="Microsoft.AspNet.WebApi.WebHost" Version="5.2.7" />
@@ -34,6 +33,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DFC.App.FindACourse.Services\DFC.App.FindACourse.Services.csproj" />
+    <ProjectReference Include="..\MVCControls\Gds.CheckboxList.csproj" />
   </ItemGroup>
 
 </Project>

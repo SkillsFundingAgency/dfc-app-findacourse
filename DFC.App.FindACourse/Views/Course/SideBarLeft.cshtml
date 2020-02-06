@@ -21,12 +21,12 @@
             </div>
 
             <div id="@Model.CourseType.FilterText" class="govuk-form-group">
-                <div id="@Model.CourseType.FilterText">
+                <div id="@Model.CourseType.FilterText" class="govuk-checkboxes">
                     <fieldset class="govuk-fieldset">
                         <legend class="govuk-label govuk-!-font-weight-bold">@Model.CourseType.FilterTitle</legend>
-                        <div class="govuk-checkboxes govuk-checkboxes--small">
-                            <check-box-list name="SideBar.CourseType.selectedIds" items="Model.CourseType.lstChkFilter" template="Bootstrap3Basic"></check-box-list>
-                        </div>
+                        @*<div class="govuk-checkboxes govuk-checkboxes--small">*@
+                            <check-box-list name="SideBar.CourseType.selectedIds" items="Model.CourseType.lstChkFilter" template="GDS"></check-box-list>
+                        @*</div>*@
                     </fieldset>
                 </div>
             </div>
@@ -36,7 +36,7 @@
                     <fieldset class="govuk-fieldset">
                         <legend class="govuk-label govuk-!-font-weight-bold">@Model.CourseHours.FilterTitle</legend>
                         <div class="govuk-checkboxes govuk-checkboxes--small">
-                            <check-box-list name="SideBar.CourseHours.selectedIds" items="Model.CourseHours.lstChkFilter" template="Bootstrap3Basic"></check-box-list>
+                            <check-box-list name="SideBar.CourseHours.selectedIds" items="Model.CourseHours.lstChkFilter" template="GDS"></check-box-list>
                         </div>
                     </fieldset>
                 </div>
@@ -47,7 +47,7 @@
                     <fieldset class="govuk-fieldset">
                         <legend class="govuk-label govuk-!-font-weight-bold">@Model.CourseStudyTime.FilterTitle</legend>
                         <div class="govuk-checkboxes govuk-checkboxes--small">
-                            <check-box-list name="SideBar.CourseStudyTime.selectedIds" items="Model.CourseStudyTime.lstChkFilter" template="Bootstrap3Basic"></check-box-list>
+                            <check-box-list name="SideBar.CourseStudyTime.selectedIds" items="Model.CourseStudyTime.lstChkFilter" template="GDS"></check-box-list>
                         </div>
                     </fieldset>
                 </div>
@@ -58,7 +58,7 @@
                     <fieldset class="govuk-fieldset">
                         <legend class="govuk-label govuk-!-font-weight-bold">@Model.StartDate.FilterTitle</legend>
                         <div class="govuk-checkboxes govuk-checkboxes--small">
-                            <check-box-list name="SideBar.StartDate.selectedIds" items="Model.StartDate.lstChkFilter" template="Bootstrap3Basic"></check-box-list>
+                            <check-box-list name="SideBar.StartDate.selectedIds" items="Model.StartDate.lstChkFilter" template="GDS"></check-box-list>
                         </div>
                     </fieldset>
                 </div>

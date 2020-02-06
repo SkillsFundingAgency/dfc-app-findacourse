@@ -1,4 +1,4 @@
-﻿using CheckBoxList.Core.Models;
+﻿using GdsCheckboxList.Models;
 using DFC.App.FindACourse.Data.Domain;
 using DFC.App.FindACourse.Data.Helpers;
 using DFC.App.FindACourse.Extensions;

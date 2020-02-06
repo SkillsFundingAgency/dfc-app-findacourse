@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using CheckBoxList.Core.Models;
+using GdsCheckboxList.Models;
 using DFC.App.FindACourse.Data.Domain;
 
 namespace DFC.App.FindACourse.ViewModels
