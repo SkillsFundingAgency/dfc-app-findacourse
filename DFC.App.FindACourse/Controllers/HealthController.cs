@@ -33,7 +33,7 @@ namespace DFC.App.FindACourse.Controllers
 
             try
             {
-                var isHealthy = await findACourseService.PingAsync().ConfigureAwait(false);
+                var isHealthy = findACourseService.PingAsync();
                 if (isHealthy)
                 {
                     logger.LogInformation($"{nameof(Health)} responded with: {resourceName} - {SuccessMessage}");

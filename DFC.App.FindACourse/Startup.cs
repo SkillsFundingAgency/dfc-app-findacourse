@@ -7,11 +7,9 @@ using DFC.FindACourseClient;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Internal;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Swashbuckle.AspNetCore.Swagger;
 
 namespace DFC.App.FindACourse
 {
@@ -21,7 +19,6 @@ namespace DFC.App.FindACourse
         public const string CourseSearchClientSvcSettings = "Configuration:CourseSearchClient:CourseSearchSvc";
         public const string CourseSearchClientAuditSettings = "Configuration:CourseSearchClient:CosmosAuditConnection";
         public const string CourseSearchClientPolicySettings = "Configuration:CourseSearchClient:Policies";
-        private const string Prefix = "find-a-course/";
 
         public Startup(IConfiguration configuration)
         {
@@ -43,20 +40,20 @@ namespace DFC.App.FindACourse
             services.AddScoped<IFindACourseService, FindACourseService>();
             services.AddScoped<IFindACourseRepository, FindACourseRepository>();
 
-            var courseSearchSettings = Configuration.GetSection(CourseSearchAppSettings).Get<CourseSearchSettings>();
+            var courseSearchSettings = this.Configuration.GetSection(CourseSearchAppSettings).Get<CourseSearchSettings>();
             services.AddSingleton(courseSearchSettings ?? new CourseSearchSettings());
 
             var courseSearchClientSettings = new CourseSearchClientSettings
             {
-                CourseSearchSvcSettings = Configuration.GetSection(CourseSearchClientSvcSettings).Get<CourseSearchSvcSettings>() ?? new CourseSearchSvcSettings(),
-                CourseSearchAuditCosmosDbSettings = Configuration.GetSection(CourseSearchClientAuditSettings).Get<CourseSearchAuditCosmosDbSettings>() ?? new CourseSearchAuditCosmosDbSettings(),
-                PolicyOptions = Configuration.GetSection(CourseSearchClientPolicySettings).Get<PolicyOptions>() ?? new PolicyOptions(),
+                CourseSearchSvcSettings = this.Configuration.GetSection(CourseSearchClientSvcSettings).Get<CourseSearchSvcSettings>() ?? new CourseSearchSvcSettings(),
+                CourseSearchAuditCosmosDbSettings = this.Configuration.GetSection(CourseSearchClientAuditSettings).Get<CourseSearchAuditCosmosDbSettings>() ?? new CourseSearchAuditCosmosDbSettings(),
+                PolicyOptions = this.Configuration.GetSection(CourseSearchClientPolicySettings).Get<PolicyOptions>() ?? new PolicyOptions(),
             };
             services.AddSingleton(courseSearchClientSettings);
             services.AddScoped<ICourseSearchApiService, CourseSearchApiService>();
             services.AddFindACourseServices(courseSearchClientSettings);
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Latest);
             services.AddSingleton(serviceProvider =>
             {
                 return new MapperConfiguration(cfg =>

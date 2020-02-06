@@ -16,7 +16,6 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
 {
     public class CourseControllerTests : BaseController
     {
-
         [Theory]
         [MemberData(nameof(HtmlMediaTypes))]
         public async Task CourseControllerIndexReturnsSuccess(string mediaTypeName)
@@ -87,7 +86,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
             var result = await controller.BodyTop().ConfigureAwait(false);
 
             Assert.IsType<ViewResult>(result);
- 
+
             controller.Dispose();
         }
 
@@ -97,7 +96,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
         {
             var controller = BuildCourseController(mediaTypeName);
 
-            var result = await controller.Document(string.Empty).ConfigureAwait(false);
+            var result = controller.Document(string.Empty);
 
             var viewResult = Assert.IsType<ViewResult>(result);
             var model = Assert.IsAssignableFrom<DocumentViewModel>(viewResult.ViewData.Model);
@@ -112,7 +111,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
         {
             var controller = BuildCourseController(mediaTypeName);
 
-            var result = await controller.BodyFooter(string.Empty).ConfigureAwait(false);
+            var result = controller.BodyFooter(string.Empty);
 
             Assert.IsType<NoContentResult>(result);
 
@@ -133,15 +132,15 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
             var returnedCourseData = new CourseSearchResult();
             returnedCourseData.Courses = new List<Course>
             {
-                new Course { Title= "Maths", CourseId = "1", AttendancePattern = "Online"}
+                new Course { Title = "Maths", CourseId = "1", AttendancePattern = "Online" },
             };
 
-            A.CallTo(() => courseService.GetFilteredData(A<CourseSearchFilters>.Ignored,CourseSearchOrderBy.Relevance, 1)).Returns(returnedCourseData);
+            A.CallTo(() => courseService.GetFilteredData(A<CourseSearchFilters>.Ignored, CourseSearchOrderBy.Relevance, 1)).Returns(returnedCourseData);
 
             var result = await controller.FilterResults(bodyViewModel).ConfigureAwait(false);
-       
+
             var viewResult = Assert.IsType<ViewResult>(result);
-           
+
             controller.Dispose();
         }
     }

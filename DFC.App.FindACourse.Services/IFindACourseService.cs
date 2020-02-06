@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using DFC.FindACourseClient;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using DFC.FindACourseClient;
 
 namespace DFC.App.FindACourse.Services
 {
@@ -9,8 +9,8 @@ namespace DFC.App.FindACourse.Services
         /// <summary>
         ///     Pings the service to ensure it is running.
         /// </summary>
-        /// <returns>Task of type bool.</returns>
-        Task<bool> PingAsync();
+        /// <returns>type bool.</returns>
+        bool PingAsync();
 
         /// <summary>
         ///     Creates a list from any enum type.

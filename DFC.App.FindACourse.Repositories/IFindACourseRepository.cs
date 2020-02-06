@@ -1,8 +1,6 @@
-﻿using System.Collections;
+﻿using DFC.FindACourseClient;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using DFC.App.FindACourse.Data.Enums;
-using DFC.FindACourseClient;
 
 namespace DFC.App.FindACourse.Repository
 {
@@ -11,8 +9,8 @@ namespace DFC.App.FindACourse.Repository
         /// <summary>
         ///     Pings the service to ensure it is running.
         /// </summary>
-        /// <returns>Task of type bool.</returns>
-        Task<bool> PingAsync();
+        /// <returns>type bool.</returns>
+        bool PingAsync();
 
         /// <summary>
         ///     Creates a list from any enum type.
@@ -24,7 +22,7 @@ namespace DFC.App.FindACourse.Repository
         /// <summary>
         ///     Retrieves data from FAC API for a given criteria.
         /// </summary>
-        /// <param name="properties">CourseSearchProperties object</param>
+        /// <param name="properties">CourseSearchProperties object.</param>
         /// <returns>Task of CourseSearchResult.</returns>
         Task<CourseSearchResult> RetrieveData(CourseSearchProperties properties);
     }

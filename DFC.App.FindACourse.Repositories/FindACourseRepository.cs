@@ -1,10 +1,8 @@
-﻿using DFC.App.FindACourse.Data.Enums;
+﻿using DFC.FindACourseClient;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using DFC.FindACourseClient;
 
 namespace DFC.App.FindACourse.Repository
 {
@@ -17,7 +15,7 @@ namespace DFC.App.FindACourse.Repository
             this.courseSearchApiService = courseSearchApiService;
         }
 
-        public async Task<bool> PingAsync()
+        public bool PingAsync()
         {
             return true;
         }

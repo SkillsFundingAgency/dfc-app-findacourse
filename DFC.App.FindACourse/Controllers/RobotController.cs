@@ -1,4 +1,8 @@
-﻿using DFC.App.FindACourse.ViewModels;
+﻿// <copyright file="RobotController.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
+using DFC.App.FindACourse.ViewModels;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
