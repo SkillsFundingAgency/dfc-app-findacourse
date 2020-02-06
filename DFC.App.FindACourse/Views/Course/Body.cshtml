@@ -2,29 +2,28 @@
 
 @if (Model.Content != null)
 {
-    <main class="govuk-main-wrapper govuk-main-wrapper--auto-spacing" id="main-content" role="main">
-        <form action="/find-a-course/course/filterresults" method="get">
-            @Html.HiddenFor(m => m.CurrentSearchTerm)
-            <div class="govuk-grid-row">
+    <button class="govuk-button filters-button">Show filters</button>
+    <form action="/find-a-course/course/filterresults" method="get">
+        @Html.HiddenFor(m => m.CurrentSearchTerm)
+        <div class="govuk-grid-row">
 
-                <div class="govuk-grid-column-one-third">
-                    <partial name="sideBarLeft" model="Model.SideBar" />
-                </div>
-
-                <div class="govuk-grid-column-two-thirds">
-                    <partial name="_counter" model="Model" />
-
-                    <div id="distanceForm" class="govuk-form-group">
-                        <div id="distance">
-                            <label class="govuk-label govuk-!-font-weight-bold">Order By</label>
-                            <select asp-for="SelectedOrderByValue" asp-items="Model.OrderByOptions" class="govuk-select" name="SelectedOrderByValue"></select>
-                        </div>
-                    </div>
-                    <hr class="govuk-section-break govuk-section-break--visible">
-
-                    <partial name="_results" model="Model" />
-                </div>
+            <div class="govuk-grid-column-one-third">
+                <partial name="sideBarLeft" model="Model.SideBar" />
             </div>
-        </form>
-    </main>
+
+            <div class="govuk-grid-column-two-thirds">
+                <partial name="_counter" model="Model" />
+
+                <div id="distanceForm" class="govuk-form-group">
+                    <div id="distance">
+                        <label class="govuk-label govuk-!-font-weight-bold">Order By</label>
+                        <select asp-for="SelectedOrderByValue" asp-items="Model.OrderByOptions" class="govuk-select" name="SelectedOrderByValue"></select>
+                    </div>
+                </div>
+                <hr class="govuk-section-break govuk-section-break--visible">
+
+                <partial name="_results" model="Model" />
+            </div>
+        </div>
+    </form>
 }
