@@ -68,16 +68,6 @@ namespace DFC.App.FindACourse
                         });
                 }).CreateMapper();
             });
-
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new Info
-                {
-                    Version = "v1",
-                    Title = "DFC.App.FindACourse",
-                    Description = "Composite Find a Course API",
-                });
-            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -116,13 +106,6 @@ namespace DFC.App.FindACourse
                 routes.MapRoute(
                     name: "default",
                     template: "find-a-course/{controller=Course}/{action=Index}");
-            });
-
-            app.UseSwagger();
-
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "DFC.App.FindACourse V1");
             });
         }
     }
