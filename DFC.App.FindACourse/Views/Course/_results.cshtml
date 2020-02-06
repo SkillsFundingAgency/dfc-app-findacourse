@@ -54,31 +54,32 @@
                 </div>
             </div>
         </div>
+        <hr class="govuk-section-break govuk-section-break--visible">
     }
     @if (Model.Results.ResultProperties.TotalPages > 1)
     {
-    <ul class="previous-next-navigation govuk-!-margin-top-3">
-        @if (Model.Results.ResultProperties.Page < Model.Results.ResultProperties.TotalPages)
-        {
-        <li class="next">
-            <a href="/find-a-course/course/page?@nextLinkParams">
-                <span class="pagination-label">Next</span>
-                <span class="govuk-visually-hidden">page</span>
-                <span class="page-numbers">@nextPage of @Model.Results.ResultProperties.TotalPages</span>
-            </a>
-        </li>
-        }
+        <ul class="previous-next-navigation govuk-!-margin-top-3">
+            @if (Model.Results.ResultProperties.Page < Model.Results.ResultProperties.TotalPages)
+            {
+                <li class="next">
+                    <a href="/find-a-course/course/page?@nextLinkParams">
+                        <span class="pagination-label">Next</span>
+                        <span class="govuk-visually-hidden">page</span>
+                        <span class="page-numbers">@nextPage of @Model.Results.ResultProperties.TotalPages</span>
+                    </a>
+                </li>
+            }
 
-        @if (Model.Results.ResultProperties.Page > 1)
-        {
-            <li class="previous">
-                <a href="/find-a-course/course/page?@previousLinkParams">
-                    <span class="pagination-label">Previous</span>
-                    <span class="govuk-visually-hidden">page</span>
-                    <span class="page-numbers">@previousPage of @Model.Results.ResultProperties.TotalPages</span>
-                </a>
-            </li>
-        }
-    </ul>
+            @if (Model.Results.ResultProperties.Page > 1)
+            {
+                <li class="previous">
+                    <a href="/find-a-course/course/page?@previousLinkParams">
+                        <span class="pagination-label">Previous</span>
+                        <span class="govuk-visually-hidden">page</span>
+                        <span class="page-numbers">@previousPage of @Model.Results.ResultProperties.TotalPages</span>
+                    </a>
+                </li>
+            }
+        </ul>
     }
 }
