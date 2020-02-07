@@ -15,12 +15,12 @@
 
             <div id="distanceForm" class="govuk-form-group">
                 <div id="distance">
-                    <label class="govuk-label govuk-!-font-weight-bold" for="CurrentSearchRequest_LocationDistance">Distance</label>
-                    <select asp-for="DistanceValue" asp-items="Model.DistanceOptions" class="govuk-select" name="SideBar.DistanceValue"></select>
+                    <label class="govuk-label govuk-!-font-weight-bold" for="location-distance">Distance</label>
+                    <select asp-for="DistanceValue" asp-items="Model.DistanceOptions" class="govuk-select" name="SideBar.DistanceValue" id="location-distance"></select>
                 </div>
             </div>
 
-            <div id="@Model.CourseType.FilterText" class="govuk-form-group">
+            <div class="govuk-form-group">
                 <div id="@Model.CourseType.FilterText" class="govuk-checkboxes">
                     <fieldset class="govuk-fieldset">
                         <legend class="govuk-label govuk-!-font-weight-bold">@Model.CourseType.FilterTitle</legend>
@@ -31,7 +31,7 @@
                 </div>
             </div>
 
-            <div id="@Model.CourseHours.FilterText" class="govuk-form-group">
+            <div class="govuk-form-group">
                 <div id="@Model.CourseHours.FilterText">
                     <fieldset class="govuk-fieldset">
                         <legend class="govuk-label govuk-!-font-weight-bold">@Model.CourseHours.FilterTitle</legend>
@@ -42,7 +42,7 @@
                 </div>
             </div>
 
-            <div id="@Model.CourseStudyTime.FilterText" class="govuk-form-group">
+            <div class="govuk-form-group">
                 <div id="@Model.CourseStudyTime.FilterText">
                     <fieldset class="govuk-fieldset">
                         <legend class="govuk-label govuk-!-font-weight-bold">@Model.CourseStudyTime.FilterTitle</legend>
@@ -53,7 +53,7 @@
                 </div>
             </div>
 
-            <div id="@Model.StartDate.FilterText" class="govuk-form-group">
+            <div class="govuk-form-group">
                 <div id="@Model.StartDate.FilterText">
                     <fieldset class="govuk-fieldset">
                         <legend class="govuk-label govuk-!-font-weight-bold">@Model.StartDate.FilterTitle</legend>
