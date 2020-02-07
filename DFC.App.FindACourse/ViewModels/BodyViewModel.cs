@@ -12,7 +12,7 @@ namespace DFC.App.FindACourse.ViewModels
         public HtmlString Content { get; set; } = new HtmlString("Unknown Find a course content");
 
         public SideBarViewModel SideBar { get; set; }
-       
+
         public CourseSearchResult Results { get; set; }
 
         public string SelectedOrderByValue { get; set; }

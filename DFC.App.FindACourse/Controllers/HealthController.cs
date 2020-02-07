@@ -22,44 +22,44 @@ namespace DFC.App.FindACourse.Controllers
         {
             this.logger = logger;
             this.findACourseService = findACourseService;
-            resourceName = typeof(Program).Namespace;
+            this.resourceName = typeof(Program).Namespace;
         }
 
         [HttpGet]
         [Route("health")]
         public async Task<IActionResult> Health()
         {
-            logger.LogInformation($"{nameof(Health)} has been called");
+            this.logger.LogInformation($"{nameof(this.Health)} has been called");
 
             try
             {
-                var isHealthy = findACourseService.PingAsync();
+                var isHealthy = this.findACourseService.PingAsync();
                 if (isHealthy)
                 {
-                    logger.LogInformation($"{nameof(Health)} responded with: {resourceName} - {SuccessMessage}");
+                    this.logger.LogInformation($"{nameof(this.Health)} responded with: {this.resourceName} - {SuccessMessage}");
 
-                    var viewModel = CreateHealthViewModel();
+                    var viewModel = this.CreateHealthViewModel();
 
                     return this.NegotiateContentResult(viewModel);
                 }
 
-                logger.LogError($"{nameof(Health)}: Ping to {resourceName} has failed");
+                this.logger.LogError($"{nameof(this.Health)}: Ping to {this.resourceName} has failed");
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, $"{nameof(Health)}: {resourceName} exception: {ex.Message}");
+                this.logger.LogError(ex, $"{nameof(this.Health)}: {this.resourceName} exception: {ex.Message}");
             }
 
-            return StatusCode((int)HttpStatusCode.ServiceUnavailable);
+            return this.StatusCode((int)HttpStatusCode.ServiceUnavailable);
         }
 
         [HttpGet]
         [Route("health/ping")]
         public IActionResult Ping()
         {
-            logger.LogInformation($"{nameof(Ping)} has been called");
+            this.logger.LogInformation($"{nameof(this.Ping)} has been called");
 
-            return Ok();
+            return this.Ok();
         }
 
         private HealthViewModel CreateHealthViewModel()
@@ -70,7 +70,7 @@ namespace DFC.App.FindACourse.Controllers
                 {
                     new HealthItemViewModel
                     {
-                        Service = resourceName,
+                        Service = this.resourceName,
                         Message = SuccessMessage,
                     },
                 },

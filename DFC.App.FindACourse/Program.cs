@@ -1,8 +1,4 @@
-﻿// <copyright file="Program.cs" company="PlaceholderCompany">
-// Copyright (c) PlaceholderCompany. All rights reserved.
-// </copyright>
-
-using Microsoft.AspNetCore;
+﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.ApplicationInsights;
@@ -21,7 +17,7 @@ namespace DFC.App.FindACourse
                 .UseApplicationInsights()
                 .ConfigureLogging((webHostBuilderContext, loggingBuilder) =>
                 {
-                    //This filter is for app insights only
+                    // This filter is for app insights only
                     loggingBuilder.AddFilter<ApplicationInsightsLoggerProvider>(string.Empty, LogLevel.Trace);
                 })
                 .UseStartup<Startup>();

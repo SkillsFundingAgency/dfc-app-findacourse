@@ -8,14 +8,14 @@ namespace DFC.App.FindACourse.ViewModels
 
         public Robot()
         {
-            robotData = new StringBuilder();
+            this.robotData = new StringBuilder();
         }
 
         public string Data => robotData.ToString();
 
         public void Add(string text)
         {
-            robotData.AppendLine(text);
+            this.robotData.AppendLine(text);
         }
     }
 }

@@ -27,7 +27,7 @@ namespace DFC.App.FindACourse.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             var viewModel = new IndexViewModel
             {
@@ -54,11 +54,11 @@ namespace DFC.App.FindACourse.Controllers
 
             this.logger.LogInformation($"{nameof(this.Document)} generated the model and ready to pass to the view");
 
-            return View(model);
+            return this.View(model);
         }
 
         [HttpGet]
-        public async Task<IActionResult> Head()
+        public IActionResult Head()
         {
             this.logger.LogInformation($"{nameof(this.Head)} has been called");
 
@@ -71,14 +71,15 @@ namespace DFC.App.FindACourse.Controllers
 
         [HttpGet]
         [Route("find-a-course/{controller}/herobanner/{**data}")]
-        public async Task<IActionResult> HeroBanner()
+        public IActionResult HeroBanner()
         {
             this.logger.LogInformation($"{nameof(this.HeroBanner)} has been called");
 
             return View();
         }
 
-        public async Task<IActionResult> Breadcrumb()
+        [HttpGet]
+        public IActionResult Breadcrumb()
         {
             this.logger.LogInformation($"{nameof(this.Breadcrumb)} has been called");
 
@@ -97,7 +98,7 @@ namespace DFC.App.FindACourse.Controllers
 
         [HttpGet]
         [Route("find-a-course/{controller}/bodytop/{**data}")]
-        public async Task<IActionResult> BodyTop()
+        public IActionResult BodyTop()
         {
             this.logger.LogInformation($"{nameof(this.BodyTop)} has been called");
 
@@ -106,7 +107,7 @@ namespace DFC.App.FindACourse.Controllers
 
         [HttpGet]
         [Route("find-a-course/{controller}/body/{**data}")]
-        public async Task<IActionResult> Body()
+        public IActionResult Body()
         {
             this.logger.LogInformation($"{nameof(this.Body)} has been called");
 
@@ -117,13 +118,13 @@ namespace DFC.App.FindACourse.Controllers
             model.OrderByOptions = ListFilters.GetOrderByOptions();
 
             this.logger.LogInformation($"{nameof(this.Body)} generated the model and ready to pass to the view");
-            
+
             return View(model);
         }
 
         [HttpGet]
         [Route("find-a-course/{controller}/bodyfooter/{**data}")]
-        public IActionResult BodyFooter(string article)
+        public IActionResult BodyFooter()
         {
             this.logger.LogInformation($"{nameof(this.BodyFooter)} has been called");
 
@@ -136,16 +137,20 @@ namespace DFC.App.FindACourse.Controllers
         {
             this.logger.LogInformation($"{nameof(this.Page)} has been called");
 
-            var model = new BodyViewModel();
-            model.CurrentSearchTerm = searchTerm;
-            model.SideBar = new SideBarViewModel();
-            model.SideBar.TownOrPostcode = town;
-            model.SideBar.DistanceValue = distance;
-            model.SideBar.CourseType = this.ConvertStringToFiltersListViewModel(courseType);
-            model.SideBar.CourseHours = this.ConvertStringToFiltersListViewModel(courseHours);
-            model.SideBar.CourseStudyTime = this.ConvertStringToFiltersListViewModel(studyTime);
-            model.SideBar.StartDate = this.ConvertStringToFiltersListViewModel(startDate);
-            model.RequestPage = page;
+            var model = new BodyViewModel
+            {
+                CurrentSearchTerm = searchTerm,
+                SideBar = new SideBarViewModel
+                {
+                    TownOrPostcode = town,
+                    DistanceValue = distance,
+                    CourseType = this.ConvertStringToFiltersListViewModel(courseType),
+                    CourseHours = this.ConvertStringToFiltersListViewModel(courseHours),
+                    CourseStudyTime = this.ConvertStringToFiltersListViewModel(studyTime),
+                    StartDate = this.ConvertStringToFiltersListViewModel(startDate),
+                },
+                RequestPage = page,
+            };
 
             this.logger.LogInformation($"{nameof(this.Page)} generated the model and ready to pass to the view");
 
@@ -166,47 +171,48 @@ namespace DFC.App.FindACourse.Controllers
             if (model?.SideBar.DistanceOptions != null)
             {
                 _ = float.TryParse(model.SideBar.DistanceValue, out selectedDistanceValue);
-                //Enum.TryParse(model, out CourseSearchOrderBy sortedByCriteria);
+
+                // Enum.TryParse(model, out CourseSearchOrderBy sortedByCriteria);
             }
 
-            if (model.SideBar.CourseType != null && model.SideBar.CourseType.selectedIds.Any())
+            if (model.SideBar.CourseType != null && model.SideBar.CourseType.SelectedIds.Any())
             {
-                _ = Enum.TryParse(model.SideBar.CourseType.selectedIds[0], out courseTypeCriteria);
+                _ = Enum.TryParse(model.SideBar.CourseType.SelectedIds[0], out courseTypeCriteria);
             }
 
-            if (model.SideBar.CourseHours != null && model.SideBar.CourseHours.selectedIds.Any())
+            if (model.SideBar.CourseHours != null && model.SideBar.CourseHours.SelectedIds.Any())
             {
-
-                _ = Enum.TryParse(model.SideBar.CourseHours.selectedIds[0], out courseHoursCriteria);
+                _ = Enum.TryParse(model.SideBar.CourseHours.SelectedIds[0], out courseHoursCriteria);
             }
 
-
-            if (model.SideBar.StartDate != null && model.SideBar.StartDate.selectedIds.Any())
+            if (model.SideBar.StartDate != null && model.SideBar.StartDate.SelectedIds.Any())
             {
-                _ = Enum.TryParse(model.SideBar.StartDate.selectedIds[0], out courseStartDateCriteria);
+                _ = Enum.TryParse(model.SideBar.StartDate.SelectedIds[0], out courseStartDateCriteria);
             }
 
-            //  TODO - Uncomment the line below after it has been added to the nuget package
-            //  Enum.TryParse(model.SideBar.CourseStudyTime.selectedIds[0], out StartDate courseStudyTimeCriteria);
+            // TODO - Uncomment the line below after it has been added to the nuget package
+            // Enum.TryParse(model.SideBar.CourseStudyTime.selectedIds[0], out StartDate courseStudyTimeCriteria);
+            var courseSearchFilters = new CourseSearchFilters
+            {
+                SearchTerm = model.CurrentSearchTerm,
+                Distance = selectedDistanceValue,
+                DistanceSpecified = true,
 
-            var courseSearchFilters = new CourseSearchFilters();
-            courseSearchFilters.SearchTerm = model.CurrentSearchTerm;
-            courseSearchFilters.Distance = selectedDistanceValue;
-            courseSearchFilters.DistanceSpecified = true;
-            //  TODO: FOLLOWING NEED TO BE LISTS - NEED TO UPDATE NUGET PACKAGE
-            courseSearchFilters.CourseType = courseTypeCriteria;
-            courseSearchFilters.CourseHours = courseHoursCriteria;
-            courseSearchFilters.StartDate = courseStartDateCriteria;
+                // TODO: FOLLOWING NEED TO BE LISTS - NEED TO UPDATE NUGET PACKAGE
+                CourseType = courseTypeCriteria,
+                CourseHours = courseHoursCriteria,
+                StartDate = courseStartDateCriteria,
+            };
 
-            //  TODO: FOLLOWING DOES NOT YET EXIST IN THE NUGET PACKAGE
-            //  courseSearchFilters.StudyTime = courseStudyTimeCriteria;
+            // TODO: FOLLOWING DOES NOT YET EXIST IN THE NUGET PACKAGE
+            // courseSearchFilters.StudyTime = courseStudyTimeCriteria;
 
-            //  Enter filters criteria here
+            // Enter filters criteria here
             model.RequestPage = (model.RequestPage > 1) ? model.RequestPage : 1;
 
             try
             {
-                model.Results = await this.findACourseService.GetFilteredData(courseSearchFilters, CourseSearchOrderBy.Relevance, model.RequestPage);
+                model.Results = await this.findACourseService.GetFilteredData(courseSearchFilters, CourseSearchOrderBy.Relevance, model.RequestPage).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
@@ -215,7 +221,7 @@ namespace DFC.App.FindACourse.Controllers
 
             this.logger.LogInformation($"{nameof(this.FilterResults)} generated the model and ready to pass to the view");
 
-            return await Results(model).ConfigureAwait(true);
+            return await this.Results(model).ConfigureAwait(true);
         }
 
         [HttpGet]
@@ -225,11 +231,13 @@ namespace DFC.App.FindACourse.Controllers
             this.logger.LogInformation($"{nameof(this.SearchCourse)} has been called");
 
             var model = new BodyViewModel();
-            var courseSearchFilters = new CourseSearchFilters();
-            courseSearchFilters.CourseType = CourseType.All;
-            courseSearchFilters.CourseHours = CourseHours.All;
-            courseSearchFilters.StartDate = StartDate.Anytime;
-            courseSearchFilters.SearchTerm = string.IsNullOrEmpty(searchTerm) ? string.Empty : searchTerm;
+            var courseSearchFilters = new CourseSearchFilters
+            {
+                CourseType = CourseType.All,
+                CourseHours = CourseHours.All,
+                StartDate = StartDate.Anytime,
+                SearchTerm = string.IsNullOrEmpty(searchTerm) ? string.Empty : searchTerm,
+            };
 
             model.SideBar = this.GetSideBarViewModel();
             model.OrderByOptions = ListFilters.GetOrderByOptions();
@@ -238,9 +246,10 @@ namespace DFC.App.FindACourse.Controllers
 
             try
             {
-                model.Results = await findACourseService.GetFilteredData(courseSearchFilters, CourseSearchOrderBy.Relevance, 1);
+                model.Results = await this.findACourseService.GetFilteredData(courseSearchFilters, CourseSearchOrderBy.Relevance, 1).ConfigureAwait(false);
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 this.logger.LogError($"{nameof(this.SearchCourse)} threw an exception", ex.Message);
             }
 
@@ -268,28 +277,28 @@ namespace DFC.App.FindACourse.Controllers
             sideBarViewModel.DistanceValue = model.SideBar.DistanceValue;
             sideBarViewModel.TownOrPostcode = model.SideBar.TownOrPostcode;
 
-            if (model.SideBar.CourseType != null && model.SideBar.CourseType.selectedIds.Any())
+            if (model.SideBar.CourseType != null && model.SideBar.CourseType.SelectedIds.Any())
             {
                 model.SideBar.CourseType = this.CheckCheckboxState(model.SideBar.CourseType, sideBarViewModel.CourseType);
-                sideBarViewModel.CourseType.selectedIds = model.SideBar.CourseType.selectedIds;
+                sideBarViewModel.CourseType.SelectedIds = model.SideBar.CourseType.SelectedIds;
             }
 
-            if (model.SideBar.CourseHours != null && model.SideBar.CourseHours.selectedIds.Any())
+            if (model.SideBar.CourseHours != null && model.SideBar.CourseHours.SelectedIds.Any())
             {
                 model.SideBar.CourseHours = this.CheckCheckboxState(model.SideBar.CourseHours, sideBarViewModel.CourseHours);
-                sideBarViewModel.CourseHours.selectedIds = model.SideBar.CourseHours.selectedIds;
+                sideBarViewModel.CourseHours.SelectedIds = model.SideBar.CourseHours.SelectedIds;
             }
 
-            if (model.SideBar.CourseStudyTime != null && model.SideBar.CourseStudyTime.selectedIds.Any())
+            if (model.SideBar.CourseStudyTime != null && model.SideBar.CourseStudyTime.SelectedIds.Any())
             {
                 model.SideBar.CourseStudyTime = this.CheckCheckboxState(model.SideBar.CourseStudyTime, sideBarViewModel.CourseStudyTime);
-                sideBarViewModel.CourseStudyTime.selectedIds = model.SideBar.CourseStudyTime.selectedIds;
+                sideBarViewModel.CourseStudyTime.SelectedIds = model.SideBar.CourseStudyTime.SelectedIds;
             }
 
-            if (model.SideBar.StartDate != null && model.SideBar.StartDate.selectedIds.Any())
+            if (model.SideBar.StartDate != null && model.SideBar.StartDate.SelectedIds.Any())
             {
                 model.SideBar.StartDate = this.CheckCheckboxState(model.SideBar.StartDate, sideBarViewModel.StartDate);
-                sideBarViewModel.StartDate.selectedIds = model.SideBar.StartDate.selectedIds;
+                sideBarViewModel.StartDate.SelectedIds = model.SideBar.StartDate.SelectedIds;
             }
 
             model.SideBar = sideBarViewModel;
@@ -316,7 +325,7 @@ namespace DFC.App.FindACourse.Controllers
                 checkboxList.Add(new CheckBoxItem(item.Id, item.Text, false, false));
             }
 
-            filterModel.lstChkFilter = checkboxList;
+            filterModel.LstChkFilter = checkboxList;
 
             this.logger.LogInformation($"{nameof(this.MapFilter)} {title} list has been generated successfully");
 
@@ -327,9 +336,9 @@ namespace DFC.App.FindACourse.Controllers
         {
             this.logger.LogInformation($"{nameof(this.CheckCheckboxState)} has been called");
 
-            foreach (var item in newModel.lstChkFilter)
+            foreach (var item in newModel.LstChkFilter)
             {
-                var exists = model.selectedIds.Contains(item.Id);
+                var exists = model.SelectedIds.Contains(item.Id);
                 if (exists)
                 {
                     item.IsChecked = true;
@@ -347,18 +356,20 @@ namespace DFC.App.FindACourse.Controllers
 
             var list = listView.Split(",").ToList().Select(x => x.Trim()).ToList();
 
-            model.selectedIds = list;
+            model.SelectedIds = list;
             return model;
         }
 
         private SideBarViewModel GetSideBarViewModel()
         {
-            var sideBarViewModel = new SideBarViewModel();
-            sideBarViewModel.CourseType = this.MapFilter("courseType", "Course type", ListFilters.GetCourseTypeList());
-            sideBarViewModel.CourseHours = this.MapFilter("courseHours", "Course hours", ListFilters.GetHoursList());
-            sideBarViewModel.CourseStudyTime = this.MapFilter("courseStudyTime", "Course study time", ListFilters.GetStudyTimeList());
-            sideBarViewModel.StartDate = this.MapFilter("courseStartDate", "Start date", ListFilters.GetStartDateList());
-            sideBarViewModel.DistanceOptions = ListFilters.GetDistanceList();
+            var sideBarViewModel = new SideBarViewModel
+            {
+                CourseType = this.MapFilter("courseType", "Course type", ListFilters.GetCourseTypeList()),
+                CourseHours = this.MapFilter("courseHours", "Course hours", ListFilters.GetHoursList()),
+                CourseStudyTime = this.MapFilter("courseStudyTime", "Course study time", ListFilters.GetStudyTimeList()),
+                StartDate = this.MapFilter("courseStartDate", "Start date", ListFilters.GetStartDateList()),
+                DistanceOptions = ListFilters.GetDistanceList(),
+            };
 
             return sideBarViewModel;
         }

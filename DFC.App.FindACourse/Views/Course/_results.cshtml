@@ -5,10 +5,10 @@
 
     var town = Model.SideBar.TownOrPostcode;
     var distance = Model.SideBar.DistanceValue;
-    var courseType = Html.Raw(Json.Serialize(Model.SideBar.CourseType.selectedIds));
-    var courseHours = Html.Raw(Json.Serialize(Model.SideBar.CourseHours.selectedIds));
-    var courseStudyTime = Html.Raw(Json.Serialize(Model.SideBar.CourseStudyTime.selectedIds));
-    var courseStartDate = Html.Raw(Json.Serialize(Model.SideBar.StartDate.selectedIds));
+    var courseType = Html.Raw(Json.Serialize(Model.SideBar.CourseType.SelectedIds));
+    var courseHours = Html.Raw(Json.Serialize(Model.SideBar.CourseHours.SelectedIds));
+    var courseStudyTime = Html.Raw(Json.Serialize(Model.SideBar.CourseStudyTime.SelectedIds));
+    var courseStartDate = Html.Raw(Json.Serialize(Model.SideBar.StartDate.SelectedIds));
     var searchTerm = Model.CurrentSearchTerm;
 
     var parameters = $"searchTerm={searchTerm}&town={town}&courseType={courseType}&courseHours={courseHours}&studyTime={courseStudyTime}&startDate={courseStartDate}&distance={distance}";

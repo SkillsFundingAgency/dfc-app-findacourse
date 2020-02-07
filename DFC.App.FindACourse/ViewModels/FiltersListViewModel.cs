@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
-using GdsCheckboxList.Models;
-using DFC.App.FindACourse.Data.Domain;
+﻿using GdsCheckboxList.Models;
+using System.Collections.Generic;
 
 namespace DFC.App.FindACourse.ViewModels
 {
@@ -8,15 +7,15 @@ namespace DFC.App.FindACourse.ViewModels
     {
         public FiltersListViewModel()
         {
-            this.selectedIds = new List<string>();
+            this.SelectedIds = new List<string>();
         }
 
         public string FilterText { get; set; }
 
         public string FilterTitle { get; set; }
 
-        public List<CheckBoxItem> lstChkFilter { get; set; }
+        public List<CheckBoxItem> LstChkFilter { get; set; }
 
-        public List<string> selectedIds { get; set; }
+        public List<string> SelectedIds { get; set; }
     }
 }

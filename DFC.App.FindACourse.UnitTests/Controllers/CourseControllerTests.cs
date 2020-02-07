@@ -22,7 +22,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
         {
             var controller = BuildCourseController(mediaTypeName);
 
-            var result = await controller.Index().ConfigureAwait(false);
+            var result = controller.Index();
 
             var viewResult = Assert.IsType<ViewResult>(result);
 
@@ -38,7 +38,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
         {
             var controller = BuildCourseController(mediaTypeName);
 
-            var result = await controller.Head().ConfigureAwait(false);
+            var result = controller.Head();
 
             var viewResult = Assert.IsType<ViewResult>(result);
             var model = Assert.IsAssignableFrom<HeadViewModel>(viewResult.ViewData.Model);
@@ -55,7 +55,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
         {
             var controller = BuildCourseController(mediaTypeName);
 
-            var result = await controller.HeroBanner().ConfigureAwait(false);
+            var result = controller.HeroBanner();
 
             Assert.IsType<ViewResult>(result);
 
@@ -68,7 +68,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
         {
             var controller = BuildCourseController(mediaTypeName);
 
-            var result = await controller.Breadcrumb().ConfigureAwait(false);
+            var result = controller.Breadcrumb();
 
             var viewResult = Assert.IsType<ViewResult>(result);
             var model = Assert.IsAssignableFrom<BreadcrumbViewModel>(viewResult.ViewData.Model);
@@ -83,7 +83,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
         {
             var controller = BuildCourseController(mediaTypeName);
 
-            var result = await controller.BodyTop().ConfigureAwait(false);
+            var result = controller.BodyTop();
 
             Assert.IsType<ViewResult>(result);
 
@@ -92,11 +92,11 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
 
         [Theory]
         [MemberData(nameof(HtmlMediaTypes))]
-        public async Task CourseControllerDocumentReturnsSuccess(string mediaTypeName)
+        public void CourseControllerDocumentReturnsSuccess(string mediaTypeName)
         {
             var controller = BuildCourseController(mediaTypeName);
 
-            var result = controller.Document(string.Empty);
+            var result = controller.Document();
 
             var viewResult = Assert.IsType<ViewResult>(result);
             var model = Assert.IsAssignableFrom<DocumentViewModel>(viewResult.ViewData.Model);
@@ -107,11 +107,11 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
 
         [Theory]
         [MemberData(nameof(HtmlMediaTypes))]
-        public async Task CourseControllerBodyFooterReturnsNoContent(string mediaTypeName)
+        public void CourseControllerBodyFooterReturnsNoContent(string mediaTypeName)
         {
             var controller = BuildCourseController(mediaTypeName);
 
-            var result = controller.BodyFooter(string.Empty);
+            var result = controller.BodyFooter();
 
             Assert.IsType<NoContentResult>(result);
 
@@ -125,14 +125,18 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
             var courseService = A.Fake<IFindACourseService>();
             var logger = A.Fake<ILogger<CourseController>>();
             var controller = BuildCourseController(mediaTypeName);
-            var bodyViewModel = new BodyViewModel();
-            bodyViewModel.CurrentSearchTerm = "Maths";
-            bodyViewModel.SideBar = new SideBarViewModel();
+            var bodyViewModel = new BodyViewModel
+            {
+                CurrentSearchTerm = "Maths",
+                SideBar = new SideBarViewModel(),
+            };
 
-            var returnedCourseData = new CourseSearchResult();
-            returnedCourseData.Courses = new List<Course>
+            var returnedCourseData = new CourseSearchResult
+            {
+                Courses = new List<Course>
             {
                 new Course { Title = "Maths", CourseId = "1", AttendancePattern = "Online" },
+            },
             };
 
             A.CallTo(() => courseService.GetFilteredData(A<CourseSearchFilters>.Ignored, CourseSearchOrderBy.Relevance, 1)).Returns(returnedCourseData);

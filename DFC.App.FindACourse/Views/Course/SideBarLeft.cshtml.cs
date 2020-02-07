@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace DFC.App.FindACourse.Views.Shared
 {
-    public class _filterModel : PageModel
+    public class FilterModel : PageModel
     {
         public void OnGet()
         {

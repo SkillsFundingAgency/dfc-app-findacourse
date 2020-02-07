@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using AutoMapper;
 using DFC.App.FindACourse.Data.Domain;
 using DFC.App.FindACourse.Repository;
@@ -10,6 +9,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using System.Collections.Generic;
 
 namespace DFC.App.FindACourse
 {
@@ -22,7 +23,7 @@ namespace DFC.App.FindACourse
 
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            this.Configuration = configuration;
         }
 
         public IConfiguration Configuration { get; }
@@ -68,7 +69,7 @@ namespace DFC.App.FindACourse
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -82,27 +83,30 @@ namespace DFC.App.FindACourse
                 app.UseHsts();
             }
 
+            app.UseCors();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
-            app.UseMvc(routes =>
+            app.UseRouting();
+            app.UseEndpoints(endpoints =>
             {
                 // add the site map route
-                routes.MapRoute(
+                endpoints.MapControllerRoute(
                     name: "Sitemap",
-                    template: "Sitemap.xml",
-                    defaults: new { controller = "Sitemap", action = "Sitemap" });
+                    pattern: "Sitemap.xml",
+                    new { controller = "Sitemap", action = "Sitemap" });
 
                 // add the robots.txt route
-                routes.MapRoute(
+                endpoints.MapControllerRoute(
                     name: "Robots",
-                    template: "Robots.txt",
-                    defaults: new { controller = "Robot", action = "Robot" });
+                    pattern: "Robots.txt",
+                    new { controller = "Robot", action = "Robot" });
 
                 // add the default route
-                routes.MapRoute(
+                endpoints.MapControllerRoute(
                     name: "default",
-                    template: "find-a-course/{controller=Course}/{action=Index}");
+                    pattern: "find-a-course/{controller=Course}/{action=Index}");
+                endpoints.MapRazorPages();
             });
         }
     }
