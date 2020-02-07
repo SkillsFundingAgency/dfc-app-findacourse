@@ -22,9 +22,9 @@
     {
         <div class="govuk-!-margin-top-6">
             <h2 class="govuk-heading-m">
-                <a class="govuk-link" href="gds-course-details">@result.Title</a>
+                <a class="govuk-link" href="course-details">@result.Title</a>
             </h2>
-            <p>[ DESCRIPTION TO GO HERE]</p>
+            <p>[ DESCRIPTION TO GO HERE] - [THIS MUST BE TRUNCATED TO 220 CHARACTERS WITH [...] AFTER].</p>
             <div class="govuk-grid-row">
                 <div class="govuk-grid-column-one-half">
                     <ul class="govuk-list">
@@ -33,10 +33,13 @@
                             <span class="govuk-secondary-colour">Start date:</span> @result.StartDate
                         </li>
                         <li>
-                            <span class="govuk-secondary-colour">Cost:</span> [COST TO GO HERE]
+                            <span class="govuk-secondary-colour">Cost:</span> [COST TO GO HERE] - [WHEN COST IS NULL THEN COST DESCRIPTION WILL GO HERE]
                         </li>
                         <li>
                             <span class="govuk-secondary-colour">Provider:</span> @result.ProviderName
+                        </li>
+                        <li>
+                            <span class="govuk-secondary-colour">Hours:</span> [FULL TIME / PART TIME / FLEXIBLE TO GO HERE] - [ONLY FOR CLASSROOM BASED]
                         </li>
 
                     </ul>
@@ -48,6 +51,12 @@
                         </li>
                         <li>
                             <span class="govuk-secondary-colour">Duration:</span> @result.Duration
+                        </li>
+                        <li>
+                            <span class="govuk-secondary-colour">Location:</span> [LOCATION TO GO HERE] - [WORK BASED: REGION] [CLASSROOM BASED: VENUE ADDRESS]
+                        </li>
+                        <li>
+                            <span class="govuk-secondary-colour">Time:</span> [DAYTIME / NIGHT / WEEKEND TO GO HERE] - [ONLY FOR CLASSROOM BASED]
                         </li>
 
                     </ul>
