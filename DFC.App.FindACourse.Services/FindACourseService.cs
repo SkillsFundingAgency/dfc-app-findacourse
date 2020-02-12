@@ -1,4 +1,6 @@
 ﻿using DFC.App.FindACourse.Repository;
+using DFC.FindACourseClient;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace DFC.App.FindACourse.Services
@@ -12,9 +14,26 @@ namespace DFC.App.FindACourse.Services
             this.repository = repository;
         }
 
-        public async Task<bool> PingAsync()
+        public bool PingAsync()
         {
-            return await repository.PingAsync().ConfigureAwait(false);
+            return repository.PingAsync();
+        }
+
+        public IList<T> GetFilterByName<T>()
+        {
+            return repository.GetFilter<T>();
+        }
+
+        public async Task<CourseSearchResult> GetFilteredData(CourseSearchFilters filters, CourseSearchOrderBy orderBy, int pageSize)
+        {
+            var criteriaProperties = new CourseSearchProperties
+            {
+                Filters = filters,
+                OrderedBy = orderBy,
+                Page = pageSize,
+            };
+
+            return await repository.RetrieveData(criteriaProperties).ConfigureAwait(true);
         }
     }
 }

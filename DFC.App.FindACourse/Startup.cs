@@ -1,20 +1,29 @@
+using AutoMapper;
+using DFC.App.FindACourse.Data.Domain;
 using DFC.App.FindACourse.Repository;
 using DFC.App.FindACourse.Services;
+using DFC.FindACourseClient;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Swashbuckle.AspNetCore.Swagger;
+using Microsoft.Extensions.Hosting;
+using System.Collections.Generic;
 
 namespace DFC.App.FindACourse
 {
     public class Startup
     {
+        public const string CourseSearchAppSettings = "Configuration:CourseSearch";
+        public const string CourseSearchClientSvcSettings = "Configuration:CourseSearchClient:CourseSearchSvc";
+        public const string CourseSearchClientAuditSettings = "Configuration:CourseSearchClient:CosmosAuditConnection";
+        public const string CourseSearchClientPolicySettings = "Configuration:CourseSearchClient:Policies";
+
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            this.Configuration = configuration;
         }
 
         public IConfiguration Configuration { get; }
@@ -32,21 +41,35 @@ namespace DFC.App.FindACourse
             services.AddScoped<IFindACourseService, FindACourseService>();
             services.AddScoped<IFindACourseRepository, FindACourseRepository>();
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            var courseSearchSettings = this.Configuration.GetSection(CourseSearchAppSettings).Get<CourseSearchSettings>();
+            services.AddSingleton(courseSearchSettings ?? new CourseSearchSettings());
 
-            services.AddSwaggerGen(c =>
+            var courseSearchClientSettings = new CourseSearchClientSettings
             {
-                c.SwaggerDoc("v1", new Info
+                CourseSearchSvcSettings = this.Configuration.GetSection(CourseSearchClientSvcSettings).Get<CourseSearchSvcSettings>() ?? new CourseSearchSvcSettings(),
+                CourseSearchAuditCosmosDbSettings = this.Configuration.GetSection(CourseSearchClientAuditSettings).Get<CourseSearchAuditCosmosDbSettings>() ?? new CourseSearchAuditCosmosDbSettings(),
+                PolicyOptions = this.Configuration.GetSection(CourseSearchClientPolicySettings).Get<PolicyOptions>() ?? new PolicyOptions(),
+            };
+            services.AddSingleton(courseSearchClientSettings);
+            services.AddScoped<ICourseSearchApiService, CourseSearchApiService>();
+            services.AddFindACourseServices(courseSearchClientSettings);
+
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Latest);
+            services.AddSingleton(serviceProvider =>
+            {
+                return new MapperConfiguration(cfg =>
                 {
-                    Version = "v1",
-                    Title = "DFC.App.FindACourse",
-                    Description = "Composite Find a Course API",
-                });
+                    cfg.AddProfiles(
+                        new List<Profile>
+                        {
+                            new FindACourseProfile(),
+                        });
+                }).CreateMapper();
             });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -60,34 +83,30 @@ namespace DFC.App.FindACourse
                 app.UseHsts();
             }
 
+            app.UseCors();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
-            app.UseMvc(routes =>
+            app.UseRouting();
+            app.UseEndpoints(endpoints =>
             {
                 // add the site map route
-                routes.MapRoute(
+                endpoints.MapControllerRoute(
                     name: "Sitemap",
-                    template: "Sitemap.xml",
-                    defaults: new { controller = "Sitemap", action = "Sitemap" });
+                    pattern: "Sitemap.xml",
+                    new { controller = "Sitemap", action = "Sitemap" });
 
                 // add the robots.txt route
-                routes.MapRoute(
+                endpoints.MapControllerRoute(
                     name: "Robots",
-                    template: "Robots.txt",
-                    defaults: new { controller = "Robot", action = "Robot" });
+                    pattern: "Robots.txt",
+                    new { controller = "Robot", action = "Robot" });
 
                 // add the default route
-                routes.MapRoute(
+                endpoints.MapControllerRoute(
                     name: "default",
-                    template: "{controller=Pages}/{action=Index}");
-            });
-
-            app.UseSwagger();
-
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "DFC.App.FindACourse V1");
+                    pattern: "find-a-course/{controller=Course}/{action=Index}");
+                endpoints.MapRazorPages();
             });
         }
     }

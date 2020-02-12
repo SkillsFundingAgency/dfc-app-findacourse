@@ -1,4 +1,8 @@
-﻿using DFC.App.FindACourse.ViewModels;
+﻿// <copyright file="RobotController.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
+using DFC.App.FindACourse.ViewModels;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -10,9 +14,9 @@ namespace DFC.App.FindACourse.Controllers
     public class RobotController : Controller
     {
         private readonly ILogger<RobotController> logger;
-        private readonly IHostingEnvironment hostingEnvironment;
+        private readonly IWebHostEnvironment hostingEnvironment;
 
-        public RobotController(ILogger<RobotController> logger, IHostingEnvironment hostingEnvironment)
+        public RobotController(ILogger<RobotController> logger, IWebHostEnvironment hostingEnvironment)
         {
             this.logger = logger;
             this.hostingEnvironment = hostingEnvironment;
@@ -23,27 +27,27 @@ namespace DFC.App.FindACourse.Controllers
         {
             try
             {
-                logger.LogInformation("Generating Robots.txt");
+                this.logger.LogInformation("Generating Robots.txt");
 
-                var robot = GenerateThisSiteRobot();
+                var robot = this.GenerateThisSiteRobot();
 
-                logger.LogInformation("Generated Robots.txt");
+                this.logger.LogInformation("Generated Robots.txt");
 
-                return Content(robot.Data, MediaTypeNames.Text.Plain);
+                return this.Content(robot.Data, MediaTypeNames.Text.Plain);
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, $"{nameof(Robot)}: {ex.Message}");
+                this.logger.LogError(ex, $"{nameof(this.Robot)}: {ex.Message}");
             }
 
             // fall through from errors
-            return Content(null, MediaTypeNames.Text.Plain);
+            return this.Content(null, MediaTypeNames.Text.Plain);
         }
 
         private Robot GenerateThisSiteRobot()
         {
             var robot = new Robot();
-            var robotsFilePath = System.IO.Path.Combine(hostingEnvironment.WebRootPath, "StaticRobots.txt");
+            var robotsFilePath = System.IO.Path.Combine(this.hostingEnvironment.WebRootPath, "StaticRobots.txt");
 
             if (!System.IO.File.Exists(robotsFilePath))
             {

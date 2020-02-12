@@ -4,6 +4,6 @@
     {
         public string RequestId { get; set; }
 
-        public bool ShowRequestId => !string.IsNullOrWhiteSpace(RequestId);
+        public bool ShowRequestId => !string.IsNullOrWhiteSpace(this.RequestId);
     }
 }
