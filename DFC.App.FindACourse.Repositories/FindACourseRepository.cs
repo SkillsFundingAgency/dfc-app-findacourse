@@ -29,5 +29,10 @@ namespace DFC.App.FindACourse.Repository
         {
             return await courseSearchApiService.SearchCoursesAsync(properties).ConfigureAwait(false);
         }
+
+        public async Task<CourseDetails> GetCourseDetails(string id, string runId)
+        {
+            return await courseSearchApiService.GetCourseDetailsAsync(id, runId).ConfigureAwait(false);
+        }
     }
 }
