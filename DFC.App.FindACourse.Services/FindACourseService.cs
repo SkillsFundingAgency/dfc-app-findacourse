@@ -35,5 +35,10 @@ namespace DFC.App.FindACourse.Services
 
             return await repository.RetrieveData(criteriaProperties).ConfigureAwait(true);
         }
+
+        public async Task<CourseDetails> GetCourseDetails(string courseId, string runId)
+        {
+            return await repository.GetCourseDetails(courseId, runId).ConfigureAwait(false);
+        }
     }
 }

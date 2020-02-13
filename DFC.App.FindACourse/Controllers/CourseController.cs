@@ -70,12 +70,24 @@ namespace DFC.App.FindACourse.Controllers
         }
 
         [HttpGet]
-        [Route("find-a-course/{controller}/herobanner/{**data}")]
-        public IActionResult HeroBanner()
+        [Route("find-a-course/{**data}")]
+        public IActionResult HeroBanner(string data)
         {
             this.logger.LogInformation($"{nameof(this.HeroBanner)} has been called");
+            var returnView = string.Empty;
 
-            return View();
+            var lastPartofUrl = data.Split("/").Last();
+
+            if (lastPartofUrl != "details")
+            {
+                returnView = "~/Views/Shared/herobanner.cshtml";
+            }
+            else
+            {
+                returnView = "~/Views/Shared/detailsHeroBanner.cshtml";
+            }
+
+            return View(returnView);
         }
 
         [HttpGet]
