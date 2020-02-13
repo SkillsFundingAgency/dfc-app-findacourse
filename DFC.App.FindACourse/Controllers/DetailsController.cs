@@ -28,7 +28,7 @@ namespace DFC.App.FindACourse.Controllers
 
             if (string.IsNullOrEmpty(courseId) || string.IsNullOrEmpty(runId))
             {
-                throw new Exception("Course Id and/or runId does not have a value");
+                throw new ArgumentNullException("Course Id and/or runId does not have a value");
             }
 
             try
@@ -37,7 +37,7 @@ namespace DFC.App.FindACourse.Controllers
             }
             catch (Exception ex)
             {
-                this.logger.LogInformation($"Get course details caused an error: {ex}");
+                this.logger.LogError($"Get course details caused an error: {ex}");
             }
 
             return View(model);
