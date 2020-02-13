@@ -37,7 +37,8 @@ namespace DFC.App.FindACourse.Controllers
             }
             catch (Exception ex)
             {
-                this.logger.LogError($"Get course details caused an error: {ex}");
+                this.logger.LogError($"Get course details caused an error: {ex}. " +
+                    $"The values passed were: course id: {courseId} and run id: {runId}");
             }
 
             return View(model);
