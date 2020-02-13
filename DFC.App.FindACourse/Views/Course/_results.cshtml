@@ -22,7 +22,7 @@
     {
         <div class="govuk-!-margin-top-6">
             <h2 class="govuk-heading-m">
-                <a class="govuk-link" href="details?courseId=@result.CourseId&runId=@result.RunId">@result.Title</a>
+                <a class="govuk-link" href="details?courseId=@result.CourseId&runId=@result.RunId&searchTerm=@searchTerm">@result.Title</a>
             </h2>
             <p>[ DESCRIPTION TO GO HERE] - [THIS MUST BE TRUNCATED TO 220 CHARACTERS WITH [...] AFTER].</p>
             <div class="govuk-grid-row">
@@ -30,16 +30,16 @@
                     <ul class="govuk-list">
 
                         <li>
-                            <span class="govuk-secondary-colour">Start date:</span> @result.StartDate
+                            <span class="govuk-secondary-colour">Start date:</span> @result.StartDate.Value.ToLongDateString()
                         </li>
                         <li>
-                            <span class="govuk-secondary-colour">Cost:</span> [COST TO GO HERE] - [WHEN COST IS NULL THEN COST DESCRIPTION WILL GO HERE]
+                            <span class="govuk-secondary-colour">Cost:</span>[COST TO GO HERE] - [WHEN COST IS NULL THEN COST DESCRIPTION WILL GO HERE]
                         </li>
                         <li>
                             <span class="govuk-secondary-colour">Provider:</span> @result.ProviderName
                         </li>
                         <li>
-                            <span class="govuk-secondary-colour">Hours:</span> [FULL TIME / PART TIME / FLEXIBLE TO GO HERE] - [ONLY FOR CLASSROOM BASED]
+                            <span class="govuk-secondary-colour">Hours:</span>[FULL TIME / PART TIME / FLEXIBLE TO GO HERE] - [ONLY FOR CLASSROOM BASED]
                         </li>
 
                     </ul>
@@ -53,10 +53,10 @@
                             <span class="govuk-secondary-colour">Duration:</span> @result.Duration
                         </li>
                         <li>
-                            <span class="govuk-secondary-colour">Location:</span> [LOCATION TO GO HERE] - [WORK BASED: REGION] [CLASSROOM BASED: VENUE ADDRESS]
+                            <span class="govuk-secondary-colour">Location:</span>@result.AttendanceMode
                         </li>
                         <li>
-                            <span class="govuk-secondary-colour">Time:</span> [DAYTIME / NIGHT / WEEKEND TO GO HERE] - [ONLY FOR CLASSROOM BASED]
+                            <span class="govuk-secondary-colour">Time:</span> @result.AttendancePattern
                         </li>
 
                     </ul>

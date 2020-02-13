@@ -55,7 +55,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
         {
             var controller = BuildCourseController(mediaTypeName);
 
-            var result = controller.HeroBanner();
+            var result = controller.HeroBanner(string.Empty);
 
             Assert.IsType<ViewResult>(result);
 
