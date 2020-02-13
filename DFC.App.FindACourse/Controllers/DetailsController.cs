@@ -31,7 +31,7 @@ namespace DFC.App.FindACourse.Controllers
 
             try
             {
-               model.courseDetails = this.findACourseService.GetCourseDetails(courseId, runId).Result;
+               model.CourseDetails = this.findACourseService.GetCourseDetails(courseId, runId).Result;
             }
             catch (Exception ex)
             {
