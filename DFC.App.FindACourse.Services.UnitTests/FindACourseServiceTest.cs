@@ -125,11 +125,10 @@ namespace DFC.App.FindACourse.Services.UnitTests
         {
             //Arrange
             var repository = A.Fake<IFindACourseRepository>();
-            string courseId = @"c0a5dfeb-f2a6-4000-8272-ec1fa78df265";
-            string runId = @"6707d15a-5a19-4c18-9cc8-570573bb5d67";
+            const string courseId = "c0a5dfeb-f2a6-4000-8272-ec1fa78df265";
+            const string runId = "6707d15a-5a19-4c18-9cc8-570573bb5d67";
 
-            var returnedCourseDetails = new CourseDetails();
-            returnedCourseDetails = new CourseDetails
+            var returnedCourseDetails = new CourseDetails
             {
                Title = "Maths in a unit test",
                Description = "This is a maths in a top class description",

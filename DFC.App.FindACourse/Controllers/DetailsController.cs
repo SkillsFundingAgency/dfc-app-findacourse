@@ -33,7 +33,7 @@ namespace DFC.App.FindACourse.Controllers
 
             try
             {
-               model.CourseDetails = this.findACourseService.GetCourseDetails(courseId, runId).Result;
+               model.CourseDetails = await this.findACourseService.GetCourseDetails(courseId, runId).ConfigureAwait(false);
             }
             catch (Exception ex)
             {

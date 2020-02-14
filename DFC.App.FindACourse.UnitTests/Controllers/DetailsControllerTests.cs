@@ -21,8 +21,8 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
             var courseService = A.Fake<IFindACourseService>();
             var logger = A.Fake<ILogger<DetailsController>>();
             var controller = BuildDetailsController(mediaTypeName);
-            string courseId = @"c0a5dfeb-f2a6-4000-8272-ec1fa78df265";
-            string runId = @"6707d15a-5a19-4c18-9cc8-570573bb5d67";
+            const string courseId = "c0a5dfeb-f2a6-4000-8272-ec1fa78df265";
+            const string runId = "6707d15a-5a19-4c18-9cc8-570573bb5d67";
 
             var returnedCourseData = new CourseDetails
             {
