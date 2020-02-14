@@ -1,34 +1,34 @@
-﻿
+﻿@model DetailsViewModel
 
-        <div class="app-related-items">
+<div class="app-related-items">
 
-            <h2 class="govuk-heading-m govuk-!-margin-top-2">Course provider</h2>
-            <p class="govuk-body-lead">St Helens College</p>
+    <h2 class="govuk-heading-m govuk-!-margin-top-2">Course provider</h2>
+    <p class="govuk-body-lead">@Model.CourseDetails.ProviderName</p>
 
-            <ul class="govuk-list govuk-!-font-size-16">
-                <li>
-                    <span class="govuk-!-font-weight-bold">Website:</span>
-                    <a class="govuk-link" href="#">https://www.sthelens.ac.uk/</a>
-                </li>
-                <li>
-                    <span class="govuk-!-font-weight-bold">Email:</span>
-                    <a class="govuk-link" href="#">enquire@sthelens.ac.uk/</a>
-                </li>
-                <li>
-                    <span class="govuk-!-font-weight-bold">Phone:</span> 0800 996699
-                </li>
-            </ul>
+    <ul class="govuk-list govuk-!-font-size-16">
+        <li>
+            <span class="govuk-!-font-weight-bold">Website:</span>
+            <a class="govuk-link" href="@Model.CourseDetails.ProviderDetails.Website">@Model.CourseDetails.ProviderDetails.Website</a>
+        </li>
+        <li>
+            <span class="govuk-!-font-weight-bold">Email:</span>
+            <a class="govuk-link" href="mailto:@Model.CourseDetails.ProviderDetails.EmailAddress">@Model.CourseDetails.ProviderDetails.EmailAddress</a>
+        </li>
+        <li>
+            <span class="govuk-!-font-weight-bold">Phone:</span> @Model.CourseDetails.ProviderDetails.PhoneNumber
+        </li>
+    </ul>
 
-            <h2 class="govuk-heading-m">Provider performance information</h2>
-            <p class="govuk-body govuk-!-font-size-48 govuk-!-font-weight-bold govuk-!-margin-bottom-2">8</p>
-            <p class="govuk-body-s govuk-!-font-weight-bold">out of 10 for learner satisfaction</p>
-            <p class="govuk-body govuk-!-font-size-48 govuk-!-font-weight-bold govuk-!-margin-bottom-2">6.3</p>
-            <p class="govuk-body-s govuk-!-font-weight-bold">out of 10 for employer satisfaction</p>
+    <h2 class="govuk-heading-m">Provider performance information</h2>
+    <p class="govuk-body govuk-!-font-size-48 govuk-!-font-weight-bold govuk-!-margin-bottom-2">@Model.CourseDetails.ProviderDetails.LearnerSatisfaction</p>
+    <p class="govuk-body-s govuk-!-font-weight-bold">out of 10 for learner satisfaction</p>
+    <p class="govuk-body govuk-!-font-size-48 govuk-!-font-weight-bold govuk-!-margin-bottom-2">@Model.CourseDetails.ProviderDetails.EmployerSatisfaction</p>
+    <p class="govuk-body-s govuk-!-font-weight-bold">out of 10 for employer satisfaction</p>
 
-        </div>
+</div>
 
-        <div class="app-related-items">
-            <h2 class="govuk-heading-m">Want to speak to an adviser?</h2>
-            <p class="govuk-body"><b>Call</b> 0800 100 900 or <a href="#" class="govuk-link govuk-link--no-visited-state">use webchat</a></p>
-            <p class="govuk-hint">8am to 10pm, 7 days a week</p>
-        </div>
+<div class="app-related-items">
+    <h2 class="govuk-heading-m">Want to speak to an adviser?</h2>
+    <p class="govuk-body"><b>Call</b> 0800 100 900 or <a href="#" class="govuk-link govuk-link--no-visited-state">use webchat</a></p>
+    <p class="govuk-hint">8am to 10pm, 7 days a week</p>
+</div>

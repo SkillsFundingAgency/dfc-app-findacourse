@@ -1,64 +1,67 @@
-﻿    <h2 class="govuk-heading-m" id="courseDetails">Course details</h2>
-    <table class="govuk-table">
-        <caption class="govuk-visually-hidden">Table with course details</caption>
-        <tbody class="govuk-table__body">
-            <tr class="govuk-table__row">
-                <th class="govuk-table__header" scope="row">Qualification name</th>
-                <td class="govuk-table__cell">Maths and Further Maths</td>
-            </tr>
-            <tr class="govuk-table__row">
-                <th class="govuk-table__header" scope="row">Qualification level</th>
-                <td class="govuk-table__cell">Level 3</td>
-            </tr>
-            <tr class="govuk-table__row">
-                <th class="govuk-table__header" scope="row">Awarding organisation</th>
-                <td class="govuk-table__cell">Open College Network London Region</td>
-            </tr>
-            <tr class="govuk-table__row">
-                <th class="govuk-table__header" scope="row">Location</th>
-                <td class="govuk-table__cell">Available nationally</td>
-            </tr>
-            <tr class="govuk-table__row">
-                <th class="govuk-table__header" scope="row">Course type</th>
-                <td class="govuk-table__cell">Work based</td>
-            </tr>
-            <tr class="govuk-table__row">
-                <th class="govuk-table__header" scope="row">Course start date</th>
-                <td class="govuk-table__cell">14 September 2016</td>
-            </tr>
-            <tr class="govuk-table__row">
-                <th class="govuk-table__header" scope="row">Cost</th>
-                <td class="govuk-table__cell">£0.00</td>
-            </tr>
-            <tr class="govuk-table__row">
-                <th class="govuk-table__header" scope="row">Cost description</th>
-                <td class="govuk-table__cell">Abc</td>
-            </tr>
-        </tbody>
-    </table>    <h2 class="govuk-heading-m" id="whofor">Who this course is for</h2>
-    <p>This course is for you if you need to be able to use a computer to improve your opportunities for work, further study or training. It’s suitable for young learners as well as adults who may already be employed or seeking employment where IT skills are required. The course will give you the opportunity to gain experience of IT and software applications for personal or office use as well as becoming skilled in specific areas of technology such as in using website software or mobile devices.  It’s the next step for anyone who has already completed a level 1 IT course.</p>
-    <h2 class="govuk-heading-m" id="entry">Entry requirements</h2>
-    <p>You will need to be familiar with using a computer and have reasonable literacy and numeracy skills. Level 1 IT qualifications would be an advantage.</p>
-    <h2 class="govuk-heading-m" id="whatlearn">What you'll learn</h2>
-    <p>The course has only one compulsory unit which covers using IT to improve productivity. For the remainder of the course you are able to select units that cover the specific IT skills you require. You could study software applications such as word processing and spreadsheets, using the internet, using email and creating presentations. Hardware skills can include setting up an IT system, using collaborative technology and mobile devices and optimising system performance.  You’ll also gain some useful transferable skills including time-management, team working, research and communication through this course.</p>
+﻿@model DetailsViewModel
 
+<h2 class="govuk-heading-m" id="courseDetails">Course details</h2>
+<table class="govuk-table">
+    <caption class="govuk-visually-hidden">Table with course details</caption>
+    <tbody class="govuk-table__body">
+        <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="row">Qualification name</th>
+            <td class="govuk-table__cell">@Model.CourseDetails.QualificationName</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="row">Qualification level</th>
+            <td class="govuk-table__cell">@Model.CourseDetails.QualificationLevel</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="row">Awarding organisation</th>
+            <td class="govuk-table__cell">@Model.CourseDetails.AwardingOrganisation</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="row">Location</th>
+            <td class="govuk-table__cell">Available nationally</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="row">Course type</th>
+            <td class="govuk-table__cell">@Model.CourseDetails.AttendanceMode</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="row">Course start date</th>
+            <td class="govuk-table__cell">@Model.CourseDetails.StartDate.Value.ToLongDateString()</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="row">Cost</th>
+            <td class="govuk-table__cell">@Model.CourseDetails.Cost</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="row">Cost description</th>
+            <td class="govuk-table__cell">@Model.CourseDetails.AdditionalPrice</td>
+        </tr>
+    </tbody>
+</table>
+<h2 class="govuk-heading-m" id="whofor">Who this course is for</h2>
+<p>@Model.CourseDetails.Description</p>
+<h2 class="govuk-heading-m" id="entry">Entry requirements</h2>
+<p>@Model.CourseDetails.EntryRequirements</p>
+<h2 class="govuk-heading-m" id="whatlearn">What you'll learn</h2>
+<p>@Model.CourseDetails.WhatYoullLearn</p>
 
-    <h2 class="govuk-heading-m" id="howlearn">How you'll learn</h2>
-    <p>This is a practical, hands-on course. You will learn in an IT suite through demonstrations, discussions and practice exercises. You will have one to one support from a tutor to make sure you’re keeping on track. Or You’ll learn through access to materials on an online learning portal.</p>
+<h2 class="govuk-heading-m" id="howlearn">How you'll learn</h2>
+<p>@Model.CourseDetails.HowYoullLearn</p>
 
-    <h2 class="govuk-heading-m" id="need">What you'll need to bring</h2>
-    <p>Notebook, pen, folder for course handouts, memory stick on which to save assignments. You will need access to the internet to be able to use online resources that support this course.</p>
+<h2 class="govuk-heading-m" id="need">What you'll need to bring</h2>
+<p>@Model.CourseDetails.EquipmentRequired</p>
 
-    <h2 class="govuk-heading-m" id="assessed">How you'll be assessed</h2>
-    <p>You’ll be assessed through timed assignments at the end of every unit. You’ll get the chance to do practice assignments beforehand and only take the final unit assignment when both you and your tutor are confident that you will pass.</p>
+<h2 class="govuk-heading-m" id="assessed">How you'll be assessed</h2>
+<p>@Model.CourseDetails.AssessmentMethod</p>
 
-    <h2 class="govuk-heading-m" id="next">What you can do next</h2>
-    <p>Employment or an apprenticeship in an office such as administrator, secretary, or general office assistant. You could progress from junior office roles to those requiring greater use of IT or a higher level of responsibility. You could build on your qualification with more units of the same level (e.g. desk top publishing, using project management software or using the internet) or go on to a Level 3 qualification in IT such as OCR Level 3 Certificate for IT Users.</p>
-    <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
-    <button href="#" role="button" draggable="false" class="govuk-button govuk-button--start" data-module="govuk-button">
-        Go to course provider
-        <svg class="govuk-button__start-icon" xmlns="http://www.w3.org/2000/svg" width="17.5" height="19" viewBox="0 0 33 40" role="presentation" focusable="false">
-            <path fill="currentColor" d="M0 0h13l20 20-20 20H0l20-20z"></path>
-        </svg>
-    </button>
-    <p><a href="#" class="govuk-back-link">Back to results</a></p>
+<h2 class="govuk-heading-m" id="next">What you can do next</h2>
+<p>@Model.CourseDetails.NextSteps</p>
+
+<hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+<button href="#" role="button" draggable="false" class="govuk-button govuk-button--start" data-module="govuk-button">
+    Go to course provider
+    <svg class="govuk-button__start-icon" xmlns="http://www.w3.org/2000/svg" width="17.5" height="19" viewBox="0 0 33 40" role="presentation" focusable="false">
+        <path fill="currentColor" d="M0 0h13l20 20-20 20H0l20-20z"></path>
+    </svg>
+</button>
+<p><a href="/find-a-course/course/searchcourse?searchTerm=@Model.SearchTerm" class="govuk-back-link">Back to results</a></p>

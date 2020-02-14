@@ -18,7 +18,8 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
 
         public BaseController()
         {
-            Logger = A.Fake<ILogger<CourseController>>();
+            CourseLogger = A.Fake<ILogger<CourseController>>();
+            DetailsLogger = A.Fake<ILogger<DetailsController>>();
             FakeFindACoursesService = A.Fake<IFindACourseService>();
         }
 
@@ -38,7 +39,9 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
             new string[] { MediaTypeNames.Application.Json },
         };
 
-        protected ILogger<CourseController> Logger { get; }
+        protected ILogger<CourseController> CourseLogger { get; }
+
+        protected ILogger<DetailsController> DetailsLogger { get; }
 
         protected IFindACourseService FakeFindACoursesService { get; }
 
@@ -50,7 +53,24 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
 
             httpContext.Request.Headers[HeaderNames.Accept] = mediaTypeName;
 
-            var controller = new CourseController(Logger, FakeFindACoursesService)
+            var controller = new CourseController(CourseLogger, FakeFindACoursesService)
+            {
+                ControllerContext = new ControllerContext()
+                {
+                    HttpContext = httpContext,
+                },
+            };
+
+            return controller;
+        }
+
+        protected DetailsController BuildDetailsController(string mediaTypeName)
+        {
+            var httpContext = new DefaultHttpContext();
+
+            httpContext.Request.Headers[HeaderNames.Accept] = mediaTypeName;
+
+            var controller = new DetailsController(DetailsLogger, FakeFindACoursesService)
             {
                 ControllerContext = new ControllerContext()
                 {

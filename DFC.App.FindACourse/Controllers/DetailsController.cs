@@ -3,15 +3,16 @@ using DFC.App.FindACourse.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Threading.Tasks;
 
 namespace DFC.App.FindACourse.Controllers
 {
     public class DetailsController : Controller
     {
-        private readonly ILogger<CourseController> logger;
+        private readonly ILogger<DetailsController> logger;
         private readonly IFindACourseService findACourseService;
 
-        public DetailsController(ILogger<CourseController> logger, IFindACourseService findACourseService)
+        public DetailsController(ILogger<DetailsController> logger, IFindACourseService findACourseService)
         {
             this.logger = logger;
             this.findACourseService = findACourseService;
@@ -19,23 +20,25 @@ namespace DFC.App.FindACourse.Controllers
 
         [HttpGet]
         [Route("find-a-course/course/body/course/details")]
-        public IActionResult Details(string courseId, string runId)
+        public async Task<IActionResult> Details(string courseId, string runId, string searchTerm)
         {
             this.logger.LogInformation($"{nameof(this.Details)} has been called");
             var model = new DetailsViewModel();
+            model.SearchTerm = searchTerm;
 
             if (string.IsNullOrEmpty(courseId) || string.IsNullOrEmpty(runId))
             {
-                throw new Exception("Course Id and/or runId does not have a value");
+                throw new ArgumentNullException("Course Id and/or runId does not have a value");
             }
 
             try
             {
-               model.courseDetails = this.findACourseService.GetCourseDetails(courseId, runId).Result;
+               model.CourseDetails = await this.findACourseService.GetCourseDetails(courseId, runId).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
-                this.logger.LogInformation($"Get course details caused an error: {ex}");
+                this.logger.LogError($"Get course details caused an error: {ex}. " +
+                    $"The values passed were: course id: {courseId} and run id: {runId}");
             }
 
             return View(model);

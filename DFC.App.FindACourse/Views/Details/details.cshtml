@@ -4,7 +4,7 @@
     <div class="govuk-width-container">
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
-                <h1 class="govuk-heading-l govuk-!-padding-bottom-9">Certificate in IT User Skills (ITQ)</h1>
+                <h1 class="govuk-heading-l govuk-!-padding-bottom-9">@Model.CourseDetails.Title</h1>
             </div>
         </div>
     </div>
@@ -13,19 +13,19 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         @{
-            switch (Model.courseDetails.AttendanceMode)
+            switch (Model.CourseDetails.AttendanceMode)
             {
                 case "Classroom based":
-                    <partial name="courseDetailsClassroom" />
+                    <partial name="courseDetailsClassroom" model="Model" />
                     break;
                 case "Work based":
-                    <partial name="courseDetailsWork" />
+                    <partial name="courseDetailsWork" model="Model" />
                     break;
                 case "Online based":
-                    <partial name="courseDetailsOnline" />
+                    <partial name="courseDetailsOnline" model="Model" />
                     break;
                 case "Work based national":
-                    <partial name="courseDetailsWorkNational" />
+                    <partial name="courseDetailsWorkNational" model="Model" />
                     break;
                 default:
                     break;
