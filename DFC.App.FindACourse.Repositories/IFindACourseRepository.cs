@@ -1,4 +1,4 @@
-﻿using DFC.FindACourseClient;
+﻿using DFC.CompositeInterfaceModels.FindACourseClient;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
