@@ -33,11 +33,6 @@ namespace DFC.App.FindACourse.Controllers
 
             try
             {
-                //WARNING - DO NOT LET THIS THROUGH - fAC CLIENT DOWN SO WORK AROUND
-                courseId = "4b04ac96-4d20-4021-b986-f6c4c2fffbc8";
-                runId = "9202aece-e1f0-4347-b6a3-5c63ada706f1";
-                /////END WARNING///////////////////
-
                model.CourseDetails = await this.findACourseService.GetCourseDetails(courseId, runId).ConfigureAwait(false);
             }
             catch (Exception ex)
