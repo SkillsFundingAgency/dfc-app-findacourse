@@ -46,7 +46,7 @@ namespace DFC.App.FindACourse.Data.Helpers
         {
             var lstCourseStudyTime = new List<Filter>();
             lstCourseStudyTime.Add(new Filter { Id = "Daytime", Text = "Daytime" });
-            lstCourseStudyTime.Add(new Filter { Id = "Night", Text = "Night" });
+            lstCourseStudyTime.Add(new Filter { Id = "Evening", Text = "Evening" });
             lstCourseStudyTime.Add(new Filter { Id = "Weekend", Text = "Weekend" });
             lstCourseStudyTime.Add(new Filter { Id = "Day or block release", Text = "Day or block release" });
 

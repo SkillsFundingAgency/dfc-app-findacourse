@@ -22,13 +22,11 @@ namespace DFC.App.FindACourse.Services.UnitTests
             courseProperties.Filters.SearchTerm = "Maths";
             courseProperties.Filters.CourseType = new List<CourseType> { CourseType.All };
             courseProperties.Filters.CourseHours = new List<CourseHours> { CourseHours.All };
-            courseProperties.Filters.StartDate = new List<StartDate> { StartDate.Anytime };
 
             var courseSearchFilters = new CourseSearchFilters();
             courseSearchFilters.SearchTerm = "Maths";
             courseSearchFilters.CourseType = new List<CourseType> { CourseType.All };
             courseSearchFilters.CourseHours = new List<CourseHours> { CourseHours.All };
-            courseSearchFilters.StartDate = new List<StartDate> { StartDate.Anytime };
 
             var returnedCourseData = new CourseSearchResult();
             returnedCourseData.Courses = new List<Course>

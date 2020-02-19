@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Fac = DFC.FindACourseClient;
 
@@ -25,6 +26,7 @@ namespace DFC.App.FindACourse.Controllers
         {
             this.logger = logger;
             this.findACourseService = findACourseService;
+            this.SearchCourse(string.Empty);
         }
 
         [HttpGet]
@@ -178,8 +180,8 @@ namespace DFC.App.FindACourse.Controllers
 
             var courseTypeList = new List<CourseType>();
             var courseHoursList = new List<CourseHours>();
-            var courseStartDateList = new List<StartDate>();
-            var courseStudyModeList = new List<Fac.StudyMode>();
+           // var courseStartDateList = new List<StartDate>();
+            var courseStudyTimeList = new List<Fac.AttendancePattern>();
 
             float selectedDistanceValue = 10;
 
@@ -202,12 +204,14 @@ namespace DFC.App.FindACourse.Controllers
 
             if (model.SideBar.StartDate != null && model.SideBar.StartDate.SelectedIds.Any())
             {
-                courseStartDateList = this.ConvertToEnumList<StartDate>(model.SideBar.StartDate.SelectedIds);
+                //ADDITIONAL LOGIC TO BE PERFORMED HERE.  NEEDS TO GO IN NEW TICKET
+                //courseStartDateList = this.ConvertToEnumList<StartDate>(model.SideBar.StartDate.SelectedIds);
             }
 
             if (model.SideBar.CourseStudyTime != null && model.SideBar.CourseStudyTime.SelectedIds.Any())
             {
-                courseStudyModeList = this.ConvertToEnumList<Fac.StudyMode>(model.SideBar.CourseStudyTime.SelectedIds);
+
+                courseStudyTimeList = this.ConvertToEnumList<Fac.AttendancePattern>(model.SideBar.CourseStudyTime.SelectedIds);
             }
 
             var courseSearchFilters = new CourseSearchFilters
@@ -215,11 +219,10 @@ namespace DFC.App.FindACourse.Controllers
                 SearchTerm = model.CurrentSearchTerm,
                 Distance = selectedDistanceValue,
                 DistanceSpecified = true,
-
                 CourseType = courseTypeList,
                 CourseHours = courseHoursList,
-                StartDate = courseStartDateList,
-                CourseStudyMode = courseStudyModeList,
+                StartDate = StartDate.Anytime, //WAITING ON ADDITIONAL LOGIC TO BE DEFINED
+                CourseStudyTime = courseStudyTimeList,
             };
 
             // Enter filters criteria here
@@ -250,8 +253,8 @@ namespace DFC.App.FindACourse.Controllers
             {
                 CourseType = new List<CourseType> { CourseType.All },
                 CourseHours = new List<CourseHours> { CourseHours.All },
-                StartDate = new List<StartDate> { StartDate.Anytime },
-                CourseStudyMode = new List<Fac.StudyMode> { Fac.StudyMode.Undefined },
+                StartDate = StartDate.Anytime, //new List<StartDate> { StartDate.Anytime },
+                CourseStudyTime = new List<Fac.AttendancePattern> { Fac.AttendancePattern.Undefined },
                 SearchTerm = string.IsNullOrEmpty(searchTerm) ? string.Empty : searchTerm,
             };
 
@@ -405,7 +408,8 @@ namespace DFC.App.FindACourse.Controllers
 
             foreach (var type in listToConvert)
             {
-                Enum.TryParse<T>(type, out T result);
+                var removedSpaces = type.Replace(" ", string.Empty);
+                Enum.TryParse<T>(removedSpaces, true, out T result);
                 returnList.Add(result);
             }
 
