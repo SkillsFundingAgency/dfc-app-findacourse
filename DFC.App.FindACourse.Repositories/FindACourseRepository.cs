@@ -1,16 +1,17 @@
-﻿using DFC.FindACourseClient;
+﻿using DFC.CompositeInterfaceModels.FindACourseClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Fac = DFC.FindACourseClient;
 
 namespace DFC.App.FindACourse.Repository
 {
     public class FindACourseRepository : IFindACourseRepository
     {
-        private readonly ICourseSearchApiService courseSearchApiService;
+        private readonly Fac.ICourseSearchApiService courseSearchApiService;
 
-        public FindACourseRepository(ICourseSearchApiService courseSearchApiService)
+        public FindACourseRepository(Fac.ICourseSearchApiService courseSearchApiService)
         {
             this.courseSearchApiService = courseSearchApiService;
         }
@@ -32,7 +33,7 @@ namespace DFC.App.FindACourse.Repository
 
         public async Task<CourseDetails> GetCourseDetails(string id, string runId)
         {
-            return await courseSearchApiService.GetCourseDetailsAsync(id, runId).ConfigureAwait(false);
+            return await courseSearchApiService.GetCompositeCourseDetailsAsync(id, runId).ConfigureAwait(false);
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using DFC.FindACourseClient;
+﻿using DFC.CompositeInterfaceModels.FindACourseClient;
 
 namespace DFC.App.FindACourse.ViewModels
 {

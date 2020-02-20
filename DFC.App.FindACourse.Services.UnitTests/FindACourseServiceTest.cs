@@ -1,10 +1,11 @@
 using DFC.App.FindACourse.Repository;
-using DFC.FindACourseClient;
+using DFC.CompositeInterfaceModels.FindACourseClient;
 using FakeItEasy;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Net;
 using Xunit;
+using Fac = DFC.FindACourseClient;
 
 namespace DFC.App.FindACourse.Services.UnitTests
 {
@@ -19,15 +20,13 @@ namespace DFC.App.FindACourse.Services.UnitTests
             var courseProperties = new CourseSearchProperties();
             courseProperties.Page = 1;
             courseProperties.Filters.SearchTerm = "Maths";
-            courseProperties.Filters.CourseType = CourseType.All;
-            courseProperties.Filters.CourseHours = CourseHours.All;
-            courseProperties.Filters.StartDate = StartDate.Anytime;
+            courseProperties.Filters.CourseType = new List<CourseType> { CourseType.All };
+            courseProperties.Filters.CourseHours = new List<CourseHours> { CourseHours.All };
 
             var courseSearchFilters = new CourseSearchFilters();
             courseSearchFilters.SearchTerm = "Maths";
-            courseSearchFilters.CourseType = CourseType.All;
-            courseSearchFilters.CourseHours = CourseHours.All;
-            courseSearchFilters.StartDate = StartDate.Anytime;
+            courseSearchFilters.CourseType = new List<CourseType> { CourseType.All };
+            courseSearchFilters.CourseHours = new List<CourseHours> { CourseHours.All };
 
             var returnedCourseData = new CourseSearchResult();
             returnedCourseData.Courses = new List<Course>
@@ -89,13 +88,13 @@ namespace DFC.App.FindACourse.Services.UnitTests
             //Arrange
             var repository = A.Fake<IFindACourseRepository>();
             var findACourseService = new FindACourseService(repository);
-            var returnList = new List<StudyMode>() { StudyMode.Flexible, StudyMode.FullTime,
-                                                    StudyMode.PartTime, StudyMode.Undefined };
+            var returnList = new List<Fac.StudyMode>() { Fac.StudyMode.Flexible, Fac.StudyMode.FullTime,
+                                                    Fac.StudyMode.PartTime, Fac.StudyMode.Undefined };
 
-            A.CallTo(() => repository.GetFilter<StudyMode>()).Returns(returnList);
+            A.CallTo(() => repository.GetFilter<Fac.StudyMode>()).Returns(returnList);
 
             //Act
-            var result = findACourseService.GetFilterByName<StudyMode>();
+            var result = findACourseService.GetFilterByName<Fac.StudyMode>();
 
             //Assert
             A.Equals(result.Count, 4);

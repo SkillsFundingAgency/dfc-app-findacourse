@@ -24,22 +24,34 @@
             <h2 class="govuk-heading-m">
                 <a class="govuk-link" href="details?courseId=@result.CourseId&runId=@result.RunId&searchTerm=@searchTerm">@result.Title</a>
             </h2>
-            <p>[ DESCRIPTION TO GO HERE] - [THIS MUST BE TRUNCATED TO 220 CHARACTERS WITH [...] AFTER].</p>
+            <p>@result.Description</p>
             <div class="govuk-grid-row">
                 <div class="govuk-grid-column-one-half">
                     <ul class="govuk-list">
 
                         <li>
-                            <span class="govuk-secondary-colour">Start date:</span> @result.StartDate.Value.ToLongDateString()
-                        </li>
+                            <span class="govuk-secondary-colour">Start date:</span>
+                            @if (result.StartDate != null)
+                            {
+                                result.StartDate.Value.ToLongDateString();
+                            }                          
+                        </li> 
                         <li>
-                            <span class="govuk-secondary-colour">Cost:</span>[COST TO GO HERE] - [WHEN COST IS NULL THEN COST DESCRIPTION WILL GO HERE]
+                            <span class="govuk-secondary-colour">Cost:</span>
+                            @if (result.Cost == null) 
+                            {
+                                <span>[Cost description to go here]</span>
+                            }
+                            else
+                            {
+                                <span>£@result.Cost</span>
+                            }
                         </li>
                         <li>
                             <span class="govuk-secondary-colour">Provider:</span> @result.ProviderName
                         </li>
                         <li>
-                            <span class="govuk-secondary-colour">Hours:</span>[FULL TIME / PART TIME / FLEXIBLE TO GO HERE] - [ONLY FOR CLASSROOM BASED]
+                            <span class="govuk-secondary-colour">Hours:</span>@result.StudyMode
                         </li>
 
                     </ul>
@@ -53,7 +65,7 @@
                             <span class="govuk-secondary-colour">Duration:</span> @result.Duration
                         </li>
                         <li>
-                            <span class="govuk-secondary-colour">Location:</span>@result.AttendanceMode
+                            <span class="govuk-secondary-colour">Location:</span>@result.Location
                         </li>
                         <li>
                             <span class="govuk-secondary-colour">Time:</span> @result.AttendancePattern
