@@ -17,8 +17,8 @@
         "sharedAppServicePlanResourceGroup": {
             "value": "dfc-dev-app-sharedresources-rg"
         },
-        "appSharedServiceBusName": {
-            "value": "dfc-dev-app-sharedresources-ns"
+        "CosmosDbResourceGroup": {
+            "value": "dfc-dev-app-sharedresources-rg"
         },
         "cosmosDBName": {
             "value": "dfc-dev-app-sharedresources-cdb"
@@ -26,7 +26,7 @@
         "cosmosDbKey": {
             "value": "not-a-real-key"
         },
-        "facCosmosDbCollectionName": {
+        "facCosmosAuditCollectionName": {
             "value": "a-test-collection"
         },
         "facAppDatabaseNeedsCreation": {

@@ -26,13 +26,16 @@
         "sharedAppServicePlanResourceGroup": {
             "value": "__appSharedResourceGroup__"
         },
+        "CosmosDbResourceGroup": {
+            "value": "__appSharedResourceGroup__"
+        },
         "cosmosDBName": {
             "value": "__appSharedCosmosDBName__"
         },
         "cosmosDbKey": {
             "value": "__appSharedCosmosPrimaryKey__"
         },
-        "facCosmosDbCollectionName": {
+        "facCosmosAuditCollectionName": {
             "value": "__cosmosDbCollectionName__"
         },
         "facAppDatabaseNeedsCreation": {
