@@ -26,9 +26,6 @@
         "sharedAppServicePlanResourceGroup": {
             "value": "__appSharedResourceGroup__"
         },
-        "appSharedServiceBusName": {
-            "value": "__appSharedServiceBusName__"
-        },
         "cosmosDBName": {
             "value": "__appSharedCosmosDBName__"
         },
@@ -49,9 +46,6 @@
         },
         "courseProviderServiceApiKey": {
             "value": "__courseProviderServiceApiKey__"
-        },
-        "refreshTopicName": {
-            "value": "__refreshTopicName__"
         }
     }
 }
