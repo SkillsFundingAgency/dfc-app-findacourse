@@ -36,13 +36,13 @@
             "value": "__appSharedCosmosPrimaryKey__"
         },
         "facCosmosAuditCollectionName": {
-            "value": "__cosmosDbCollectionName__"
+            "value": "__facCosmosAuditCollectionName__"
         },
         "facAppDatabaseNeedsCreation": {
             "value": __CosmosDbDatabaseDoesntExist__
         },
         "facAppDatabaseThroughput": {
-            "value": __helpAppDatabaseThroughput__
+            "value": __facAppDatabaseThroughput__
         },
         "courseProviderServiceEndpoint": {
             "value": "__courseProviderServiceEndpoint__"
