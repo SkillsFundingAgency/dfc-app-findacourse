@@ -1,0 +1,63 @@
+﻿@model DetailsViewModel
+
+<h2 class="govuk-heading-m" id="courseDetails">Course details</h2>
+<table class="govuk-table">
+    <caption class="govuk-visually-hidden">Table with course details</caption>
+    <tbody class="govuk-table__body">
+        <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="row">Qualification name</th>
+            <td class="govuk-table__cell">@Model.CourseDetails.QualificationName</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="row">Qualification level</th>
+            <td class="govuk-table__cell">@Model.CourseDetails.QualificationLevel</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="row">Awarding organisation</th>
+            <td class="govuk-table__cell">@Model.CourseDetails.AwardingOrganisation</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="row">Course type</th>
+            <td class="govuk-table__cell">@Model.CourseDetails.AttendanceMode</td>
+        </tr>
+        <tr>
+            <th class="govuk-table__header" scope="row">Course start date</th>
+            <td class="govuk-table__cell">@Model.CourseDetails.StartDate.Value.ToLongDateString()</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="row">Cost</th>
+            <td class="govuk-table__cell">@Model.CourseDetails.Cost</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="row">Cost description</th>
+            <td class="govuk-table__cell">@Model.CourseDetails.AdditionalPrice</td>
+        </tr>
+    </tbody>
+</table>
+<h2 class="govuk-heading-m" id="whofor">Who this course is for</h2>
+<p>@Model.CourseDetails.Description</p>
+<h2 class="govuk-heading-m" id="entry">Entry requirements</h2>
+<p>@Model.CourseDetails.EntryRequirements</p>
+<h2 class="govuk-heading-m" id="whatlearn">What you'll learn</h2>
+<p>@Model.CourseDetails.WhatYoullLearn</p>
+
+<h2 class="govuk-heading-m" id="assessed">How you'll be assessed</h2>
+<p>@Model.CourseDetails.AssessmentMethod</p>
+
+<h2 class="govuk-heading-m" id="next">What you can do next</h2>
+<p>@Model.CourseDetails.NextSteps</p>
+
+<h2 class="govuk-heading-m" id="assessed">How you'll be assessed</h2>
+<p>You’ll be assessed through timed assignments at the end of every unit. You’ll get the chance to do practice assignments beforehand and only take the final unit assignment when both you and your tutor are confident that you will pass.</p>
+
+<h2 class="govuk-heading-m" id="next">What you can do next</h2>
+<p>Employment or an apprenticeship in an office such as administrator, secretary, or general office assistant. You could progress from junior office roles to those requiring greater use of IT or a higher level of responsibility. You could build on your qualification with more units of the same level (e.g. desk top publishing, using project management software or using the internet) or go on to a Level 3 qualification in IT such as OCR Level 3 Certificate for IT Users.</p>
+<hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+<button href="#" role="button" draggable="false" class="govuk-button govuk-button--start" data-module="govuk-button">
+    Go to course provider
+    <svg class="govuk-button__start-icon" xmlns="http://www.w3.org/2000/svg" width="17.5" height="19" viewBox="0 0 33 40" role="presentation" focusable="false">
+        <path fill="currentColor" d="M0 0h13l20 20-20 20H0l20-20z"></path>
+    </svg>
+</button>
+<p><a href="/find-a-course/course/searchcourse?searchTerm=@Model.SearchTerm" class="govuk-back-link">Back to results</a></p>
+<h2 class="govuk-heading-m" id="othervenuesdates">Other venues and dates</h2>

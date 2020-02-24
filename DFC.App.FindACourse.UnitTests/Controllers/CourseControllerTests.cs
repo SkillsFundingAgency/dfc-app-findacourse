@@ -1,7 +1,7 @@
 ﻿using DFC.App.FindACourse.Controllers;
 using DFC.App.FindACourse.Services;
 using DFC.App.FindACourse.ViewModels;
-using DFC.FindACourseClient;
+using DFC.CompositeInterfaceModels.FindACourseClient;
 using FakeItEasy;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
@@ -55,7 +55,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
         {
             var controller = BuildCourseController(mediaTypeName);
 
-            var result = controller.HeroBanner();
+            var result = controller.HeroBanner(string.Empty);
 
             Assert.IsType<ViewResult>(result);
 

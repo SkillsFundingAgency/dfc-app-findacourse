@@ -1,0 +1,88 @@
+﻿@model DetailsViewModel
+
+<h2 class="govuk-heading-m" id="courseDetails">Course details</h2>
+<table class="govuk-table">
+    <caption class="govuk-visually-hidden">Table with course details</caption>
+    <tbody class="govuk-table__body">
+        <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="row">Qualification name</th>
+            <td class="govuk-table__cell">@Model.CourseDetails.QualificationName</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="row">Qualification level</th>
+            <td class="govuk-table__cell">@Model.CourseDetails.QualificationLevel</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="row">Awarding organisation</th>
+            <td class="govuk-table__cell">@Model.CourseDetails.AwardingOrganisation</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="row">Course type</th>
+            <td class="govuk-table__cell">@Model.CourseDetails.AttendanceMode</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="row">Course hours</th>
+            <td class="govuk-table__cell">@Model.CourseDetails.AttendancePattern</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="row">Course start date</th>
+            <td class="govuk-table__cell">@Model.CourseDetails.StartDate.Value.ToLongDateString()</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="row">Cost</th>
+            <td class="govuk-table__cell">@Model.CourseDetails.Cost</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="row">Cost description</th>
+            <td class="govuk-table__cell">@Model.CourseDetails.AdditionalPrice</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="row">Attendance pattern</th>
+            <td class="govuk-table__cell">@Model.CourseDetails.AttendancePattern</td>
+        </tr>
+    </tbody>
+</table>
+<h2 class="govuk-heading-m" id="whofor">Who this course is for</h2>
+<p>@Model.CourseDetails.Description</p>
+<h2 class="govuk-heading-m" id="entry">Entry requirements</h2>
+<p>@Model.CourseDetails.EntryRequirements</p>
+<h2 class="govuk-heading-m" id="whatlearn">What you'll learn</h2>
+<p>@Model.CourseDetails.WhatYoullLearn</p>
+
+<h2 class="govuk-heading-m" id="howlearn">How you'll learn</h2>
+<p>@Model.CourseDetails.HowYoullLearn</p>
+
+<h2 class="govuk-heading-m" id="need">What you'll need to bring</h2>
+<p>@Model.CourseDetails.EquipmentRequired</p>
+
+<h2 class="govuk-heading-m" id="assessed">How you'll be assessed</h2>
+<p>@Model.CourseDetails.AssessmentMethod</p>
+
+<h2 class="govuk-heading-m" id="next">What you can do next</h2>
+<p>@Model.CourseDetails.NextSteps</p>
+
+<hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+<button href="#" role="button" draggable="false" class="govuk-button govuk-button--start" data-module="govuk-button">
+    Go to course provider
+    <svg class="govuk-button__start-icon" xmlns="http://www.w3.org/2000/svg" width="17.5" height="19" viewBox="0 0 33 40" role="presentation" focusable="false">
+        <path fill="currentColor" d="M0 0h13l20 20-20 20H0l20-20z"></path>
+    </svg>
+</button>
+<p><a href="/find-a-course/course/searchcourse?searchTerm=@Model.SearchTerm" class="govuk-back-link">Back to results</a></p>
+<h2 class="govuk-heading-m" id="othervenuesdates">Other venues and dates</h2>
+<table class="govuk-table">
+    <tbody class="govuk-table__body">
+        <tr class="govuk-table__row">
+            <th class="govuk-table__header">Venue</th>
+            <th class="govuk-table__header">Start date</th>
+            <th class="govuk-table__header">Options</th>
+        </tr>
+        <tr class="govuk-table__row">
+            <td class="govuk-table__cell">@Model.CourseDetails.VenueDetails.VenueName</td>
+            <td class="govuk-table__cell">@Model.CourseDetails.StartDate.Value.ToLongDateString()</td>
+            <td class="govuk-table__cell">
+                <a class="govuk-link" href="@Model.CourseDetails.VenueDetails.Website">View course</a>
+            </td>
+        </tr>
+    </tbody>
+</table>

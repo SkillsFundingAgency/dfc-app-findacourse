@@ -1,4 +1,4 @@
-﻿using DFC.FindACourseClient;
+﻿using DFC.CompositeInterfaceModels.FindACourseClient;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -27,5 +27,13 @@ namespace DFC.App.FindACourse.Services
         /// <param name="pageSize">page requested.<./param>
         /// <returns>Task of CourseSearchResult.</returns>
         Task<CourseSearchResult> GetFilteredData(CourseSearchFilters filters, CourseSearchOrderBy orderBy, int pageSize);
+
+        /// <summary>
+        ///     Retrieves the course details for a given course and period.
+        /// </summary>
+        /// <param name="courseId">Course Id.</param>
+        /// <param name="runId">Run Id.</param>
+        /// <returns>Task of course details.</returns>
+        Task<CourseDetails> GetCourseDetails(string courseId, string runId);
     }
 }

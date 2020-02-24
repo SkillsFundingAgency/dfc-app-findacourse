@@ -3,7 +3,7 @@ using DFC.App.FindACourse.Data.Helpers;
 using DFC.App.FindACourse.Extensions;
 using DFC.App.FindACourse.Services;
 using DFC.App.FindACourse.ViewModels;
-using DFC.FindACourseClient;
+using DFC.CompositeInterfaceModels.FindACourseClient;
 using GdsCheckboxList.Models;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +11,9 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Fac = DFC.FindACourseClient;
 
 namespace DFC.App.FindACourse.Controllers
 {
@@ -24,6 +26,7 @@ namespace DFC.App.FindACourse.Controllers
         {
             this.logger = logger;
             this.findACourseService = findACourseService;
+            this.SearchCourse(string.Empty);
         }
 
         [HttpGet]
@@ -70,12 +73,24 @@ namespace DFC.App.FindACourse.Controllers
         }
 
         [HttpGet]
-        [Route("find-a-course/{controller}/herobanner/{**data}")]
-        public IActionResult HeroBanner()
+        [Route("find-a-course/{**data}")]
+        public IActionResult HeroBanner(string data)
         {
             this.logger.LogInformation($"{nameof(this.HeroBanner)} has been called");
+            var returnView = string.Empty;
 
-            return View();
+            var lastPartofUrl = data.Split("/").Last();
+
+            if (lastPartofUrl != "details")
+            {
+                returnView = "~/Views/Shared/herobanner.cshtml";
+            }
+            else
+            {
+                returnView = "~/Views/Shared/detailsHeroBanner.cshtml";
+            }
+
+            return View(returnView);
         }
 
         [HttpGet]
@@ -163,9 +178,11 @@ namespace DFC.App.FindACourse.Controllers
         {
             this.logger.LogInformation($"{nameof(this.FilterResults)} has been called");
 
-            CourseType courseTypeCriteria = CourseType.All;
-            CourseHours courseHoursCriteria = CourseHours.All;
-            StartDate courseStartDateCriteria = StartDate.Anytime;
+            var courseTypeList = new List<CourseType>();
+            var courseHoursList = new List<CourseHours>();
+           // var courseStartDateList = new List<StartDate>();
+            var courseStudyTimeList = new List<Fac.AttendancePattern>();
+
             float selectedDistanceValue = 10;
 
             if (model?.SideBar.DistanceOptions != null)
@@ -177,35 +194,36 @@ namespace DFC.App.FindACourse.Controllers
 
             if (model.SideBar.CourseType != null && model.SideBar.CourseType.SelectedIds.Any())
             {
-                _ = Enum.TryParse(model.SideBar.CourseType.SelectedIds[0], out courseTypeCriteria);
+                courseTypeList = this.ConvertToEnumList<CourseType>(model.SideBar.CourseType.SelectedIds);
             }
 
             if (model.SideBar.CourseHours != null && model.SideBar.CourseHours.SelectedIds.Any())
             {
-                _ = Enum.TryParse(model.SideBar.CourseHours.SelectedIds[0], out courseHoursCriteria);
+                courseHoursList = this.ConvertToEnumList<CourseHours>(model.SideBar.CourseHours.SelectedIds);
             }
 
             if (model.SideBar.StartDate != null && model.SideBar.StartDate.SelectedIds.Any())
             {
-                _ = Enum.TryParse(model.SideBar.StartDate.SelectedIds[0], out courseStartDateCriteria);
+                //ADDITIONAL LOGIC TO BE PERFORMED HERE.  NEEDS TO GO IN NEW TICKET
+                //courseStartDateList = this.ConvertToEnumList<StartDate>(model.SideBar.StartDate.SelectedIds);
             }
 
-            // TODO - Uncomment the line below after it has been added to the nuget package
-            // Enum.TryParse(model.SideBar.CourseStudyTime.selectedIds[0], out StartDate courseStudyTimeCriteria);
+            if (model.SideBar.CourseStudyTime != null && model.SideBar.CourseStudyTime.SelectedIds.Any())
+            {
+
+                courseStudyTimeList = this.ConvertToEnumList<Fac.AttendancePattern>(model.SideBar.CourseStudyTime.SelectedIds);
+            }
+
             var courseSearchFilters = new CourseSearchFilters
             {
                 SearchTerm = model.CurrentSearchTerm,
                 Distance = selectedDistanceValue,
                 DistanceSpecified = true,
-
-                // TODO: FOLLOWING NEED TO BE LISTS - NEED TO UPDATE NUGET PACKAGE
-                CourseType = courseTypeCriteria,
-                CourseHours = courseHoursCriteria,
-                StartDate = courseStartDateCriteria,
+                CourseType = courseTypeList,
+                CourseHours = courseHoursList,
+                StartDate = StartDate.Anytime, //WAITING ON ADDITIONAL LOGIC TO BE DEFINED
+                CourseStudyTime = courseStudyTimeList,
             };
-
-            // TODO: FOLLOWING DOES NOT YET EXIST IN THE NUGET PACKAGE
-            // courseSearchFilters.StudyTime = courseStudyTimeCriteria;
 
             // Enter filters criteria here
             model.RequestPage = (model.RequestPage > 1) ? model.RequestPage : 1;
@@ -233,9 +251,10 @@ namespace DFC.App.FindACourse.Controllers
             var model = new BodyViewModel();
             var courseSearchFilters = new CourseSearchFilters
             {
-                CourseType = CourseType.All,
-                CourseHours = CourseHours.All,
-                StartDate = StartDate.Anytime,
+                CourseType = new List<CourseType> { CourseType.All },
+                CourseHours = new List<CourseHours> { CourseHours.All },
+                StartDate = StartDate.Anytime, //new List<StartDate> { StartDate.Anytime },
+                CourseStudyTime = new List<Fac.AttendancePattern> { Fac.AttendancePattern.Undefined },
                 SearchTerm = string.IsNullOrEmpty(searchTerm) ? string.Empty : searchTerm,
             };
 
@@ -299,6 +318,15 @@ namespace DFC.App.FindACourse.Controllers
             {
                 model.SideBar.StartDate = this.CheckCheckboxState(model.SideBar.StartDate, sideBarViewModel.StartDate);
                 sideBarViewModel.StartDate.SelectedIds = model.SideBar.StartDate.SelectedIds;
+            }
+
+            foreach (var item in model.Results.Courses)
+            {
+                if (item.Description.Length > 220)
+                {
+                    item.Description = item.Description.Substring(0, 200);
+                    item.Description += "...";
+                }
             }
 
             model.SideBar = sideBarViewModel;
@@ -372,6 +400,20 @@ namespace DFC.App.FindACourse.Controllers
             };
 
             return sideBarViewModel;
+        }
+
+        private List<T> ConvertToEnumList<T>(List<string> listToConvert) where T : struct
+        {
+            var returnList = new List<T>();
+
+            foreach (var type in listToConvert)
+            {
+                var removedSpaces = type.Replace(" ", string.Empty);
+                Enum.TryParse<T>(removedSpaces, true, out T result);
+                returnList.Add(result);
+            }
+
+            return returnList;
         }
     }
 }

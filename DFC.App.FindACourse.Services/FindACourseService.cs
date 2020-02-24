@@ -1,5 +1,5 @@
 ﻿using DFC.App.FindACourse.Repository;
-using DFC.FindACourseClient;
+using DFC.CompositeInterfaceModels.FindACourseClient;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -34,6 +34,11 @@ namespace DFC.App.FindACourse.Services
             };
 
             return await repository.RetrieveData(criteriaProperties).ConfigureAwait(true);
+        }
+
+        public async Task<CourseDetails> GetCourseDetails(string courseId, string runId)
+        {
+            return await repository.GetCourseDetails(courseId, runId).ConfigureAwait(false);
         }
     }
 }
