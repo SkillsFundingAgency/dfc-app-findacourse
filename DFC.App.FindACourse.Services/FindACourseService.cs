@@ -33,7 +33,7 @@ namespace DFC.App.FindACourse.Services
                 Page = pageSize,
             };
 
-            return await repository.RetrieveData(criteriaProperties).ConfigureAwait(true);
+            return await repository.RetrieveData(criteriaProperties).ConfigureAwait(false);
         }
 
         public async Task<CourseDetails> GetCourseDetails(string courseId, string runId)

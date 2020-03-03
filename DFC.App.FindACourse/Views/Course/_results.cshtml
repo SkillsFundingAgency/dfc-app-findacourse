@@ -8,8 +8,8 @@
     var courseType = Html.Raw(Json.Serialize(Model.SideBar.CourseType.SelectedIds));
     var courseHours = Html.Raw(Json.Serialize(Model.SideBar.CourseHours.SelectedIds));
     var courseStudyTime = Html.Raw(Json.Serialize(Model.SideBar.CourseStudyTime.SelectedIds));
-    var courseStartDate = Html.Raw(Json.Serialize(Model.SideBar.StartDate.SelectedIds));
-    var searchTerm = Model.CurrentSearchTerm;
+    var courseStartDate = Model.SideBar.StartDateValue;
+    var searchTerm = Model.SideBar.StartDateValue;
 
     var parameters = $"searchTerm={searchTerm}&town={town}&courseType={courseType}&courseHours={courseHours}&studyTime={courseStudyTime}&startDate={courseStartDate}&distance={distance}";
     var nextLinkParams = $"{parameters}&page={nextPage}";
@@ -20,87 +20,49 @@
 {
     @foreach (var result in Model.Results.Courses)
     {
-        <div class="govuk-!-margin-top-6">
-            <h2 class="govuk-heading-m">
-                <a class="govuk-link" href="details?courseId=@result.CourseId&runId=@result.RunId&searchTerm=@searchTerm">@result.Title</a>
-            </h2>
-            <p>@result.Description</p>
-            <div class="govuk-grid-row">
-                <div class="govuk-grid-column-one-half">
-                    <ul class="govuk-list">
-
-                        <li>
-                            <span class="govuk-secondary-colour">Start date:</span>
-                            @if (result.StartDate != null)
-                            {
-                                result.StartDate.Value.ToLongDateString();
-                            }                          
-                        </li> 
-                        <li>
-                            <span class="govuk-secondary-colour">Cost:</span>
-                            @if (result.Cost == null) 
-                            {
-                                <span>[Cost description to go here]</span>
-                            }
-                            else
-                            {
-                                <span>£@result.Cost</span>
-                            }
-                        </li>
-                        <li>
-                            <span class="govuk-secondary-colour">Provider:</span> @result.ProviderName
-                        </li>
-                        <li>
-                            <span class="govuk-secondary-colour">Hours:</span>@result.StudyMode
-                        </li>
-
-                    </ul>
-                </div>
-                <div class="govuk-grid-column-one-half">
-                    <ul class="govuk-list">
-                        <li>
-                            <span class="govuk-secondary-colour">Course type:</span> @result.AttendanceMode
-                        </li>
-                        <li>
-                            <span class="govuk-secondary-colour">Duration:</span> @result.Duration
-                        </li>
-                        <li>
-                            <span class="govuk-secondary-colour">Location:</span>@result.Location
-                        </li>
-                        <li>
-                            <span class="govuk-secondary-colour">Time:</span> @result.AttendancePattern
-                        </li>
-
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <hr class="govuk-section-break govuk-section-break--visible">
+        switch (result.AttendanceMode)
+        {
+            case "Classroom based":
+                <partial name="_results_classroom" model="result" />
+                <hr class="govuk-section-break govuk-section-break--visible">
+                break;
+            case "Work based":
+                <partial name="_results_workbased" model="result" />
+                <hr class="govuk-section-break govuk-section-break--visible">
+                break;
+            case "Online":
+                <partial name="_results_online" model="result" />
+                <hr class="govuk-section-break govuk-section-break--visible">
+                break;
+            default:
+                break;
+        }
     }
-    @if (Model.Results.ResultProperties.TotalPages > 1)
-    {
-        <ul class="previous-next-navigation govuk-!-margin-top-3">
-            @if (Model.Results.ResultProperties.Page < Model.Results.ResultProperties.TotalPages)
-            {
-                <li class="next">
-                    <a href="/find-a-course/course/page?@nextLinkParams">
-                        <span class="pagination-label">Next</span>
-                        <span class="govuk-visually-hidden">page</span>
-                        <span class="page-numbers">@nextPage of @Model.Results.ResultProperties.TotalPages</span>
-                    </a>
-                </li>
-            }
+}
 
-            @if (Model.Results.ResultProperties.Page > 1)
-            {
-                <li class="previous">
-                    <a href="/find-a-course/course/page?@previousLinkParams">
-                        <span class="pagination-label">Previous</span>
-                        <span class="govuk-visually-hidden">page</span>
-                        <span class="page-numbers">@previousPage of @Model.Results.ResultProperties.TotalPages</span>
-                    </a>
-                </li>
-            }
-        </ul>
-    }
+@if (Model.Results.ResultProperties.TotalPages > 1)
+{
+    <ul class="previous-next-navigation govuk-!-margin-top-3">
+        @if (Model.Results.ResultProperties.Page < Model.Results.ResultProperties.TotalPages)
+        {
+            <li class="next">
+                <a href="/find-a-course/course/page?@nextLinkParams">
+                    <span class="pagination-label">Next</span>
+                    <span class="govuk-visually-hidden">page</span>
+                    <span class="page-numbers">@nextPage of @Model.Results.ResultProperties.TotalPages</span>
+                </a>
+            </li>
+        }
+
+        @if (Model.Results.ResultProperties.Page > 1)
+        {
+            <li class="previous">
+                <a href="/find-a-course/course/page?@previousLinkParams">
+                    <span class="pagination-label">Previous</span>
+                    <span class="govuk-visually-hidden">page</span>
+                    <span class="page-numbers">@previousPage of @Model.Results.ResultProperties.TotalPages</span>
+                </a>
+            </li>
+        }
+    </ul>
 }

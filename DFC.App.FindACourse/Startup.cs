@@ -83,7 +83,7 @@ namespace DFC.App.FindACourse
                 app.UseHsts();
             }
 
-            app.UseCors();
+         //   app.UseCors();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
