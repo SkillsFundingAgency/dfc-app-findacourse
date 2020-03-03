@@ -39,6 +39,24 @@
             "type": "string",
             "defaultValue": ""
         },
+        "CosmosDbResourceGroup": {
+            "type": "string"
+        },
+        "cosmosDbName": {
+            "type": "string"
+        },
+        "cosmosDbKey": {
+            "type": "securestring"
+        },
+        "facCosmosAuditCollectionName": {
+            "type": "string"
+        },
+        "facAppDatabaseNeedsCreation": {
+            "type": "bool"
+        },
+        "facAppDatabaseThroughput": {
+            "type": "int"
+        },
         "courseProviderServiceEndpoint": {
             "type": "string",
             "metadata": {
@@ -57,6 +75,9 @@
         "appServicePlanName": "[if(greater(length(parameters('sharedAppServicePlanName')), 0), parameters('sharedAppServicePlanName'), concat(parameters('resourcePrefix'), '-asp'))]",
         "appServicePlanResourceGroup": "[if(greater(length(parameters('SharedAppServicePlanResourceGroup')), 0), parameters('SharedAppServicePlanResourceGroup'), resourceGroup().name)]",
         "buildingBlocksDfcBaseUrl": "https://raw.githubusercontent.com/SkillsFundingAgency/dfc-devops/master/ArmTemplates/",
+        "facCosmosAuditCollectionPartitionKey": "/PartitionKey",
+        "cosmosDbDatabaseName": "dfc-app-findacourse",
+        "cosmosDbEndpoint": "[concat('https://', parameters('cosmosDbName'), '.documents.azure.com:443/')]",
         "webAppName": "[concat(parameters('resourcePrefix'), '-as')]"
     },
     "resources": [
@@ -154,6 +175,30 @@
                                 "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',parameters('appSharedStorageAccountName'),';AccountKey=',listKeys(resourceId(parameters('appSharedResourceGroup'), 'Microsoft.Storage/storageAccounts', parameters('appSharedStorageAccountName')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value, ';EndpointSuffix=core.windows.net')]"
                             },
                             {
+                                "name": "AllowedHosts",
+                                "value": "*"
+                            },
+                            {
+                                "name": "Configuration__CourseSearchClient__CosmosAuditConnection__AccessKey",
+                                "value": "[parameters('cosmosDbKey')]"
+                            },
+                            {
+                                "name": "Configuration__CourseSearchClient__CosmosAuditConnection__EndpointUrl",
+                                "value": "[variables('cosmosDbEndpoint')]"
+                            },
+                            {
+                                "name": "Configuration__CourseSearchClient__CosmosAuditConnection__DatabaseId",
+                                "value": "[variables('cosmosDbDatabaseName')]"
+                            },
+                            {
+                                "name": "Configuration__CourseSearchClient__CosmosAuditConnection__CollectionId",
+                                "value": "[parameters('facCosmosAuditCollectionName')]"
+                            },
+                            {
+                                "name": "Configuration__CourseSearchClient__CosmosAuditConnection__PartitionKey",
+                                "value": "[variables('facCosmosAuditCollectionPartitionKey')]"
+                            },
+                            {
                                 "name": "Configuration__CourseSearchClient__CourseSearchSvc__ServiceEndpoint",
                                 "value": "[Parameters('courseProviderServiceEndpoint')]"
                             },
@@ -174,8 +219,24 @@
                                 "value": "3"
                             },
                             {
+                                "name": "Configuration__CourseSearchClient__Policies__HttpCircuitBreaker__DurationOfBreak",
+                                "value": "00:00:10"
+                            },
+                            {
+                                "name": "Configuration__CourseSearchClient__Policies__HttpCircuitBreaker__ExceptionsAllowedBeforeBreaking",
+                                "value": "3"
+                            },
+                            {
+                                "name": "Configuration__CourseSearchClient__Policies__HttpRetry__BackoffPower",
+                                "value": "2"
+                            },
+                            {
+                                "name": "Configuration__CourseSearchClient__Policies__HttpRetry__Count",
+                                "value": "3"
+                            },
+                            {
                                 "name": "Logging__ApplicationInsights__LogLevel__Default",
-                                "value": "Information"
+                                "value": "Warning"
                             }
                         ]
                     }
@@ -184,7 +245,70 @@
             "dependsOn": [
                 "[variables('AppServiceAppInsightsName')]"
             ]
+        },
+        {
+            "name": "[variables('CosmosDbDatabaseName')]",
+            "type": "Microsoft.Resources/deployments",
+            "resourceGroup": "[parameters('CosmosDbResourceGroup')]",
+            "apiVersion": "2017-05-10",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(variables('BuildingBlocksDfcBaseUrl'),'CosmosDb/cosmos-database.json')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "accountName": {
+                        "value": "[parameters('CosmosDbName')]"
+                    },
+                    "databaseName": {
+                        "value": "[variables('CosmosDbDatabaseName')]"
+                    },
+                    "useSharedRequestUnits": {
+                        "value": true
+                    },
+                    "offerThroughput": {
+                        "value": "[parameters('facAppDatabaseThroughput')]"
+                    },
+                    "databaseNeedsCreation": {
+                        "value": "[parameters('facAppDatabaseNeedsCreation')]"
+                    }
+                }
+            }
+        },
+        {
+            "apiVersion": "2017-05-10",
+            "name": "[parameters('facCosmosAuditCollectionName')]",
+            "type": "Microsoft.Resources/deployments",
+            "resourceGroup": "[parameters('CosmosDbResourceGroup')]",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(variables('BuildingBlocksDfcBaseUrl'), 'CosmosDb/cosmos-collection.json')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "accountName": {
+                        "value": "[parameters('CosmosDbName')]"
+                    },
+                    "databaseName": {
+                        "value": "[variables('CosmosDbDatabaseName')]"
+                    },
+                    "collectionName": {
+                        "value": "[parameters('facCosmosAuditCollectionName')]"
+                    },
+                    "provisionRequestUnits": {
+                        "value": false
+                    },
+                    "partitionKey": {
+                        "value": "[variables('facCosmosAuditCollectionPartitionKey')]"
+                    }
+                }
+            },
+            "dependsOn": [
+                "[variables('CosmosDbDatabaseName')]"
+            ]
         }
     ],
-        "outputs": {}
-    }
+    "outputs": {}
+}

@@ -26,6 +26,24 @@
         "sharedAppServicePlanResourceGroup": {
             "value": "__appSharedResourceGroup__"
         },
+        "CosmosDbResourceGroup": {
+            "value": "__appSharedResourceGroup__"
+        },
+        "cosmosDBName": {
+            "value": "__appSharedCosmosDBName__"
+        },
+        "cosmosDbKey": {
+            "value": "__appSharedCosmosPrimaryKey__"
+        },
+        "facCosmosAuditCollectionName": {
+            "value": "__facCosmosAuditCollectionName__"
+        },
+        "facAppDatabaseNeedsCreation": {
+            "value": __CosmosDbDatabaseDoesntExist__
+        },
+        "facAppDatabaseThroughput": {
+            "value": __facAppDatabaseThroughput__
+        },
         "courseProviderServiceEndpoint": {
             "value": "__courseProviderServiceEndpoint__"
         },
