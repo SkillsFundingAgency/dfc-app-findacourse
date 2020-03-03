@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace DFC.App.FindACourse.ViewModels
 {
@@ -9,6 +10,8 @@ namespace DFC.App.FindACourse.ViewModels
 
         public string DistanceValue { get; set; }
 
+        public string StartDateValue { get; set; }
+
         public List<SelectListItem> DistanceOptions { get; set; }
 
         public FiltersListViewModel CourseStudyTime { get; set; }
@@ -17,6 +20,7 @@ namespace DFC.App.FindACourse.ViewModels
 
         public FiltersListViewModel CourseType { get; set; }
 
-        public FiltersListViewModel StartDate { get; set; }
+       // public FiltersListViewModel StartDate { get; set; }
+        public List<SelectListItem> StartDateOptions { get; set; }
     }
 }

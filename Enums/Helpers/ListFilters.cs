@@ -12,7 +12,7 @@ namespace DFC.App.FindACourse.Data.Helpers
         {
             var lstDistance = new List<SelectListItem>();
             lstDistance.Add(new SelectListItem("5 miles", "5 miles"));
-            lstDistance.Add(new SelectListItem("10 miles", "10 miles"));
+            lstDistance.Add(new SelectListItem("10 miles", "10 miles", true));
             lstDistance.Add(new SelectListItem("15 miles", "15 miles"));
             lstDistance.Add(new SelectListItem("30 miles", "30 miles"));
             lstDistance.Add(new SelectListItem("45 miles", "45 miles"));
@@ -53,23 +53,24 @@ namespace DFC.App.FindACourse.Data.Helpers
             return lstCourseStudyTime;
         }
 
-        public static List<Filter> GetStartDateList()
+        public static List<SelectListItem> GetStartDateList()
         {
-            var lstCourseStartDate = new List<Filter>();
-            lstCourseStartDate.Add(new Filter { Id = "Next 3 months", Text = "Next 3 months" });
-            lstCourseStartDate.Add(new Filter { Id = "In 3 to 6 months", Text = "In 3 to 6 months" });
-            lstCourseStartDate.Add(new Filter { Id = "More than 6 months", Text = "More than 6 months" });
-            lstCourseStartDate.Add(new Filter { Id = "Flexible", Text = "Flexible" });
+            var lstStartDate = new List<SelectListItem>();
 
-            return lstCourseStartDate;
+            lstStartDate.Add(new SelectListItem("Anytime", "Anytime", true));
+            lstStartDate.Add(new SelectListItem("Next 3 months", "Next 3 months"));
+            lstStartDate.Add(new SelectListItem("In 3 to 6 months", "In 3 to 6 months"));
+            lstStartDate.Add(new SelectListItem("More than 6 months", "More than 6 months"));
+
+            return lstStartDate;
         }
 
         public static List<SelectListItem> GetOrderByOptions()
         {
             var lstOrderBy = new List<SelectListItem>();
-            lstOrderBy.Add(new SelectListItem("Recently added", "Recently added"));
+
             lstOrderBy.Add(new SelectListItem("Distance", "Distance"));
-            lstOrderBy.Add(new SelectListItem("Relevance", "Relevance"));
+            lstOrderBy.Add(new SelectListItem("Relevance", "Relevance", true));
             lstOrderBy.Add(new SelectListItem("Start date", "Start date"));
 
             return lstOrderBy;
