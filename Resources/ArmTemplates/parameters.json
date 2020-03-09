@@ -49,6 +49,12 @@
         },
         "courseProviderServiceApiKey": {
             "value": "__courseProviderServiceApiKey__"
+        },
+        "Environment": {
+            "value": "__ReleaseEnvironmentName__"
+        },
+        "enableAlerts": {
+            "value": __EnableAzureMonitorAlerting__
         }
     }
 }
