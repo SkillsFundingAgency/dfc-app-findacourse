@@ -68,6 +68,15 @@
             "metadata": {
                 "description": "Access token for course provider service"
             }
+	        },
+        "Environment": {
+            "type": "string"
+        },
+        "enableAlerts": {
+            "type": "bool",
+            "metadata": {
+                "description": "Enable or disable alerting"
+            }
         }
     },
     "variables": {
@@ -78,7 +87,8 @@
         "facCosmosAuditCollectionPartitionKey": "/PartitionKey",
         "cosmosDbDatabaseName": "dfc-app-findacourse",
         "cosmosDbEndpoint": "[concat('https://', parameters('cosmosDbName'), '.documents.azure.com:443/')]",
-        "webAppName": "[concat(parameters('resourcePrefix'), '-as')]"
+        "webAppName": "[concat(parameters('resourcePrefix'), '-as')]",
+        "ActionGroupName": "[concat('dfc-', replace(tolower(parameters('Environment')), '-draft', ''), '-app-sharedresources-actgrp')]"
     },
     "resources": [
         {
@@ -308,6 +318,88 @@
             "dependsOn": [
                 "[variables('CosmosDbDatabaseName')]"
             ]
+        },
+        {
+          "apiVersion": "2019-05-01",
+          "name": "[concat(variables('appServiceAppInsightsName'), '-metric-exceptions')]",
+          "type": "Microsoft.Resources/deployments",
+          "dependsOn": [
+              "[variables('appServiceAppInsightsName')]"
+          ],
+          "properties": {
+              "mode": "Incremental",
+              "templateLink": {
+                  "uri": "[concat(variables('BuildingBlocksDfcBaseUrl'), 'Application-Insights/metric-alerts.json')]",
+                  "contentVersion": "1.0.0.0"
+              },
+              "parameters": {
+                  "enabled": {
+                      "value": "[parameters('enableAlerts')]"
+                  },
+                  "alertName": {
+                      "value": "[concat(variables('appServiceAppInsightsName'), '-metric-exceptions')]"
+                  },
+                  "alertSeverity": {
+                      "value": 3
+                  },
+                  "metricName": {
+                      "value": "exceptions/count"
+                  },
+                  "operator": {
+                      "value": "GreaterThan"
+                  },
+                  "threshold": {
+                      "value": "0"
+                  },
+                  "aggregation": {
+                      "value": "Count"
+                  },
+                  "windowSize": {
+                      "value": "PT5M"
+                  },
+                  "evaluationFrequency": {
+                      "value": "PT1M"
+                  },
+                  "actionGroupName": {
+                      "value": "[variables('ActionGroupName')]"
+                  },
+                  "actionGroupResourceGroup": {
+                      "value": "[parameters('appSharedResourceGroup')]"
+                  },
+                  "resourceId": {
+                      "value": "[resourceId('Microsoft.Insights/Components', variables('appServiceAppInsightsName'))]"
+                  }
+              }
+          }
+        },
+        {
+          "apiVersion": "2019-05-01",
+          "name": "[concat(variables('appServiceAppInsightsName'), '-failure-anomaly-v2')]",
+          "type": "Microsoft.Resources/deployments",
+          "dependsOn": [
+              "[variables('appServiceAppInsightsName')]"
+          ],
+          "properties": {
+              "mode": "Incremental",
+              "templateLink": {
+                  "uri": "[concat(variables('BuildingBlocksDfcBaseUrl'), 'Application-Insights/failure-anomaly-rule.json')]",
+                  "contentVersion": "1.0.0.0"
+              },
+              "parameters": {
+                  "alertName": {
+                      "value": "[concat(variables('appServiceAppInsightsName'), '-failure-anomaly-v2')]"
+                  },
+                  "enabled": {
+                      "value": "[parameters('enableAlerts')]"
+                  },
+                  "resourceId": {
+                      "value": "[resourceId('Microsoft.Insights/Components', variables('appServiceAppInsightsName'))]"
+                  },
+                  "actionGroupId": {
+                      "value": "[resourceId(parameters('appSharedResourceGroup'), 'microsoft.insights/actionGroups', variables('ActionGroupName'))]"
+                  }
+              }
+          }
         }
     ],
     "outputs": {}
