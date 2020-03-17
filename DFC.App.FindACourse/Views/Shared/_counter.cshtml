@@ -3,6 +3,6 @@
 @if (Model.Results != null)
 {
 <div>
-    <p class="govuk-body">Showing all @Model.Results.ResultProperties.TotalResultCount courses</p>
+    <p class="govuk-body">Showing all @String.Format("{0:n}", Model.Results.ResultProperties.TotalResultCount)courses</p>
 </div>
 }
