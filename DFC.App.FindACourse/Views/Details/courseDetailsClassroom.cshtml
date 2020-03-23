@@ -41,7 +41,16 @@
         </tr>
         <tr class="govuk-table__row">
             <th class="govuk-table__header" scope="row">Cost</th>
-            <td class="govuk-table__cell">£@Model.CourseDetails.Cost</td>
+            <td class="govuk-table__cell">
+                @if (string.IsNullOrEmpty(Model.CourseDetails.Cost))
+                {
+                    <span>£0.00</span>
+                }
+                else
+                {
+                    <span>£@string.Format("{0:0.00}", Model.CourseDetails.Cost)</span>
+                }
+            </td>
         </tr>
         <tr class="govuk-table__row">
             <th class="govuk-table__header" scope="row">Cost description</th>
