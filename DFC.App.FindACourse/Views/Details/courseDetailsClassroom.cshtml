@@ -33,7 +33,22 @@
         </tr>
         <tr class="govuk-table__row">
             <th class="govuk-table__header" scope="row">Course hours</th>
-            <td class="govuk-table__cell">@Model.CourseDetails.AttendancePattern</td>
+            <td class="govuk-table__cell">
+                @switch (Model.CourseDetails.AttendancePattern)
+                {
+                    case "PartTime":
+                        <span>Part-time</span>
+                        break;
+                    case "FullTime":
+                        <span>Full-time</span>
+                        break;
+                    case "Daytime":
+                        <span>Daytime</span>
+                        break;
+                    default:
+                        break;
+                }
+            </td>
         </tr>
         <tr class="govuk-table__row">
             <th class="govuk-table__header" scope="row">Course start date</th>
@@ -43,7 +58,7 @@
             <th class="govuk-table__header" scope="row">Cost</th>
             <td class="govuk-table__cell">
                 @if (string.IsNullOrEmpty(Model.CourseDetails.Cost))
-                {
+                    {
                     <span>£0.00</span>
                 }
                 else
@@ -63,49 +78,49 @@
     </tbody>
 </table>
 @if (!string.IsNullOrWhiteSpace(Model.CourseDetails.Description))
-{
+                {
     <h2 class="govuk-heading-m" id="whofor">Who this course is for</h2>
     <p>@Model.CourseDetails.Description</p>
 }
 
-@if (!string.IsNullOrWhiteSpace(Model.CourseDetails.EntryRequirements))
-{
+                @if (!string.IsNullOrWhiteSpace(Model.CourseDetails.EntryRequirements))
+                {
     <h2 class="govuk-heading-m" id="entry">Entry requirements</h2>
     <p>@Model.CourseDetails.EntryRequirements</p>
 }
 
-@if (!string.IsNullOrWhiteSpace(Model.CourseDetails.WhatYoullLearn))
-{
+            @if (!string.IsNullOrWhiteSpace(Model.CourseDetails.WhatYoullLearn))
+            {
     <h2 class="govuk-heading-m" id="whatlearn">What you'll learn</h2>
     <p>@Model.CourseDetails.WhatYoullLearn</p>
 }
 
 @if (!string.IsNullOrWhiteSpace(Model.CourseDetails.HowYoullLearn))
-{
+            {
     <h2 class="govuk-heading-m" id="howlearn">How you'll learn</h2>
     <p>@Model.CourseDetails.HowYoullLearn</p>
 }
 
 @if (!string.IsNullOrWhiteSpace(Model.CourseDetails.HowYoullLearn))
-{
+            {
     <h2 class="govuk-heading-m" id="howlearn">How you'll learn</h2>
     <p>@Model.CourseDetails.HowYoullLearn</p>
 }
 
 @if (!string.IsNullOrWhiteSpace(Model.CourseDetails.EquipmentRequired))
-{
+            {
     <h2 class="govuk-heading-m" id="need">What you'll need to bring</h2>
     <p>@Model.CourseDetails.EquipmentRequired</p>
 }
 
 @if (!string.IsNullOrWhiteSpace(Model.CourseDetails.AssessmentMethod))
-{
+            {
     <h2 class="govuk-heading-m" id="assessed">How you'll be assessed</h2>
     <p>@Model.CourseDetails.AssessmentMethod</p>
 }
 
 @if (!string.IsNullOrWhiteSpace(Model.CourseDetails.NextSteps))
-{
+            {
     <h2 class="govuk-heading-m" id="next">What you can do next</h2>
     <p>@Model.CourseDetails.NextSteps</p>
 }
