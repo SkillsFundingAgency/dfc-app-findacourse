@@ -34,16 +34,16 @@
         <tr class="govuk-table__row">
             <th class="govuk-table__header" scope="row">Course hours</th>
             <td class="govuk-table__cell">
-                @switch (Model.CourseDetails.AttendancePattern)
+            @switch (Model.CourseDetails.StudyMode)
                 {
-                    case "PartTime":
-                        <span>Part-time</span>
-                        break;
                     case "FullTime":
                         <span>Full-time</span>
                         break;
-                    case "Daytime":
-                        <span>Daytime</span>
+                    case "PartTime":
+                        <span>Part-time</span>
+                        break;
+                    case "Flexible":
+                        <span>Flexible</span>
                         break;
                     default:
                         break;
