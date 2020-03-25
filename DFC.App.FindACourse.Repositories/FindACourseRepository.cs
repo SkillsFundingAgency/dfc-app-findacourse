@@ -28,9 +28,7 @@ namespace DFC.App.FindACourse.Repository
 
         public async Task<CourseSearchResult> RetrieveData(CourseSearchProperties properties)
         {
-            // return await courseSearchApiService.SearchCoursesAsync(properties).ConfigureAwait(false);
-            var test = await courseSearchApiService.SearchCoursesAsync(properties).ConfigureAwait(false);
-            return test;
+            return await courseSearchApiService.SearchCoursesAsync(properties).ConfigureAwait(false);
         }
 
         public async Task<CourseDetails> GetCourseDetails(string id, string runId)
