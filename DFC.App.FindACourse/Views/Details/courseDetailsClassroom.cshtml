@@ -125,27 +125,29 @@
     <p>@Model.CourseDetails.NextSteps</p>
 }
     <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
-    <button href="#" role="button" draggable="false" class="govuk-button govuk-button--start" data-module="govuk-button">
-        Go to course provider
-        <svg class="govuk-button__start-icon" xmlns="http://www.w3.org/2000/svg" width="17.5" height="19" viewBox="0 0 33 40" role="presentation" focusable="false">
-            <path fill="currentColor" d="M0 0h13l20 20-20 20H0l20-20z"></path>
-        </svg>
-    </button>
-    <p><a href="/find-a-course/course/searchcourse?searchTerm=@Model.SearchTerm" class="govuk-back-link">Back to results</a></p>
-    <h2 class="govuk-heading-m" id="othervenuesdates">Other venues and dates</h2>
-    <table class="govuk-table">
-        <tbody class="govuk-table__body">
-            <tr class="govuk-table__row">
-                <th class="govuk-table__header">Venue</th>
-                <th class="govuk-table__header">Start date</th>
-                <th class="govuk-table__header">Options</th>
-            </tr>
-            <tr class="govuk-table__row">
-                <td class="govuk-table__cell">@Model.CourseDetails.VenueDetails.VenueName</td>
-                <td class="govuk-table__cell">@Model.CourseDetails.StartDate.Value.ToLongDateString()</td>
-                <td class="govuk-table__cell">
-                    <a class="govuk-link" href="@Model.CourseDetails.VenueDetails.Website">View course</a>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    <form action="@Model.CourseDetails.VenueDetails.Website">
+        <button href="@Model.CourseDetails.VenueDetails.Website" role="button" draggable="false" class="govuk-button govuk-button--start" data-module="govuk-button">
+            Go to course provider
+            <svg class="govuk-button__start-icon" xmlns="http://www.w3.org/2000/svg" width="17.5" height="19" viewBox="0 0 33 40" role="presentation" focusable="false">
+                <path fill="currentColor" d="M0 0h13l20 20-20 20H0l20-20z"></path>
+            </svg>
+        </button>
+    </form>
+        <p><a href="/find-a-course/course/searchcourse?searchTerm=@Model.SearchTerm" class="govuk-back-link">Back to results</a></p>
+        <h2 class="govuk-heading-m" id="othervenuesdates">Other venues and dates</h2>
+        <table class="govuk-table">
+            <tbody class="govuk-table__body">
+                <tr class="govuk-table__row">
+                    <th class="govuk-table__header">Venue</th>
+                    <th class="govuk-table__header">Start date</th>
+                    <th class="govuk-table__header">Options</th>
+                </tr>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">@Model.CourseDetails.VenueDetails.VenueName</td>
+                    <td class="govuk-table__cell">@Model.CourseDetails.StartDate.Value.ToLongDateString()</td>
+                    <td class="govuk-table__cell">
+                        <a class="govuk-link" href="@Model.CourseDetails.VenueDetails.Website">View course</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
