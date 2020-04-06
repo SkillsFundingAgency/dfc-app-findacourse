@@ -1,4 +1,9 @@
-﻿@model Course
+﻿@using System.Text.RegularExpressions;
+@model Course
+@{
+    var resultString = Regex.Match(Model.Duration, @"\d+").Value;
+     int.TryParse(resultString, out int durationInt);
+}
 
 <div class="govuk-!-margin-top-6">
     <h2 class="govuk-heading-m">
@@ -39,7 +44,15 @@
                     <span class="govuk-secondary-colour">Course type:</span> @Model.AttendancePattern
                 </li>
                 <li>
-                    <span class="govuk-secondary-colour">Duration:</span> @Model.Duration
+                    <span class="govuk-secondary-colour">Duration:</span>
+                    @if (durationInt == 1)
+                    {
+                        <span>1 Year</span>
+                    }
+                    else if (durationInt > 1)
+                    {
+                        @Model.Duration
+                    }
                 </li>
 
             </ul>

@@ -34,23 +34,23 @@
         <tr>
             <th class="govuk-table__header" scope="row">Course start date</th>
             <td class="govuk-table__cell">
-            @if (Model.CourseDetails.StartDate != null) 
-            { 
-                <span>@Model.CourseDetails.StartDate.Value.ToLongDateString()</span>
-            }
+                @if (Model.CourseDetails.StartDate != null)
+                {
+                    <span>@Model.CourseDetails.StartDate.Value.ToLongDateString()</span>
+                }
             </td>
         </tr>
         <tr class="govuk-table__row">
             <th class="govuk-table__header" scope="row">Cost</th>
             <td class="govuk-table__cell">
-            @if (string.IsNullOrEmpty(Model.CourseDetails.Cost))
-            {
-                <span>£0.00</span>
-            }
-            else 
-            { 
-                <span>£@string.Format("{0:0.00}", Model.CourseDetails.Cost)</span>
-            }
+                @if (string.IsNullOrEmpty(Model.CourseDetails.Cost))
+                {
+                    <span>£0.00</span>
+                }
+                else
+                {
+                    <span>£@string.Format("{0:0.00}", Model.CourseDetails.Cost)</span>
+                }
             </td>
         </tr>
         <tr class="govuk-table__row">
@@ -87,17 +87,19 @@
     <h2 class="govuk-heading-m" id="next">What you can do next</h2>
     <p>@Model.CourseDetails.NextSteps</p>
 }
-    <h2 class="govuk-heading-m" id="assessed">How you'll be assessed</h2>
-    <p>You’ll be assessed through timed assignments at the end of every unit. You’ll get the chance to do practice assignments beforehand and only take the final unit assignment when both you and your tutor are confident that you will pass.</p>
+<h2 class="govuk-heading-m" id="assessed">How you'll be assessed</h2>
+<p>You’ll be assessed through timed assignments at the end of every unit. You’ll get the chance to do practice assignments beforehand and only take the final unit assignment when both you and your tutor are confident that you will pass.</p>
 
-    <h2 class="govuk-heading-m" id="next">What you can do next</h2>
-    <p>Employment or an apprenticeship in an office such as administrator, secretary, or general office assistant. You could progress from junior office roles to those requiring greater use of IT or a higher level of responsibility. You could build on your qualification with more units of the same level (e.g. desk top publishing, using project management software or using the internet) or go on to a Level 3 qualification in IT such as OCR Level 3 Certificate for IT Users.</p>
-    <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
-    <button href="#" role="button" draggable="false" class="govuk-button govuk-button--start" data-module="govuk-button">
+<h2 class="govuk-heading-m" id="next">What you can do next</h2>
+<p>Employment or an apprenticeship in an office such as administrator, secretary, or general office assistant. You could progress from junior office roles to those requiring greater use of IT or a higher level of responsibility. You could build on your qualification with more units of the same level (e.g. desk top publishing, using project management software or using the internet) or go on to a Level 3 qualification in IT such as OCR Level 3 Certificate for IT Users.</p>
+<hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+<form action="@Model.CourseDetails.VenueDetails.Website">
+    <button href="@Model.CourseDetails.VenueDetails.Website" role="button" draggable="false" class="govuk-button govuk-button--start" data-module="govuk-button">
         Go to course provider
         <svg class="govuk-button__start-icon" xmlns="http://www.w3.org/2000/svg" width="17.5" height="19" viewBox="0 0 33 40" role="presentation" focusable="false">
             <path fill="currentColor" d="M0 0h13l20 20-20 20H0l20-20z"></path>
         </svg>
     </button>
-    <p><a href="/find-a-course/course/searchcourse?searchTerm=@Model.SearchTerm" class="govuk-back-link">Back to results</a></p>
-    <h2 class="govuk-heading-m" id="othervenuesdates">Other venues and dates</h2>
+</form>
+<p><a href="/find-a-course/course/searchcourse?searchTerm=@Model.SearchTerm" class="govuk-back-link">Back to results</a></p>
+<h2 class="govuk-heading-m" id="othervenuesdates">Other venues and dates</h2>

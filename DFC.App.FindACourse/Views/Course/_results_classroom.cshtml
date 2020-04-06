@@ -1,4 +1,9 @@
-﻿@model Course
+﻿@using System.Text.RegularExpressions;
+@model Course
+@{
+    var resultString = Regex.Match(Model.Duration, @"\d+").Value;
+     int.TryParse(resultString, out int durationInt);
+}
 
 <div class="govuk-!-margin-top-6">
     <h2 class="govuk-heading-m">
@@ -10,7 +15,7 @@
             <ul class="govuk-list">
 
                 <li>
-                    <span class="govuk-secondary-colour">Start date:</span> 
+                    <span class="govuk-secondary-colour">Start date:</span>
                     @if (Model.StartDate != null)
                     {
                         @Model.StartDate.Value.ToLongDateString()
@@ -42,7 +47,15 @@
                     <span class="govuk-secondary-colour">Course type:</span> @Model.AttendanceMode
                 </li>
                 <li>
-                    <span class="govuk-secondary-colour">Duration:</span> @Model.Duration
+                    <span class="govuk-secondary-colour">Duration:</span>
+                    @if (durationInt == 1)
+                    {
+                        <span>1 Year</span>
+                    }
+                    else if (durationInt > 1)
+                    {
+                        @Model.Duration
+                    }
                 </li>
                 <li>
                     <span class="govuk-secondary-colour">Location:</span> @Model.Location
