@@ -134,9 +134,9 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
             var returnedCourseData = new CourseSearchResult
             {
                 Courses = new List<Course>
-            {
-                new Course { Title = "Maths", CourseId = "1", AttendancePattern = "Online" },
-            },
+                {
+                    new Course { Title = "Maths", CourseId = "1", AttendancePattern = "Online" },
+                },
             };
 
             A.CallTo(() => courseService.GetFilteredData(A<CourseSearchFilters>.Ignored, CourseSearchOrderBy.Relevance, 1)).Returns(returnedCourseData);

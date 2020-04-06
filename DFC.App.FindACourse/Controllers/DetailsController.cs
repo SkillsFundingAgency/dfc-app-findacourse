@@ -28,6 +28,7 @@ namespace DFC.App.FindACourse.Controllers
             var model = new DetailsViewModel();
             model.SearchTerm = searchTerm;
 
+          
             if (string.IsNullOrEmpty(courseId) || string.IsNullOrEmpty(runId))
             {
                 throw new ArgumentNullException("Course Id and/or runId does not have a value");
