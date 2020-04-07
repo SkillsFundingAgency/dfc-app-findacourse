@@ -79,7 +79,7 @@ namespace DFC.App.FindACourse.Controllers
             this.logger.LogInformation($"{nameof(this.HeroBanner)} has been called");
             var returnView = string.Empty;
 
-            var lastPartofUrl = data.Split("/").Last();
+            var lastPartofUrl = data.Replace("/herobanner", string.Empty).Split("/").Last();
 
             if (lastPartofUrl != "details")
             {
