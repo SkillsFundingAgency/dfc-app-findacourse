@@ -212,6 +212,7 @@ namespace DFC.App.FindACourse.Controllers
                 CourseHours = courseHoursList,
                 StartDate = selectedStartDateValue,
                 CourseStudyTime = courseStudyTimeList,
+                Distance = selectedDistanceValue,
             };
 
             switch (model.SideBar.StartDateValue)
@@ -319,6 +320,7 @@ namespace DFC.App.FindACourse.Controllers
             sideBarViewModel.DistanceValue = model.SideBar.DistanceValue;
             sideBarViewModel.TownOrPostcode = model.SideBar.TownOrPostcode;
             sideBarViewModel.StartDateValue = model.SideBar.StartDateValue;
+            sideBarViewModel.DistanceValue = model.SelectedDistanceValue;
 
             if (model.SideBar.CourseType != null && model.SideBar.CourseType.SelectedIds.Any())
             {
