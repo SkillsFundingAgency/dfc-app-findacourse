@@ -17,6 +17,8 @@ namespace DFC.App.FindACourse.ViewModels
 
         public string SelectedOrderByValue { get; set; }
 
+        public string SelectedDistanceValue { get; set; }
+
         public List<SelectListItem> OrderByOptions { get; set; }
 
         public int RequestPage { get; set; }
