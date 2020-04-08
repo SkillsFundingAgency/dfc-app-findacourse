@@ -2,7 +2,7 @@
   {
     "Path": "find-a-course",
     "TopNavigationOrder": 999,
-    "Layout": 1,
+    "Layout": 4,
     "OfflineHtml": "<div class=\"govuk-width-container\"><H2>Help Service Unavailable</H2></div>",
     "SitemapUrl": "https://__AppServiceName__.__appServiceDomain__/help/sitemap.xml",
     "RobotsUrl": "https://__AppServiceName__.__appServiceDomain__/Robots.txt",
