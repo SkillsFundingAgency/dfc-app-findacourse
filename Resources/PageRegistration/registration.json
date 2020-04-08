@@ -32,12 +32,6 @@
         "IsHealthy" : true,
         "RegionEndpoint": "https://__AppServiceName__.__appServiceDomain__/find-a-course/course/bodyfooter",
         "OfflineHtml": "<div class=\"govuk-width-container\"><H3>Help Service Unavailable</H3></div>"
-      },
-      {
-        "PageRegion": 8,
-        "HealthCheckRequired": true,
-        "IsHealthy" : true,
-        "RegionEndpoint": "https://__AppServiceName__.__appServiceDomain__/find-a-course/course/herobanner"
       }
     ]
   }
