@@ -164,8 +164,11 @@ namespace DFC.App.FindACourse.Controllers
 
             float selectedDistanceValue = 10;
 
-            var resultString = Regex.Match(model.SelectedDistanceValue, @"\d+").Value;
-            _ = float.TryParse(resultString, out selectedDistanceValue);
+            if (model.SelectedDistanceValue != null)
+            {
+                var resultString = Regex.Match(model.SelectedDistanceValue, @"\d+").Value;
+                _ = float.TryParse(resultString, out selectedDistanceValue);
+            }
 
             if (model.SideBar.CourseType != null && model.SideBar.CourseType.SelectedIds.Any())
             {
