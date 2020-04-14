@@ -93,13 +93,16 @@
 <h2 class="govuk-heading-m" id="next">What you can do next</h2>
 <p>Employment or an apprenticeship in an office such as administrator, secretary, or general office assistant. You could progress from junior office roles to those requiring greater use of IT or a higher level of responsibility. You could build on your qualification with more units of the same level (e.g. desk top publishing, using project management software or using the internet) or go on to a Level 3 qualification in IT such as OCR Level 3 Certificate for IT Users.</p>
 <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
-<form action="@Model.CourseDetails.VenueDetails.Website">
-    <button href="@Model.CourseDetails.VenueDetails.Website" role="button" draggable="false" class="govuk-button govuk-button--start" data-module="govuk-button">
-        Go to course provider
-        <svg class="govuk-button__start-icon" xmlns="http://www.w3.org/2000/svg" width="17.5" height="19" viewBox="0 0 33 40" role="presentation" focusable="false">
-            <path fill="currentColor" d="M0 0h13l20 20-20 20H0l20-20z"></path>
-        </svg>
-    </button>
-</form>
-<p><a href="/find-a-course/course/searchcourse?searchTerm=@Model.SearchTerm" class="govuk-back-link">Back to results</a></p>
-<h2 class="govuk-heading-m" id="othervenuesdates">Other venues and dates</h2>
+@if (Model.CourseDetails.VenueDetails != null)
+{
+    <form action="@Model.CourseDetails.VenueDetails.Website">
+        <button href="@Model.CourseDetails.VenueDetails.Website" role="button" draggable="false" class="govuk-button govuk-button--start" data-module="govuk-button">
+            Go to course provider
+            <svg class="govuk-button__start-icon" xmlns="http://www.w3.org/2000/svg" width="17.5" height="19" viewBox="0 0 33 40" role="presentation" focusable="false">
+                <path fill="currentColor" d="M0 0h13l20 20-20 20H0l20-20z"></path>
+            </svg>
+        </button>
+    </form>
+}
+    <p><a href="/find-a-course/course/searchcourse?searchTerm=@Model.SearchTerm" class="govuk-back-link">Back to results</a></p>
+    <h2 class="govuk-heading-m" id="othervenuesdates">Other venues and dates</h2>
