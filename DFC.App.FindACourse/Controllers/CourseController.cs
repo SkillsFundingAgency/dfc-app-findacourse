@@ -220,9 +220,9 @@ namespace DFC.App.FindACourse.Controllers
 
             if (!string.IsNullOrEmpty(model.SideBar.TownOrPostcode))
                 {
-                    if (IsPostcode(model.SideBar.TownOrPostcode))
+                    if (this.IsPostcode(model.SideBar.TownOrPostcode))
                     {
-                        courseSearchFilters.PostCode = model.SideBar.TownOrPostcode;
+                        courseSearchFilters.PostCode = this.NormalizePostcode(model.SideBar.TownOrPostcode);
                         courseSearchFilters.Distance = selectedDistanceValue;
                         courseSearchFilters.DistanceSpecified = true;
                     }
@@ -428,6 +428,16 @@ namespace DFC.App.FindACourse.Controllers
             }
 
             return false;
+        }
+
+        private string NormalizePostcode(string postcode)
+        {
+            //removes end and start spaces 
+            postcode = postcode.Trim();
+            //removes in middle spaces 
+            postcode = postcode.Replace(" ", "");
+
+            return postcode.Insert(postcode.Length - 3, " ");
         }
     }
 }
