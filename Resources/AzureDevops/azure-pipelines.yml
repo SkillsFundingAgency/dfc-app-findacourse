@@ -29,19 +29,19 @@ jobs:
       ArmTemplateRoot: $(ArmTemplateRoot)
       SolutionBaseName: $(SolutionBaseName)
 
-    - task: CopyFiles@2
-      displayName: 'Copy Page Registration to Staging'
-      inputs:
-        SourceFolder: '$(Build.SourcesDirectory)/PageRegistration'
-        TargetFolder: $(build.artifactstagingdirectory)/PageRegistrations
-        Contents: |
-          *.json
+  - task: CopyFiles@2
+    displayName: 'Copy Page Registration to Staging'
+    inputs:
+      SourceFolder: '$(Build.SourcesDirectory)/PageRegistration'
+      TargetFolder: $(build.artifactstagingdirectory)/PageRegistrations
+      Contents: |
+        *.json
 
-    - task: PublishPipelineArtifact@0
-      displayName: Publish Pipeline Artifact
-      inputs:
-        targetPath: $(build.artifactstagingdirectory)/PageRegistrations
-        artifactName: $(SolutionBaseName).PageRegistrations
+  - task: PublishPipelineArtifact@0
+    displayName: Publish Pipeline Artifact
+    inputs:
+      targetPath: $(build.artifactstagingdirectory)/PageRegistrations
+      artifactName: $(SolutionBaseName).PageRegistrations
 
 #Build and test application
 - job: BuildDotNetCore
