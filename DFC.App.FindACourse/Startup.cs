@@ -41,7 +41,6 @@ namespace DFC.App.FindACourse
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
-            //services.AddCorrelationId();
 
             services.AddScoped<ICorrelationIdProvider, CorrelationIdProvider>();
             services.AddScoped<IFindACourseService, FindACourseService>();
