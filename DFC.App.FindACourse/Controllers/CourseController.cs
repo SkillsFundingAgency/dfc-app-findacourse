@@ -420,7 +420,10 @@ namespace DFC.App.FindACourse.Controllers
 
         private bool IsPostcode(string townOrPostcode)
         {
-            var postcodeRegex = new Regex(@"^([A-Z][A-HJ-Y]?\d[A-Z\d]? ?\d[A-Z]{2}|GIR ?0A{2})$");
+            townOrPostcode = townOrPostcode.Replace(" ", string.Empty);
+
+            // var postcodeRegex = new Regex(@"^([A-Z][A-HJ-Y]?\d[A-Z\d]? ?\d[A-Z]{2}|GIR ?0A{2})$");
+            var postcodeRegex = new Regex(@"^([Gg][Ii][Rr] 0[Aa]{2})|((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([A-Za-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9][A-Za-z]?))))\s?[0-9][A-Za-z]{2})");
 
             if (postcodeRegex.IsMatch(townOrPostcode.ToUpper()))
             {
