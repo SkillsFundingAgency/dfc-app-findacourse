@@ -61,18 +61,11 @@
             </div>
         </div>
 
-        @*<div class="govuk-form-group">
-            <div id="@Model.StartDate.FilterText">
-                <fieldset class="govuk-fieldset">
-                    <legend class="govuk-label govuk-!-font-weight-bold">@Model.StartDate.FilterTitle</legend>
-                    <div class="govuk-checkboxes govuk-checkboxes--small">
-                        <check-box-list name="SideBar.StartDate.SelectedIds" items="Model.StartDate.LstChkFilter" template="GDS"></check-box-list>
-                    </div>
-                </fieldset>
-            </div>
-        </div>*@
-
         <button data-module="govuk-button" class="govuk-button" type="submit">Apply filters</button>
         @*</noscript>*@
-        <p><a href="">Clear search</a></p>
+
+        @if (Model.FiltersApplied)
+        {
+            <p><a href="/find-a-course/course/searchcourse?searchTerm=@Model.CurrentSearchTerm">Clear filters</a></p>
+        }
     </div>

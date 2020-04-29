@@ -142,8 +142,10 @@ namespace DFC.App.FindACourse.Controllers
                     CourseHours = this.ConvertStringToFiltersListViewModel(courseHours),
                     CourseStudyTime = this.ConvertStringToFiltersListViewModel(studyTime),
                     StartDateValue = startDate,
+                    CurrentSearchTerm = searchTerm,
                 },
                 RequestPage = page,
+                IsNewPage = true,
             };
 
             this.logger.LogInformation($"{nameof(this.Page)} generated the model and ready to pass to the view");
@@ -196,6 +198,15 @@ namespace DFC.App.FindACourse.Controllers
                 CourseStudyTime = courseStudyTimeList,
                 Distance = selectedDistanceValue,
             };
+
+            if (courseSearchFilters.StartDate != StartDate.Anytime
+                || !string.IsNullOrEmpty(model.SideBar.TownOrPostcode)
+                || (model.SideBar.CourseType.SelectedIds != null && model.SideBar.CourseType.SelectedIds.Where(s => !string.IsNullOrEmpty(s)).Distinct().ToList().Count > 0)
+                || (model.SideBar.CourseHours.SelectedIds != null && model.SideBar.CourseHours.SelectedIds.Where(s => !string.IsNullOrEmpty(s)).Distinct().ToList().Count > 0)
+                || (model.SideBar.CourseStudyTime.SelectedIds != null && model.SideBar.CourseStudyTime.SelectedIds.Where(s => !string.IsNullOrEmpty(s)).Distinct().ToList().Count > 0))
+            {
+                model.SideBar.FiltersApplied = true;
+            }
 
             switch (model.SideBar.StartDateValue)
             {
@@ -268,6 +279,7 @@ namespace DFC.App.FindACourse.Controllers
             model.SideBar = this.GetSideBarViewModel();
             model.OrderByOptions = ListFilters.GetOrderByOptions();
             model.CurrentSearchTerm = searchTerm;
+            model.SideBar.CurrentSearchTerm = searchTerm;
             model.RequestPage = 1;
 
             try
@@ -303,6 +315,8 @@ namespace DFC.App.FindACourse.Controllers
             sideBarViewModel.TownOrPostcode = model.SideBar.TownOrPostcode;
             sideBarViewModel.StartDateValue = model.SideBar.StartDateValue;
             sideBarViewModel.DistanceValue = model.SelectedDistanceValue;
+            sideBarViewModel.CurrentSearchTerm = model.CurrentSearchTerm;
+            sideBarViewModel.FiltersApplied = model.SideBar.FiltersApplied;
 
             if (model.SideBar.CourseType != null && model.SideBar.CourseType.SelectedIds.Any())
             {

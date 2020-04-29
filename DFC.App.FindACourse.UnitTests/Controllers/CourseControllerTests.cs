@@ -51,19 +51,6 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
 
         [Theory]
         [MemberData(nameof(HtmlMediaTypes))]
-        public async Task CourseControllerHeroBannerReturnsSuccess(string mediaTypeName)
-        {
-            var controller = BuildCourseController(mediaTypeName);
-
-            var result = controller.HeroBanner(string.Empty);
-
-            Assert.IsType<ViewResult>(result);
-
-            controller.Dispose();
-        }
-
-        [Theory]
-        [MemberData(nameof(HtmlMediaTypes))]
         public async Task CourseControllerBreadcrumbHtmlReturnsSuccess(string mediaTypeName)
         {
             var controller = BuildCourseController(mediaTypeName);
