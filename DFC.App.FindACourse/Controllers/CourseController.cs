@@ -239,7 +239,7 @@ namespace DFC.App.FindACourse.Controllers
                     }
                     else
                     {
-                        courseSearchFilters.Town = model.SideBar.TownOrPostcode;
+                        courseSearchFilters.Town = "\u0022" + model.SideBar.TownOrPostcode + "\u0022";
                     }
                 }
 
