@@ -1,6 +1,7 @@
 using AutoMapper;
 using CorrelationId;
 using DFC.App.FindACourse.Data.Domain;
+using DFC.App.FindACourse.Framework;
 using DFC.App.FindACourse.Repository;
 using DFC.App.FindACourse.Services;
 using DFC.FindACourseClient;
@@ -40,9 +41,8 @@ namespace DFC.App.FindACourse
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
-            services.AddCorrelationId();
 
-            services.AddScoped<ICorrelationIdProvider, RequestHeaderCorrelationIdProvider>();
+            services.AddScoped<ICorrelationIdProvider, CorrelationIdProvider>();
             services.AddScoped<IFindACourseService, FindACourseService>();
             services.AddScoped<IFindACourseRepository, FindACourseRepository>();
 
