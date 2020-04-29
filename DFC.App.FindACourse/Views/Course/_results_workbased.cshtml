@@ -18,10 +18,18 @@
                     {
                         <span>@Model.StartDate.Value.ToLongDateString()</span>
                     }
+                    else
+                    {
+                        <span>Not known</span>
+                    }
                 </li>
                 <li>
                     <span class="govuk-secondary-colour">Cost:</span>
-                    @if (!string.IsNullOrEmpty(Model.Cost))
+                    @if (Model.Cost == null)
+                    {
+                        <span>@Model.CostDescription</span>
+                    }
+                    else
                     {
                         <span>£@Model.Cost</span>
                     }
