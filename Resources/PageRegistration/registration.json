@@ -12,11 +12,11 @@
         "PageRegion": 1,
         "HealthCheckRequired": true,
         "IsHealthy" : true,
-        "RegionEndpoint": "https://__AppServiceName__.__appServiceDomain__/head"
+        "RegionEndpoint": "https://__AppServiceName__.__appServiceDomain__/course/{0}/head"
       },
       {
         "PageRegion": 4,
-        "RegionEndpoint": "https://__AppServiceName__.__appServiceDomain__/find-a-course/course/body",
+        "RegionEndpoint": "https://__AppServiceName__.__appServiceDomain__/find-a-course/{0}/body",
         "HealthCheckRequired": true,
         "IsHealthy" : true
       },
@@ -24,13 +24,13 @@
         "PageRegion": 3,
         "HealthCheckRequired": true,
         "IsHealthy" : true,
-        "RegionEndpoint": "https://__AppServiceName__.__appServiceDomain__/find-a-course/course/bodytop"
+        "RegionEndpoint": "https://__AppServiceName__.__appServiceDomain__/find-a-course/{0}/bodytop"
       },
       {
         "PageRegion": 7,
         "HealthCheckRequired": true,
         "IsHealthy" : true,
-        "RegionEndpoint": "https://__AppServiceName__.__appServiceDomain__/find-a-course/course/bodyfooter",
+        "RegionEndpoint": "https://__AppServiceName__.__appServiceDomain__/find-a-course/{0}/bodyfooter",
         "OfflineHtml": "<div class=\"govuk-width-container\"><H3>Help Service Unavailable</H3></div>"
       }
     ]
