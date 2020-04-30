@@ -219,9 +219,9 @@ namespace DFC.App.FindACourse.Controllers
 
             if (courseSearchFilters.StartDate != StartDate.Anytime
                 || !string.IsNullOrEmpty(model.SideBar.TownOrPostcode)
-                || (model.SideBar.CourseType.SelectedIds != null && model.SideBar.CourseType.SelectedIds.Where(s => !string.IsNullOrEmpty(s)).Distinct().ToList().Count > 0)
-                || (model.SideBar.CourseHours.SelectedIds != null && model.SideBar.CourseHours.SelectedIds.Where(s => !string.IsNullOrEmpty(s)).Distinct().ToList().Count > 0)
-                || (model.SideBar.CourseStudyTime.SelectedIds != null && model.SideBar.CourseStudyTime.SelectedIds.Where(s => !string.IsNullOrEmpty(s)).Distinct().ToList().Count > 0))
+                || (model.SideBar.CourseType != null && model.SideBar.CourseType.SelectedIds.Where(s => !string.IsNullOrEmpty(s)).Distinct().ToList().Count > 0)
+                || (model.SideBar.CourseHours != null && model.SideBar.CourseHours.SelectedIds.Where(s => !string.IsNullOrEmpty(s)).Distinct().ToList().Count > 0)
+                || (model.SideBar.CourseStudyTime != null && model.SideBar.CourseStudyTime.SelectedIds.Where(s => !string.IsNullOrEmpty(s)).Distinct().ToList().Count > 0))
             {
                 model.SideBar.FiltersApplied = true;
             }
