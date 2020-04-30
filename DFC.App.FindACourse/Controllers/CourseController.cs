@@ -61,11 +61,27 @@ namespace DFC.App.FindACourse.Controllers
         }
 
         [HttpGet]
-        public IActionResult Head()
+        [Route("course/{articleName}/head")]
+        [Route("course/head")]
+        public IActionResult Head(string articleName)
         {
+            string title = "Results";
+
             this.logger.LogInformation($"{nameof(this.Head)} has been called");
 
-            var model = new HeadViewModel { Title = "Find a Course", Description = "FAC", Keywords = "fac", CanonicalUrl = "find-a-course" };
+            switch (articleName)
+            {
+                case "course":
+                    title = "Results";
+                    break;
+                case "details":
+                    title = "Details";
+                    break;
+                default:
+                    break;
+            }
+
+            var model = new HeadViewModel { Title = $"{title} | Find a course | National careers service", Description = "FAC", Keywords = "fac", CanonicalUrl = "find-a-course" };
 
             this.logger.LogInformation($"{nameof(this.Head)} generated the model and ready to pass to the view");
 
@@ -91,8 +107,9 @@ namespace DFC.App.FindACourse.Controllers
         }
 
         [HttpGet]
-        [Route("find-a-course/{controller}/bodytop/{**data}")]
-        public IActionResult BodyTop()
+        [Route("find-a-course/{articleName}/bodytop")]
+        [Route("find-a-course/bodytop")]
+        public IActionResult BodyTop(string articleName)
         {
             this.logger.LogInformation($"{nameof(this.BodyTop)} has been called");
 
@@ -100,7 +117,7 @@ namespace DFC.App.FindACourse.Controllers
         }
 
         [HttpGet]
-        [Route("find-a-course/{controller}/body/{**data}")]
+        [Route("find-a-course/body")]
         public async Task<IActionResult> Body()
         {
             this.logger.LogInformation($"{nameof(this.Body)} has been called");
@@ -117,8 +134,9 @@ namespace DFC.App.FindACourse.Controllers
         }
 
         [HttpGet]
-        [Route("find-a-course/{controller}/bodyfooter/{**data}")]
-        public IActionResult BodyFooter()
+        [Route("find-a-course/{articleName}/bodyfooter")]
+        [Route("find-a-course/bodyfooter")]
+        public IActionResult BodyFooter(string articleName)
         {
             this.logger.LogInformation($"{nameof(this.BodyFooter)} has been called");
 
