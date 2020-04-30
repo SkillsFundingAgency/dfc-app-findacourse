@@ -12,6 +12,10 @@ namespace DFC.App.FindACourse.ViewModels
 
         public string StartDateValue { get; set; }
 
+        public string CurrentSearchTerm { get; set; }
+
+        public bool FiltersApplied { get; set; }
+
         public List<SelectListItem> DistanceOptions { get; set; }
 
         public FiltersListViewModel CourseStudyTime { get; set; }
@@ -20,7 +24,7 @@ namespace DFC.App.FindACourse.ViewModels
 
         public FiltersListViewModel CourseType { get; set; }
 
-       // public FiltersListViewModel StartDate { get; set; }
         public List<SelectListItem> StartDateOptions { get; set; }
+
     }
 }
