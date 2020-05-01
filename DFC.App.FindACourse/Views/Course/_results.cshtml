@@ -47,7 +47,7 @@
                 @if (Model.Results.ResultProperties.Page < Model.Results.ResultProperties.TotalPages)
                 {
                     <li class="next">
-                        <a href="/find-a-course/course/page?@nextLinkParams">
+                        <a href="/find-a-course/page?@nextLinkParams">
                             <span class="pagination-label">Next</span>
                             <span class="govuk-visually-hidden">page</span>
                             <span class="page-numbers">@nextPage of @Model.Results.ResultProperties.TotalPages</span>
@@ -58,7 +58,7 @@
                 @if (Model.Results.ResultProperties.Page > 1)
                 {
                     <li class="previous">
-                        <a href="/find-a-course/course/page?@previousLinkParams">
+                        <a href="/find-a-course/page?@previousLinkParams">
                             <span class="pagination-label">Previous</span>
                             <span class="govuk-visually-hidden">page</span>
                             <span class="page-numbers">@previousPage of @Model.Results.ResultProperties.TotalPages</span>
