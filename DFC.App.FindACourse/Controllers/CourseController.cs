@@ -145,6 +145,7 @@ namespace DFC.App.FindACourse.Controllers
 
         [HttpGet]
         [Route("find-a-course/course/body/course/page")]
+        [Route("find-a-course/page/body")]
         public async Task<IActionResult> Page(string searchTerm, string town, string distance, string courseType, string courseHours, string studyTime, string startDate, int page)
         {
             this.logger.LogInformation($"{nameof(this.Page)} has been called");
@@ -172,6 +173,7 @@ namespace DFC.App.FindACourse.Controllers
 
         [HttpGet]
         [Route("find-a-course/course/body/course/filterresults")]
+        [Route("find-a-course/filterresults/body")]
         public async Task<IActionResult> FilterResults(BodyViewModel model)
         {
             this.logger.LogInformation($"{nameof(this.FilterResults)} has been called");
@@ -280,6 +282,7 @@ namespace DFC.App.FindACourse.Controllers
 
         [HttpGet]
         [Route("find-a-course/course/body/course/searchcourse")]
+        [Route("find-a-course/searchcourse/body")]
         public async Task<IActionResult> SearchCourse(string searchTerm)
         {
             this.logger.LogInformation($"{nameof(this.SearchCourse)} has been called");
