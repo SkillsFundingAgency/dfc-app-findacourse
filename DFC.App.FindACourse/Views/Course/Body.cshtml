@@ -37,12 +37,6 @@
                         <div class="govuk-grid-column-two-thirds">
                             <partial name="_counter" model="Model" />
 
-                            <div id="orderByForm" class="govuk-form-group">
-                                <div id="orderBy">
-                                    <label class="result-region-header__sort-label govuk-label" for="orderByInput">Sort by</label>
-                                    <select asp-for="SelectedOrderByValue" asp-items="Model.OrderByOptions" class="govuk-select" name="SelectedOrderByValue" id="orderByInput"></select>
-                                </div>
-                            </div>
                             <hr class="govuk-section-break govuk-section-break--visible">
 
                             <partial name="_results" model="Model" />

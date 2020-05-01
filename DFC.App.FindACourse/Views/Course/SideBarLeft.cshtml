@@ -61,6 +61,13 @@
             </div>
         </div>
 
+        <div id="orderByForm" class="govuk-form-group">
+            <div id="orderBy">
+                <label class="result-region-header__sort-label govuk-label" for="orderByInput">Sort by</label>
+                <select asp-for="SelectedOrderByValue" asp-items="Model.OrderByOptions" class="govuk-select" name="SideBar.SelectedOrderByValue" id="orderByInput"></select>
+            </div>
+        </div>
+
         <button data-module="govuk-button" class="govuk-button" type="submit">Apply filters</button>
         @*</noscript>*@
 

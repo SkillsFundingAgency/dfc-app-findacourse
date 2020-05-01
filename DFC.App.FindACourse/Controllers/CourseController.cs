@@ -126,7 +126,7 @@ namespace DFC.App.FindACourse.Controllers
 
             model = new BodyViewModel { Content = new HtmlString("Find a course: Body element") };
             model.SideBar = this.GetSideBarViewModel();
-            model.OrderByOptions = ListFilters.GetOrderByOptions();
+            model.SideBar.OrderByOptions = ListFilters.GetOrderByOptions();
 
             this.logger.LogInformation($"{nameof(this.Body)} generated the model and ready to pass to the view");
 
@@ -207,7 +207,7 @@ namespace DFC.App.FindACourse.Controllers
                 courseStudyTimeList = this.ConvertToEnumList<Fac.AttendancePattern>(model.SideBar.CourseStudyTime.SelectedIds);
             }
 
-            _ = Enum.TryParse(model.SelectedOrderByValue, out sortedByCriteria);
+            _ = Enum.TryParse(model.SideBar.SelectedOrderByValue, out sortedByCriteria);
 
             var courseSearchFilters = new CourseSearchFilters
             {
@@ -298,7 +298,7 @@ namespace DFC.App.FindACourse.Controllers
             };
 
             model.SideBar = this.GetSideBarViewModel();
-            model.OrderByOptions = ListFilters.GetOrderByOptions();
+            model.SideBar.OrderByOptions = ListFilters.GetOrderByOptions();
             model.CurrentSearchTerm = searchTerm;
             model.SideBar.CurrentSearchTerm = searchTerm;
             model.RequestPage = 1;
@@ -367,7 +367,7 @@ namespace DFC.App.FindACourse.Controllers
             }
 
             model.SideBar = sideBarViewModel;
-            model.OrderByOptions = ListFilters.GetOrderByOptions();
+            model.SideBar.OrderByOptions = ListFilters.GetOrderByOptions();
 
             this.logger.LogInformation($"{nameof(this.Results)} generated the model and ready to pass to the view");
 
