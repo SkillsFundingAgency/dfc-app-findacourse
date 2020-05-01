@@ -16,6 +16,10 @@ namespace DFC.App.FindACourse.ViewModels
 
         public bool FiltersApplied { get; set; }
 
+        public string SelectedOrderByValue { get; set; }
+
+        public List<SelectListItem> OrderByOptions { get; set; }
+
         public List<SelectListItem> DistanceOptions { get; set; }
 
         public FiltersListViewModel CourseStudyTime { get; set; }
