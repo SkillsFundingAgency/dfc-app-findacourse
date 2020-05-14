@@ -332,6 +332,7 @@ namespace DFC.App.FindACourse.Controllers
             sideBarViewModel.DistanceValue = model.SelectedDistanceValue;
             sideBarViewModel.CurrentSearchTerm = model.CurrentSearchTerm;
             sideBarViewModel.FiltersApplied = model.SideBar.FiltersApplied;
+            sideBarViewModel.SelectedOrderByValue = model.SideBar.SelectedOrderByValue;
 
             if (model.SideBar.CourseType != null && model.SideBar.CourseType.SelectedIds.Any())
             {
