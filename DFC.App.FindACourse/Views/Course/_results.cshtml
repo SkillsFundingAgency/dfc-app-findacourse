@@ -10,8 +10,9 @@
     var courseStudyTime = Html.Raw(Json.Serialize(Model.SideBar.CourseStudyTime.SelectedIds));
     var courseStartDate = Model.SideBar.StartDateValue;
     var searchTerm = Model.SideBar.CurrentSearchTerm;
+    var filterA = Model.SideBar.FiltersApplied;
 
-    var parameters = $"searchTerm={searchTerm}&town={town}&courseType={courseType}&courseHours={courseHours}&studyTime={courseStudyTime}&startDate={courseStartDate}&distance={distance}";
+    var parameters = $"searchTerm={searchTerm}&town={town}&courseType={courseType}&courseHours={courseHours}&studyTime={courseStudyTime}&startDate={courseStartDate}&distance={distance}&filtera={filterA}";
     var nextLinkParams = $"{parameters}&page={nextPage}";
     var previousLinkParams = $"{parameters}&page={previousPage}";
 }
