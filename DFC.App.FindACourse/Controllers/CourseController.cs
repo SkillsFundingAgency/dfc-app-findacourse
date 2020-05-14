@@ -146,7 +146,7 @@ namespace DFC.App.FindACourse.Controllers
         [HttpGet]
         [Route("find-a-course/course/body/course/page")]
         [Route("find-a-course/page/body")]
-        public async Task<IActionResult> Page(string searchTerm, string town, string distance, string courseType, string courseHours, string studyTime, string startDate, int page)
+        public async Task<IActionResult> Page(string searchTerm, string town, string distance, string courseType, string courseHours, string studyTime, string startDate, int page, bool filterA)
         {
             this.logger.LogInformation($"{nameof(this.Page)} has been called");
 
@@ -162,11 +162,13 @@ namespace DFC.App.FindACourse.Controllers
                     CourseStudyTime = this.ConvertStringToFiltersListViewModel(studyTime),
                     StartDateValue = startDate,
                     CurrentSearchTerm = searchTerm,
+                    FiltersApplied = filterA,
                 },
                 RequestPage = page,
                 IsNewPage = true,
             };
 
+            model.FromPaging = true;
             this.logger.LogInformation($"{nameof(this.Page)} generated the model and ready to pass to the view");
             return await this.FilterResults(model).ConfigureAwait(false);
         }
@@ -219,14 +221,7 @@ namespace DFC.App.FindACourse.Controllers
                 Distance = selectedDistanceValue,
             };
 
-            if (courseSearchFilters.StartDate != StartDate.Anytime
-                || !string.IsNullOrEmpty(model.SideBar.TownOrPostcode)
-                || (model.SideBar.CourseType != null && model.SideBar.CourseType.SelectedIds.Where(s => !string.IsNullOrEmpty(s)).Distinct().ToList().Count > 0)
-                || (model.SideBar.CourseHours != null && model.SideBar.CourseHours.SelectedIds.Where(s => !string.IsNullOrEmpty(s)).Distinct().ToList().Count > 0)
-                || (model.SideBar.CourseStudyTime != null && model.SideBar.CourseStudyTime.SelectedIds.Where(s => !string.IsNullOrEmpty(s)).Distinct().ToList().Count > 0))
-            {
-                model.SideBar.FiltersApplied = true;
-            }
+            model.SideBar.FiltersApplied = model.FromPaging ? model.SideBar.FiltersApplied : true;
 
             switch (model.SideBar.StartDateValue)
             {
