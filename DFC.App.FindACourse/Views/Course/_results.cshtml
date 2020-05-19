@@ -44,7 +44,7 @@
 
         @if (Model.Results.ResultProperties.TotalPages > 1)
         {
-            <ul class="previous-next-navigation govuk-!-margin-top-3">
+            <ul class="previous-next-navigation govuk-!-margin-top-3" id="page-identifiers">
                 @if (Model.Results.ResultProperties.Page < Model.Results.ResultProperties.TotalPages)
                 {
                     <li class="next">
@@ -71,16 +71,18 @@
     }
     else 
     {
-        <h3 class="govuk-body-s govuk-!-margin-bottom-1">
-        <p class="govuk-body">We didn't find any results for '@Model.CurrentSearchTerm' with the active filters you've applied. Try searching again.</p>
-        <p class="govuk-body">You could:</p>
-            <ul class="list list-bullet govuk-body">    
-                <li>check your spelling</li>    
-                <li>change the start date</li>    
-                <li>check your town or postcode</li>    
-                <li>change your filters</li>    
-                <li>try different search terms</li>
-            </ul>
-        </h3>
+        <div id="no-results-block">
+            <h3 class="govuk-body-s govuk-!-margin-bottom-1">
+                <p class="govuk-body">We didn't find any results for <span id="search-term-no-results">'@Model.CurrentSearchTerm'</span> with the active filters you've applied. Try searching again.</p>
+                <p class="govuk-body">You could:</p>
+                <ul class="list list-bullet govuk-body">
+                    <li>check your spelling</li>
+                    <li>change the start date</li>
+                    <li>check your town or postcode</li>
+                    <li>change your filters</li>
+                    <li>try different search terms</li>
+                </ul>
+            </h3>
+        </div>
     }
 }

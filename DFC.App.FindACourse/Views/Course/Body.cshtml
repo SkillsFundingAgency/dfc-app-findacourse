@@ -1,17 +1,17 @@
 ﻿@model BodyViewModel
 
-    <form action="/find-a-course/searchcourse" method="get">
+    <form action="/find-a-course/searchcourse" method="get" id="search-course-form">
         <section id="fac-search-banner" class="primary-hero">
             <div class="govuk-width-container">
                 <div class="govuk-grid-row">
                     <div class="govuk-grid-column-two-thirds">
                         <h1 class="govuk-heading-xl">Find a course</h1>
                         <p class="govuk-body-lead">Use our course search to look for different types of learning opportunities.</p>
-                        <label class="input-label js-search-label" id="input-label" for="search-input">Enter a keyword</label>
+                        <label class="input-label js-search-label" id="enter-keyword-label" for="search-input">Enter a keyword</label>
                         <div class="input-wrapper">
                             <input type="search" id="search-input" name="searchTerm" value="@Model.CurrentSearchTerm" title="Enter a keyword" class="govuk-input input-search-item input-search js-search-focus">
                             <div class="input-search-item input-submit-wrapper">
-                                <button data-module="govuk-button" type="submit" class="input-search-submit">Search</button>
+                                <button data-module="govuk-button" type="submit" class="input-search-submit" id="search-button">Search</button>
                             </div>
                         </div>
 
@@ -25,7 +25,7 @@
         <main class="govuk-main-wrapper govuk-main-wrapper--auto-spacing" id="main-content" role="main">
             @if (Model.Results != null)
             {
-                <button class="govuk-button filters-button">Show filters</button>
+                <button class="govuk-button filters-button" id="show-filters-button">Show filters</button>
                 <form action="/find-a-course/filterresults" method="get">
                     @Html.HiddenFor(m => m.CurrentSearchTerm)
                     <div class="govuk-grid-row">
