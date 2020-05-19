@@ -1,136 +1,138 @@
 ﻿@model DetailsViewModel
 
-<h2 class="govuk-heading-m" id="courseDetails">Course details</h2>
-<table class="govuk-table">
-    <caption class="govuk-visually-hidden">Table with course details</caption>
-    <tbody class="govuk-table__body">
-        @if (!string.IsNullOrWhiteSpace(Model.CourseDetails.QualificationName))
-        {
-            <tr class="govuk-table__row">
-                <th class="govuk-table__header" scope="row">Qualification name</th>
-                <td class="govuk-table__cell">@Model.CourseDetails.QualificationName</td>
-            </tr>
-        }
-
-        @if (!string.IsNullOrWhiteSpace(Model.CourseDetails.QualificationLevel))
-        {
-            <tr class="govuk-table__row">
-                <th class="govuk-table__header" scope="row">Qualification level</th>
-                <td class="govuk-table__cell">@Model.CourseDetails.QualificationLevel</td>
-            </tr>
-        }
-
-        @if (!string.IsNullOrWhiteSpace(Model.CourseDetails.AwardingOrganisation))
-        {
-            <tr class="govuk-table__row">
-                <th class="govuk-table__header" scope="row">Awarding organisation</th>
-                <td class="govuk-table__cell">@Model.CourseDetails.AwardingOrganisation</td>
-            </tr>
-        }
-        <tr class="govuk-table__row">
-            <th class="govuk-table__header" scope="row">Location</th>
-            <td class="govuk-table__cell">
-                <details class="govuk-details govuk-!-margin-bottom-0" data-module="govuk-details">
-                    <summary class="govuk-details__summary">
-                        <span class="govuk-details__summary-text">East Midlands</span>
-                    </summary>
-                    <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
-                        <li>Derby</li>
-                        <li>Derbyshire</li>
-                        <li>Nottinghamshire</li>
-                    </ul>
-                </details>
-                <details class="govuk-details govuk-!-margin-bottom-0" data-module="govuk-details">
-                    <summary class="govuk-details__summary">
-                        <span class="govuk-details__summary-text">London</span>
-                    </summary>
-                    <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
-                        <li>Barking and Dagenham</li>
-                        <li>Barnet</li>
-                        <li>Bexley</li>
-                    </ul>
-                </details>
-            </td>
-        </tr>
-        <tr class="govuk-table__row">
-            <th class="govuk-table__header" scope="row">Course type</th>
-            <td class="govuk-table__cell">@Model.CourseDetails.AttendanceMode</td>
-        </tr>
-        <tr class="govuk-table__row">
-            <th class="govuk-table__header" scope="row">Course start date</th>
-            <td class="govuk-table__cell">@Model.CourseDetails.StartDate.Value.ToLongDateString()</td>
-        </tr>
-        <tr class="govuk-table__row">
-            <th class="govuk-table__header" scope="row">Cost</th>
-            <td class="govuk-table__cell">
-                @if (string.IsNullOrEmpty(Model.CourseDetails.Cost))
+    <div id="work-details-block">
+        <h2 class="govuk-heading-m" id="courseDetails">Course details</h2>
+        <table class="govuk-table">
+            <caption class="govuk-visually-hidden">Table with course details</caption>
+            <tbody class="govuk-table__body">
+                @if (!string.IsNullOrWhiteSpace(Model.CourseDetails.QualificationName))
                 {
-                    <span>£0.00</span>
+                    <tr class="govuk-table__row">
+                        <th class="govuk-table__header" scope="row">Qualification name</th>
+                        <td class="govuk-table__cell"><span id="qualification-name">@Model.CourseDetails.QualificationName</span></td>
+                    </tr>
                 }
-                else
+
+                @if (!string.IsNullOrWhiteSpace(Model.CourseDetails.QualificationLevel))
                 {
-                    <span>£@string.Format("{0:0.00}", Model.CourseDetails.Cost)</span>
+                    <tr class="govuk-table__row">
+                        <th class="govuk-table__header" scope="row">Qualification level</th>
+                        <td class="govuk-table__cell"><span id="qualification-level">@Model.CourseDetails.QualificationLevel</span></td>
+                    </tr>
                 }
-            </td>
-        </tr>
-        <tr class="govuk-table__row">
-            <th class="govuk-table__header" scope="row">Cost description</th>
-            <td class="govuk-table__cell">@Model.CourseDetails.AdditionalPrice</td>
-        </tr>
-    </tbody>
-</table>
-@if (!string.IsNullOrWhiteSpace(Model.CourseDetails.Description))
-{
-    <h2 class="govuk-heading-m" id="whofor">Who this course is for</h2>
-    <p>@Model.CourseDetails.Description</p>
-}
 
-@if (!string.IsNullOrWhiteSpace(Model.CourseDetails.EntryRequirements))
-{
-    <h2 class="govuk-heading-m" id="entry">Entry requirements</h2>
-    <p>@Model.CourseDetails.EntryRequirements</p>
-}
+                @if (!string.IsNullOrWhiteSpace(Model.CourseDetails.AwardingOrganisation))
+                {
+                    <tr class="govuk-table__row">
+                        <th class="govuk-table__header" scope="row">Awarding organisation</th>
+                        <td class="govuk-table__cell"><span id="awarding-organisation">@Model.CourseDetails.AwardingOrganisation</span></td>
+                    </tr>
+                }
+                <tr class="govuk-table__row">
+                    <th class="govuk-table__header" scope="row">Location</th>
+                    <td class="govuk-table__cell">
+                        <details class="govuk-details govuk-!-margin-bottom-0" data-module="govuk-details">
+                            <summary class="govuk-details__summary">
+                                <span class="govuk-details__summary-text">East Midlands</span>
+                            </summary>
+                            <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0 location-block">
+                                <li>Derby</li>
+                                <li>Derbyshire</li>
+                                <li>Nottinghamshire</li>
+                            </ul>
+                        </details>
+                        <details class="govuk-details govuk-!-margin-bottom-0" data-module="govuk-details">
+                            <summary class="govuk-details__summary">
+                                <span class="govuk-details__summary-text">London</span>
+                            </summary>
+                            <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0 location-block">
+                                <li>Barking and Dagenham</li>
+                                <li>Barnet</li>
+                                <li>Bexley</li>
+                            </ul>
+                        </details>
+                    </td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <th class="govuk-table__header" scope="row">Course type</th>
+                    <td class="govuk-table__cell"><span id="attendance-mode">@Model.CourseDetails.AttendanceMode</span></td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <th class="govuk-table__header" scope="row">Course start date</th>
+                    <td class="govuk-table__cell"><span id="start-date">@Model.CourseDetails.StartDate.Value.ToLongDateString()</span></td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <th class="govuk-table__header" scope="row">Cost</th>
+                    <td class="govuk-table__cell">
+                        @if (string.IsNullOrEmpty(Model.CourseDetails.Cost))
+                        {
+                            <span id="cost-value">£0.00</span>
+                        }
+                        else
+                        {
+                            <span id="cost-value">£@string.Format("{0:0.00}", Model.CourseDetails.Cost)</span>
+                        }
+                    </td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <th class="govuk-table__header" scope="row">Cost description</th>
+                    <td class="govuk-table__cell"><span id="additional-price">@Model.CourseDetails.AdditionalPrice</span></td>
+                </tr>
+            </tbody>
+        </table>
+        @if (!string.IsNullOrWhiteSpace(Model.CourseDetails.Description))
+        {
+            <h2 class="govuk-heading-m" id="whofor">Who this course is for</h2>
+            <p id="course-description">@Model.CourseDetails.Description</p>
+        }
 
-@if (!string.IsNullOrWhiteSpace(Model.CourseDetails.WhatYoullLearn))
-{
-    <h2 class="govuk-heading-m" id="whatlearn">What you'll learn</h2>
-    <p>@Model.CourseDetails.WhatYoullLearn</p>
-}
+        @if (!string.IsNullOrWhiteSpace(Model.CourseDetails.EntryRequirements))
+        {
+            <h2 class="govuk-heading-m" id="entry">Entry requirements</h2>
+            <p id="course-entryrequirements">@Model.CourseDetails.EntryRequirements</p>
+        }
 
-@if (!string.IsNullOrWhiteSpace(Model.CourseDetails.HowYoullLearn))
-{
-    <h2 class="govuk-heading-m" id="howlearn">How you'll learn</h2>
-    <p>@Model.CourseDetails.HowYoullLearn</p>
-}
+        @if (!string.IsNullOrWhiteSpace(Model.CourseDetails.WhatYoullLearn))
+        {
+            <h2 class="govuk-heading-m" id="whatlearn">What you'll learn</h2>
+            <p id="course-what-you-will-learn">@Model.CourseDetails.WhatYoullLearn</p>
+        }
 
-@if (!string.IsNullOrWhiteSpace(Model.CourseDetails.EquipmentRequired))
-{
-    <h2 class="govuk-heading-m" id="need">What you'll need to bring</h2>
-    <p>@Model.CourseDetails.EquipmentRequired</p>
-}
+        @if (!string.IsNullOrWhiteSpace(Model.CourseDetails.HowYoullLearn))
+        {
+            <h2 class="govuk-heading-m" id="howlearn">How you'll learn</h2>
+            <p id="course-how-you-will-learn">@Model.CourseDetails.HowYoullLearn</p>
+        }
 
-@if (!string.IsNullOrWhiteSpace(Model.CourseDetails.AssessmentMethod))
-{
-    <h2 class="govuk-heading-m" id="assessed">How you'll be assessed</h2>
-    <p>@Model.CourseDetails.AssessmentMethod</p>
-}
+        @if (!string.IsNullOrWhiteSpace(Model.CourseDetails.EquipmentRequired))
+        {
+            <h2 class="govuk-heading-m" id="need">What you'll need to bring</h2>
+            <p id="course-what-you-will-need-to-bring">@Model.CourseDetails.EquipmentRequired</p>
+        }
 
-@if (!string.IsNullOrWhiteSpace(Model.CourseDetails.NextSteps))
-{
-    <h2 class="govuk-heading-m" id="next">What you can do next</h2>
-    <p>@Model.CourseDetails.NextSteps</p>
-}
+        @if (!string.IsNullOrWhiteSpace(Model.CourseDetails.AssessmentMethod))
+        {
+            <h2 class="govuk-heading-m" id="assessed">How you'll be assessed</h2>
+            <p id="course-assessment-method">@Model.CourseDetails.AssessmentMethod</p>
+        }
 
-@if (Model.CourseDetails.VenueDetails != null)
-{
-    <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
-    <form action="@Model.CourseDetails.VenueDetails.Website">
-        <button href="@Model.CourseDetails.VenueDetails.Website" role="button" draggable="false" class="govuk-button govuk-button--start" data-module="govuk-button">
-            Go to course provider
-            <svg class="govuk-button__start-icon" xmlns="http://www.w3.org/2000/svg" width="17.5" height="19" viewBox="0 0 33 40" role="presentation" focusable="false">
-                <path fill="currentColor" d="M0 0h13l20 20-20 20H0l20-20z"></path>
-            </svg>
-        </button>
-    </form>
-}
-<p><a href="/find-a-course/course/searchcourse?searchTerm=@Model.SearchTerm" class="govuk-back-link">Back to results</a></p>
+        @if (!string.IsNullOrWhiteSpace(Model.CourseDetails.NextSteps))
+        {
+            <h2 class="govuk-heading-m" id="next">What you can do next</h2>
+            <p id="course-nextsteps">@Model.CourseDetails.NextSteps</p>
+        }
+
+        @if (Model.CourseDetails.VenueDetails != null)
+        {
+            <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+            <form action="@Model.CourseDetails.VenueDetails.Website" id="venue-form">
+                <button href="@Model.CourseDetails.VenueDetails.Website" role="button" draggable="false" class="govuk-button govuk-button--start" data-module="govuk-button">
+                    Go to course provider
+                    <svg class="govuk-button__start-icon" xmlns="http://www.w3.org/2000/svg" width="17.5" height="19" viewBox="0 0 33 40" role="presentation" focusable="false">
+                        <path fill="currentColor" d="M0 0h13l20 20-20 20H0l20-20z"></path>
+                    </svg>
+                </button>
+            </form>
+        }
+        <p><a href="/find-a-course/course/searchcourse?searchTerm=@Model.SearchTerm" class="govuk-back-link" id="back-to-results">Back to results</a></p>
+</div>
