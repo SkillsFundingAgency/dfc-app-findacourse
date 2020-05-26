@@ -1,4 +1,4 @@
-using AutoMapper;
+﻿using AutoMapper;
 using CorrelationId;
 using DFC.App.FindACourse.Data.Domain;
 using DFC.App.FindACourse.Framework;
