@@ -1,14 +1,12 @@
 ﻿using DFC.App.FindACourse.Controllers;
 using DFC.App.FindACourse.Services;
+using DFC.Logger.AppInsights.Contracts;
 using FakeItEasy;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Microsoft.Net.Http.Headers;
-using System;
 using System.Collections.Generic;
 using System.Net.Mime;
-using System.Text;
 
 namespace DFC.App.FindACourse.UnitTests.Controllers
 {
@@ -18,8 +16,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
 
         public BaseController()
         {
-            CourseLogger = A.Fake<ILogger<CourseController>>();
-            DetailsLogger = A.Fake<ILogger<DetailsController>>();
+            FakeLogService = A.Fake<ILogService>();
             FakeFindACoursesService = A.Fake<IFindACourseService>();
         }
 
@@ -39,9 +36,9 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
             new string[] { MediaTypeNames.Application.Json },
         };
 
-        protected ILogger<CourseController> CourseLogger { get; }
+        protected ILogService FakeLogService { get; }
 
-        protected ILogger<DetailsController> DetailsLogger { get; }
+       // protected ILogger<DetailsController> DetailsLogger { get; }
 
         protected IFindACourseService FakeFindACoursesService { get; }
 
@@ -53,7 +50,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
 
             httpContext.Request.Headers[HeaderNames.Accept] = mediaTypeName;
 
-            var controller = new CourseController(CourseLogger, FakeFindACoursesService)
+            var controller = new CourseController(FakeLogService, FakeFindACoursesService)
             {
                 ControllerContext = new ControllerContext()
                 {
@@ -70,7 +67,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
 
             httpContext.Request.Headers[HeaderNames.Accept] = mediaTypeName;
 
-            var controller = new DetailsController(DetailsLogger, FakeFindACoursesService)
+            var controller = new DetailsController(FakeLogService, FakeFindACoursesService)
             {
                 ControllerContext = new ControllerContext()
                 {

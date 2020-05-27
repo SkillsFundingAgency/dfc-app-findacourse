@@ -4,6 +4,7 @@ using DFC.App.FindACourse.Extensions;
 using DFC.App.FindACourse.Services;
 using DFC.App.FindACourse.ViewModels;
 using DFC.CompositeInterfaceModels.FindACourseClient;
+using DFC.Logger.AppInsights.Contracts;
 using GdsCheckboxList.Models;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Http;
@@ -20,12 +21,12 @@ namespace DFC.App.FindACourse.Controllers
 {
     public class CourseController : Controller
     {
-        private readonly ILogger<CourseController> logger;
+        private readonly ILogService logService;
         private readonly IFindACourseService findACourseService;
 
-        public CourseController(ILogger<CourseController> logger, IFindACourseService findACourseService)
+        public CourseController(ILogService logService, IFindACourseService findACourseService)
         {
-            this.logger = logger;
+            this.logService = logService;
             this.findACourseService = findACourseService;
         }
 
@@ -43,7 +44,7 @@ namespace DFC.App.FindACourse.Controllers
         [HttpGet]
         public IActionResult Document()
         {
-            this.logger.LogInformation($"{nameof(this.Document)} has been called");
+            this.logService.LogInformation($"{nameof(this.Document)} has been called");
 
             var model = new DocumentViewModel
             {
@@ -55,7 +56,7 @@ namespace DFC.App.FindACourse.Controllers
                 IncludeInSitemap = true,
             };
 
-            this.logger.LogInformation($"{nameof(this.Document)} generated the model and ready to pass to the view");
+            this.logService.LogInformation($"{nameof(this.Document)} generated the model and ready to pass to the view");
 
             return this.View(model);
         }
@@ -63,11 +64,11 @@ namespace DFC.App.FindACourse.Controllers
         [HttpGet]
         public IActionResult Head()
         {
-            this.logger.LogInformation($"{nameof(this.Head)} has been called");
+            this.logService.LogInformation($"{nameof(this.Head)} has been called");
 
             var model = new HeadViewModel { Title = "Find a Course", Description = "FAC", Keywords = "fac", CanonicalUrl = "find-a-course" };
 
-            this.logger.LogInformation($"{nameof(this.Head)} generated the model and ready to pass to the view");
+            this.logService.LogInformation($"{nameof(this.Head)} generated the model and ready to pass to the view");
 
             return View(model);
         }
@@ -75,7 +76,7 @@ namespace DFC.App.FindACourse.Controllers
         [HttpGet]
         public IActionResult Breadcrumb()
         {
-            this.logger.LogInformation($"{nameof(this.Breadcrumb)} has been called");
+            this.logService.LogInformation($"{nameof(this.Breadcrumb)} has been called");
 
             var model = new BreadcrumbViewModel
             {
@@ -86,7 +87,7 @@ namespace DFC.App.FindACourse.Controllers
                 },
             };
 
-            this.logger.LogInformation($"{nameof(this.Breadcrumb)} generated the model and ready to pass to the view");
+            this.logService.LogInformation($"{nameof(this.Breadcrumb)} generated the model and ready to pass to the view");
             return View(model);
         }
 
@@ -94,7 +95,7 @@ namespace DFC.App.FindACourse.Controllers
         [Route("find-a-course/{controller}/bodytop/{**data}")]
         public IActionResult BodyTop()
         {
-            this.logger.LogInformation($"{nameof(this.BodyTop)} has been called");
+            this.logService.LogInformation($"{nameof(this.BodyTop)} has been called");
 
             return View();
         }
@@ -103,7 +104,7 @@ namespace DFC.App.FindACourse.Controllers
         [Route("find-a-course/{controller}/body/{**data}")]
         public async Task<IActionResult> Body()
         {
-            this.logger.LogInformation($"{nameof(this.Body)} has been called");
+            this.logService.LogInformation($"{nameof(this.Body)} has been called");
 
             var model = new BodyViewModel();
 
@@ -111,7 +112,7 @@ namespace DFC.App.FindACourse.Controllers
             model.SideBar = this.GetSideBarViewModel();
             model.OrderByOptions = ListFilters.GetOrderByOptions();
 
-            this.logger.LogInformation($"{nameof(this.Body)} generated the model and ready to pass to the view");
+            this.logService.LogInformation($"{nameof(this.Body)} generated the model and ready to pass to the view");
 
             return await this.SearchCourse(string.Empty).ConfigureAwait(true);
         }
@@ -120,7 +121,7 @@ namespace DFC.App.FindACourse.Controllers
         [Route("find-a-course/{controller}/bodyfooter/{**data}")]
         public IActionResult BodyFooter()
         {
-            this.logger.LogInformation($"{nameof(this.BodyFooter)} has been called");
+            this.logService.LogInformation($"{nameof(this.BodyFooter)} has been called");
 
             return this.NoContent();
         }
@@ -129,7 +130,7 @@ namespace DFC.App.FindACourse.Controllers
         [Route("find-a-course/course/body/course/page")]
         public async Task<IActionResult> Page(string searchTerm, string town, string distance, string courseType, string courseHours, string studyTime, string startDate, int page)
         {
-            this.logger.LogInformation($"{nameof(this.Page)} has been called");
+            this.logService.LogInformation($"{nameof(this.Page)} has been called");
 
             var model = new BodyViewModel
             {
@@ -146,7 +147,7 @@ namespace DFC.App.FindACourse.Controllers
                 RequestPage = page,
             };
 
-            this.logger.LogInformation($"{nameof(this.Page)} generated the model and ready to pass to the view");
+            this.logService.LogInformation($"{nameof(this.Page)} generated the model and ready to pass to the view");
             return await this.FilterResults(model).ConfigureAwait(false);
         }
 
@@ -154,7 +155,7 @@ namespace DFC.App.FindACourse.Controllers
         [Route("find-a-course/course/body/course/filterresults")]
         public async Task<IActionResult> FilterResults(BodyViewModel model)
         {
-            this.logger.LogInformation($"{nameof(this.FilterResults)} has been called");
+            this.logService.LogInformation($"{nameof(this.FilterResults)} has been called");
 
             var courseTypeList = new List<CourseType>();
             var courseHoursList = new List<CourseHours>();
@@ -241,10 +242,10 @@ namespace DFC.App.FindACourse.Controllers
                 }
                 catch (Exception ex)
                 {
-                    this.logger.LogError($"{nameof(this.FilterResults)} threw an exception", ex.Message);
+                    this.logService.LogError($"{nameof(this.FilterResults)} threw an exception" + ex.Message);
                 }
 
-            this.logger.LogInformation($"{nameof(this.FilterResults)} generated the model and ready to pass to the view");
+            this.logService.LogInformation($"{nameof(this.FilterResults)} generated the model and ready to pass to the view");
 
             return this.Results(model);
         }
@@ -253,7 +254,7 @@ namespace DFC.App.FindACourse.Controllers
         [Route("find-a-course/course/body/course/searchcourse")]
         public async Task<IActionResult> SearchCourse(string searchTerm)
         {
-            this.logger.LogInformation($"{nameof(this.SearchCourse)} has been called");
+            this.logService.LogInformation($"{nameof(this.SearchCourse)} has been called");
 
             var model = new BodyViewModel();
             var courseSearchFilters = new CourseSearchFilters
@@ -276,10 +277,10 @@ namespace DFC.App.FindACourse.Controllers
             }
             catch (Exception ex)
             {
-                this.logger.LogError($"{nameof(this.SearchCourse)} threw an exception", ex.Message);
+                this.logService.LogError($"{nameof(this.SearchCourse)} threw an exception" + ex.Message);
             }
 
-            this.logger.LogInformation($"{nameof(this.SearchCourse)} generated the model and ready to pass to the view");
+            this.logService.LogInformation($"{nameof(this.SearchCourse)} generated the model and ready to pass to the view");
 
             return this.Results(model);
         }
@@ -287,7 +288,7 @@ namespace DFC.App.FindACourse.Controllers
         [HttpGet]
         public IActionResult Results(BodyViewModel model)
         {
-            this.logger.LogInformation($"{nameof(this.Results)} has been called");
+            this.logService.LogInformation($"{nameof(this.Results)} has been called");
 
             var sideBarViewModel = this.GetSideBarViewModel();
             foreach (var item in sideBarViewModel.DistanceOptions)
@@ -334,14 +335,14 @@ namespace DFC.App.FindACourse.Controllers
             model.SideBar = sideBarViewModel;
             model.OrderByOptions = ListFilters.GetOrderByOptions();
 
-            this.logger.LogInformation($"{nameof(this.Results)} generated the model and ready to pass to the view");
+            this.logService.LogInformation($"{nameof(this.Results)} generated the model and ready to pass to the view");
 
             return View("Body", model);
         }
 
         private FiltersListViewModel MapFilter(string text, string title, List<Filter> lstFilter)
         {
-            this.logger.LogInformation($"{nameof(this.MapFilter)} has been called for {title}");
+            this.logService.LogInformation($"{nameof(this.MapFilter)} has been called for {title}");
 
             var filterModel = new FiltersListViewModel
             {
@@ -357,14 +358,14 @@ namespace DFC.App.FindACourse.Controllers
 
             filterModel.LstChkFilter = checkboxList;
 
-            this.logger.LogInformation($"{nameof(this.MapFilter)} {title} list has been generated successfully");
+            this.logService.LogInformation($"{nameof(this.MapFilter)} {title} list has been generated successfully");
 
             return filterModel;
         }
 
         private FiltersListViewModel CheckCheckboxState(FiltersListViewModel model, FiltersListViewModel newModel)
         {
-            this.logger.LogInformation($"{nameof(this.CheckCheckboxState)} has been called");
+            this.logService.LogInformation($"{nameof(this.CheckCheckboxState)} has been called");
 
             foreach (var item in newModel.LstChkFilter)
             {
