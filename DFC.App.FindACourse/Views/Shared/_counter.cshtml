@@ -1,0 +1,11 @@
+﻿@model BodyViewModel
+
+@if (Model.Results != null)
+{
+<div>
+    @if (Model.Results.Courses.Count() > 0)
+    {
+        <p class="govuk-body">Showing @String.Format("{0:n0}", Model.Results.ResultProperties.TotalResultCount) courses</p>
+    }
+</div>
+}

@@ -1,0 +1,60 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "resourcePrefix": {
+            "value": "__resourcePrefix__"
+        },
+        "appSharedResourceGroup": {
+            "value": "__appSharedResourceGroup__"
+        },
+        "appSharedStorageAccountName": {
+            "value": "__appSharedStorageAccountName__"
+        },
+        "aseHostingEnvironmentName": {
+            "value": "__aseHostingEnvironmentName__"
+        },
+        "aseResourceGroup": {
+            "value": "__aseResourceGroup__"
+        },
+        "aspTier": {
+            "value": "__aspTier__"
+        },
+        "sharedAppServicePlanName": {
+            "value": "__sharedAppServicePlanName__"
+        },
+        "sharedAppServicePlanResourceGroup": {
+            "value": "__appSharedResourceGroup__"
+        },
+        "CosmosDbResourceGroup": {
+            "value": "__appSharedResourceGroup__"
+        },
+        "cosmosDBName": {
+            "value": "__appSharedCosmosDBName__"
+        },
+        "cosmosDbKey": {
+            "value": "__appSharedCosmosPrimaryKey__"
+        },
+        "facCosmosAuditCollectionName": {
+            "value": "__facCosmosAuditCollectionName__"
+        },
+        "facAppDatabaseNeedsCreation": {
+            "value": __CosmosDbDatabaseDoesntExist__
+        },
+        "facAppDatabaseThroughput": {
+            "value": __facAppDatabaseThroughput__
+        },
+        "courseProviderServiceEndpoint": {
+            "value": "__courseProviderServiceEndpoint__"
+        },
+        "courseProviderServiceApiKey": {
+            "value": "__courseProviderServiceApiKey__"
+        },
+        "Environment": {
+            "value": "__ReleaseEnvironmentName__"
+        },
+        "enableAlerts": {
+            "value": __EnableAzureMonitorAlerting__
+        }
+    }
+}

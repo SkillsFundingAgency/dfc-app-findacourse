@@ -1,0 +1,88 @@
+﻿@model DFC.App.FindACourse.ViewModels.BodyViewModel
+@{
+    var previousPage = Model.RequestPage - 1;
+    var nextPage = Model.RequestPage + 1;
+
+    var town = Model.SideBar.TownOrPostcode;
+    var distance = Model.SideBar.DistanceValue;
+    var courseType = Html.Raw(Json.Serialize(Model.SideBar.CourseType.SelectedIds));
+    var courseHours = Html.Raw(Json.Serialize(Model.SideBar.CourseHours.SelectedIds));
+    var courseStudyTime = Html.Raw(Json.Serialize(Model.SideBar.CourseStudyTime.SelectedIds));
+    var courseStartDate = Model.SideBar.StartDateValue;
+    var searchTerm = Model.SideBar.CurrentSearchTerm;
+    var filterA = Model.SideBar.FiltersApplied;
+
+    var parameters = $"searchTerm={searchTerm}&town={town}&courseType={courseType}&courseHours={courseHours}&studyTime={courseStudyTime}&startDate={courseStartDate}&distance={distance}&filtera={filterA}";
+    var nextLinkParams = $"{parameters}&page={nextPage}";
+    var previousLinkParams = $"{parameters}&page={previousPage}";
+}
+
+@if (Model.Results != null)
+{
+    if (Model.Results.Courses.Count() > 0)
+    {
+        @foreach (var result in Model.Results.Courses)
+        {
+            switch (result.AttendanceMode)
+            {
+                case "Classroom based":
+                    <partial name="_results_classroom" model="result" />
+                    <hr class="govuk-section-break govuk-section-break--visible">
+                    break;
+                case "Work based":
+                    <partial name="_results_workbased" model="result" />
+                    <hr class="govuk-section-break govuk-section-break--visible">
+                    break;
+                case "Online":
+                    <partial name="_results_online" model="result" />
+                    <hr class="govuk-section-break govuk-section-break--visible">
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        @if (Model.Results.ResultProperties.TotalPages > 1)
+        {
+            <ul class="previous-next-navigation govuk-!-margin-top-3" id="page-identifiers">
+                @if (Model.Results.ResultProperties.Page < Model.Results.ResultProperties.TotalPages)
+                {
+                    <li class="next">
+                        <a href="/find-a-course/page?@nextLinkParams">
+                            <span class="pagination-label">Next</span>
+                            <span class="govuk-visually-hidden">page</span>
+                            <span class="page-numbers">@nextPage of @Model.Results.ResultProperties.TotalPages</span>
+                        </a>
+                    </li>
+                }
+
+                @if (Model.Results.ResultProperties.Page > 1)
+                {
+                    <li class="previous">
+                        <a href="/find-a-course/page?@previousLinkParams">
+                            <span class="pagination-label">Previous</span>
+                            <span class="govuk-visually-hidden">page</span>
+                            <span class="page-numbers">@previousPage of @Model.Results.ResultProperties.TotalPages</span>
+                        </a>
+                    </li>
+                }
+            </ul>
+        }
+    }
+    else 
+    {
+        <div id="no-results-block">
+            <h3 class="govuk-body-s govuk-!-margin-bottom-1">
+                <p class="govuk-body">We didn't find any results for <span id="search-term-no-results">'@Model.CurrentSearchTerm'</span> with the active filters you've applied. Try searching again.</p>
+                <p class="govuk-body">You could:</p>
+                <ul class="list list-bullet govuk-body">
+                    <li>check your spelling</li>
+                    <li>change the start date</li>
+                    <li>check your town or postcode</li>
+                    <li>change your filters</li>
+                    <li>try different search terms</li>
+                </ul>
+            </h3>
+        </div>
+    }
+}

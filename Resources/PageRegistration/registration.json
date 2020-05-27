@@ -1,0 +1,38 @@
+[
+  {
+    "Path": "find-a-course",
+    "TopNavigationOrder": 999,
+    "Layout": 4,
+    "OfflineHtml": "<div class=\"govuk-width-container\"><H2>Help Service Unavailable</H2></div>",
+    "SitemapUrl": "https://__AppServiceName__.__appServiceDomain__/help/sitemap.xml",
+    "RobotsUrl": "https://__AppServiceName__.__appServiceDomain__/Robots.txt",
+    "ExternalUrl":  "",
+    "Regions": [
+      {
+        "PageRegion": 1,
+        "HealthCheckRequired": true,
+        "IsHealthy" : true,
+        "RegionEndpoint": "https://__AppServiceName__.__appServiceDomain__/course/{0}/head"
+      },
+      {
+        "PageRegion": 4,
+        "RegionEndpoint": "https://__AppServiceName__.__appServiceDomain__/find-a-course/{0}/body",
+        "HealthCheckRequired": true,
+        "IsHealthy" : true
+      },
+      {
+        "PageRegion": 3,
+        "HealthCheckRequired": true,
+        "IsHealthy" : true,
+        "RegionEndpoint": "https://__AppServiceName__.__appServiceDomain__/find-a-course/{0}/bodytop"
+      },
+      {
+        "PageRegion": 7,
+        "HealthCheckRequired": true,
+        "IsHealthy" : true,
+        "RegionEndpoint": "https://__AppServiceName__.__appServiceDomain__/find-a-course/{0}/bodyfooter",
+        "OfflineHtml": "<div class=\"govuk-width-container\"><H3>Help Service Unavailable</H3></div>"
+      }
+    ]
+  }
+]
