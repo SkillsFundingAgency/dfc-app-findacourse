@@ -1,0 +1,406 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "resourcePrefix": {
+            "type": "string"
+        },
+        "appSharedResourceGroup": {
+            "type": "string"
+        },
+        "appSharedStorageAccountName": {
+            "type": "string"
+        },
+        "aseHostingEnvironmentName": {
+            "type": "string",
+            "defaultValue": ""
+        },
+        "aseResourceGroup": {
+            "type": "string",
+            "defaultValue": ""
+        },
+        "aspInstances": {
+            "type": "int",
+            "defaultValue": 2
+        },
+        "aspSize": {
+            "type": "string",
+            "defaultValue": ""
+        },
+        "aspTier": {
+            "type": "string",
+            "defaultValue": ""
+        },
+        "sharedAppServicePlanName": {
+            "type": "string",
+            "defaultValue": ""
+        },
+        "sharedAppServicePlanResourceGroup": {
+            "type": "string",
+            "defaultValue": ""
+        },
+        "CosmosDbResourceGroup": {
+            "type": "string"
+        },
+        "cosmosDbName": {
+            "type": "string"
+        },
+        "cosmosDbKey": {
+            "type": "securestring"
+        },
+        "facCosmosAuditCollectionName": {
+            "type": "string"
+        },
+        "facAppDatabaseNeedsCreation": {
+            "type": "bool"
+        },
+        "facAppDatabaseThroughput": {
+            "type": "int"
+        },
+        "courseProviderServiceEndpoint": {
+            "type": "string",
+            "metadata": {
+                "description": "Url for course provider service"
+            }
+        },
+        "courseProviderServiceApiKey": {
+            "type": "securestring",
+            "metadata": {
+                "description": "Access token for course provider service"
+            }
+	        },
+        "Environment": {
+            "type": "string"
+        },
+        "enableAlerts": {
+            "type": "bool",
+            "metadata": {
+                "description": "Enable or disable alerting"
+            }
+        }
+    },
+    "variables": {
+        "appServiceAppInsightsName": "[concat(parameters('resourcePrefix'), '-ai')]",
+        "appServicePlanName": "[if(greater(length(parameters('sharedAppServicePlanName')), 0), parameters('sharedAppServicePlanName'), concat(parameters('resourcePrefix'), '-asp'))]",
+        "appServicePlanResourceGroup": "[if(greater(length(parameters('SharedAppServicePlanResourceGroup')), 0), parameters('SharedAppServicePlanResourceGroup'), resourceGroup().name)]",
+        "buildingBlocksDfcBaseUrl": "https://raw.githubusercontent.com/SkillsFundingAgency/dfc-devops/master/ArmTemplates/",
+        "facCosmosAuditCollectionPartitionKey": "/PartitionKey",
+        "cosmosDbDatabaseName": "dfc-app-findacourse",
+        "cosmosDbEndpoint": "[concat('https://', parameters('cosmosDbName'), '.documents.azure.com:443/')]",
+        "webAppName": "[concat(parameters('resourcePrefix'), '-as')]",
+        "ActionGroupName": "[concat('dfc-', replace(tolower(parameters('Environment')), '-draft', ''), '-app-sharedresources-actgrp')]"
+    },
+    "resources": [
+        {
+            "apiVersion": "2017-05-10",
+            "name": "[variables('appServiceAppInsightsName')]",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(variables('buildingBlocksDfcBaseUrl'), 'application-insights.json')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "appInsightsName": {
+                        "value": "[variables('appServiceAppInsightsName')]"
+                    },
+                    "attachedService": {
+                        "value": ""
+                    }
+                }
+            }
+        },
+        {
+            "apiVersion": "2017-05-10",
+            "name": "[variables('appServicePlanName')]",
+            "type": "Microsoft.Resources/deployments",
+            "condition": "[not(equals(parameters('sharedAppServicePlanName'), variables('appServicePlanName')))]",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(variables('buildingBlocksDfcBaseUrl'), 'app-service-plan.json')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "appServicePlanName": {
+                        "value": "[variables('appServicePlanName')]"
+                    },
+                    "aseHostingEnvironmentName": {
+                        "value": "[parameters('aseHostingEnvironmentName')]"
+                    },
+                    "aseResourceGroup": {
+                        "value": "[parameters('aseResourceGroup')]"
+                    },
+                    "aspSize": {
+                        "value": "[parameters('aspSize')]"
+                    },
+                    "aspInstances": {
+                        "value": "[parameters('aspInstances')]"
+                    },
+                    "nonASETier": {
+                        "value": "[parameters('aspTier')]"
+                    }
+                }
+            }
+        },
+        {
+            "apiVersion": "2017-05-10",
+            "name": "[variables('WebAppName')]",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(variables('buildingBlocksDfcBaseUrl'), 'app-service.json')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "appServiceName": {
+                        "value": "[variables('webAppName')]"
+                    },
+                    "appServicePlanName": {
+                        "value": "[variables('appServicePlanName')]"
+                    },
+                    "appServicePlanResourceGroup": {
+                        "value": "[variables('appServicePlanResourceGroup')]"
+                    },
+                    "appServiceType": {
+                        "value": "app"
+                    },
+                    "deployStagingSlot": {
+                        "value": false
+                    },
+                    "appServiceAppSettings": {
+                        "value": [
+                            {
+                                "name": "MSDEPLOY_RENAME_LOCKED_FILES",
+                                "value": "1"
+                            },
+                            {
+                                "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+                                "value": "[reference(variables('AppServiceAppInsightsName')).outputs.InstrumentationKey.value]"
+                            },
+                            {
+                                "name": "AzureWebJobsStorage",
+                                "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',parameters('appSharedStorageAccountName'),';AccountKey=',listKeys(resourceId(parameters('appSharedResourceGroup'), 'Microsoft.Storage/storageAccounts', parameters('appSharedStorageAccountName')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value, ';EndpointSuffix=core.windows.net')]"
+                            },
+                            {
+                                "name": "AllowedHosts",
+                                "value": "*"
+                            },
+                            {
+                                "name": "Configuration__CourseSearchClient__CosmosAuditConnection__AccessKey",
+                                "value": "[parameters('cosmosDbKey')]"
+                            },
+                            {
+                                "name": "Configuration__CourseSearchClient__CosmosAuditConnection__EndpointUrl",
+                                "value": "[variables('cosmosDbEndpoint')]"
+                            },
+                            {
+                                "name": "Configuration__CourseSearchClient__CosmosAuditConnection__DatabaseId",
+                                "value": "[variables('cosmosDbDatabaseName')]"
+                            },
+                            {
+                                "name": "Configuration__CourseSearchClient__CosmosAuditConnection__CollectionId",
+                                "value": "[parameters('facCosmosAuditCollectionName')]"
+                            },
+                            {
+                                "name": "Configuration__CourseSearchClient__CosmosAuditConnection__PartitionKey",
+                                "value": "[variables('facCosmosAuditCollectionPartitionKey')]"
+                            },
+                            {
+                                "name": "Configuration__CourseSearchClient__CourseSearchSvc__ServiceEndpoint",
+                                "value": "[Parameters('courseProviderServiceEndpoint')]"
+                            },
+                            {
+                                "name": "Configuration__CourseSearchClient__CourseSearchSvc__APIKey",
+                                "value": "[Parameters('courseProviderServiceApiKey')]"
+                            },
+                            {
+                                "name": "Configuration__CourseSearchClient__CourseSearchSvc__SearchPageSize",
+                                "value": "20"
+                            },
+                            {
+                                "name": "Configuration__CourseSearchClient__CourseSearchSvc__RequestTimeOutSeconds",
+                                "value": "10"
+                            },
+                            {
+                                "name": "Configuration__CourseSearchClient__CourseSearchSvc__TransientErrorsNumberOfRetries",
+                                "value": "3"
+                            },
+                            {
+                                "name": "Configuration__CourseSearchClient__Policies__HttpCircuitBreaker__DurationOfBreak",
+                                "value": "00:00:10"
+                            },
+                            {
+                                "name": "Configuration__CourseSearchClient__Policies__HttpCircuitBreaker__ExceptionsAllowedBeforeBreaking",
+                                "value": "3"
+                            },
+                            {
+                                "name": "Configuration__CourseSearchClient__Policies__HttpRetry__BackoffPower",
+                                "value": "2"
+                            },
+                            {
+                                "name": "Configuration__CourseSearchClient__Policies__HttpRetry__Count",
+                                "value": "3"
+                            },
+                            {
+                                "name": "Logging__ApplicationInsights__LogLevel__Default",
+                                "value": "Warning"
+                            }
+                        ]
+                    }
+                }
+            },
+            "dependsOn": [
+                "[variables('AppServiceAppInsightsName')]"
+            ]
+        },
+        {
+            "name": "[variables('CosmosDbDatabaseName')]",
+            "type": "Microsoft.Resources/deployments",
+            "resourceGroup": "[parameters('CosmosDbResourceGroup')]",
+            "apiVersion": "2017-05-10",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(variables('BuildingBlocksDfcBaseUrl'),'CosmosDb/cosmos-database.json')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "accountName": {
+                        "value": "[parameters('CosmosDbName')]"
+                    },
+                    "databaseName": {
+                        "value": "[variables('CosmosDbDatabaseName')]"
+                    },
+                    "useSharedRequestUnits": {
+                        "value": true
+                    },
+                    "offerThroughput": {
+                        "value": "[parameters('facAppDatabaseThroughput')]"
+                    },
+                    "databaseNeedsCreation": {
+                        "value": "[parameters('facAppDatabaseNeedsCreation')]"
+                    }
+                }
+            }
+        },
+        {
+            "apiVersion": "2017-05-10",
+            "name": "[parameters('facCosmosAuditCollectionName')]",
+            "type": "Microsoft.Resources/deployments",
+            "resourceGroup": "[parameters('CosmosDbResourceGroup')]",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(variables('BuildingBlocksDfcBaseUrl'), 'CosmosDb/cosmos-collection.json')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "accountName": {
+                        "value": "[parameters('CosmosDbName')]"
+                    },
+                    "databaseName": {
+                        "value": "[variables('CosmosDbDatabaseName')]"
+                    },
+                    "collectionName": {
+                        "value": "[parameters('facCosmosAuditCollectionName')]"
+                    },
+                    "provisionRequestUnits": {
+                        "value": false
+                    },
+                    "partitionKey": {
+                        "value": "[variables('facCosmosAuditCollectionPartitionKey')]"
+                    }
+                }
+            },
+            "dependsOn": [
+                "[variables('CosmosDbDatabaseName')]"
+            ]
+        },
+        {
+          "apiVersion": "2019-05-01",
+          "name": "[concat(variables('appServiceAppInsightsName'), '-metric-exceptions')]",
+          "type": "Microsoft.Resources/deployments",
+          "dependsOn": [
+              "[variables('appServiceAppInsightsName')]"
+          ],
+          "properties": {
+              "mode": "Incremental",
+              "templateLink": {
+                  "uri": "[concat(variables('BuildingBlocksDfcBaseUrl'), 'Application-Insights/metric-alerts.json')]",
+                  "contentVersion": "1.0.0.0"
+              },
+              "parameters": {
+                  "enabled": {
+                      "value": "[parameters('enableAlerts')]"
+                  },
+                  "alertName": {
+                      "value": "[concat(variables('appServiceAppInsightsName'), '-metric-exceptions')]"
+                  },
+                  "alertSeverity": {
+                      "value": 3
+                  },
+                  "metricName": {
+                      "value": "exceptions/count"
+                  },
+                  "operator": {
+                      "value": "GreaterThan"
+                  },
+                  "threshold": {
+                      "value": "0"
+                  },
+                  "aggregation": {
+                      "value": "Count"
+                  },
+                  "windowSize": {
+                      "value": "PT5M"
+                  },
+                  "evaluationFrequency": {
+                      "value": "PT1M"
+                  },
+                  "actionGroupName": {
+                      "value": "[variables('ActionGroupName')]"
+                  },
+                  "actionGroupResourceGroup": {
+                      "value": "[parameters('appSharedResourceGroup')]"
+                  },
+                  "resourceId": {
+                      "value": "[resourceId('Microsoft.Insights/Components', variables('appServiceAppInsightsName'))]"
+                  }
+              }
+          }
+        },
+        {
+          "apiVersion": "2019-05-01",
+          "name": "[concat(variables('appServiceAppInsightsName'), '-failure-anomaly-v2')]",
+          "type": "Microsoft.Resources/deployments",
+          "dependsOn": [
+              "[variables('appServiceAppInsightsName')]"
+          ],
+          "properties": {
+              "mode": "Incremental",
+              "templateLink": {
+                  "uri": "[concat(variables('BuildingBlocksDfcBaseUrl'), 'Application-Insights/failure-anomaly-rule.json')]",
+                  "contentVersion": "1.0.0.0"
+              },
+              "parameters": {
+                  "alertName": {
+                      "value": "[concat(variables('appServiceAppInsightsName'), '-failure-anomaly-v2')]"
+                  },
+                  "enabled": {
+                      "value": "[parameters('enableAlerts')]"
+                  },
+                  "resourceId": {
+                      "value": "[resourceId('Microsoft.Insights/Components', variables('appServiceAppInsightsName'))]"
+                  },
+                  "actionGroupId": {
+                      "value": "[resourceId(parameters('appSharedResourceGroup'), 'microsoft.insights/actionGroups', variables('ActionGroupName'))]"
+                  }
+              }
+          }
+        }
+    ],
+    "outputs": {}
+}

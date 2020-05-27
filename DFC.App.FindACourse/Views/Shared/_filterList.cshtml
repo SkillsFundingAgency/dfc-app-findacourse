@@ -1,0 +1,12 @@
+﻿@model DFC.App.FindACourse.ViewModels.FiltersListViewModel
+
+<div id="@Model.FilterText" class="govuk-form-group">
+    <div id="@Model.FilterText">
+        <fieldset class="govuk-fieldset">
+            <legend class="govuk-label govuk-!-font-weight-bold">@Model.FilterTitle</legend>
+            <div class="govuk-checkboxes govuk-checkboxes--small">
+                <check-box-list name="Model.SelectedIds" items="Model.LstChkFilter" template="GDS"></check-box-list>
+            </div>
+        </fieldset>
+    </div>
+</div>

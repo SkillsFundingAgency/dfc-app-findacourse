@@ -1,0 +1,66 @@
+﻿@using System.Text.RegularExpressions;
+@model Course
+@{
+    var resultString = Regex.Match(Model.Duration, @"\d+").Value;
+     int.TryParse(resultString, out int durationInt);
+}
+
+<div class="govuk-!-margin-top-6">
+    <h2 class="govuk-heading-m">
+        <a class="govuk-link" href="/find-a-course/details?courseId=@Model.CourseId&runId=@Model.RunId">@Model.Title </a>
+    </h2>
+    <p>@Model.Description</p>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-one-half">
+            <ul class="govuk-list">
+
+                <li>
+                    <span class="govuk-secondary-colour">Start date:</span>
+                    @if (Model.StartDate != null)
+                    {
+                        <span>@Model.StartDate.Value.ToLongDateString()</span>
+                    }
+                    else
+                    {
+                        <span>Not known</span>
+                    }
+                </li>
+                <li>
+                    <span class="govuk-secondary-colour">Cost:</span>
+                    @if (Model.Cost == null)
+                    {
+                        <span>@Model.CostDescription</span>
+                    }
+                    else
+                    {
+                        <span>£@Model.Cost</span>
+                    }
+                </li>
+                <li>
+                    <span class="govuk-secondary-colour">Provider:</span> @Model.ProviderName
+                </li>
+
+            </ul>
+        </div>
+        <div class="govuk-grid-column-one-half">
+            <ul class="govuk-list">
+                <li>
+                    <span class="govuk-secondary-colour">Course type:</span> @Model.AttendancePattern
+                </li>
+                <li>
+                    <span class="govuk-secondary-colour">Duration:</span>
+                    @if (durationInt == 1)
+                    {
+                        <span>1 Year</span>
+                    }
+                    else if (durationInt > 1)
+                    {
+                        @Model.Duration
+                    }
+                </li>
+
+            </ul>
+        </div>
+
+    </div>
+</div>
