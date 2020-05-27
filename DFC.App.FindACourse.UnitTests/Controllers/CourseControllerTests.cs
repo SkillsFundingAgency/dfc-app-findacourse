@@ -38,7 +38,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
         {
             var controller = BuildCourseController(mediaTypeName);
 
-            var result = controller.Head();
+            var result = controller.Head(string.Empty);
 
             var viewResult = Assert.IsType<ViewResult>(result);
             var model = Assert.IsAssignableFrom<HeadViewModel>(viewResult.ViewData.Model);
@@ -70,7 +70,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
         {
             var controller = BuildCourseController(mediaTypeName);
 
-            var result = controller.BodyTop();
+            var result = controller.BodyTop("course");
 
             Assert.IsType<ViewResult>(result);
 
@@ -98,7 +98,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
         {
             var controller = BuildCourseController(mediaTypeName);
 
-            var result = controller.BodyFooter();
+            var result = controller.BodyFooter("course");
 
             Assert.IsType<NoContentResult>(result);
 

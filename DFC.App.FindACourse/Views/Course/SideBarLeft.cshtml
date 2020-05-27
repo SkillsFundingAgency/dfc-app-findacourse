@@ -1,37 +1,37 @@
 ﻿@model DFC.App.FindACourse.ViewModels.SideBarViewModel
 
 
-    <div class="filters filters">
+    <div class="filters filters" id="filters-block">
 
-        <div class="govuk-form-group">
-            <label class="govuk-label govuk-!-font-weight-bold" for="location">
+        <div class="govuk-form-group" id="location-block">
+            <label class="govuk-label govuk-!-font-weight-bold" for="location" id="location-label">
                 Location
             </label>
             <span id="location-hint" class="govuk-hint">
                 Enter a town or postcode
             </span>
-            <input type="text" asp-for="TownOrPostcode" name="SideBar.TownOrPostcode" class="govuk-input govuk-input--width-10" id="location" />
-            <span asp-validation-for="TownOrPostcode" class="text-danger"></span>
+            <input type="text" asp-for="TownOrPostcode" name="SideBar.TownOrPostcode" class="govuk-input govuk-input--width-10" id="location-input" />
+            <span asp-validation-for="TownOrPostcode" class="text-danger" id="location-validator"></span>
         </div>
 
-        <div id="distanceForm" class="govuk-form-group">
+        <div id="distance-block" class="govuk-form-group">
             <div id="distance">
-                <label class="govuk-label govuk-!-font-weight-bold" for="location-distance">Distance</label>
-                <select asp-for="DistanceValue" asp-items="Model.DistanceOptions" class="govuk-select" name="SelectedDistanceValue" id="location-distance"></select>
+                <label class="govuk-label govuk-!-font-weight-bold" for="location-distance" id="distance-label">Distance</label>
+                <select asp-for="DistanceValue" asp-items="Model.DistanceOptions" class="govuk-select" name="SelectedDistanceValue" id="distance-select"></select>
             </div>
         </div>
 
-        <div id="orderByForm" class="govuk-form-group">
+        <div id="startdate-block" class="govuk-form-group">
             <div id="orderBy">
-                <label class="govuk-label govuk-!-font-weight-bold" for="orderByInput">Start date</label>
-                <select asp-for="StartDateValue" asp-items="Model.StartDateOptions" class="govuk-select" name="SideBar.StartDateValue" id="start-date"></select>
+                <label class="govuk-label govuk-!-font-weight-bold" for="orderByInput" id="startdate-label">Start date</label>
+                <select asp-for="StartDateValue" asp-items="Model.StartDateOptions" class="govuk-select" name="SideBar.StartDateValue" id="startdate-select"></select>
             </div>
         </div>
 
-        <div class="govuk-form-group">
+        <div class="govuk-form-group" id="coursetype-block">
             <div id="@Model.CourseType.FilterText" class="govuk-checkboxes">
                 <fieldset class="govuk-fieldset">
-                    <legend class="govuk-label govuk-!-font-weight-bold">@Model.CourseType.FilterTitle</legend>
+                    <legend class="govuk-label govuk-!-font-weight-bold" id="coursetype-label">@Model.CourseType.FilterTitle</legend>
                     <div class="govuk-checkboxes govuk-checkboxes--small">
                         <check-box-list name="SideBar.CourseType.SelectedIds" items="Model.CourseType.LstChkFilter" template="GDS"></check-box-list>
                     </div>
@@ -39,10 +39,10 @@
             </div>
         </div>
 
-        <div class="govuk-form-group">
+        <div class="govuk-form-group" id="coursehours-block">
             <div id="@Model.CourseHours.FilterText">
                 <fieldset class="govuk-fieldset">
-                    <legend class="govuk-label govuk-!-font-weight-bold">@Model.CourseHours.FilterTitle</legend>
+                    <legend class="govuk-label govuk-!-font-weight-bold" id="coursehours-label">@Model.CourseHours.FilterTitle</legend>
                     <div class="govuk-checkboxes govuk-checkboxes--small">
                         <check-box-list name="SideBar.CourseHours.SelectedIds" items="Model.CourseHours.LstChkFilter" template="GDS"></check-box-list>
                     </div>
@@ -51,9 +51,9 @@
         </div>
 
         <div class="govuk-form-group">
-            <div id="@Model.CourseStudyTime.FilterText">
+            <div id="@Model.CourseStudyTime.FilterText" id="coursestudytime-block">
                 <fieldset class="govuk-fieldset">
-                    <legend class="govuk-label govuk-!-font-weight-bold">@Model.CourseStudyTime.FilterTitle</legend>
+                    <legend class="govuk-label govuk-!-font-weight-bold" id="coursestudytime-label">@Model.CourseStudyTime.FilterTitle</legend>
                     <div class="govuk-checkboxes govuk-checkboxes--small">
                         <check-box-list name="SideBar.CourseStudyTime.SelectedIds" items="Model.CourseStudyTime.LstChkFilter" template="GDS"></check-box-list>
                     </div>
@@ -61,18 +61,18 @@
             </div>
         </div>
 
-        @*<div class="govuk-form-group">
-            <div id="@Model.StartDate.FilterText">
-                <fieldset class="govuk-fieldset">
-                    <legend class="govuk-label govuk-!-font-weight-bold">@Model.StartDate.FilterTitle</legend>
-                    <div class="govuk-checkboxes govuk-checkboxes--small">
-                        <check-box-list name="SideBar.StartDate.SelectedIds" items="Model.StartDate.LstChkFilter" template="GDS"></check-box-list>
-                    </div>
-                </fieldset>
+        <div id="orderby-block" class="govuk-form-group">
+            <div id="orderBy">
+                <label class="result-region-header__sort-label govuk-label" for="orderByInput" id="orderby-label">Sort by</label>
+                <select asp-for="SelectedOrderByValue" asp-items="Model.OrderByOptions" class="govuk-select" name="SideBar.SelectedOrderByValue" id="orderBy-Input"></select>
             </div>
-        </div>*@
+        </div>
 
-        <button data-module="govuk-button" class="govuk-button" type="submit">Apply filters</button>
+        <button data-module="govuk-button" class="govuk-button" type="submit" id="applyfilters-button">Apply filters</button>
         @*</noscript>*@
-        <p><a href="">Clear search</a></p>
+
+        @if (Model.FiltersApplied)
+        {
+            <p><a href="/find-a-course/searchcourse?searchTerm=@Model.CurrentSearchTerm">Clear filters</a></p>
+        }
     </div>

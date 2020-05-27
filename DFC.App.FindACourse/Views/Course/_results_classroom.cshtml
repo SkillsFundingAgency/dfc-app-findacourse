@@ -7,7 +7,7 @@
 
 <div class="govuk-!-margin-top-6">
     <h2 class="govuk-heading-m">
-        <a class="govuk-link" href="/find-a-course/course/details?courseId=@Model.CourseId&runId=@Model.RunId">@Model.Title</a>
+        <a class="govuk-link" href="/find-a-course/details?courseId=@Model.CourseId&runId=@Model.RunId">@Model.Title</a>
     </h2>
     <p>@Model.Description</p>
     <div class="govuk-grid-row">
@@ -19,6 +19,10 @@
                     @if (Model.StartDate != null)
                     {
                         @Model.StartDate.Value.ToLongDateString()
+                    }
+                    else
+                    {
+                        <span>Not known</span>
                     }
                 </li>
                 <li>

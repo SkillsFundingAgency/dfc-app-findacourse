@@ -22,5 +22,9 @@ namespace DFC.App.FindACourse.ViewModels
         public List<SelectListItem> OrderByOptions { get; set; }
 
         public int RequestPage { get; set; }
+
+        public bool IsNewPage { get; set; }
+
+        public bool FromPaging { get; set; }
     }
 }
