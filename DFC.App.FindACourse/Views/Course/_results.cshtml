@@ -9,9 +9,10 @@
     var courseHours = Html.Raw(Json.Serialize(Model.SideBar.CourseHours.SelectedIds));
     var courseStudyTime = Html.Raw(Json.Serialize(Model.SideBar.CourseStudyTime.SelectedIds));
     var courseStartDate = Model.SideBar.StartDateValue;
-    var searchTerm = Model.SideBar.StartDateValue;
+    var searchTerm = Model.SideBar.CurrentSearchTerm;
+    var filterA = Model.SideBar.FiltersApplied;
 
-    var parameters = $"searchTerm={searchTerm}&town={town}&courseType={courseType}&courseHours={courseHours}&studyTime={courseStudyTime}&startDate={courseStartDate}&distance={distance}";
+    var parameters = $"searchTerm={searchTerm}&town={town}&courseType={courseType}&courseHours={courseHours}&studyTime={courseStudyTime}&startDate={courseStartDate}&distance={distance}&filtera={filterA}";
     var nextLinkParams = $"{parameters}&page={nextPage}";
     var previousLinkParams = $"{parameters}&page={previousPage}";
 }
@@ -43,11 +44,11 @@
 
         @if (Model.Results.ResultProperties.TotalPages > 1)
         {
-            <ul class="previous-next-navigation govuk-!-margin-top-3">
+            <ul class="previous-next-navigation govuk-!-margin-top-3" id="page-identifiers">
                 @if (Model.Results.ResultProperties.Page < Model.Results.ResultProperties.TotalPages)
                 {
                     <li class="next">
-                        <a href="/find-a-course/course/page?@nextLinkParams">
+                        <a href="/find-a-course/page?@nextLinkParams">
                             <span class="pagination-label">Next</span>
                             <span class="govuk-visually-hidden">page</span>
                             <span class="page-numbers">@nextPage of @Model.Results.ResultProperties.TotalPages</span>
@@ -58,7 +59,7 @@
                 @if (Model.Results.ResultProperties.Page > 1)
                 {
                     <li class="previous">
-                        <a href="/find-a-course/course/page?@previousLinkParams">
+                        <a href="/find-a-course/page?@previousLinkParams">
                             <span class="pagination-label">Previous</span>
                             <span class="govuk-visually-hidden">page</span>
                             <span class="page-numbers">@previousPage of @Model.Results.ResultProperties.TotalPages</span>
@@ -70,16 +71,18 @@
     }
     else 
     {
-        <h3 class="govuk-body-s govuk-!-margin-bottom-1">
-        <p class="govuk-body">We didn't find any results for '@Model.CurrentSearchTerm' with the active filters you've applied. Try searching again.</p>
-        <p class="govuk-body">You could:</p>
-            <ul class="list list-bullet govuk-body">    
-                <li>check your spelling</li>    
-                <li>change the start date</li>    
-                <li>check your location or postcode</li>    
-                <li>change your filters</li>    
-                <li>try different search terms</li>
-            </ul>
-        </h3>
+        <div id="no-results-block">
+            <h3 class="govuk-body-s govuk-!-margin-bottom-1">
+                <p class="govuk-body">We didn't find any results for <span id="search-term-no-results">'@Model.CurrentSearchTerm'</span> with the active filters you've applied. Try searching again.</p>
+                <p class="govuk-body">You could:</p>
+                <ul class="list list-bullet govuk-body">
+                    <li>check your spelling</li>
+                    <li>change the start date</li>
+                    <li>check your town or postcode</li>
+                    <li>change your filters</li>
+                    <li>try different search terms</li>
+                </ul>
+            </h3>
+        </div>
     }
 }

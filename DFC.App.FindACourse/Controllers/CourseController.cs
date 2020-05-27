@@ -62,11 +62,27 @@ namespace DFC.App.FindACourse.Controllers
         }
 
         [HttpGet]
-        public IActionResult Head()
+        [Route("course/{articleName}/head")]
+        [Route("course/head")]
+        public IActionResult Head(string articleName)
         {
             this.logService.LogInformation($"{nameof(this.Head)} has been called");
+            
+            string title = "Results";
 
-            var model = new HeadViewModel { Title = "Find a Course", Description = "FAC", Keywords = "fac", CanonicalUrl = "find-a-course" };
+            switch (articleName)
+            {
+                case "course":
+                    title = "Results";
+                    break;
+                case "details":
+                    title = "Details";
+                    break;
+                default:
+                    break;
+            }
+
+            var model = new HeadViewModel { Title = $"{title} | Find a course | National careers service", Description = "FAC", Keywords = "fac", CanonicalUrl = "find-a-course" };
 
             this.logService.LogInformation($"{nameof(this.Head)} generated the model and ready to pass to the view");
 
@@ -92,8 +108,9 @@ namespace DFC.App.FindACourse.Controllers
         }
 
         [HttpGet]
-        [Route("find-a-course/{controller}/bodytop/{**data}")]
-        public IActionResult BodyTop()
+        [Route("find-a-course/{articleName}/bodytop")]
+        [Route("find-a-course/bodytop")]
+        public IActionResult BodyTop(string articleName)
         {
             this.logService.LogInformation($"{nameof(this.BodyTop)} has been called");
 
@@ -101,7 +118,7 @@ namespace DFC.App.FindACourse.Controllers
         }
 
         [HttpGet]
-        [Route("find-a-course/{controller}/body/{**data}")]
+        [Route("find-a-course/body")]
         public async Task<IActionResult> Body()
         {
             this.logService.LogInformation($"{nameof(this.Body)} has been called");
@@ -110,7 +127,7 @@ namespace DFC.App.FindACourse.Controllers
 
             model = new BodyViewModel { Content = new HtmlString("Find a course: Body element") };
             model.SideBar = this.GetSideBarViewModel();
-            model.OrderByOptions = ListFilters.GetOrderByOptions();
+            model.SideBar.OrderByOptions = ListFilters.GetOrderByOptions();
 
             this.logService.LogInformation($"{nameof(this.Body)} generated the model and ready to pass to the view");
 
@@ -118,8 +135,9 @@ namespace DFC.App.FindACourse.Controllers
         }
 
         [HttpGet]
-        [Route("find-a-course/{controller}/bodyfooter/{**data}")]
-        public IActionResult BodyFooter()
+        [Route("find-a-course/{articleName}/bodyfooter")]
+        [Route("find-a-course/bodyfooter")]
+        public IActionResult BodyFooter(string articleName)
         {
             this.logService.LogInformation($"{nameof(this.BodyFooter)} has been called");
 
@@ -128,7 +146,8 @@ namespace DFC.App.FindACourse.Controllers
 
         [HttpGet]
         [Route("find-a-course/course/body/course/page")]
-        public async Task<IActionResult> Page(string searchTerm, string town, string distance, string courseType, string courseHours, string studyTime, string startDate, int page)
+        [Route("find-a-course/page/body")]
+        public async Task<IActionResult> Page(string searchTerm, string town, string distance, string courseType, string courseHours, string studyTime, string startDate, int page, bool filterA)
         {
             this.logService.LogInformation($"{nameof(this.Page)} has been called");
 
@@ -143,16 +162,23 @@ namespace DFC.App.FindACourse.Controllers
                     CourseHours = this.ConvertStringToFiltersListViewModel(courseHours),
                     CourseStudyTime = this.ConvertStringToFiltersListViewModel(studyTime),
                     StartDateValue = startDate,
+                    CurrentSearchTerm = searchTerm,
+                    FiltersApplied = filterA,
                 },
                 RequestPage = page,
+                IsNewPage = true,
             };
 
             this.logService.LogInformation($"{nameof(this.Page)} generated the model and ready to pass to the view");
+            
+            model.FromPaging = true;
+            
             return await this.FilterResults(model).ConfigureAwait(false);
         }
 
         [HttpGet]
         [Route("find-a-course/course/body/course/filterresults")]
+        [Route("find-a-course/filterresults/body")]
         public async Task<IActionResult> FilterResults(BodyViewModel model)
         {
             this.logService.LogInformation($"{nameof(this.FilterResults)} has been called");
@@ -186,7 +212,7 @@ namespace DFC.App.FindACourse.Controllers
                 courseStudyTimeList = this.ConvertToEnumList<Fac.AttendancePattern>(model.SideBar.CourseStudyTime.SelectedIds);
             }
 
-            _ = Enum.TryParse(model.SelectedOrderByValue, out sortedByCriteria);
+            _ = Enum.TryParse(model.SideBar.SelectedOrderByValue, out sortedByCriteria);
 
             var courseSearchFilters = new CourseSearchFilters
             {
@@ -198,10 +224,11 @@ namespace DFC.App.FindACourse.Controllers
                 Distance = selectedDistanceValue,
             };
 
+            model.SideBar.FiltersApplied = model.FromPaging ? model.SideBar.FiltersApplied : true;
+
             switch (model.SideBar.StartDateValue)
             {
                 case "Next 3 months":
-                    courseSearchFilters.StartDateFrom = DateTime.Today;
                     courseSearchFilters.StartDateTo = DateTime.Today.AddMonths(3);
                     courseSearchFilters.StartDate = StartDate.SelectDateFrom;
                     break;
@@ -229,7 +256,7 @@ namespace DFC.App.FindACourse.Controllers
                     }
                     else
                     {
-                        courseSearchFilters.Town = model.SideBar.TownOrPostcode;
+                        courseSearchFilters.Town = "\u0022" + model.SideBar.TownOrPostcode + "\u0022";
                     }
                 }
 
@@ -252,6 +279,7 @@ namespace DFC.App.FindACourse.Controllers
 
         [HttpGet]
         [Route("find-a-course/course/body/course/searchcourse")]
+        [Route("find-a-course/searchcourse/body")]
         public async Task<IActionResult> SearchCourse(string searchTerm)
         {
             this.logService.LogInformation($"{nameof(this.SearchCourse)} has been called");
@@ -267,8 +295,9 @@ namespace DFC.App.FindACourse.Controllers
             };
 
             model.SideBar = this.GetSideBarViewModel();
-            model.OrderByOptions = ListFilters.GetOrderByOptions();
+            model.SideBar.OrderByOptions = ListFilters.GetOrderByOptions();
             model.CurrentSearchTerm = searchTerm;
+            model.SideBar.CurrentSearchTerm = searchTerm;
             model.RequestPage = 1;
 
             try
@@ -304,6 +333,9 @@ namespace DFC.App.FindACourse.Controllers
             sideBarViewModel.TownOrPostcode = model.SideBar.TownOrPostcode;
             sideBarViewModel.StartDateValue = model.SideBar.StartDateValue;
             sideBarViewModel.DistanceValue = model.SelectedDistanceValue;
+            sideBarViewModel.CurrentSearchTerm = model.CurrentSearchTerm;
+            sideBarViewModel.FiltersApplied = model.SideBar.FiltersApplied;
+            sideBarViewModel.SelectedOrderByValue = model.SideBar.SelectedOrderByValue;
 
             if (model.SideBar.CourseType != null && model.SideBar.CourseType.SelectedIds.Any())
             {
@@ -333,7 +365,7 @@ namespace DFC.App.FindACourse.Controllers
             }
 
             model.SideBar = sideBarViewModel;
-            model.OrderByOptions = ListFilters.GetOrderByOptions();
+            model.SideBar.OrderByOptions = ListFilters.GetOrderByOptions();
 
             this.logService.LogInformation($"{nameof(this.Results)} generated the model and ready to pass to the view");
 
@@ -421,7 +453,10 @@ namespace DFC.App.FindACourse.Controllers
 
         private bool IsPostcode(string townOrPostcode)
         {
-            var postcodeRegex = new Regex(@"^([A-Z][A-HJ-Y]?\d[A-Z\d]? ?\d[A-Z]{2}|GIR ?0A{2})$");
+            townOrPostcode = townOrPostcode.Replace(" ", string.Empty);
+
+            // var postcodeRegex = new Regex(@"^([A-Z][A-HJ-Y]?\d[A-Z\d]? ?\d[A-Z]{2}|GIR ?0A{2})$");
+            var postcodeRegex = new Regex(@"^([Gg][Ii][Rr] 0[Aa]{2})|((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([A-Za-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9][A-Za-z]?))))\s?[0-9][A-Za-z]{2})");
 
             if (postcodeRegex.IsMatch(townOrPostcode.ToUpper()))
             {

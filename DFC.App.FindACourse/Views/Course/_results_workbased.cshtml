@@ -6,7 +6,7 @@
 }
 <div class="govuk-!-margin-top-6">
     <h2 class="govuk-heading-m">
-        <a class="govuk-link" href="/find-a-course/course/details?courseId=@Model.CourseId&runId=@Model.RunId">@Model.Title</a>
+        <a class="govuk-link" href="/find-a-course/details?courseId=@Model.CourseId&runId=@Model.RunId">@Model.Title</a>
     </h2>
     <p>@Model.Description</p>
     <div class="govuk-grid-row">
@@ -18,21 +18,21 @@
                     {
                         <span>@Model.StartDate.Value.ToLongDateString()</span>
                     }
+                    else
+                    {
+                        <span>Not known</span>
+                    }
                 </li>
                 <li>
                     <span class="govuk-secondary-colour">Cost:</span>
-                    @if (!string.IsNullOrEmpty(Model.Cost))
+                    @if (Model.Cost == null)
+                    {
+                        <span>@Model.CostDescription</span>
+                    }
+                    else
                     {
                         <span>£@Model.Cost</span>
                     }
-                    <details data-module="govuk-details" class="course-cost-desc">
-                        <summary class="govuk-details__summary">
-                            <span class="govuk-details__summary-text">
-                                View cost description
-                            </span>
-                        </summary>
-                        <div class="govuk-details__text">@Model.CostDescription</div>
-                    </details>
                 </li>
                 <li>
                     <span class="govuk-secondary-colour">Provider:</span> @Model.ProviderName
