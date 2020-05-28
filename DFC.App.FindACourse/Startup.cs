@@ -7,6 +7,7 @@ using DFC.App.FindACourse.Services;
 using DFC.FindACourseClient;
 using DFC.Logger.AppInsights.Contracts;
 using DFC.Logger.AppInsights.CorrelationIdProviders;
+using DFC.Logger.AppInsights.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -46,6 +47,7 @@ namespace DFC.App.FindACourse
             services.AddScoped<IFindACourseService, FindACourseService>();
             services.AddScoped<IFindACourseRepository, FindACourseRepository>();
 
+            services.AddDFCLogging(this.Configuration["ApplicationInsights:InstrumentationKey"]);
             var courseSearchSettings = this.Configuration.GetSection(CourseSearchAppSettings).Get<CourseSearchSettings>();
             services.AddSingleton(courseSearchSettings ?? new CourseSearchSettings());
 
