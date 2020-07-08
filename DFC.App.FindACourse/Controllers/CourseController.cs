@@ -118,8 +118,9 @@ namespace DFC.App.FindACourse.Controllers
         }
 
         [HttpGet]
+        [Route("find-a-course/{articleName}/body")]
         [Route("find-a-course/body")]
-        public async Task<IActionResult> Body()
+        public async Task<IActionResult> Body(string articleName)
         {
             this.logService.LogInformation($"{nameof(this.Body)} has been called");
 
