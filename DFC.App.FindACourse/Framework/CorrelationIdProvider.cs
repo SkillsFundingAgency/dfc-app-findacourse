@@ -9,7 +9,7 @@ namespace DFC.App.FindACourse.Framework
 {
     public class CorrelationIdProvider : ICorrelationIdProvider
     {
-        private const string CorrelationId = "DssCorrelationId";
+        private const string CorrelationId = "CorrelationId";
 
         private readonly IHttpContextAccessor httpContextAccessor;
 
