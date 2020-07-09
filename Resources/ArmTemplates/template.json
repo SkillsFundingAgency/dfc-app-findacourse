@@ -245,8 +245,16 @@
                                 "value": "3"
                             },
                             {
+                                "name": "Configuration__ApplicationName",
+                                "value": "DFC-App-Find-a-course"
+                            },
+                            {
                                 "name": "Logging__ApplicationInsights__LogLevel__Default",
-                                "value": "Warning"
+                                "value": "Information"
+                            },
+                            {
+                                "name": "Logging__LogLevel__Default",
+                                "value": "Error"
                             }
                         ]
                     }
