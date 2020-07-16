@@ -1,7 +1,7 @@
 [
   {
     "Path": "find-a-course",
-    "TopNavigationText": null,
+    "TopNavigationText": "Find a course",
     "TopNavigationOrder": 600,
     "Layout": 4,
     "OfflineHtml": "<div class=\"govuk-width-container\"><H2>Help Service Unavailable</H2></div>",
