@@ -108,16 +108,6 @@ namespace DFC.App.FindACourse.Controllers
         }
 
         [HttpGet]
-        [Route("find-a-course/{articleName}/bodytop")]
-        [Route("find-a-course/bodytop")]
-        public IActionResult BodyTop(string articleName)
-        {
-            this.logService.LogInformation($"{nameof(this.BodyTop)} has been called");
-
-            return View();
-        }
-
-        [HttpGet]
         [Route("find-a-course/{articleName}/body")]
         [Route("find-a-course/body")]
         public async Task<IActionResult> Body(string articleName)

@@ -66,19 +66,6 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
 
         [Theory]
         [MemberData(nameof(HtmlMediaTypes))]
-        public async Task CourseControllerBodyTopReturnsSuccess(string mediaTypeName)
-        {
-            var controller = BuildCourseController(mediaTypeName);
-
-            var result = controller.BodyTop("course");
-
-            Assert.IsType<ViewResult>(result);
-
-            controller.Dispose();
-        }
-
-        [Theory]
-        [MemberData(nameof(HtmlMediaTypes))]
         public void CourseControllerDocumentReturnsSuccess(string mediaTypeName)
         {
             var controller = BuildCourseController(mediaTypeName);
