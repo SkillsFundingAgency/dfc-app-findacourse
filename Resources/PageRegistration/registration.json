@@ -4,6 +4,7 @@
     "TopNavigationText": "Find a course",
     "TopNavigationOrder": 600,
     "Layout": 4,
+    "IsOnline": true,
     "OfflineHtml": "<div class=\"govuk-width-container\"><H2>Help Service Unavailable</H2></div>",
     "SitemapUrl": "https://__AppServiceName__.__appServiceDomain__/help/sitemap.xml",
     "RobotsUrl": "https://__AppServiceName__.__appServiceDomain__/Robots.txt",
