@@ -23,9 +23,9 @@
     {
         @foreach (var result in Model.Results.Courses)
         {
-            switch (result.AttendanceMode)
-            {
-                case "Classroom based":
+                switch (result.AttendanceMode)
+                {
+                    case "Classroom based":
                     <partial name="_results_classroom" model="result" />
                     <hr class="govuk-section-break govuk-section-break--visible">
                     break;

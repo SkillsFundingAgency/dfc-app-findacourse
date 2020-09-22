@@ -1,5 +1,7 @@
 ﻿@model DetailsViewModel
+@{ 
 
+}
     <div id="work-details-block">
         <h2 class="govuk-heading-m" id="courseDetails">Course details</h2>
         <table class="govuk-table">
@@ -134,5 +136,5 @@
                 </button>
             </form>
         }
-        <p><a href="/find-a-course/course/searchcourse?searchTerm=@Model.SearchTerm" class="govuk-back-link" id="back-to-results">Back to results</a></p>
+        <p><a href="/find-a-course/page?@Model.SearchTerm" class="govuk-back-link" id="back-to-results">Back to results</a></p>
 </div>
