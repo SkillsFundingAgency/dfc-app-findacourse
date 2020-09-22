@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -67,7 +68,7 @@ namespace DFC.App.FindACourse.Controllers
         public IActionResult Head(string articleName)
         {
             this.logService.LogInformation($"{nameof(this.Head)} has been called");
-            
+
             string title = "Results";
 
             switch (articleName)
@@ -161,9 +162,9 @@ namespace DFC.App.FindACourse.Controllers
             };
 
             this.logService.LogInformation($"{nameof(this.Page)} generated the model and ready to pass to the view");
-            
+
             model.FromPaging = true;
-            
+
             return await this.FilterResults(model).ConfigureAwait(false);
         }
 
@@ -268,6 +269,7 @@ namespace DFC.App.FindACourse.Controllers
             return this.Results(model);
         }
 
+
         [HttpGet]
         [Route("find-a-course/course/body/course/searchcourse")]
         [Route("find-a-course/searchcourse/body")]
@@ -355,6 +357,16 @@ namespace DFC.App.FindACourse.Controllers
                 }
             }
 
+            var town = model.SideBar.TownOrPostcode;
+            var distance = model.SideBar.DistanceValue;
+            var courseType = model.SideBar.CourseType.SelectedIds?.Count > 0 || model.SideBar.CourseType != null ? JsonConvert.SerializeObject(model.SideBar.CourseType.SelectedIds) : null;
+            var courseHours = model.SideBar.CourseHours != null && model.SideBar.CourseHours.SelectedIds?.Count > 0 ? JsonConvert.SerializeObject(model.SideBar.CourseHours.SelectedIds) : null;
+            var courseStudyTime = model.SideBar.CourseStudyTime != null && model.SideBar.CourseStudyTime?.SelectedIds.Count > 0 ? JsonConvert.SerializeObject(model.SideBar.CourseStudyTime.SelectedIds) : null;
+            var courseStartDate = model.SideBar.StartDateValue;
+            var searchTerm = sideBarViewModel.CurrentSearchTerm;
+            var filterA = model.SideBar.FiltersApplied;
+            TempData["params"] = $"searchTerm={searchTerm}&town={town}&courseType={courseType}&courseHours={courseHours}&studyTime={courseStudyTime}&startDate={courseStartDate}&distance={distance}&filtera={filterA}";
+
             model.SideBar = sideBarViewModel;
             model.SideBar.OrderByOptions = ListFilters.GetOrderByOptions();
 
@@ -406,11 +418,15 @@ namespace DFC.App.FindACourse.Controllers
         {
             var model = new FiltersListViewModel();
 
-            listView = listView.Replace('"', ' ').Replace('[', ' ').Replace(']', ' ').Trim();
+            if (listView != null)
+            {
+                listView = listView.Replace('"', ' ').Replace('[', ' ').Replace(']', ' ').Trim();
 
-            var list = listView.Split(",").ToList().Select(x => x.Trim()).ToList();
+                var list = listView.Split(",").ToList().Select(x => x.Trim()).ToList();
 
-            model.SelectedIds = list;
+                model.SelectedIds = list;
+            }
+
             return model;
         }
 

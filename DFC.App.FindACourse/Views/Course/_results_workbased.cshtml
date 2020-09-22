@@ -6,7 +6,7 @@
 }
 <div class="govuk-!-margin-top-6">
     <h2 class="govuk-heading-m">
-        <a class="govuk-link" href="/find-a-course/details?courseId=@Model.CourseId&runId=@Model.RunId">@Model.Title</a>
+        <a class="govuk-link" href="/find-a-course/details?courseId=@Model.CourseId&runId=@Model.RunId&@TempData["params"]">@Html.Raw(Model.Title)</a>
     </h2>
     <p>@Model.Description</p>
     <div class="govuk-grid-row">
@@ -45,34 +45,37 @@
                 <li>
                     <span class="govuk-secondary-colour">Course type:</span> @Model.AttendanceMode
                 </li>
-                <li>
-                    <span class="govuk-secondary-colour">Duration:</span>
-                    @if (durationInt == 1)
-                    {
-                        <span>1 Year</span>
-                    }
-                    else if (durationInt > 1)
-                    {
-                        @Model.Duration
-                    }
-                </li>
-                <li>
-                    <span class="govuk-secondary-colour">Location:</span> @Model.Location
-                    @if (Model.AttendanceMode == "Work based" && Model.National == true)
-                    {
-                        <span>National</span>
-                    }
-                    else
-                    {
-                        <span>@Model.Region</span>
-                    }
-                    @if (Model.LocationDetails.Distance > 0)
-                    {
-                        <span>(@Model.LocationDetails.Distance)</span>;
-                    }
-                </li>
+                @if (durationInt > 1)
+                {
+                    <li>
+                        <span class="govuk-secondary-colour">Duration:</span>
+                        @if (durationInt == 1)
+                        {
+                            <span>1 Year</span>
+                        }
+                        else if (durationInt > 1)
+                        {
+                            @Model.Duration
+                        }
+                    </li>
+                }
+                    <li>
+                        <span class="govuk-secondary-colour">Location:</span> @Model.Location
+                        @if (Model.AttendanceMode == "Work based" && Model.National == true)
+                        {
+                            <span>National</span>
+                        }
+                        else
+                        {
+                            <span>@Model.Region</span>
+                        }
+                        @if (Model.LocationDetails.Distance > 0)
+                        {
+                            <span>(@Model.LocationDetails.Distance)</span>;
+                        }
+                    </li>
 
-            </ul>
+                </ul>
         </div>
 
     </div>
