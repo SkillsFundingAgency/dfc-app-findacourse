@@ -21,7 +21,7 @@ namespace DFC.App.FindACourse.Controllers
         [HttpGet]
         [Route("find-a-course/details/body")]
         public async Task<IActionResult> Details(string courseId, string runId, string searchTerm, string CurrentSearchTerm, string town, string courseType,
-                                                      string courseHours, string courseStudyTime, string courseStartDate, string distance, string filtera)
+                                                      string courseHours, string courseStudyTime, string courseStartDate, string distance, string filtera, int page)
         {
             this.logService.LogInformation($"{nameof(this.Details)} has been called");
             var model = new DetailsViewModel();
@@ -30,7 +30,7 @@ namespace DFC.App.FindACourse.Controllers
                 searchTerm = CurrentSearchTerm;
             }
 
-            model.SearchTerm = $"searchTerm={searchTerm}&town={town}&courseType={courseType}&courseHours={courseHours}&studyTime={courseStudyTime}&startDate={courseStartDate}&distance={distance}&filtera={filtera}";
+            model.SearchTerm = $"searchTerm={searchTerm}&town={town}&courseType={courseType}&courseHours={courseHours}&studyTime={courseStudyTime}&startDate={courseStartDate}&distance={distance}&filtera={filtera}&page={page}";
 
             if (string.IsNullOrEmpty(courseId) || string.IsNullOrEmpty(runId))
             {

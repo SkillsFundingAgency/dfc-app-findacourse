@@ -129,7 +129,7 @@
     <p id="next-steps">@Model.CourseDetails.NextSteps</p>
 }
 <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
-@if (Model.CourseDetails.VenueDetails != null)
+@if (Model.CourseDetails.VenueDetails != null && Model.CourseDetails.VenueDetails.Website != null)
 {
     <form action="@Model.CourseDetails.VenueDetails.Website" id="venue-form">
         <button href="@Model.CourseDetails.VenueDetails.Website" role="button" draggable="false" class="govuk-button govuk-button--start" data-module="govuk-button">
@@ -157,9 +157,12 @@
                 {
                     <td class="govuk-table__cell"><span id="startdate">@Model.CourseDetails.StartDate.Value.ToLongDateString()</span></td>
                 }
-                <td class="govuk-table__cell">
-                    <a class="govuk-link" href="@Model.CourseDetails.VenueDetails.Website" id="website">View course</a>
-                </td>
+                @if (Model.CourseDetails.VenueDetails.Website != null)
+                {
+                    <td class="govuk-table__cell">
+                        <a class="govuk-link" href="@Model.CourseDetails.VenueDetails.Website" id="website">View course</a>
+                    </td>
+                }
             </tr>
         </tbody>
     </table>

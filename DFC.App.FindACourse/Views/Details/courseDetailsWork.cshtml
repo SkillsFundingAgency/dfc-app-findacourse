@@ -124,7 +124,7 @@
             <p id="course-nextsteps">@Model.CourseDetails.NextSteps</p>
         }
 
-        @if (Model.CourseDetails.VenueDetails != null)
+        @if (Model.CourseDetails.VenueDetails != null && Model.CourseDetails.VenueDetails.Website != null)
         {
             <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
             <form action="@Model.CourseDetails.VenueDetails.Website" id="venue-form">
