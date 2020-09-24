@@ -20,16 +20,13 @@
             "defaultValue": ""
         },
         "aspInstances": {
-            "type": "int",
-            "defaultValue": 2
+            "type": "int"
         },
         "aspSize": {
-            "type": "string",
-            "defaultValue": ""
+            "type": "string"
         },
         "aspTier": {
-            "type": "string",
-            "defaultValue": ""
+            "type": "string"
         },
         "sharedAppServicePlanName": {
             "type": "string",
@@ -81,8 +78,8 @@
     },
     "variables": {
         "appServiceAppInsightsName": "[concat(parameters('resourcePrefix'), '-ai')]",
-        "appServicePlanName": "[if(greater(length(parameters('sharedAppServicePlanName')), 0), parameters('sharedAppServicePlanName'), concat(parameters('resourcePrefix'), '-asp'))]",
-        "appServicePlanResourceGroup": "[if(greater(length(parameters('SharedAppServicePlanResourceGroup')), 0), parameters('SharedAppServicePlanResourceGroup'), resourceGroup().name)]",
+        "appServicePlanName": "[concat(parameters('resourcePrefix'), '-asp')]",
+        "appServicePlanResourceGroup": "[concat(parameters('resourcePrefix'),'-rg')]",
         "buildingBlocksDfcBaseUrl": "https://raw.githubusercontent.com/SkillsFundingAgency/dfc-devops/master/ArmTemplates/",
         "facCosmosAuditCollectionPartitionKey": "/PartitionKey",
         "cosmosDbDatabaseName": "dfc-app-findacourse",
@@ -115,7 +112,6 @@
             "apiVersion": "2017-05-10",
             "name": "[variables('appServicePlanName')]",
             "type": "Microsoft.Resources/deployments",
-            "condition": "[not(equals(parameters('sharedAppServicePlanName'), variables('appServicePlanName')))]",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
@@ -245,8 +241,16 @@
                                 "value": "3"
                             },
                             {
+                                "name": "Configuration__ApplicationName",
+                                "value": "DFC-App-Find-a-course"
+                            },
+                            {
                                 "name": "Logging__ApplicationInsights__LogLevel__Default",
-                                "value": "Warning"
+                                "value": "Information"
+                            },
+                            {
+                                "name": "Logging__LogLevel__Default",
+                                "value": "Error"
                             }
                         ]
                     }

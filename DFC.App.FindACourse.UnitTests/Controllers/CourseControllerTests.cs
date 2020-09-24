@@ -44,7 +44,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
             var model = Assert.IsAssignableFrom<HeadViewModel>(viewResult.ViewData.Model);
 
             Assert.NotNull(model);
-            Assert.Equal("Find a Course", model.Title);
+            Assert.Equal("Results | Find a course | National careers service", model.Title);
 
             controller.Dispose();
         }
@@ -61,19 +61,6 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
             var model = Assert.IsAssignableFrom<BreadcrumbViewModel>(viewResult.ViewData.Model);
 
             model.Paths.Count.Should().BeGreaterThan(0);
-            controller.Dispose();
-        }
-
-        [Theory]
-        [MemberData(nameof(HtmlMediaTypes))]
-        public async Task CourseControllerBodyTopReturnsSuccess(string mediaTypeName)
-        {
-            var controller = BuildCourseController(mediaTypeName);
-
-            var result = controller.BodyTop("course");
-
-            Assert.IsType<ViewResult>(result);
-
             controller.Dispose();
         }
 
@@ -122,11 +109,11 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
             {
                 Courses = new List<Course>
                 {
-                    new Course { Title = "Maths", CourseId = "1", AttendancePattern = "Online" },
+                    new Course { Title = "Maths", CourseId = "1", AttendancePattern = "Online", Description = "This is a test description" },
                 },
             };
 
-            A.CallTo(() => courseService.GetFilteredData(A<CourseSearchFilters>.Ignored, CourseSearchOrderBy.Relevance, 1)).Returns(returnedCourseData);
+            A.CallTo(() => FakeFindACoursesService.GetFilteredData(A<CourseSearchFilters>.Ignored, CourseSearchOrderBy.Relevance, 1)).Returns(returnedCourseData);
 
             var result = await controller.FilterResults(bodyViewModel).ConfigureAwait(false);
 

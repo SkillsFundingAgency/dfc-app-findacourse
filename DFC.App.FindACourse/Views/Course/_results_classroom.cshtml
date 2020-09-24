@@ -2,12 +2,12 @@
 @model Course
 @{
     var resultString = Regex.Match(Model.Duration, @"\d+").Value;
-     int.TryParse(resultString, out int durationInt);
+    int.TryParse(resultString, out int durationInt);
 }
 
 <div class="govuk-!-margin-top-6">
     <h2 class="govuk-heading-m">
-        <a class="govuk-link" href="/find-a-course/details?courseId=@Model.CourseId&runId=@Model.RunId">@Model.Title</a>
+        <a class="govuk-link" href="/find-a-course/details?courseId=@Model.CourseId&runId=@Model.RunId&@TempData["params"]">@Html.Raw(Model.Title)</a>
     </h2>
     <p>@Model.Description</p>
     <div class="govuk-grid-row">
@@ -50,17 +50,20 @@
                 <li>
                     <span class="govuk-secondary-colour">Course type:</span> @Model.AttendanceMode
                 </li>
-                <li>
-                    <span class="govuk-secondary-colour">Duration:</span>
-                    @if (durationInt == 1)
-                    {
-                        <span>1 Year</span>
-                    }
-                    else if (durationInt > 1)
-                    {
-                        @Model.Duration
-                    }
-                </li>
+                @if (durationInt > 1)
+                {
+                    <li>
+                        <span class="govuk-secondary-colour">Duration:</span>
+                        @if (durationInt == 1)
+                        {
+                            <span>1 Year</span>
+                        }
+                        else if (durationInt > 1)
+                        {
+                            @Model.Duration
+                        }
+                    </li>
+                }
                 <li>
                     <span class="govuk-secondary-colour">Location:</span> @Model.Location
                     @if (Model.LocationDetails.Distance > 0)
