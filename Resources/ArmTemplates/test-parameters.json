@@ -17,6 +17,15 @@
         "sharedAppServicePlanResourceGroup": {
             "value": "dfc-dev-app-sharedresources-rg"
         },
+        "aspSize": {
+            "value": "2"
+        },
+        "aspTier": {
+            "value": "Standard"
+        },
+        "aspInstances": {
+            "value": 2
+        },
         "CosmosDbResourceGroup": {
             "value": "dfc-dev-app-sharedresources-rg"
         },

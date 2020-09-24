@@ -51,10 +51,13 @@
                 }
             </td>
         </tr>
-        <tr class="govuk-table__row">
-            <th class="govuk-table__header" scope="row">Course start date</th>
-            <td class="govuk-table__cell"><span id="start-date">@Model.CourseDetails.StartDate.Value.ToLongDateString()</span></td>
-        </tr>
+        @if (Model.CourseDetails.StartDate != null)
+        {
+            <tr class="govuk-table__row">
+                <th class="govuk-table__header" scope="row">Course start date</th>
+                <td class="govuk-table__cell"><span id="start-date">@Model.CourseDetails.StartDate.Value.ToLongDateString()</span></td>
+            </tr>
+        }
         <tr class="govuk-table__row">
             <th class="govuk-table__header" scope="row">Cost</th>
             <td class="govuk-table__cell">
@@ -126,7 +129,7 @@
     <p id="next-steps">@Model.CourseDetails.NextSteps</p>
 }
 <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
-@if (Model.CourseDetails.VenueDetails != null)
+@if (Model.CourseDetails.VenueDetails != null && Model.CourseDetails.VenueDetails.Website != null)
 {
     <form action="@Model.CourseDetails.VenueDetails.Website" id="venue-form">
         <button href="@Model.CourseDetails.VenueDetails.Website" role="button" draggable="false" class="govuk-button govuk-button--start" data-module="govuk-button">
@@ -137,7 +140,7 @@
         </button>
     </form>
 }
-<p><a href="/find-a-course/course/searchcourse?searchTerm=@Model.SearchTerm" class="govuk-back-link" id="back-to-results">Back to results</a></p>
+<p><a href="/find-a-course/page?@Model.SearchTerm" class="govuk-back-link" id="back-to-results">Back to results</a></p>
 @if (Model.CourseDetails.VenueDetails != null)
 {
     <h2 class="govuk-heading-m" id="othervenuesdates">Other venues and dates</h2>
@@ -150,10 +153,16 @@
             </tr>
             <tr class="govuk-table__row">
                 <td class="govuk-table__cell"><span id="venue-name">@Model.CourseDetails.VenueDetails.VenueName</span></td>
-                <td class="govuk-table__cell"><span id="startdate">@Model.CourseDetails.StartDate.Value.ToLongDateString()</span></td>
-                <td class="govuk-table__cell">
-                    <a class="govuk-link" href="@Model.CourseDetails.VenueDetails.Website" id="website">View course</a>
-                </td>
+                @if (Model.CourseDetails.StartDate != null)
+                {
+                    <td class="govuk-table__cell"><span id="startdate">@Model.CourseDetails.StartDate.Value.ToLongDateString()</span></td>
+                }
+                @if (Model.CourseDetails.VenueDetails.Website != null)
+                {
+                    <td class="govuk-table__cell">
+                        <a class="govuk-link" href="@Model.CourseDetails.VenueDetails.Website" id="website">View course</a>
+                    </td>
+                }
             </tr>
         </tbody>
     </table>
