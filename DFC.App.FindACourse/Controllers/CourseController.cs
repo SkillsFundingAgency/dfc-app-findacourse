@@ -32,6 +32,7 @@ namespace DFC.App.FindACourse.Controllers
         }
 
         [HttpGet]
+        [Route("search/")]
         public IActionResult Index()
         {
             var viewModel = new IndexViewModel
@@ -43,6 +44,7 @@ namespace DFC.App.FindACourse.Controllers
         }
 
         [HttpGet]
+        [Route("search/document")]
         public IActionResult Document()
         {
             this.logService.LogInformation($"{nameof(this.Document)} has been called");
@@ -63,8 +65,8 @@ namespace DFC.App.FindACourse.Controllers
         }
 
         [HttpGet]
-        [Route("course/{articleName}/head")]
-        [Route("course/head")]
+        [Route("course/search/{articleName}/head")]
+        [Route("course/search/head")]
         public IActionResult Head(string articleName)
         {
             this.logService.LogInformation($"{nameof(this.Head)} has been called");
@@ -109,8 +111,8 @@ namespace DFC.App.FindACourse.Controllers
         }
 
         [HttpGet]
-        [Route("find-a-course/{articleName}/body")]
-        [Route("find-a-course/body")]
+        [Route("find-a-course/search/{articleName}/body")]
+        [Route("find-a-course/search/body")]
         public async Task<IActionResult> Body(string articleName)
         {
             this.logService.LogInformation($"{nameof(this.Body)} has been called");
@@ -127,8 +129,8 @@ namespace DFC.App.FindACourse.Controllers
         }
 
         [HttpGet]
-        [Route("find-a-course/{articleName}/bodyfooter")]
-        [Route("find-a-course/bodyfooter")]
+        [Route("find-a-course/search/{articleName}/bodyfooter")]
+        [Route("find-a-course/search/bodyfooter")]
         public IActionResult BodyFooter(string articleName)
         {
             this.logService.LogInformation($"{nameof(this.BodyFooter)} has been called");
@@ -138,8 +140,8 @@ namespace DFC.App.FindACourse.Controllers
 
         [HttpGet]
         [Route("find-a-course/course/body/course/page")]
-        [Route("find-a-course/page/body")]
-        public async Task<IActionResult> Page(string searchTerm, string town, string distance, string courseType, string courseHours, string studyTime, string startDate, int page, bool filterA)
+        [Route("find-a-course/search/page/body")]
+        public async Task<IActionResult> Page(string searchTerm, string town, string distance, string courseType, string courseHours, string studyTime, string startDate, int page, bool filterA, bool IsTest)
         {
             this.logService.LogInformation($"{nameof(this.Page)} has been called");
 
@@ -159,6 +161,7 @@ namespace DFC.App.FindACourse.Controllers
                 },
                 RequestPage = page,
                 IsNewPage = true,
+                IsTest = IsTest,
             };
 
             this.logService.LogInformation($"{nameof(this.Page)} generated the model and ready to pass to the view");
@@ -170,7 +173,7 @@ namespace DFC.App.FindACourse.Controllers
 
         [HttpGet]
         [Route("find-a-course/course/body/course/filterresults")]
-        [Route("find-a-course/filterresults/body")]
+        [Route("find-a-course/search/filterresults/body")]
         public async Task<IActionResult> FilterResults(BodyViewModel model)
         {
             this.logService.LogInformation($"{nameof(this.FilterResults)} has been called");
@@ -272,7 +275,9 @@ namespace DFC.App.FindACourse.Controllers
 
         [HttpGet]
         [Route("find-a-course/course/body/course/searchcourse")]
-        [Route("find-a-course/searchcourse/body")]
+        [Route("find-a-course/course/body")]
+        [Route("find-a-course/search/searchCourse/body")]
+        [Route("find-a-course/search/body")]
         public async Task<IActionResult> SearchCourse(string searchTerm)
         {
             this.logService.LogInformation($"{nameof(this.SearchCourse)} has been called");
@@ -365,7 +370,10 @@ namespace DFC.App.FindACourse.Controllers
             var courseStartDate = model.SideBar.StartDateValue;
             var searchTerm = sideBarViewModel.CurrentSearchTerm;
             var filterA = model.SideBar.FiltersApplied;
-            TempData["params"] = $"searchTerm={searchTerm}&town={town}&courseType={courseType}&courseHours={courseHours}&studyTime={courseStudyTime}&startDate={courseStartDate}&distance={distance}&filtera={filterA}&page={model.RequestPage}";
+            if (!model.IsTest)
+            {
+                TempData["params"] = $"searchTerm={searchTerm}&town={town}&courseType={courseType}&courseHours={courseHours}&studyTime={courseStudyTime}&startDate={courseStartDate}&distance={distance}&filtera={filterA}&page={model.RequestPage}";
+            }
 
             model.SideBar = sideBarViewModel;
             model.SideBar.OrderByOptions = ListFilters.GetOrderByOptions();
