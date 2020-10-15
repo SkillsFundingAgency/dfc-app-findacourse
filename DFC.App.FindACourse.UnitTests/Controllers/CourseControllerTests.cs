@@ -103,6 +103,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
             {
                 CurrentSearchTerm = "Maths",
                 SideBar = new SideBarViewModel(),
+                IsTest = true,
             };
 
             var returnedCourseData = new CourseSearchResult

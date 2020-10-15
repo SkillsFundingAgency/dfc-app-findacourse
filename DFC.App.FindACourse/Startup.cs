@@ -112,7 +112,7 @@ namespace DFC.App.FindACourse
                 // add the default route
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "find-a-course/{controller=Course}/{action=Index}");
+                    pattern: "find-a-course/search/{controller=Course}/{action=Index}");
                 endpoints.MapRazorPages();
             });
         }
