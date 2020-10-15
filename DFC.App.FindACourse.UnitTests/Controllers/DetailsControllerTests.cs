@@ -33,7 +33,8 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
 
             A.CallTo(() => courseService.GetCourseDetails(courseId, runId)).Returns(returnedCourseData);
 
-            var result = await controller.Details(courseId, runId, "Maths").ConfigureAwait(false);
+            var result = await controller.Details(courseId, runId, "Maths", null, null, null, null, null,
+                                                            null, null, "false", 1).ConfigureAwait(false);
 
             var viewResult = Assert.IsType<ViewResult>(result);
 

@@ -27,5 +27,7 @@ namespace DFC.App.FindACourse.ViewModels
         public bool IsNewPage { get; set; }
 
         public bool FromPaging { get; set; }
+
+        public bool IsTest { get; set; }
     }
 }
