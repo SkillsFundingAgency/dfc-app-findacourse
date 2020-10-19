@@ -1,8 +1,20 @@
 ﻿using AutoMapper;
+using DFC.App.FindACourse.Data.Contracts;
 using DFC.App.FindACourse.Data.Domain;
+using DFC.App.FindACourse.Data.Models;
+using DFC.App.FindACourse.EventProcessorService;
 using DFC.App.FindACourse.Framework;
+using DFC.App.FindACourse.HostedServices;
 using DFC.App.FindACourse.Repository;
 using DFC.App.FindACourse.Services;
+using DFC.Compui.Cosmos;
+using DFC.Compui.Subscriptions.Pkg.Netstandard.Extensions;
+using DFC.Compui.Telemetry;
+using DFC.Content.Pkg.Netcore.Data.Contracts;
+using DFC.Content.Pkg.Netcore.Data.Models.ClientOptions;
+using DFC.Content.Pkg.Netcore.Extensions;
+using DFC.Content.Pkg.Netcore.Services.ApiProcessorService;
+using DFC.Content.Pkg.Netcore.Services.CmsApiProcessorService;
 using DFC.FindACourseClient;
 using DFC.Logger.AppInsights.Contracts;
 using DFC.Logger.AppInsights.CorrelationIdProviders;
@@ -24,10 +36,14 @@ namespace DFC.App.FindACourse
         public const string CourseSearchClientSvcSettings = "Configuration:CourseSearchClient:CourseSearchSvc";
         public const string CourseSearchClientAuditSettings = "Configuration:CourseSearchClient:CosmosAuditConnection";
         public const string CourseSearchClientPolicySettings = "Configuration:CourseSearchClient:Policies";
+        public const string StaticCosmosDbConfigAppSettings = "Configuration:CosmosDbConnections:StaticContent";
 
-        public Startup(IConfiguration configuration)
+        private readonly IWebHostEnvironment env;
+
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             this.Configuration = configuration;
+            this.env = env;
         }
 
         public IConfiguration Configuration { get; }
@@ -60,6 +76,31 @@ namespace DFC.App.FindACourse
             services.AddSingleton(courseSearchClientSettings);
             services.AddScoped<ICourseSearchApiService, CourseSearchApiService>();
             services.AddFindACourseServices(courseSearchClientSettings);
+
+            ////
+            var staticContentDbConnection = this.Configuration.GetSection(StaticCosmosDbConfigAppSettings).Get<StaticCosmosDbConnection>();
+            services.AddSingleton(staticContentDbConnection);
+            services.AddSingleton<IStaticCosmosRepository<StaticContentItemModel>, StaticCosmosRepository<StaticContentItemModel>>();
+            services.AddTransient<IEventMessageService<StaticContentItemModel>, EventMessageService<StaticContentItemModel>>();
+            services.AddScoped<ISharedContentService, SharedContentService>();
+            services.AddTransient<IStaticContentReloadService, StaticContentReloadService>();
+            services.AddTransient<IApiService, ApiService>();
+            services.AddTransient<ICmsApiService, CmsApiService>();
+            services.AddTransient<IApiDataProcessorService, ApiDataProcessorService>();
+            services.AddHostedServiceTelemetryWrapper();
+
+            var cosmosDbConnectionStaticPages = this.Configuration.GetSection(StaticCosmosDbConfigAppSettings).Get<Compui.Cosmos.Contracts.CosmosDbConnection>();
+            services.AddContentPageServices<StaticContentItemModel>(cosmosDbConnectionStaticPages, env.IsDevelopment());
+            services.AddApplicationInsightsTelemetry();
+            services.AddSingleton(this.Configuration.GetSection(nameof(CmsApiClientOptions)).Get<CmsApiClientOptions>() ?? new CmsApiClientOptions());
+            services.AddSubscriptionBackgroundService(this.Configuration);
+            services.AddHostedService<StaticContentReloadBackgroundService>();
+
+            const string AppSettingsPolicies = "Policies";
+            var policyOptions = this.Configuration.GetSection(AppSettingsPolicies).Get<PolicyOptions>();
+            var policyRegistry = services.AddPolicyRegistry();
+
+            services.AddApiServices(this.Configuration, policyRegistry);
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Latest);
             services.AddSingleton(serviceProvider =>

@@ -7,7 +7,10 @@
   <ItemGroup>
     <PackageReference Include="DFC.Compui.Cosmos" Version="1.0.61" />
     <PackageReference Include="DFC.Content.Pkg.Netcore" Version="1.0.80" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.ViewFeatures" Version="2.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Enums\DFC.App.FindACourse.Data.csproj" />
   </ItemGroup>
 
 </Project>
