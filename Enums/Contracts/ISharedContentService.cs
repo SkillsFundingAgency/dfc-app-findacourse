@@ -1,12 +1,19 @@
-﻿using System.Collections.Generic;
+﻿using DFC.App.FindACourse.Data.Models;
+using System;
+using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace DFC.App.FindACourse.Data.Contracts
 {
     public interface ISharedContentService
     {
-        Task<Models.StaticContentItemModel> GetByNameAsync(string canonicalName);
+        Task<StaticContentItemModel> GetByNameAsync(string canonicalName);
 
-        Task<List<Models.StaticContentItemModel>> GetByNamesAsync(List<string> contentList);
+        Task<StaticContentItemModel> GetById(Guid id);
+
+        Task<List<StaticContentItemModel>> GetByNamesAsync(List<string> contentList);
+
+        Task<HttpStatusCode> RemoveContentItem(Guid id);
     }
 }

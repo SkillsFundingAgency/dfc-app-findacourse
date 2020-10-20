@@ -3,6 +3,7 @@ using DFC.App.FindACourse.Data.Contracts;
 using DFC.App.FindACourse.Data.Models;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace DFC.App.FindACourse.Services
@@ -27,6 +28,21 @@ namespace DFC.App.FindACourse.Services
             }
 
             return await repository.GetAsync(d => d.CanonicalName == canonicalName.ToLowerInvariant()).ConfigureAwait(false);
+        }
+
+        public async Task<StaticContentItemModel> GetById(Guid id)
+        {
+            if (id == null)
+            {
+                throw new ArgumentNullException(nameof(id));
+            }
+
+            return await repository.GetAsync(d => d.Id == id).ConfigureAwait(false);
+        }
+
+        public async Task<HttpStatusCode> RemoveContentItem(Guid id)
+        {
+            return await repository.DeleteAsync(id).ConfigureAwait(false);
         }
 
         public async Task<List<StaticContentItemModel>> GetByNamesAsync(List<string> contentList)

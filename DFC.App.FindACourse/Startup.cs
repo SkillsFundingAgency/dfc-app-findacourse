@@ -87,6 +87,7 @@ namespace DFC.App.FindACourse
             services.AddTransient<IApiService, ApiService>();
             services.AddTransient<ICmsApiService, CmsApiService>();
             services.AddTransient<IApiDataProcessorService, ApiDataProcessorService>();
+            services.AddTransient<IWebhooksService, WebhooksService>();
             services.AddHostedServiceTelemetryWrapper();
 
             var cosmosDbConnectionStaticPages = this.Configuration.GetSection(StaticCosmosDbConfigAppSettings).Get<Compui.Cosmos.Contracts.CosmosDbConnection>();
