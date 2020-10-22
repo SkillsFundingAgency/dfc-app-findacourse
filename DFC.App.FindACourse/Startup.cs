@@ -1,11 +1,25 @@
 ﻿using AutoMapper;
+using DFC.App.FindACourse.Data.Contracts;
 using DFC.App.FindACourse.Data.Domain;
+using DFC.App.FindACourse.Data.Models;
+using DFC.App.FindACourse.EventProcessorService;
+using DFC.App.FindACourse.Extensions;
 using DFC.App.FindACourse.Framework;
+using DFC.App.FindACourse.HostedServices;
 using DFC.App.FindACourse.Repository;
 using DFC.App.FindACourse.Services;
+using DFC.Compui.Cosmos;
+using DFC.Compui.Subscriptions.Pkg.Netstandard.Extensions;
+using DFC.Compui.Telemetry;
+using DFC.Content.Pkg.Netcore.Data.Contracts;
+using DFC.Content.Pkg.Netcore.Data.Models.ClientOptions;
+using DFC.Content.Pkg.Netcore.Extensions;
+// using DFC.Content.Pkg.Netcore.Extensions;
+using DFC.Content.Pkg.Netcore.Services;
+using DFC.Content.Pkg.Netcore.Services.ApiProcessorService;
+using DFC.Content.Pkg.Netcore.Services.CmsApiProcessorService;
 using DFC.FindACourseClient;
 using DFC.Logger.AppInsights.Contracts;
-using DFC.Logger.AppInsights.CorrelationIdProviders;
 using DFC.Logger.AppInsights.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -14,6 +28,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Polly;
+using Polly.Extensions.Http;
+using Polly.Registry;
+using System;
 using System.Collections.Generic;
 
 namespace DFC.App.FindACourse
@@ -24,10 +42,14 @@ namespace DFC.App.FindACourse
         public const string CourseSearchClientSvcSettings = "Configuration:CourseSearchClient:CourseSearchSvc";
         public const string CourseSearchClientAuditSettings = "Configuration:CourseSearchClient:CosmosAuditConnection";
         public const string CourseSearchClientPolicySettings = "Configuration:CourseSearchClient:Policies";
+        public const string StaticCosmosDbConfigAppSettings = "Configuration:CosmosDbConnections:StaticContent";
 
-        public Startup(IConfiguration configuration)
+        private readonly IWebHostEnvironment env;
+
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             this.Configuration = configuration;
+            this.env = env;
         }
 
         public IConfiguration Configuration { get; }
@@ -59,7 +81,35 @@ namespace DFC.App.FindACourse
             };
             services.AddSingleton(courseSearchClientSettings);
             services.AddScoped<ICourseSearchApiService, CourseSearchApiService>();
-            services.AddFindACourseServices(courseSearchClientSettings);
+            services.AddFindACourseServicesWithoutFaultHandling(courseSearchClientSettings);
+
+            services.AddSingleton(this.Configuration.GetSection(nameof(CmsApiClientOptions)).Get<CmsApiClientOptions>() ?? new CmsApiClientOptions());
+            var staticContentDbConnection = this.Configuration.GetSection(StaticCosmosDbConfigAppSettings).Get<StaticCosmosDbConnection>();
+            services.AddSingleton(staticContentDbConnection);
+            services.AddSingleton<IStaticCosmosRepository<StaticContentItemModel>, StaticCosmosRepository<StaticContentItemModel>>();
+            services.AddTransient<IEventMessageService<StaticContentItemModel>, EventMessageService<StaticContentItemModel>>();
+            services.AddScoped<ISharedContentService, SharedContentService>();
+            services.AddTransient<IStaticContentReloadService, StaticContentReloadService>();
+            services.AddTransient<IApiService, ApiService>();
+            services.AddTransient<ICmsApiService, CmsApiService>();
+            services.AddTransient<IApiDataProcessorService, ApiDataProcessorService>();
+            services.AddTransient<IApiCacheService, ApiCacheService>();
+            services.AddTransient<IWebhooksService, WebhooksService>();
+
+            var cosmosDbConnectionStaticPages = this.Configuration.GetSection(StaticCosmosDbConfigAppSettings).Get<Compui.Cosmos.Contracts.CosmosDbConnection>();
+            services.AddContentPageServices<StaticContentItemModel>(cosmosDbConnectionStaticPages, env.IsDevelopment());
+            services.AddApplicationInsightsTelemetry();
+            services.AddSingleton(this.Configuration.GetSection(nameof(CmsApiClientOptions)).Get<CmsApiClientOptions>() ?? new CmsApiClientOptions());
+
+            var policyRegistry = services.AddPolicyRegistry();
+            var policyOptions = this.Configuration.GetSection(CourseSearchClientPolicySettings).Get<PolicyOptions>() ?? new PolicyOptions();
+            services.AddFindACourseTransientFaultHandlingPolicies(courseSearchClientSettings, policyRegistry);
+
+            services.AddHostedServiceTelemetryWrapper();
+            services.AddSubscriptionBackgroundService(this.Configuration);
+            services.AddHostedService<StaticContentReloadBackgroundService>();
+
+            services.AddApiServices(this.Configuration, policyRegistry);
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Latest);
             services.AddSingleton(serviceProvider =>
@@ -73,6 +123,13 @@ namespace DFC.App.FindACourse
                         });
                 }).CreateMapper();
             });
+        }
+
+        private static void AddPolicies(IPolicyRegistry<string> policyRegistry)
+        {
+            var policyOptions = new PolicyOptions() { HttpRetry = new RetryPolicyOptions(), HttpCircuitBreaker = new CircuitBreakerPolicyOptions() };
+            policyRegistry.Add(nameof(PolicyOptions.HttpRetry), HttpPolicyExtensions.HandleTransientHttpError().WaitAndRetryAsync(policyOptions.HttpRetry.Count, retryAttempt => TimeSpan.FromSeconds(Math.Pow(policyOptions.HttpRetry.BackoffPower, retryAttempt))));
+            policyRegistry.Add(nameof(PolicyOptions.HttpCircuitBreaker), HttpPolicyExtensions.HandleTransientHttpError().CircuitBreakerAsync(policyOptions.HttpCircuitBreaker.ExceptionsAllowedBeforeBreaking, policyOptions.HttpCircuitBreaker.DurationOfBreak));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
