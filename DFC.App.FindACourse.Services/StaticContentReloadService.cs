@@ -16,20 +16,17 @@ namespace DFC.App.FindACourse.Services
         private readonly AutoMapper.IMapper mapper;
         private readonly IEventMessageService<StaticContentItemModel> eventMessageService;
         private readonly ICmsApiService cmsApiService;
-        private readonly IContentCacheService contentCacheService;
 
         public StaticContentReloadService(
             ILogger<StaticContentReloadService> logger,
             AutoMapper.IMapper mapper,
             IEventMessageService<StaticContentItemModel> eventMessageService,
-            ICmsApiService cmsApiService,
-            IContentCacheService contentCacheService)
+            ICmsApiService cmsApiService)
         {
             this.logger = logger;
             this.mapper = mapper;
             this.eventMessageService = eventMessageService;
             this.cmsApiService = cmsApiService;
-            this.contentCacheService = contentCacheService;
         }
 
         public async Task Reload(CancellationToken stoppingToken)
@@ -70,8 +67,6 @@ namespace DFC.App.FindACourse.Services
         public async Task ProcessContentAsync(List<StaticContentItemModel> sharedContent, CancellationToken stoppingToken)
         {
             logger.LogInformation("Process summary list started");
-
-            contentCacheService.Clear();
 
             if (stoppingToken.IsCancellationRequested)
             {

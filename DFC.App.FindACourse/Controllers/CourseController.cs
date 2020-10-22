@@ -66,6 +66,7 @@ namespace DFC.App.FindACourse.Controllers
 
         [HttpGet]
         [Route("course/search/{articleName}/head")]
+        [Route("course/search/search/head")]
         [Route("course/search/head")]
         public IActionResult Head(string articleName)
         {
