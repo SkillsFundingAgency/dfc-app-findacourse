@@ -28,14 +28,6 @@
         "aspTier": {
             "type": "string"
         },
-        "sharedAppServicePlanName": {
-            "type": "string",
-            "defaultValue": ""
-        },
-        "sharedAppServicePlanResourceGroup": {
-            "type": "string",
-            "defaultValue": ""
-        },
         "CosmosDbResourceGroup": {
             "type": "string"
         },
@@ -85,7 +77,8 @@
         "cosmosDbDatabaseName": "dfc-app-findacourse",
         "cosmosDbEndpoint": "[concat('https://', parameters('cosmosDbName'), '.documents.azure.com:443/')]",
         "webAppName": "[concat(parameters('resourcePrefix'), '-as')]",
-        "ActionGroupName": "[concat('dfc-', replace(tolower(parameters('Environment')), '-draft', ''), '-app-sharedresources-actgrp')]"
+        "ActionGroupName": "[concat('dfc-', replace(tolower(parameters('Environment')), '-draft', ''), '-app-sharedresources-actgrp')]",
+        "CmsApiClientOptionsBaseAddress": "[concat('https://dfc-', replace(tolower(parameters('Environment')), '-draft', ''), '-api-cont-fa.azurewebsites.net/')]"
     },
     "resources": [
         {
@@ -251,6 +244,78 @@
                             {
                                 "name": "Logging__LogLevel__Default",
                                 "value": "Error"
+                            },
+                            {
+                                "name": "SubscriptionSettings__Endpoint",
+                                "value": "[concat(parameters('courseProviderServiceEndpoint'),'api/webhook/ReceiveEvents?subscription-key=',parameters('courseProviderServiceApiKey'))]"
+                            },
+							{
+                                "name": "SubscriptionSettings__SubscriptionRegistrationDelay",
+                                "value": "00:02:00"
+                            },
+                            {
+                                "name": "SubscriptionSettings__SubscriptionServiceEndpoint",
+                                "value": "[concat(parameters('courseProviderServiceEndpoint'),'api/Execute')]"
+                            },
+                            {
+                                "name": "SubscriptionSettings__Filter__IncludeEventTypes__0",
+                                "value": "published"
+                            },
+                            {
+                                "name": "SubscriptionSettings__Filter__IncludeEventTypes__1",
+                                "value": "unpublished"
+                            },
+                            {
+                                "name": "SubscriptionSettings__Filter__IncludeEventTypes__2",
+                                "value": "deleted"
+                            },
+                            {
+                                "name": "SubscriptionSettings__Filter__PropertyContainsFilters__0__Key",
+                                "value": "subject"
+                            },
+                            {
+                                "name": "SubscriptionSettings__Filter__PropertyContainsFilters__0__Values__0",
+                                "value": "/content/sharedcontent/"
+                            },
+                            {
+                                "name": "CmsApiClientOptions__Timeout",
+                                "value": "00:00:30"
+                            },
+                            {
+                                "name": "CmsApiClientOptions__ApiKey",
+                                "value": "[parameters('courseProviderServiceApiKey')]"
+                            },
+                            {
+                                "name": "CmsApiClientOptions__BaseAddress",
+                                "value": "[variables('CmsApiClientOptionsBaseAddress')]"
+                            },
+                            {
+                                "name": "CmsApiClientOptions__SummaryEndpoint",
+                                "value": "api/execute/jobprofile"
+                            },
+                            {
+                                "name": "CmsApiClientOptions__StaticContentEndpoint",
+                                "value": "api/execute/sharedcontent/"
+                            },
+                            {
+                                "name": "CmsApiClientOptions__ContentIds",
+                                "value": "531ed13a-5659-4a36-a822-9f4795b7b1c8"
+                            },
+                            {
+                                "name": "EventGridSubscriptionClientOptions__Timeout",
+                                "value": "00:00:30"
+                            },
+                            {
+                                "name": "EventGridSubscriptionClientOptions__ApiKey",
+                                "value": "[parameters('courseProviderServiceApiKey')]"
+                            },
+                            {
+                                "name": "EventGridSubscriptionClientOptions__BaseAddress",
+                                "value": "[parameters('courseProviderServiceEndpoint')]"
+                            },
+                            {
+                                "name": "EventGridSubscriptionClientOptions__Endpoint",
+                                "value": "api/execute"
                             }
                         ]
                     }
