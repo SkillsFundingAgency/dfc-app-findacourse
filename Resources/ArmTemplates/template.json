@@ -247,7 +247,7 @@
                             },
                             {
                                 "name": "SubscriptionSettings__Endpoint",
-                                "value": "[concat(parameters('courseProviderServiceEndpoint'),'/api/webhook/ReceiveEvents?subscription-key=',parameters('courseProviderServiceApiKey'))]"
+                                "value": "[concat(parameters('courseProviderServiceEndpoint'),'api/webhook/ReceiveEvents?subscription-key=',parameters('courseProviderServiceApiKey'))]"
                             },
 							{
                                 "name": "SubscriptionSettings__SubscriptionRegistrationDelay",
@@ -255,7 +255,7 @@
                             },
                             {
                                 "name": "SubscriptionSettings__SubscriptionServiceEndpoint",
-                                "value": "[concat(parameters('courseProviderServiceEndpoint'),'/api/Execute')]"
+                                "value": "[concat(parameters('courseProviderServiceEndpoint'),'api/Execute')]"
                             },
                             {
                                 "name": "SubscriptionSettings__Filter__IncludeEventTypes__0",
