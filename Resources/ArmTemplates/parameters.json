@@ -26,12 +26,6 @@
         "aspSize": {
             "value": "__aspSize__"
         },
-        "sharedAppServicePlanName": {
-            "value": "__sharedAppServicePlanName__"
-        },
-        "sharedAppServicePlanResourceGroup": {
-            "value": "__appSharedResourceGroup__"
-        },
         "CosmosDbResourceGroup": {
             "value": "__appSharedResourceGroup__"
         },

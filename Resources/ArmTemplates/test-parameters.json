@@ -11,12 +11,6 @@
         "appSharedStorageAccountName": {
             "value": "dfcdevappsharedstr"
         },
-        "sharedAppServicePlanName": {
-            "value": "dfc-dev-app-shared-asp"
-        },
-        "sharedAppServicePlanResourceGroup": {
-            "value": "dfc-dev-app-sharedresources-rg"
-        },
         "aspSize": {
             "value": "2"
         },
