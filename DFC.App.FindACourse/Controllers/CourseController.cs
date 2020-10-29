@@ -141,7 +141,7 @@ namespace DFC.App.FindACourse.Controllers
 
         [HttpGet]
         [Route("api/get/find-a-course/search/{appData}/SortBy")]
-        public async Task<string> AjaxChanged(string appData)
+        public async Task<AjaxModel> AjaxChanged(string appData)
         {
             var paramValues = System.Text.Json.JsonSerializer.Deserialize<ParamValues>(appData);
 
@@ -191,7 +191,8 @@ namespace DFC.App.FindACourse.Controllers
             }
 
             var viewAsString = await this.RenderViewAsync("~/Views/Course/_results.cshtml", model, true).ConfigureAwait(false);
-            return viewAsString;
+            return new AjaxModel { HTML = viewAsString, Count = model.Results.ResultProperties.TotalResultCount };
+            //return viewAsString;
         }
 
         [HttpGet]
