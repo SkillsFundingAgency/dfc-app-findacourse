@@ -1,5 +1,6 @@
 ﻿using DFC.App.FindACourse.Data.Domain;
 using DFC.App.FindACourse.Data.Helpers;
+using DFC.App.FindACourse.Data.Models;
 using DFC.App.FindACourse.Extensions;
 using DFC.App.FindACourse.Services;
 using DFC.App.FindACourse.ViewModels;
@@ -7,13 +8,12 @@ using DFC.CompositeInterfaceModels.FindACourseClient;
 using DFC.Logger.AppInsights.Contracts;
 using GdsCheckboxList.Models;
 using Microsoft.AspNetCore.Html;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Fac = DFC.FindACourseClient;
@@ -140,9 +140,64 @@ namespace DFC.App.FindACourse.Controllers
         }
 
         [HttpGet]
+        [Route("api/get/find-a-course/search/{appData}/SortBy")]
+        public async Task<string> AjaxChanged(string appData)
+        {
+            var paramValues = System.Text.Json.JsonSerializer.Deserialize<ParamValues>(appData);
+
+            if (paramValues == null)
+            {
+                throw new ArgumentNullException(nameof(paramValues));
+            }
+
+            var model = new BodyViewModel
+            {
+                CurrentSearchTerm = paramValues.SearchTerm,
+                SideBar = new SideBarViewModel
+                {
+                    TownOrPostcode = paramValues.Town,
+                    DistanceValue = paramValues.Distance,
+                    CourseType = this.ConvertStringToFiltersListViewModel(paramValues.CourseType),
+                    CourseHours = this.ConvertStringToFiltersListViewModel(paramValues.CourseHours),
+                    CourseStudyTime = this.ConvertStringToFiltersListViewModel(paramValues.CourseStudyTime),
+                    StartDateValue = paramValues.StartDate,
+                    CurrentSearchTerm = paramValues.SearchTerm,
+                    FiltersApplied = paramValues.FilterA,
+                    SelectedOrderByValue = paramValues.OrderByValue,
+                },
+                RequestPage = paramValues.Page,
+                IsNewPage = true,
+                IsTest = paramValues.IsTest,
+                SelectedDistanceValue = paramValues.Distance,
+            };
+
+            var newBodyViewModel = this.GenerateModel(model);
+
+            try
+            {
+                model.Results = await this.findACourseService.GetFilteredData(newBodyViewModel.CourseSearchFilters, newBodyViewModel.CourseSearchOrderBy, model.RequestPage).ConfigureAwait(false);
+                foreach (var item in model.Results.Courses)
+                {
+                    if (item.Description.Length > 220)
+                    {
+                        item.Description = item.Description.Substring(0, 200);
+                        item.Description += "...";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                this.logService.LogError($"{nameof(this.FilterResults)} threw an exception" + ex.Message);
+            }
+
+            var viewAsString = await this.RenderViewAsync("~/Views/Course/_results.cshtml", model, true).ConfigureAwait(false);
+            return viewAsString;
+        }
+
+        [HttpGet]
         [Route("find-a-course/course/body/course/page")]
         [Route("find-a-course/search/page/body")]
-        public async Task<IActionResult> Page(string searchTerm, string town, string distance, string courseType, string courseHours, string studyTime, string startDate, int page, bool filterA, bool IsTest)
+        public async Task<IActionResult> Page(string searchTerm, string town, string distance, string courseType, string courseHours, string studyTime, string startDate, int page, bool filterA, bool IsTest, string orderBy)
         {
             this.logService.LogInformation($"{nameof(this.Page)} has been called");
 
@@ -159,6 +214,7 @@ namespace DFC.App.FindACourse.Controllers
                     StartDateValue = startDate,
                     CurrentSearchTerm = searchTerm,
                     FiltersApplied = filterA,
+                    SelectedOrderByValue = orderBy,
                 },
                 RequestPage = page,
                 IsNewPage = true,
@@ -179,10 +235,28 @@ namespace DFC.App.FindACourse.Controllers
         {
             this.logService.LogInformation($"{nameof(this.FilterResults)} has been called");
 
+            var newBodyViewModel = GenerateModel(model);
+
+            try
+                {
+                    model.Results = await this.findACourseService.GetFilteredData(newBodyViewModel.CourseSearchFilters, newBodyViewModel.CourseSearchOrderBy, model.RequestPage).ConfigureAwait(false);
+
+            }
+                catch (Exception ex)
+                {
+                    this.logService.LogError($"{nameof(this.FilterResults)} threw an exception" + ex.Message);
+                }
+
+            this.logService.LogInformation($"{nameof(this.FilterResults)} generated the model and ready to pass to the view");
+
+            return this.Results(model);
+        }
+
+        private BodyViewModel GenerateModel(BodyViewModel model)
+        {
             var courseTypeList = new List<CourseType>();
             var courseHoursList = new List<CourseHours>();
             var courseStudyTimeList = new List<Fac.AttendancePattern>();
-            var sortedByCriteria = CourseSearchOrderBy.StartDate;
             var selectedStartDateValue = StartDate.Anytime;
 
             float selectedDistanceValue = 10;
@@ -208,7 +282,17 @@ namespace DFC.App.FindACourse.Controllers
                 courseStudyTimeList = this.ConvertToEnumList<Fac.AttendancePattern>(model.SideBar.CourseStudyTime.SelectedIds);
             }
 
-            _ = Enum.TryParse(model.SideBar.SelectedOrderByValue, out sortedByCriteria);
+            if (model.SideBar.SelectedOrderByValue != null)
+            {
+                _ = Enum.TryParse(model.SideBar.SelectedOrderByValue.Replace(" ", ""), out CourseSearchOrderBy sortedByCriteria);
+                model.CourseSearchOrderBy = sortedByCriteria;
+            }
+            else
+            {
+                var sortedByCriteria = CourseSearchOrderBy.Relevance;
+                model.CourseSearchOrderBy = sortedByCriteria;
+            }
+
 
             var courseSearchFilters = new CourseSearchFilters
             {
@@ -243,36 +327,26 @@ namespace DFC.App.FindACourse.Controllers
             }
 
             if (!string.IsNullOrEmpty(model.SideBar.TownOrPostcode))
+            {
+                if (this.IsPostcode(model.SideBar.TownOrPostcode))
                 {
-                    if (this.IsPostcode(model.SideBar.TownOrPostcode))
-                    {
-                        courseSearchFilters.PostCode = this.NormalizePostcode(model.SideBar.TownOrPostcode);
-                        courseSearchFilters.Distance = selectedDistanceValue;
-                        courseSearchFilters.DistanceSpecified = true;
-                    }
-                    else
-                    {
-                        courseSearchFilters.Town = "\u0022" + model.SideBar.TownOrPostcode + "\u0022";
-                    }
+                    courseSearchFilters.PostCode = this.NormalizePostcode(model.SideBar.TownOrPostcode);
+                    courseSearchFilters.Distance = selectedDistanceValue;
+                    courseSearchFilters.DistanceSpecified = true;
                 }
+                else
+                {
+                    courseSearchFilters.Town = "\u0022" + model.SideBar.TownOrPostcode + "\u0022";
+                }
+            }
 
-                // Enter filters criteria here
+            // Enter filters criteria here
             model.RequestPage = (model.RequestPage > 1) ? model.RequestPage : 1;
 
-            try
-                {
-                    model.Results = await this.findACourseService.GetFilteredData(courseSearchFilters, sortedByCriteria, model.RequestPage).ConfigureAwait(false);
-                }
-                catch (Exception ex)
-                {
-                    this.logService.LogError($"{nameof(this.FilterResults)} threw an exception" + ex.Message);
-                }
+            model.CourseSearchFilters = courseSearchFilters;
 
-            this.logService.LogInformation($"{nameof(this.FilterResults)} generated the model and ready to pass to the view");
-
-            return this.Results(model);
+            return model;
         }
-
 
         [HttpGet]
         [Route("find-a-course/course/body/course/searchcourse")]
@@ -491,5 +565,10 @@ namespace DFC.App.FindACourse.Controllers
 
             return postcode.Insert(postcode.Length - 3, " ");
         }
+    }
+
+    public class POCO
+    {
+        public string HTML { get; set; }
     }
 }

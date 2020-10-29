@@ -1,4 +1,8 @@
-﻿@using System.Text.RegularExpressions;
+﻿
+@{
+    Layout = null;
+}
+@using System.Text.RegularExpressions;
 @model Course
 @{
     var resultString = Regex.Match(Model.Duration, @"\d+").Value;
@@ -59,23 +63,23 @@
                         }
                     </li>
                 }
-                    <li>
-                        <span class="govuk-secondary-colour">Location:</span> @Model.Location
-                        @if (Model.AttendanceMode == "Work based" && Model.National == true)
-                        {
-                            <span>National</span>
-                        }
-                        else
-                        {
-                            <span>@Model.Region</span>
-                        }
-                        @if (Model.LocationDetails.Distance > 0)
-                        {
-                            <span>(@Model.LocationDetails.Distance)</span>;
-                        }
-                    </li>
+                <li>
+                    <span class="govuk-secondary-colour">Location:</span> @Model.Location
+                    @if (Model.AttendanceMode == "Work based" && Model.National == true)
+                    {
+                        <span>National</span>
+                    }
+                    else
+                    {
+                        <span>@Model.Region</span>
+                    }
+                    @if (Model.LocationDetails.Distance > 0)
+                    {
+                        <span>(@Model.LocationDetails.Distance)</span>;
+                    }
+                </li>
 
-                </ul>
+            </ul>
         </div>
 
     </div>
