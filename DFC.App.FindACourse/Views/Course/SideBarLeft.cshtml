@@ -8,21 +8,21 @@
                 Location
             </label>
             <span id="location-hint" class="govuk-hint">
-                Enter a town or postcode
+                <label aria-label="TownOrPostCodeLabel">Enter a town or postcode</label>
             </span>
-            <input type="text" asp-for="TownOrPostcode" name="SideBar.TownOrPostcode" class="govuk-input govuk-input--width-10" id="location-input" />
+            <input type="text" asp-for="TownOrPostcode" aria-label="TownOrPostcode" name="SideBar.TownOrPostcode" class="govuk-input govuk-input--width-10" id="location-input" />
             <span asp-validation-for="TownOrPostcode" class="text-danger" id="location-validator"></span>
         </div>
 
         <div id="distance-block" class="govuk-form-group">
             <div id="distance">
                 <label class="govuk-label govuk-!-font-weight-bold" for="location-distance" id="distance-label">Distance</label>
-                <select asp-for="DistanceValue" asp-items="Model.DistanceOptions" class="govuk-select" name="SelectedDistanceValue" id="distance-select"></select>
+                <select asp-for="DistanceValue" aria-label="DistanceValue" asp-items="Model.DistanceOptions" class="govuk-select" name="SelectedDistanceValue" id="distance-select"></select>
             </div>
         </div>
 
         <div id="startdate-block" class="govuk-form-group">
-            <div id="orderBy">
+            <div id="startdate-block-div">
                 <label class="govuk-label govuk-!-font-weight-bold" for="orderByInput" id="startdate-label">Start date</label>
                 <select asp-for="StartDateValue" asp-items="Model.StartDateOptions" class="govuk-select" name="SideBar.StartDateValue" id="startdate-select"></select>
             </div>
@@ -33,7 +33,7 @@
                 <fieldset class="govuk-fieldset">
                     <legend class="govuk-label govuk-!-font-weight-bold" id="coursetype-label">@Model.CourseType.FilterTitle</legend>
                     <div class="govuk-checkboxes govuk-checkboxes--small">
-                        <check-box-list name="SideBar.CourseType.SelectedIds" items="Model.CourseType.LstChkFilter" template="GDS"></check-box-list>
+                        <check-box-list name="SideBar.CourseType.SelectedIds" aria-label="CourseType" items="Model.CourseType.LstChkFilter" template="GDS"></check-box-list>
                     </div>
                 </fieldset>
             </div>
@@ -44,7 +44,7 @@
                 <fieldset class="govuk-fieldset">
                     <legend class="govuk-label govuk-!-font-weight-bold" id="coursehours-label">@Model.CourseHours.FilterTitle</legend>
                     <div class="govuk-checkboxes govuk-checkboxes--small">
-                        <check-box-list name="SideBar.CourseHours.SelectedIds" items="Model.CourseHours.LstChkFilter" template="GDS"></check-box-list>
+                        <check-box-list name="SideBar.CourseHours.SelectedIds" aria-label="CourseHours" items="Model.CourseHours.LstChkFilter" template="GDS"></check-box-list>
                     </div>
                 </fieldset>
             </div>
@@ -63,8 +63,8 @@
 
         <div id="orderby-block" class="govuk-form-group">
             <div id="orderBy">
-                <label class="result-region-header__sort-label govuk-label" for="orderByInput" id="orderby-label">Sort by</label>
-                <select asp-for="SelectedOrderByValue" asp-items="Model.OrderByOptions" class="govuk-select" name="SideBar.SelectedOrderByValue" id="orderBy-Input"></select>
+                <label class="result-region-header__sort-label govuk-label" aria-label="SelectedOrderValue" for="orderByInput" id="orderby-label">Sort by</label>
+                <select asp-for="SelectedOrderByValue" aria-label="SelectedOrderByValue" asp-items="Model.OrderByOptions" class="govuk-select" name="SideBar.SelectedOrderByValue" id="orderBy-Input"></select>
             </div>
         </div>
 
@@ -73,6 +73,6 @@
 
         @if (Model.FiltersApplied)
         {
-            <p><a href="/find-a-course/searchcourse?searchTerm=@Model.CurrentSearchTerm">Clear filters</a></p>
+            <p id="fac-clear-filters"><a href="/find-a-course/searchcourse?searchTerm=@Model.CurrentSearchTerm" aria-label="ClearFilters">Clear filters</a></p>
         }
     </div>

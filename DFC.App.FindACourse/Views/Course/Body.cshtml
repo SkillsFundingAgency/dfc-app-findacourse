@@ -1,6 +1,7 @@
 ﻿@model BodyViewModel
 
-    <form action="/find-a-course/searchcourse" method="get" id="search-course-form">
+<header>
+    <form action="/find-a-course/searchcourse" method="get" id="fac-search-course-form" class="find-a-course-page">
         <section id="fac-search-banner" class="primary-hero">
             <div class="govuk-width-container">
                 <div class="govuk-grid-row">
@@ -20,13 +21,14 @@
             </div>
         </section>
     </form>
+</header>
 
     <div class="govuk-width-container">
         <main class="govuk-main-wrapper govuk-main-wrapper--auto-spacing" id="main-content" role="main">
             @if (Model.Results != null)
             {
                 <button class="govuk-button filters-button" id="show-filters-button">Show filters</button>
-                <form action="/find-a-course/filterresults" method="get">
+                <form action="/find-a-course/filterresults" method="get" class="find-a-course-page" id="fac-filter-form">
                     @Html.HiddenFor(m => m.CurrentSearchTerm)
                     <div class="govuk-grid-row">
 
