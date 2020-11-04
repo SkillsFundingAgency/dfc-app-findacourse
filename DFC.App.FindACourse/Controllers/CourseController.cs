@@ -252,6 +252,20 @@ namespace DFC.App.FindACourse.Controllers
             return this.Results(model);
         }
 
+        [HttpGet]
+        [Route("api/get/find-a-course/search/{appdata}/isvalidpostcode")]
+        public async Task<bool> IsValidPostcode(string appdata)
+        {
+            var postcode = System.Text.Json.JsonSerializer.Deserialize<string>(appdata);
+
+            if (postcode == null)
+            {
+                throw new ArgumentNullException(nameof(postcode));
+            }
+
+            return this.IsPostcode(postcode);
+        }
+
         private BodyViewModel GenerateModel(BodyViewModel model)
         {
             var courseTypeList = new List<CourseType>();

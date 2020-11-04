@@ -26,6 +26,7 @@ namespace DFC.App.FindACourse.Controllers
 
         [HttpGet]
         [Route("find-a-course/search/details/body")]
+        [Route("find-a-course/details/body")]
         public async Task<IActionResult> Details(string courseId, string runId, string searchTerm, string CurrentSearchTerm, string town, string courseType,
                                                       string courseHours, string courseStudyTime, string courseStartDate, string distance, string filtera, int page)
         {
