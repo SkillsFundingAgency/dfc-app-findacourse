@@ -65,6 +65,10 @@
                     {
                         <td class="govuk-table__cell"><span id="start-date">@Model.CourseDetails.StartDate.Value.ToLongDateString()</span></td>
                     }
+                    else
+                    {
+                        <td class="govuk-table__cell"><span id="start-date">&nbsp;</span></td>
+                    }
                 </tr>
                 <tr class="govuk-table__row">
                     <th class="govuk-table__header" scope="row">Cost</th>
