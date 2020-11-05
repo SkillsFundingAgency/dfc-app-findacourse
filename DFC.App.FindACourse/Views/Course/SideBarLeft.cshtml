@@ -69,10 +69,13 @@
         </div>
 
         <button data-module="govuk-button" class="govuk-button" type="submit" id="applyfilters-button">Apply filters</button>
-        @*</noscript>*@
 
-        @if (Model.FiltersApplied)
-        {
-            <p id="fac-clear-filters"><a href="/find-a-course/searchcourse?searchTerm=@Model.CurrentSearchTerm" aria-label="ClearFilters">Clear filters</a></p>
-        }
+        <div class="fac-filters-block"></div>
+
+        <noscript>
+            @if (Model.FiltersApplied)
+            {
+                <p id="fac-clear-filters"><a href="/find-a-course/searchcourse?searchTerm=@Model.CurrentSearchTerm" aria-label="ClearFilters">Clear filters</a></p>
+            }
+        </noscript>
     </div>
