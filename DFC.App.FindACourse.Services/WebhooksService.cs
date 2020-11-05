@@ -21,7 +21,6 @@ namespace DFC.App.FindACourse.Services
         private readonly AutoMapper.IMapper mapper;
         private readonly IEventMessageService<StaticContentItemModel> eventMessageService;
         private readonly ICmsApiService cmsApiService;
-        private readonly IEventGridService eventGridService;
         private readonly IStaticContentReloadService staticContentReloadService;
         private readonly IContentCacheService contentCacheService;
         private readonly ISharedContentService sharedContentService;
@@ -31,7 +30,6 @@ namespace DFC.App.FindACourse.Services
             AutoMapper.IMapper mapper,
             IEventMessageService<StaticContentItemModel> eventMessageService,
             ICmsApiService cmsApiService,
-            IEventGridService eventGridService,
             IStaticContentReloadService staticContentReloadService,
             IContentCacheService contentCacheService,
             ISharedContentService sharedContentService)
@@ -40,7 +38,6 @@ namespace DFC.App.FindACourse.Services
             this.mapper = mapper;
             this.eventMessageService = eventMessageService;
             this.cmsApiService = cmsApiService;
-            this.eventGridService = eventGridService;
             this.staticContentReloadService = staticContentReloadService;
             this.contentCacheService = contentCacheService;
             this.sharedContentService = sharedContentService;
@@ -95,7 +92,6 @@ namespace DFC.App.FindACourse.Services
             }
 
             await GetAndSaveItemAsync(sharedContent, stoppingToken).ConfigureAwait(false);
-
 
             return HttpStatusCode.OK;
         }
