@@ -184,6 +184,15 @@ namespace DFC.App.FindACourse.Controllers
                         item.Description += "...";
                     }
                 }
+
+                var courseType = model.SideBar.CourseType != null && model.SideBar.CourseType.SelectedIds?.Count > 0 ? JsonConvert.SerializeObject(model.SideBar.CourseType.SelectedIds) : null;
+                var courseHours = model.SideBar.CourseHours != null && model.SideBar.CourseHours.SelectedIds?.Count > 0 ? JsonConvert.SerializeObject(model.SideBar.CourseHours.SelectedIds) : null;
+                var courseStudyTime = model.SideBar.CourseStudyTime != null && model.SideBar.CourseStudyTime?.SelectedIds.Count > 0 ? JsonConvert.SerializeObject(model.SideBar.CourseStudyTime.SelectedIds) : null;
+
+                if (!model.IsTest)
+                {
+                    TempData["params"] = $"searchTerm={paramValues.SearchTerm}&town={paramValues.Town}&courseType={paramValues.CourseType}&courseHours={paramValues.CourseHours}&studyTime={paramValues.CourseStudyTime}&startDate={paramValues.StartDate}&distance={paramValues.Distance}&filtera={paramValues.FilterA}&page={model.RequestPage}";
+                }
             }
             catch (Exception ex)
             {
