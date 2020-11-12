@@ -94,6 +94,7 @@ namespace DFC.App.FindACourse.Controllers
         }
 
         [HttpGet]
+        [ResponseCache(Duration = 43200)]
         public IActionResult Breadcrumb()
         {
             this.logService.LogInformation($"{nameof(this.Breadcrumb)} has been called");
@@ -114,6 +115,7 @@ namespace DFC.App.FindACourse.Controllers
         [HttpGet]
         [Route("find-a-course/search/{articleName}/body")]
         [Route("find-a-course/search/body")]
+        [ResponseCache(Duration = 43200)]
         public async Task<IActionResult> Body(string articleName)
         {
             this.logService.LogInformation($"{nameof(this.Body)} has been called");
@@ -132,6 +134,7 @@ namespace DFC.App.FindACourse.Controllers
         [HttpGet]
         [Route("find-a-course/search/{articleName}/bodyfooter")]
         [Route("find-a-course/search/bodyfooter")]
+        [ResponseCache(Duration = 43200)]
         public IActionResult BodyFooter(string articleName)
         {
             this.logService.LogInformation($"{nameof(this.BodyFooter)} has been called");
@@ -144,6 +147,7 @@ namespace DFC.App.FindACourse.Controllers
         public async Task<AjaxModel> AjaxChanged(string appData)
         {
             var paramValues = System.Text.Json.JsonSerializer.Deserialize<ParamValues>(appData);
+            bool? isPostcode = null;
 
             if (paramValues == null)
             {
@@ -185,6 +189,8 @@ namespace DFC.App.FindACourse.Controllers
                     }
                 }
 
+                isPostcode = !string.IsNullOrEmpty(paramValues.Town) ? (bool?)this.IsPostcode(paramValues.Town) : null;
+
                 var courseType = model.SideBar.CourseType != null && model.SideBar.CourseType.SelectedIds?.Count > 0 ? JsonConvert.SerializeObject(model.SideBar.CourseType.SelectedIds) : null;
                 var courseHours = model.SideBar.CourseHours != null && model.SideBar.CourseHours.SelectedIds?.Count > 0 ? JsonConvert.SerializeObject(model.SideBar.CourseHours.SelectedIds) : null;
                 var courseStudyTime = model.SideBar.CourseStudyTime != null && model.SideBar.CourseStudyTime?.SelectedIds.Count > 0 ? JsonConvert.SerializeObject(model.SideBar.CourseStudyTime.SelectedIds) : null;
@@ -200,7 +206,7 @@ namespace DFC.App.FindACourse.Controllers
             }
 
             var viewAsString = await this.RenderViewAsync("~/Views/Course/_results.cshtml", model, true).ConfigureAwait(false);
-            return new AjaxModel { HTML = viewAsString, Count = model.Results.ResultProperties.TotalResultCount };
+            return new AjaxModel { HTML = viewAsString, Count = model.Results.ResultProperties.TotalResultCount, IsPostcode = isPostcode };
         }
 
         [HttpGet]
@@ -315,7 +321,6 @@ namespace DFC.App.FindACourse.Controllers
                 var sortedByCriteria = CourseSearchOrderBy.Relevance;
                 model.CourseSearchOrderBy = sortedByCriteria;
             }
-
 
             var courseSearchFilters = new CourseSearchFilters
             {
@@ -536,6 +541,7 @@ namespace DFC.App.FindACourse.Controllers
             return model;
         }
 
+        [ResponseCache(Duration = 43200)]
         private SideBarViewModel GetSideBarViewModel()
         {
             var sideBarViewModel = new SideBarViewModel
