@@ -37,7 +37,7 @@
 		"IsHealthy": true,
 		"AjaxEndpoint": "https://localhost:44306/api/get/find-a-course/search/{0}/ajax",
 		"HealthCheckRequired": true,
-		"OfflineHtml": "<div class=\"govuk-width-container\"><H3>Help Service Unavailable</H3>",
+		"OfflineHtml": "<div class=\"govuk-width-container\"><H3>Help Service Unavailable</H3></div>",
 		"DateOfRegistration": "2020-10-22T12:49:24.9672393Z",
 		"LastModifiedDate": "2020-10-26T14:16:10.4948477Z"
 	},
@@ -46,7 +46,7 @@
 		"IsHealthy": true,
 		"AjaxEndpoint": "https://localhost:44306/api/get/find-a-course/search/{0}/isvalidpostcode",
 		"HealthCheckRequired": true,
-		"OfflineHtml": "<div class=\"govuk-width-container\"><H3>Help Service Unavailable</H3>",
+		"OfflineHtml": "<div class=\"govuk-width-container\"><H3>Help Service Unavailable</H3></div>",
 		"DateOfRegistration": "2020-10-22T12:49:24.9672393Z",
 		"LastModifiedDate": "2020-10-26T14:16:10.4948477Z"
 	}
