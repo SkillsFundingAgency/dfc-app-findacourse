@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DFC.App.FindACourse.Cache;
 using DFC.App.FindACourse.Data.Contracts;
 using DFC.App.FindACourse.Data.Domain;
 using DFC.App.FindACourse.Data.Models;
@@ -23,6 +24,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -93,6 +95,8 @@ namespace DFC.App.FindACourse
             services.AddTransient<IApiDataProcessorService, ApiDataProcessorService>();
             services.AddTransient<IApiCacheService, ApiCacheService>();
             services.AddTransient<IWebhooksService, WebhooksService>();
+            services.AddTransient<MemoryCache>();
+            services.AddSingleton<ICacheService, CacheService>();
 
             var cosmosDbConnectionStaticPages = this.Configuration.GetSection(StaticCosmosDbConfigAppSettings).Get<Compui.Cosmos.Contracts.CosmosDbConnection>();
             services.AddContentPageServices<StaticContentItemModel>(cosmosDbConnectionStaticPages, env.IsDevelopment());
