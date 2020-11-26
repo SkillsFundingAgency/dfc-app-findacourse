@@ -65,7 +65,7 @@ namespace DFC.App.FindACourse.Controllers
         }
 
         [HttpGet]
-        [Route("find-a-course/search/{articleName}/head")]
+        [Route("course/search/{articleName}/head")]
         [Route("course/search/search/head")]
         [Route("course/search/head")]
         public IActionResult Head(string articleName)
@@ -380,6 +380,7 @@ namespace DFC.App.FindACourse.Controllers
         [Route("find-a-course/course/body/course/searchcourse")]
         [Route("find-a-course/course/body")]
         [Route("find-a-course/search/searchCourse/body")]
+        [Route("find-a-course/search/body")]
         public async Task<IActionResult> SearchCourse(string searchTerm)
         {
             this.logService.LogInformation($"{nameof(this.SearchCourse)} has been called");
