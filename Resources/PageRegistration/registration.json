@@ -28,7 +28,7 @@
         "HealthCheckRequired": true,
         "IsHealthy" : true,
         "RegionEndpoint": "https://__AppServiceName__.__appServiceDomain__/find-a-course/search/{0}/bodyfooter",
-        "OfflineHtml": "<div class=\"govuk-width-container\"><H3>Help Service Unavailable</H3></div>"
+        "OfflineHtml": "<div class=\"govuk-width-container\"><H3>Service Unavailable</H3></div>"
       }
     ],
 	"AjaxRequests": [
@@ -37,7 +37,7 @@
 		"IsHealthy": true,
 		"AjaxEndpoint": "https://__AppServiceName__.__appServiceDomain__/api/get/find-a-course/search/{0}/ajax",
 		"HealthCheckRequired": true,
-		"OfflineHtml": "<div class=\"govuk-width-container\"><H3>Help Service Unavailable</H3></div>",
+		"OfflineHtml": "<div class=\"govuk-width-container\"><H3>Service Unavailable</H3></div>",
 	}
     ],
     "JavaScriptNames": {
