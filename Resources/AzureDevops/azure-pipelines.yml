@@ -43,7 +43,7 @@ jobs:
       targetPath: $(build.artifactstagingdirectory)/PageRegistrations
       artifactName: $(SolutionBaseName).PageRegistrations
 
-#Build and test application
+#Builds and test application
 - job: BuildDotNetCore
   displayName: Build-DotNetCore
   steps:
