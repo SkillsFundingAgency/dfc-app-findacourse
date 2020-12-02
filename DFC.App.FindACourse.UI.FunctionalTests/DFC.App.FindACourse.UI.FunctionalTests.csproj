@@ -39,6 +39,7 @@
     <Folder Include="Features\" />
     <Folder Include="StepDefinitions\" />
     <Folder Include="Pages\" />
+    <Folder Include="Model\" />
   </ItemGroup>
 
 </Project>
