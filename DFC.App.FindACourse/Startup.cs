@@ -101,7 +101,6 @@ namespace DFC.App.FindACourse
             var cosmosDbConnectionStaticPages = this.Configuration.GetSection(StaticCosmosDbConfigAppSettings).Get<Compui.Cosmos.Contracts.CosmosDbConnection>();
             services.AddContentPageServices<StaticContentItemModel>(cosmosDbConnectionStaticPages, env.IsDevelopment());
             services.AddApplicationInsightsTelemetry();
-            services.AddSingleton(this.Configuration.GetSection(nameof(CmsApiClientOptions)).Get<CmsApiClientOptions>() ?? new CmsApiClientOptions());
 
             var policyRegistry = services.AddPolicyRegistry();
             var policyOptions = this.Configuration.GetSection(CourseSearchClientPolicySettings).Get<PolicyOptions>() ?? new PolicyOptions();
