@@ -9,6 +9,6 @@ namespace DFC.App.FindACourse.ViewModels
 
         public string SearchTerm { get; set; }
 
-        public StaticContentItemModel SpeakToAnAdvisor { get; set; }
+        public StaticContentItemModel SpeakToAnAdviser { get; set; }
     }
 }

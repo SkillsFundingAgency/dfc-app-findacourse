@@ -2,6 +2,7 @@
 using DFC.App.FindACourse.Controllers;
 using DFC.App.FindACourse.Data.Contracts;
 using DFC.App.FindACourse.Services;
+using DFC.Content.Pkg.Netcore.Data.Models.ClientOptions;
 using DFC.Logger.AppInsights.Contracts;
 using FakeItEasy;
 using Microsoft.AspNetCore.Http;
@@ -22,6 +23,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
             FakeFindACoursesService = A.Fake<IFindACourseService>();
             FakeSharedContentService = A.Fake<ISharedContentService>();
             FakeCacheService = A.Fake<ICacheService>();
+            DummyCmsApiClientOptions = A.Dummy<CmsApiClientOptions>();
         }
 
         public static IEnumerable<object[]> HtmlMediaTypes => new List<object[]>
@@ -52,6 +54,8 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
 
         protected ICacheService FakeCacheService { get; set; }
 
+        protected CmsApiClientOptions DummyCmsApiClientOptions { get; set; }
+
         protected CourseController BuildCourseController(string mediaTypeName)
         {
             var httpContext = new DefaultHttpContext();
@@ -75,7 +79,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
 
             httpContext.Request.Headers[HeaderNames.Accept] = mediaTypeName;
 
-            var controller = new DetailsController(FakeLogService, FakeFindACoursesService, FakeSharedContentService, FakeCacheService)
+            var controller = new DetailsController(FakeLogService, FakeFindACoursesService, FakeSharedContentService, FakeCacheService, DummyCmsApiClientOptions)
             {
                 ControllerContext = new ControllerContext()
                 {
