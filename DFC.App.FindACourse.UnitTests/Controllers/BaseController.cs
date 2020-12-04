@@ -1,4 +1,5 @@
-﻿using DFC.App.FindACourse.Controllers;
+﻿using DFC.App.FindACourse.Cache;
+using DFC.App.FindACourse.Controllers;
 using DFC.App.FindACourse.Data.Contracts;
 using DFC.App.FindACourse.Services;
 using DFC.Logger.AppInsights.Contracts;
@@ -20,6 +21,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
             FakeLogService = A.Fake<ILogService>();
             FakeFindACoursesService = A.Fake<IFindACourseService>();
             FakeSharedContentService = A.Fake<ISharedContentService>();
+            FakeCacheService = A.Fake<ICacheService>();
         }
 
         public static IEnumerable<object[]> HtmlMediaTypes => new List<object[]>
@@ -48,6 +50,8 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
 
         protected ISharedContentService FakeSharedContentService { get; set; }
 
+        protected ICacheService FakeCacheService { get; set; }
+
         protected CourseController BuildCourseController(string mediaTypeName)
         {
             var httpContext = new DefaultHttpContext();
@@ -71,7 +75,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
 
             httpContext.Request.Headers[HeaderNames.Accept] = mediaTypeName;
 
-            var controller = new DetailsController(FakeLogService, FakeFindACoursesService, FakeSharedContentService)
+            var controller = new DetailsController(FakeLogService, FakeFindACoursesService, FakeSharedContentService, FakeCacheService)
             {
                 ControllerContext = new ControllerContext()
                 {
