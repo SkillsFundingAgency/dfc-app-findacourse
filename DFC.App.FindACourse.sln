@@ -6,9 +6,11 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Solution Items", "_Solution Items", "{4FC06D0C-8BBE-4ECA-87C2-7DFEBCF495BE}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
+		CODEOWNERS = CODEOWNERS
 		DFC.Digital.CodeAnalysis.ruleset = DFC.Digital.CodeAnalysis.ruleset
 		LICENSE = LICENSE
 		README.md = README.md
+		Resources\PageRegistration\registration.json = Resources\PageRegistration\registration.json
 		stylecop.json = stylecop.json
 		UnitTests.CodeAnalysis.ruleset = UnitTests.CodeAnalysis.ruleset
 	EndProjectSection
@@ -49,7 +51,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FunctionalTests", "Function
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{98F8CFB0-6513-4077-81ED-8CB8DA33654B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DFC.App.FindACourse.UI.FunctionalTests", "DFC.App.FindACourse.UI.FunctionalTests\DFC.App.FindACourse.UI.FunctionalTests.csproj", "{1FF680BC-6E33-4B40-92AE-D5D4131AD1A5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DFC.App.FindACourse.UI.FunctionalTests", "DFC.App.FindACourse.UI.FunctionalTests\DFC.App.FindACourse.UI.FunctionalTests.csproj", "{1FF680BC-6E33-4B40-92AE-D5D4131AD1A5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
