@@ -3,11 +3,10 @@ using DFC.App.FindACourse.Data.Contracts;
 using DFC.App.FindACourse.Data.Models;
 using DFC.App.FindACourse.Services;
 using DFC.App.FindACourse.ViewModels;
+using DFC.Content.Pkg.Netcore.Data.Models.ClientOptions;
 using DFC.Logger.AppInsights.Contracts;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace DFC.App.FindACourse.Controllers
@@ -19,32 +18,35 @@ namespace DFC.App.FindACourse.Controllers
         private readonly IFindACourseService findACourseService;
         private readonly ISharedContentService sharedContentService;
         private readonly ICacheService cacheService;
+        private readonly CmsApiClientOptions cmsApiClientOptions;
 
-        public DetailsController(ILogService logService,
+        public DetailsController(
+            ILogService logService,
             IFindACourseService findACourseService,
             ISharedContentService sharedContentService,
-            ICacheService cacheService
-            )
+            ICacheService cacheService,
+            CmsApiClientOptions cmsApiClientOptions)
         {
             this.logService = logService;
             this.findACourseService = findACourseService;
             this.sharedContentService = sharedContentService;
             this.cacheService = cacheService;
+            this.cmsApiClientOptions = cmsApiClientOptions;
         }
 
         [HttpGet]
         [Route("find-a-course/search/details/body")]
         [Route("find-a-course/details/body")]
-        public async Task<IActionResult> Details(string courseId, string runId, string searchTerm, string CurrentSearchTerm, string town, string courseType,
+        public async Task<IActionResult> Details(string courseId, string runId, string searchTerm, string currentSearchTerm, string town, string courseType,
                                                       string courseHours, string courseStudyTime, string courseStartDate, string distance, string filtera, int page, int d)
         {
-            this.logService.LogInformation($"{nameof(this.Details)} has been called");
+            logService.LogInformation($"{nameof(this.Details)} has been called");
             var model = new DetailsViewModel();
-            if (searchTerm == null && CurrentSearchTerm != null)
+            if (searchTerm == null && currentSearchTerm != null)
             {
-                searchTerm = CurrentSearchTerm;
+                searchTerm = currentSearchTerm;
             }
-            var contentList = new List<string>() { "speaktoanadvisor" };
+
             model.SearchTerm = $"searchTerm={searchTerm}&town={town}&courseType={courseType}&courseHours={courseHours}&studyTime={courseStudyTime}&startDate={courseStartDate}&distance={distance}&filtera={filtera}&page={page}&d={d}";
 
             if (string.IsNullOrEmpty(courseId) || string.IsNullOrEmpty(runId))
@@ -54,18 +56,12 @@ namespace DFC.App.FindACourse.Controllers
 
             try
             {
-                var sharedContent = this.cacheService.GetFromCache<List<StaticContentItemModel>>(SharedContent);
-                if (sharedContent == null)
-                {
-                    sharedContent = this.cacheService.GetOrSet<List<StaticContentItemModel>>(SharedContent, await this.sharedContentService.GetByNamesAsync(contentList).ConfigureAwait(false));
-                }
-
-                model.SpeakToAnAdvisor = sharedContent.FirstOrDefault();
-                model.CourseDetails = await this.findACourseService.GetCourseDetails(courseId, runId).ConfigureAwait(false);
+                model.SpeakToAnAdviser = cacheService.GetOrSet<StaticContentItemModel>(SharedContent, await sharedContentService.GetById(new Guid(cmsApiClientOptions.ContentIds)).ConfigureAwait(false));
+                model.CourseDetails = await findACourseService.GetCourseDetails(courseId, runId).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
-                this.logService.LogError($"Get course details caused an error: {ex}. " +
+                logService.LogError($"Get course details caused an error: {ex}. " +
                     $"The values passed were: course id: {courseId} and run id: {runId}");
             }
 

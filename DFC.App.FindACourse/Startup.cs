@@ -48,7 +48,7 @@ namespace DFC.App.FindACourse
 
         public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
-            this.Configuration = configuration;
+            Configuration = configuration;
             this.env = env;
         }
 
@@ -69,22 +69,22 @@ namespace DFC.App.FindACourse
             services.AddScoped<IFindACourseRepository, FindACourseRepository>();
 
             services.AddApplicationInsightsTelemetry();
-            services.AddDFCLogging(this.Configuration["ApplicationInsights:InstrumentationKey"]);
-            var courseSearchSettings = this.Configuration.GetSection(CourseSearchAppSettings).Get<CourseSearchSettings>();
+            services.AddDFCLogging(Configuration["ApplicationInsights:InstrumentationKey"]);
+            var courseSearchSettings = Configuration.GetSection(CourseSearchAppSettings).Get<CourseSearchSettings>();
             services.AddSingleton(courseSearchSettings ?? new CourseSearchSettings());
 
             var courseSearchClientSettings = new CourseSearchClientSettings
             {
-                CourseSearchSvcSettings = this.Configuration.GetSection(CourseSearchClientSvcSettings).Get<CourseSearchSvcSettings>() ?? new CourseSearchSvcSettings(),
-                CourseSearchAuditCosmosDbSettings = this.Configuration.GetSection(CourseSearchClientAuditSettings).Get<CourseSearchAuditCosmosDbSettings>() ?? new CourseSearchAuditCosmosDbSettings(),
-                PolicyOptions = this.Configuration.GetSection(CourseSearchClientPolicySettings).Get<PolicyOptions>() ?? new PolicyOptions(),
+                CourseSearchSvcSettings = Configuration.GetSection(CourseSearchClientSvcSettings).Get<CourseSearchSvcSettings>() ?? new CourseSearchSvcSettings(),
+                CourseSearchAuditCosmosDbSettings = Configuration.GetSection(CourseSearchClientAuditSettings).Get<CourseSearchAuditCosmosDbSettings>() ?? new CourseSearchAuditCosmosDbSettings(),
+                PolicyOptions = Configuration.GetSection(CourseSearchClientPolicySettings).Get<PolicyOptions>() ?? new PolicyOptions(),
             };
             services.AddSingleton(courseSearchClientSettings);
             services.AddScoped<ICourseSearchApiService, CourseSearchApiService>();
             services.AddFindACourseServicesWithoutFaultHandling(courseSearchClientSettings);
 
-            services.AddSingleton(this.Configuration.GetSection(nameof(CmsApiClientOptions)).Get<CmsApiClientOptions>() ?? new CmsApiClientOptions());
-            var staticContentDbConnection = this.Configuration.GetSection(StaticCosmosDbConfigAppSettings).Get<StaticCosmosDbConnection>();
+            services.AddSingleton(Configuration.GetSection(nameof(CmsApiClientOptions)).Get<CmsApiClientOptions>() ?? new CmsApiClientOptions());
+            var staticContentDbConnection = Configuration.GetSection(StaticCosmosDbConfigAppSettings).Get<StaticCosmosDbConnection>();
             services.AddSingleton(staticContentDbConnection);
             services.AddSingleton<IStaticCosmosRepository<StaticContentItemModel>, StaticCosmosRepository<StaticContentItemModel>>();
             services.AddTransient<IEventMessageService<StaticContentItemModel>, EventMessageService<StaticContentItemModel>>();
@@ -98,20 +98,19 @@ namespace DFC.App.FindACourse
             services.AddTransient<MemoryCache>();
             services.AddSingleton<ICacheService, CacheService>();
 
-            var cosmosDbConnectionStaticPages = this.Configuration.GetSection(StaticCosmosDbConfigAppSettings).Get<Compui.Cosmos.Contracts.CosmosDbConnection>();
+            var cosmosDbConnectionStaticPages = Configuration.GetSection(StaticCosmosDbConfigAppSettings).Get<Compui.Cosmos.Contracts.CosmosDbConnection>();
             services.AddContentPageServices<StaticContentItemModel>(cosmosDbConnectionStaticPages, env.IsDevelopment());
             services.AddApplicationInsightsTelemetry();
-            services.AddSingleton(this.Configuration.GetSection(nameof(CmsApiClientOptions)).Get<CmsApiClientOptions>() ?? new CmsApiClientOptions());
 
             var policyRegistry = services.AddPolicyRegistry();
-            var policyOptions = this.Configuration.GetSection(CourseSearchClientPolicySettings).Get<PolicyOptions>() ?? new PolicyOptions();
+            var policyOptions = Configuration.GetSection(CourseSearchClientPolicySettings).Get<PolicyOptions>() ?? new PolicyOptions();
             services.AddFindACourseTransientFaultHandlingPolicies(courseSearchClientSettings, policyRegistry);
 
             services.AddHostedServiceTelemetryWrapper();
-            services.AddSubscriptionBackgroundService(this.Configuration);
+            services.AddSubscriptionBackgroundService(Configuration);
             services.AddHostedService<StaticContentReloadBackgroundService>();
 
-            services.AddApiServices(this.Configuration, policyRegistry);
+            services.AddApiServices(Configuration, policyRegistry);
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Latest);
             services.AddSingleton(serviceProvider =>
@@ -149,7 +148,7 @@ namespace DFC.App.FindACourse
                 app.UseHsts();
             }
 
-         //   app.UseCors();
+            //   app.UseCors();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
