@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore;
+﻿using DFC.Compui.Telemetry.HostExtensions;
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using System.Diagnostics.CodeAnalysis;
 
@@ -9,7 +10,10 @@ namespace DFC.App.FindACourse
     {
         public static void Main(string[] args)
         {
-            CreateWebHostBuilder(args).Build().Run();
+            CreateWebHostBuilder(args)
+                .Build()
+                .AddApplicationTelemetryInitializer()
+                .Run();
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args)
