@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
 	  <CodeAnalysisRuleSet>../DFC.Digital.CodeAnalysis.ruleset</CodeAnalysisRuleSet>
+	  <ProjectGuid>{E48326CC-8AF0-4364-8A66-7613B03A00A4}</ProjectGuid>
   </PropertyGroup>
 	<ItemGroup>
 		<AdditionalFiles Include="..\stylecop.json" Link="../stylecop.json" />

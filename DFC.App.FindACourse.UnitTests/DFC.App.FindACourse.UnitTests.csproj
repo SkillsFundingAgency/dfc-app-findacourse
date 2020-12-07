@@ -4,8 +4,8 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <IsPackable>false</IsPackable>
     <CodeAnalysisRuleSet>../UnitTests.CodeAnalysis.ruleset</CodeAnalysisRuleSet>
-    <LangVersion>latest</LangVersion>
-  </PropertyGroup>
+ 	  <ProjectGuid>{84788D59-022E-46DB-964F-213E57F17E25}</ProjectGuid>
+ </PropertyGroup>
 
   <ItemGroup>
     <AdditionalFiles Include="..\stylecop.json" Link="../stylecop.json" />

@@ -131,7 +131,7 @@ namespace DFC.App.FindACourse.Services
                 }
                 catch (Exception ex)
                 {
-                    logger.LogError(ex, $"Error in get and save for {item.Id} - {item.Url}");
+                    logger.LogError(ex, $"Error in get and save for {item?.Id} - {item?.Url}");
                 }
             }
         }
