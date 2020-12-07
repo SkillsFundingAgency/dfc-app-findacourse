@@ -40,6 +40,9 @@
         "facCosmosAuditCollectionName": {
             "type": "string"
         },
+        "facCosmosStaticContentCollectionName": {
+            "type": "string"
+        },
         "facAppDatabaseNeedsCreation": {
             "type": "bool"
         },
@@ -332,7 +335,7 @@
                             },
                             {
                                 "name": "Configuration__CosmosDbConnections__StaticContent__CollectionId",
-                                "value": "[parameters('facCosmosAuditCollectionName')]"
+                                "value": "[parameters('facCosmosStaticContentCollectionName')]"
                             },
                             {
                                 "name": "Configuration__CosmosDbConnections__StaticContent__PartitionKey",
