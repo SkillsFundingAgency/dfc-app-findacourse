@@ -38,6 +38,9 @@
         "facCosmosAuditCollectionName": {
             "value": "__facCosmosAuditCollectionName__"
         },
+        "facCosmosStaticContentCollectionName": {
+            "value": "__facCosmosStaticContentCollectionName__"
+        },
         "facAppDatabaseNeedsCreation": {
             "value": __CosmosDbDatabaseDoesntExist__
         },
