@@ -58,6 +58,9 @@
         },
         "enableAlerts": {
             "value": __EnableAzureMonitorAlerting__
+        },
+        "CmsApiClientOptionsBaseAddress": {
+            "value": "__CmsApiClientOptionsBaseAddress__"
         }
     }
 }

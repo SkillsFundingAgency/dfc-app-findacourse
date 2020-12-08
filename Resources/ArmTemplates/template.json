@@ -69,6 +69,9 @@
             "metadata": {
                 "description": "Enable or disable alerting"
             }
+        },
+        "CmsApiClientOptionsBaseAddress": {
+            "type": "string"
         }
     },
     "variables": {
@@ -81,8 +84,7 @@
         "staticContentDatabase": "dfc-shared-content",
         "cosmosDbEndpoint": "[concat('https://', parameters('cosmosDbName'), '.documents.azure.com:443/')]",
         "webAppName": "[concat(parameters('resourcePrefix'), '-as')]",
-        "ActionGroupName": "[concat('dfc-', replace(tolower(parameters('Environment')), '-draft', ''), '-app-sharedresources-actgrp')]",
-        "CmsApiClientOptionsBaseAddress": "[concat('https://dfc-', replace(tolower(parameters('Environment')), '-draft', ''), '-api-cont-fa.azurewebsites.net/')]"
+        "ActionGroupName": "[concat('dfc-', replace(tolower(parameters('Environment')), '-draft', ''), '-app-sharedresources-actgrp')]"
     },
     "resources": [
         {
@@ -291,7 +293,7 @@
                             },
                             {
                                 "name": "CmsApiClientOptions__BaseAddress",
-                                "value": "[variables('CmsApiClientOptionsBaseAddress')]"
+                                "value": "[parameters('CmsApiClientOptionsBaseAddress')]"
                             },
                             {
                                 "name": "CmsApiClientOptions__SummaryEndpoint",
