@@ -40,10 +40,18 @@ namespace DFC.App.FindACourse.Services
             {
                 logger.LogInformation("Reload static content started");
 
-                var apiDataModels = new List<StaticContentItemModel>
+                var contentIds = cmsApiClientOptions.ContentIds.Split(",", StringSplitOptions.RemoveEmptyEntries);
+                var apiDataModels = new List<StaticContentItemModel>();
+
+                foreach (var contentId in contentIds)
                 {
-                    await cmsApiService.GetItemAsync<StaticContentItemModel>("sharedcontent", new Guid(cmsApiClientOptions.ContentIds)).ConfigureAwait(false),
-                };
+                    var apiDataModel = await cmsApiService.GetItemAsync<StaticContentItemModel>("sharedcontent", new Guid(contentId)).ConfigureAwait(false);
+
+                    if (apiDataModel != null)
+                    {
+                        apiDataModels.Add(apiDataModel);
+                    }
+                }
 
                 if (stoppingToken.IsCancellationRequested)
                 {
@@ -96,37 +104,30 @@ namespace DFC.App.FindACourse.Services
             {
                 try
                 {
-                    if (item == null)
-                    {
-                        logger.LogWarning("Found null static content response");
-                    }
-                    else
-                    {
-                        logger.LogInformation($"Updating static content cache with {item.Id} - {item.Url}");
+                    logger.LogInformation($"Updating static content cache with {item.Id} - {item.Url}");
 
-                        item.PartitionKey = "/";
-                        item.CanonicalName = item.skos_prefLabel.Replace(" ", "").ToLower();
-                        var result = await eventMessageService.UpdateAsync(item).ConfigureAwait(false);
+                    item.PartitionKey = item.PageLocation;
+                    item.CanonicalName = item.skos_prefLabel.Replace(" ", "-").ToLower();
+                    var result = await eventMessageService.UpdateAsync(item).ConfigureAwait(false);
 
-                        if (result == HttpStatusCode.NotFound)
+                    if (result == HttpStatusCode.NotFound)
+                    {
+                        logger.LogInformation($"Does not exist, creating static content cache with {item.Id} - {item.Url}");
+
+                        result = await eventMessageService.CreateAsync(item).ConfigureAwait(false);
+
+                        if (result == HttpStatusCode.OK)
                         {
-                            logger.LogInformation($"Does not exist, creating static content cache with {item.Id} - {item.Url}");
-
-                            result = await eventMessageService.CreateAsync(item).ConfigureAwait(false);
-
-                            if (result == HttpStatusCode.OK)
-                            {
-                                logger.LogInformation($"Created static content cache with {item.Id} - {item.Url}");
-                            }
-                            else
-                            {
-                                logger.LogError($"Static content cache create error status {result} from {item.Id} - {item.Url}");
-                            }
+                            logger.LogInformation($"Created static content cache with {item.Id} - {item.Url}");
                         }
                         else
                         {
-                            logger.LogInformation($"Updated static content cache with {item.Id} - {item.Url}");
+                            logger.LogError($"Static content cache create error status {result} from {item.Id} - {item.Url}");
                         }
+                    }
+                    else
+                    {
+                        logger.LogInformation($"Updated static content cache with {item.Id} - {item.Url}");
                     }
                 }
                 catch (Exception ex)
