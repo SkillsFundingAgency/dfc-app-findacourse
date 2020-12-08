@@ -183,8 +183,7 @@ namespace DFC.App.FindACourse.Controllers
                 {
                     if (item.Description.Length > 220)
                     {
-                        item.Description = item.Description.Substring(0, 200);
-                        item.Description += "...";
+                        item.Description = item.Description.Substring(0, 200) + "...";
                     }
                 }
 
@@ -205,7 +204,7 @@ namespace DFC.App.FindACourse.Controllers
             }
 
             var viewAsString = await this.RenderViewAsync("~/Views/Course/_results.cshtml", model, true).ConfigureAwait(false);
-            return new AjaxModel { HTML = viewAsString, Count = model.Results.ResultProperties.TotalResultCount, IsPostcode = isPostcode };
+            return new AjaxModel { HTML = viewAsString, Count = model.Results?.ResultProperties != null ? model.Results.ResultProperties.TotalResultCount : 0, IsPostcode = isPostcode };
         }
 
         [HttpGet]
@@ -453,12 +452,14 @@ namespace DFC.App.FindACourse.Controllers
                 sideBarViewModel.CourseStudyTime.SelectedIds = model.SideBar.CourseStudyTime.SelectedIds;
             }
 
-            foreach (var item in model.Results.Courses)
+            if (model.Results?.Courses != null && model.Results.Courses.Any())
             {
-                if (item.Description.Length > 220)
+                foreach (var item in model.Results.Courses)
                 {
-                    item.Description = item.Description.Substring(0, 200);
-                    item.Description += "...";
+                    if (item.Description.Length > 220)
+                    {
+                        item.Description = item.Description.Substring(0, 200) + "...";
+                    }
                 }
             }
 
@@ -553,7 +554,7 @@ namespace DFC.App.FindACourse.Controllers
             return sideBarViewModel;
         }
 
-        private static List<T> ConvertToEnumList<T>(List<string> listToConvert) 
+        private static List<T> ConvertToEnumList<T>(List<string> listToConvert)
             where T : struct
         {
             var returnList = new List<T>();
