@@ -30,9 +30,9 @@ namespace DFC.App.FindACourse.UI.FunctionalTests
         private ScenarioContext Context { get; set; }
 
         [BeforeScenario(Order = 0)]
-        public void SetObjectContext(ObjectContext objectContext)
+        public void SetObjectContext()
         {
-            this.Context.SetObjectContext(objectContext);
+            this.Context.SetObjectContext(new ObjectContext());
         }
 
         [BeforeScenario(Order = 1)]
@@ -45,14 +45,14 @@ namespace DFC.App.FindACourse.UI.FunctionalTests
         public void SetApplicationUrl()
         {
             string appBaseUrl = this.Context.GetSettingsLibrary<AppSettings>().AppSettings.AppBaseUrl.ToString();
-            this.Context.GetSettingsLibrary<AppSettings>().AppSettings.AppBaseUrl = new Uri($"{appBaseUrl}contact-us");
+            this.Context.GetSettingsLibrary<AppSettings>().AppSettings.AppBaseUrl = new Uri($"{appBaseUrl}find-a-course");
         }
 
         [BeforeScenario(Order = 3)]
         public void ConfigureBrowserStack()
         {
             this.Context.GetSettingsLibrary<AppSettings>().BrowserStackSettings.Name = this.Context.ScenarioInfo.Title;
-            this.Context.GetSettingsLibrary<AppSettings>().BrowserStackSettings.Build = "Contact us";
+            this.Context.GetSettingsLibrary<AppSettings>().BrowserStackSettings.Build = "Find a course";
         }
 
         [BeforeScenario(Order = 4)]
