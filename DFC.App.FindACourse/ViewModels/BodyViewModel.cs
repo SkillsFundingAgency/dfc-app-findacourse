@@ -33,5 +33,7 @@ namespace DFC.App.FindACourse.ViewModels
         public CourseSearchFilters CourseSearchFilters { get; set; }
 
         public CourseSearchOrderBy CourseSearchOrderBy { get; set; }
+
+        public bool IsResultBody { get; set; }
     }
 }
