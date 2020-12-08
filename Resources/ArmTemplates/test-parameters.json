@@ -52,6 +52,9 @@
         },
         "enableAlerts": {
             "value": false
+        },
+        "CmsApiClientOptionsBaseAddress": {
+            "value": "https://example.net/"
         }
     }
 }
