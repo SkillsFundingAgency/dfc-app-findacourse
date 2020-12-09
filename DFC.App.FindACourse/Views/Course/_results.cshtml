@@ -19,9 +19,10 @@
     var parameters = $"searchTerm={searchTerm}&town={town}&courseType={courseType}&courseHours={courseHours}&studyTime={courseStudyTime}&startDate={courseStartDate}&distance={distance}&filtera={filterA}";
     var nextLinkParams = $"{parameters}&page={nextPage}";
     var previousLinkParams = $"{parameters}&page={previousPage}";
+    var id = Model.IsResultBody ? "fac-result-list-Result" : "fac-result-list";
 }
 
-<div id="fac-result-list">
+<div id="@id">
     @if (Model.Results != null)
     {
         if (Model.Results.Courses.Count() > 0)
