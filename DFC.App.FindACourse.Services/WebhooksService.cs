@@ -1,15 +1,11 @@
 ﻿using DFC.App.FindACourse.Data.Contracts;
 using DFC.App.FindACourse.Data.Enums;
 using DFC.App.FindACourse.Data.Models;
-using DFC.Compui.Cosmos.Contracts;
-using DFC.Compui.Cosmos.Models;
 using DFC.Content.Pkg.Netcore.Data.Contracts;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Net;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -48,19 +44,19 @@ namespace DFC.App.FindACourse.Services
             switch (webhookCacheOperation)
             {
                 case WebhookCacheOperation.Delete:
-                        return await DeleteContentItemAsync(sharedContentId).ConfigureAwait(false);
+                    return await DeleteContentItemAsync(sharedContentId).ConfigureAwait(false);
 
                 case WebhookCacheOperation.CreateOrUpdate:
-                        if (!Uri.TryCreate(apiEndpoint, UriKind.Absolute, out Uri? url))
-                        {
-                            throw new InvalidDataException($"Invalid Api url '{apiEndpoint}' received for Event Id: {eventId}");
-                        }
+                    if (!Uri.TryCreate(apiEndpoint, UriKind.Absolute, out Uri? url))
+                    {
+                        throw new InvalidDataException($"Invalid Api url '{apiEndpoint}' received for Event Id: {eventId}");
+                    }
 
-                        return await ProcessContentAsync(sharedContentId, CancellationToken.None).ConfigureAwait(false);
+                    return await ProcessContentAsync(sharedContentId, CancellationToken.None).ConfigureAwait(false);
 
                 default:
-                        logger.LogError($"Event Id: {eventId} got unknown cache operation - {webhookCacheOperation}");
-                        return HttpStatusCode.BadRequest;
+                    logger.LogError($"Event Id: {eventId} got unknown cache operation - {webhookCacheOperation}");
+                    return HttpStatusCode.BadRequest;
             }
         }
 
@@ -100,12 +96,12 @@ namespace DFC.App.FindACourse.Services
         {
             _ = item ?? throw new ArgumentNullException(nameof(item));
 
-            item.PartitionKey = "/";
-            item.CanonicalName = item.skos_prefLabel.Replace(" ", "").ToLower();
             try
             {
                 logger.LogInformation($"Updating static content cache with {item.Id} - {item.Url}");
 
+                item.PartitionKey = item.PageLocation;
+                item.CanonicalName = item.skos_prefLabel.Replace(" ", "-").ToLower();
                 var result = await eventMessageService.UpdateAsync(item).ConfigureAwait(false);
 
                 if (result == HttpStatusCode.NotFound)
