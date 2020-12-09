@@ -70,6 +70,9 @@
         },
         "SubscriptionSettingsEndpoint": {
             "value": "__SubscriptionSettingsEndpoint__"
+        },
+        "SubscriptionSettingsSubscriptionServiceEndpoint": {
+            "value": "__SubscriptionSettingsSubscriptionServiceEndpoint__"
         }
     }
 }

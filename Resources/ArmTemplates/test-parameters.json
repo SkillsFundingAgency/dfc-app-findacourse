@@ -64,6 +64,9 @@
         },
         "SubscriptionSettingsEndpoint": {
             "value": "https://example.net/"
+        },
+        "SubscriptionSettingsSubscriptionServiceEndpoint": {
+            "value": "https://example.net/"
         }
     }
 }
