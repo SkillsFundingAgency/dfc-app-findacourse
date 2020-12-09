@@ -55,6 +55,12 @@
         },
         "CmsApiClientOptionsBaseAddress": {
             "value": "https://example.net/"
+        },
+        "SubscriptionSettingsFilterIncludeEventTypes3": {
+            "value": "foo"
+        },
+        "SubscriptionSettingsFilterIncludeEventTypes4": {
+            "value": "bar"
         }
     }
 }

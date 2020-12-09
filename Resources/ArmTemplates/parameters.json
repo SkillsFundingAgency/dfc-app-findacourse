@@ -61,6 +61,12 @@
         },
         "CmsApiClientOptionsBaseAddress": {
             "value": "__CmsApiClientOptionsBaseAddress__"
+        },
+        "SubscriptionSettingsFilterIncludeEventTypes3": {
+            "value": "__SubscriptionSettingsFilterIncludeEventTypes3__"
+        },
+        "SubscriptionSettingsFilterIncludeEventTypes4": {
+            "value": "__SubscriptionSettingsFilterIncludeEventTypes4__"
         }
     }
 }
