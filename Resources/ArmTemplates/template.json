@@ -78,6 +78,9 @@
         },
         "SubscriptionSettingsFilterIncludeEventTypes4": {
             "type": "string"
+        },
+        "SubscriptionSettingsEndpoint": {
+            "type": "string"
         }
     },
     "variables": {
@@ -260,7 +263,7 @@
                             },
                             {
                                 "name": "SubscriptionSettings__Endpoint",
-                                "value": "[concat(parameters('courseProviderServiceEndpoint'),'api/webhook/ReceiveEvents?subscription-key=',parameters('courseProviderServiceApiKey'))]"
+                                "value": "[Parameters('SubscriptionSettingsEndpoint')]"
                             },
 							{
                                 "name": "SubscriptionSettings__SubscriptionRegistrationDelay",

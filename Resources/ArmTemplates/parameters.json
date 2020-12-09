@@ -67,6 +67,9 @@
         },
         "SubscriptionSettingsFilterIncludeEventTypes4": {
             "value": "__SubscriptionSettingsFilterIncludeEventTypes4__"
+        },
+        "SubscriptionSettingsEndpoint": {
+            "value": "__SubscriptionSettingsEndpoint__"
         }
     }
 }
