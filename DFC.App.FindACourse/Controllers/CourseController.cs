@@ -172,6 +172,7 @@ namespace DFC.App.FindACourse.Controllers
                 IsNewPage = true,
                 IsTest = paramValues.IsTest,
                 SelectedDistanceValue = paramValues.Distance,
+                IsResultBody = true
             };
 
             var newBodyViewModel = GenerateModel(model);
