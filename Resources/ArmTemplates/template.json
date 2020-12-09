@@ -72,6 +72,12 @@
         },
         "CmsApiClientOptionsBaseAddress": {
             "type": "string"
+        },
+        "SubscriptionSettingsFilterIncludeEventTypes3": {
+            "type": "string"
+        },
+        "SubscriptionSettingsFilterIncludeEventTypes4": {
+            "type": "string"
         }
     },
     "variables": {
@@ -80,6 +86,7 @@
         "appServicePlanResourceGroup": "[concat(parameters('resourcePrefix'),'-rg')]",
         "buildingBlocksDfcBaseUrl": "https://raw.githubusercontent.com/SkillsFundingAgency/dfc-devops/master/ArmTemplates/",
         "facCosmosAuditCollectionPartitionKey": "/PartitionKey",
+        "facCosmosStaticContentCollectionPartitionKey": "/PartitionKey",
         "cosmosDbDatabaseName": "dfc-app-findacourse",
         "staticContentDatabase": "dfc-app-findacourse",
         "cosmosDbEndpoint": "[concat('https://', parameters('cosmosDbName'), '.documents.azure.com:443/')]",
@@ -276,6 +283,14 @@
                                 "value": "deleted"
                             },
                             {
+                                "name": "SubscriptionSettings__Filter__IncludeEventTypes__3",
+                                "value": "[Parameters('SubscriptionSettingsFilterIncludeEventTypes3')]"
+                            },
+                            {
+                                "name": "SubscriptionSettings__Filter__IncludeEventTypes__4",
+                                "value": "[Parameters('SubscriptionSettingsFilterIncludeEventTypes4')]"
+                            },
+                            {
                                 "name": "SubscriptionSettings__Filter__PropertyContainsFilters__0__Key",
                                 "value": "subject"
                             },
@@ -301,7 +316,7 @@
                             },
                             {
                                 "name": "CmsApiClientOptions__StaticContentEndpoint",
-                                "value": "api/execute/sharedcontent/"
+                                "value": "/sharedcontent/"
                             },
                             {
                                 "name": "CmsApiClientOptions__ContentIds",
@@ -342,26 +357,6 @@
                             {
                                 "name": "Configuration__CosmosDbConnections__StaticContent__PartitionKey",
                                 "value": "[variables('facCosmosAuditCollectionPartitionKey')]"
-                            },
-                            {
-                                "name": "EventGridSubscriptionModel__Endpoint",
-                                "value": "[concat(parameters('courseProviderServiceEndpoint'),'api/webhook/ReceiveEvents?subscription-key=',parameters('courseProviderServiceApiKey'))]"
-                            },
-                            {
-                                "name": "EventGridSubscriptionModel__Filter__BeginsWith",
-                                "value": "/jobprofile/"
-                            },
-                            {
-                                "name": "EventGridSubscriptionModel__Filter__IncludeEventTypes__0",
-                                "value": "published"
-                            },
-                            {
-                                "name": "EventGridSubscriptionModel__Filter__IncludeEventTypes__1",
-                                "value": "unpublished"
-                            },
-                            {
-                                "name": "EventGridSubscriptionModel__Filter__IncludeEventTypes__2",
-                                "value": "deleted"
                             }
                         ]
                     }
@@ -427,6 +422,39 @@
                     },
                     "partitionKey": {
                         "value": "[variables('facCosmosAuditCollectionPartitionKey')]"
+                    }
+                }
+            },
+            "dependsOn": [
+                "[variables('CosmosDbDatabaseName')]"
+            ]
+        },
+        {
+            "apiVersion": "2017-05-10",
+            "name": "[parameters('facCosmosStaticContentCollectionName')]",
+            "type": "Microsoft.Resources/deployments",
+            "resourceGroup": "[parameters('CosmosDbResourceGroup')]",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(variables('BuildingBlocksDfcBaseUrl'), 'CosmosDb/cosmos-collection.json')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "accountName": {
+                        "value": "[parameters('CosmosDbName')]"
+                    },
+                    "databaseName": {
+                        "value": "[variables('CosmosDbDatabaseName')]"
+                    },
+                    "collectionName": {
+                        "value": "[parameters('facCosmosStaticContentCollectionName')]"
+                    },
+                    "provisionRequestUnits": {
+                        "value": false
+                    },
+                    "partitionKey": {
+                        "value": "[variables('facCosmosStaticContentCollectionPartitionKey')]"
                     }
                 }
             },
