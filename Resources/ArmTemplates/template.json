@@ -81,6 +81,9 @@
         },
         "SubscriptionSettingsEndpoint": {
             "type": "string"
+        },
+        "SubscriptionSettingsSubscriptionServiceEndpoint": {
+            "type": "string"
         }
     },
     "variables": {
@@ -271,7 +274,7 @@
                             },
                             {
                                 "name": "SubscriptionSettings__SubscriptionServiceEndpoint",
-                                "value": "[concat(parameters('courseProviderServiceEndpoint'),'api/Execute')]"
+                                "value": "[Parameters('SubscriptionSettingsSubscriptionServiceEndpoint')]"
                             },
                             {
                                 "name": "SubscriptionSettings__Filter__IncludeEventTypes__0",
