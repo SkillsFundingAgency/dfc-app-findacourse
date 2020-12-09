@@ -33,7 +33,7 @@
             "value": "a-test-collection"
         },
         "facCosmosStaticContentCollectionName": {
-            "value": "a-test-collection"
+            "value": "another-test-collection"
         },
         "facAppDatabaseNeedsCreation": {
             "value": true
