@@ -1,14 +1,13 @@
 ﻿using AutoMapper;
-using DFC.App.FindACourse.Cache;
 using DFC.App.FindACourse.Data.Contracts;
 using DFC.App.FindACourse.Data.Domain;
 using DFC.App.FindACourse.Data.Models;
-using DFC.App.FindACourse.EventProcessorService;
 using DFC.App.FindACourse.Framework;
 using DFC.App.FindACourse.HostedServices;
 using DFC.App.FindACourse.Repository;
 using DFC.App.FindACourse.Services;
 using DFC.Compui.Cosmos;
+using DFC.Compui.Cosmos.Contracts;
 using DFC.Compui.Subscriptions.Pkg.Netstandard.Extensions;
 using DFC.Compui.Telemetry;
 using DFC.Content.Pkg.Netcore.Data.Contracts;
@@ -64,6 +63,7 @@ namespace DFC.App.FindACourse
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            services.AddAutoMapper(typeof(Startup).Assembly, typeof(DFC.FindACourseClient.FindACourseProfile).Assembly);
             services.AddScoped<ICorrelationIdProvider, CorrelationIdProvider>();
             services.AddScoped<IFindACourseService, FindACourseService>();
             services.AddScoped<IFindACourseRepository, FindACourseRepository>();
@@ -84,11 +84,8 @@ namespace DFC.App.FindACourse
             services.AddFindACourseServicesWithoutFaultHandling(courseSearchClientSettings);
 
             services.AddSingleton(Configuration.GetSection(nameof(CmsApiClientOptions)).Get<CmsApiClientOptions>() ?? new CmsApiClientOptions());
-            var staticContentDbConnection = Configuration.GetSection(StaticCosmosDbConfigAppSettings).Get<StaticCosmosDbConnection>();
-            services.AddSingleton(staticContentDbConnection);
-            services.AddSingleton<IStaticCosmosRepository<StaticContentItemModel>, StaticCosmosRepository<StaticContentItemModel>>();
-            services.AddTransient<IEventMessageService<StaticContentItemModel>, EventMessageService<StaticContentItemModel>>();
-            services.AddScoped<ISharedContentService, SharedContentService>();
+            var staticContentDbConnection = Configuration.GetSection(StaticCosmosDbConfigAppSettings).Get<CosmosDbConnection>();
+            services.AddDocumentServices<StaticContentItemModel>(staticContentDbConnection, env.IsDevelopment());
             services.AddTransient<IStaticContentReloadService, StaticContentReloadService>();
             services.AddTransient<IApiService, ApiService>();
             services.AddTransient<ICmsApiService, CmsApiService>();
@@ -96,11 +93,6 @@ namespace DFC.App.FindACourse
             services.AddTransient<IApiCacheService, ApiCacheService>();
             services.AddTransient<IWebhooksService, WebhooksService>();
             services.AddTransient<MemoryCache>();
-            services.AddSingleton<ICacheService, CacheService>();
-
-            var cosmosDbConnectionStaticPages = Configuration.GetSection(StaticCosmosDbConfigAppSettings).Get<Compui.Cosmos.Contracts.CosmosDbConnection>();
-            services.AddContentPageServices<StaticContentItemModel>(cosmosDbConnectionStaticPages, env.IsDevelopment());
-            services.AddApplicationInsightsTelemetry();
 
             var policyRegistry = services.AddPolicyRegistry();
             var policyOptions = Configuration.GetSection(CourseSearchClientPolicySettings).Get<PolicyOptions>() ?? new PolicyOptions();
@@ -113,17 +105,6 @@ namespace DFC.App.FindACourse
             services.AddApiServices(Configuration, policyRegistry);
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Latest);
-            services.AddSingleton(serviceProvider =>
-            {
-                return new MapperConfiguration(cfg =>
-                {
-                    cfg.AddProfiles(
-                        new List<Profile>
-                        {
-                            new FindACourseProfile(),
-                        });
-                }).CreateMapper();
-            });
         }
 
         private static void AddPolicies(IPolicyRegistry<string> policyRegistry)
@@ -134,7 +115,7 @@ namespace DFC.App.FindACourse
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IMapper mapper)
         {
             if (env.IsDevelopment())
             {
@@ -148,7 +129,6 @@ namespace DFC.App.FindACourse
                 app.UseHsts();
             }
 
-            //   app.UseCors();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
