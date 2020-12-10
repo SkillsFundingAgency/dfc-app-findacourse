@@ -55,7 +55,7 @@
         {
             <tr class="govuk-table__row">
                 <th class="govuk-table__header" scope="row">Course start date</th>
-                <td class="govuk-table__cell"><span id="start-date">@Model.CourseDetails.StartDate.Value.ToLongDateString()</span></td>
+                <td class="govuk-table__cell"><span id="start-date">@Model.CourseDetails.StartDate.Value.ToFormattedString()</span></td>
             </tr>
         }
         <tr class="govuk-table__row">
@@ -156,16 +156,18 @@
             </tr>
             <tr class="govuk-table__row">
                 <td class="govuk-table__cell"><span id="venue-name">@Model.CourseDetails.VenueDetails.VenueName</span></td>
-                @if (Model.CourseDetails.StartDate != null)
-                {
-                    <td class="govuk-table__cell"><span id="startdate">@Model.CourseDetails.StartDate.Value.ToLongDateString()</span></td>
-                }
-                @if (Model.CourseDetails.VenueDetails.Website != null)
-                {
-                    <td class="govuk-table__cell">
+                <td class="govuk-table__cell">
+                    @if (Model.CourseDetails.StartDate != null)
+                    {
+                        <span id="startdate">@Model.CourseDetails.StartDate.Value.ToFormattedString()</span>
+                    }
+                </td>
+                <td class="govuk-table__cell">
+                    @if (Model.CourseDetails.VenueDetails.Website != null)
+                    {
                         <a class="govuk-link" href="@Model.CourseDetails.VenueDetails.Website" id="website">View course</a>
-                    </td>
-                }
+                    }
+                </td>
             </tr>
         </tbody>
     </table>

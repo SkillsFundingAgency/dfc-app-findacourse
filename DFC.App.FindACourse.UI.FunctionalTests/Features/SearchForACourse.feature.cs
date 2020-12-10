@@ -123,9 +123,6 @@ this.ScenarioInitialize(scenarioInfo);
 #line 11
  testRunner.Then("search results are displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-#line 12
- testRunner.And("all results contain the term computer in their name", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line hidden
             }
             this.ScenarioCleanup();
         }
