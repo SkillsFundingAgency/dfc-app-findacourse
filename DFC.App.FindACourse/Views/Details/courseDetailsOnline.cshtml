@@ -54,10 +54,13 @@
                         }
                     </td>
                 </tr>
+            @if (!string.IsNullOrEmpty(Model.CourseDetails.CostDescription))
+            {
                 <tr class="govuk-table__row">
                     <th class="govuk-table__header" scope="row">Cost description</th>
-                    <td class="govuk-table__cell"><span id="additonal-price">@Model.CourseDetails.AdditionalPrice</span></td>
+                    <td class="govuk-table__cell"><span id="additonal-price">@Model.CourseDetails.CostDescription</span></td>
                 </tr>
+            }
             </tbody>
         </table>
         @if (!string.IsNullOrWhiteSpace(Model.CourseDetails.Description))

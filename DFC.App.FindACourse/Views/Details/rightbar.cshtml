@@ -10,10 +10,13 @@
             <span class="govuk-!-font-weight-bold">Website:</span>
             <a class="govuk-link" href="@Model.CourseDetails.ProviderDetails.Website">@Model.CourseDetails.ProviderDetails.Website</a>
         </li>
-        <li>
-            <span class="govuk-!-font-weight-bold">Email:</span>
-            <a class="govuk-link" href="mailto:@Model.CourseDetails.ProviderDetails.EmailAddress" aria-label="EmailTo">@Model.CourseDetails.ProviderDetails.EmailAddress</a>
-        </li>
+        @if (!string.IsNullOrEmpty(Model.CourseDetails.ProviderDetails.EmailAddress))
+        {
+            <li>
+                <span class="govuk-!-font-weight-bold">Email:</span>
+                <a class="govuk-link" href="mailto:@Model.CourseDetails.ProviderDetails.EmailAddress" aria-label="EmailTo">@Model.CourseDetails.ProviderDetails.EmailAddress</a>
+            </li>
+        }
         <li>
             <span class="govuk-!-font-weight-bold">Phone:</span> @Model.CourseDetails.ProviderDetails.PhoneNumber
         </li>
