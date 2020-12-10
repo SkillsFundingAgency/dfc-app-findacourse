@@ -37,7 +37,7 @@
                     <td class="govuk-table__cell">
                         @if (Model.CourseDetails.StartDate != null)
                         {
-                            <span id="start-date">@Model.CourseDetails.StartDate.Value.ToLongDateString()</span>
+                            <span id="start-date">@Model.CourseDetails.StartDate.Value.ToFormattedString()</span>
                         }
                     </td>
                 </tr>
