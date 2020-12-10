@@ -1,34 +1,29 @@
 ﻿using DFC.App.FindACourse.Data.Contracts;
-using DFC.Content.Pkg.Netcore.Data.Contracts;
-using Newtonsoft.Json;
+using DFC.Compui.Cosmos.Contracts;
 using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace DFC.App.FindACourse.Data.Models
 {
-    public class StaticContentItemModel : Compui.Cosmos.Models.ContentPageModel, IApiDataModel, IDataModel
+    public class StaticContentItemModel : DocumentModel, ICachedModel
     {
-        [JsonProperty(PropertyName = "skos__prefLabel")]
-        public string skos_prefLabel { get; set; }
+        public const string DefaultPartitionKey = "shared-content";
 
-        [JsonProperty(PropertyName = "uri")]
+        public override string? PartitionKey { get; set; } = DefaultPartitionKey;
+
+        [Required]
+        public string Title { get; set; }
+
+        [Required]
         public Uri Url { get; set; }
 
-        //[JsonProperty(PropertyName = "id")]
-        //public string Id { get; set; }
+        [Required]
+        public string Content { get; set; }
 
-        [JsonProperty(PropertyName = "htmlbody_Html")]
-        public string Html_Content { get; set; }
+        public DateTime LastReviewed { get; set; }
 
-        public DateTime? CreatedDate { get; set; }
+        public DateTime CreatedDate { get; set; }
 
-        [JsonProperty(PropertyName = "ModifiedDate")]
-        public DateTime Published { get; set; }
-
-        public override string PageLocation { get; set; } = "/shared-content";
-
-        Guid IDataModel.DocumentId { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        string IDataModel.Etag { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
-        string IDataModel.PartitionKey => throw new NotImplementedException();
+        public DateTime LastCached { get; set; } = DateTime.UtcNow;
     }
 }

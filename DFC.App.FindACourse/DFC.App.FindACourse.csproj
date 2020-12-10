@@ -35,7 +35,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DFC.App.FindACourse.EventProcessorService\DFC.App.FindACourse.EventProcessorService.csproj" />
     <ProjectReference Include="..\DFC.App.FindACourse.Services\DFC.App.FindACourse.Services.csproj" />
     <ProjectReference Include="..\MVCControls\Gds.CheckboxList.csproj" />
   </ItemGroup>

@@ -1,12 +1,13 @@
 ﻿using DFC.App.FindACourse.Data.Contracts;
 using DFC.App.FindACourse.Data.Models;
+using DFC.Compui.Cosmos.Contracts;
 using DFC.Content.Pkg.Netcore.Data.Contracts;
 using DFC.Content.Pkg.Netcore.Data.Models.ClientOptions;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -16,20 +17,20 @@ namespace DFC.App.FindACourse.Services
     {
         private readonly ILogger<StaticContentReloadService> logger;
         private readonly AutoMapper.IMapper mapper;
-        private readonly IEventMessageService<StaticContentItemModel> eventMessageService;
+        private readonly IDocumentService<StaticContentItemModel> staticContentDocumentService;
         private readonly ICmsApiService cmsApiService;
         private readonly CmsApiClientOptions cmsApiClientOptions;
 
         public StaticContentReloadService(
             ILogger<StaticContentReloadService> logger,
             AutoMapper.IMapper mapper,
-            IEventMessageService<StaticContentItemModel> eventMessageService,
+            IDocumentService<StaticContentItemModel> staticContentDocumentService,
             ICmsApiService cmsApiService,
             CmsApiClientOptions cmsApiClientOptions)
         {
             this.logger = logger;
             this.mapper = mapper;
-            this.eventMessageService = eventMessageService;
+            this.staticContentDocumentService = staticContentDocumentService;
             this.cmsApiService = cmsApiService;
             this.cmsApiClientOptions = cmsApiClientOptions;
         }
@@ -38,103 +39,77 @@ namespace DFC.App.FindACourse.Services
         {
             try
             {
-                logger.LogInformation("Reload static content started");
-
-                var contentIds = cmsApiClientOptions.ContentIds.Split(",", StringSplitOptions.RemoveEmptyEntries);
-                var apiDataModels = new List<StaticContentItemModel>();
-
-                foreach (var contentId in contentIds)
-                {
-                    var apiDataModel = await cmsApiService.GetItemAsync<StaticContentItemModel>("sharedcontent", new Guid(contentId)).ConfigureAwait(false);
-
-                    if (apiDataModel != null)
-                    {
-                        apiDataModels.Add(apiDataModel);
-                    }
-                }
+                logger.LogInformation("Reload All shared-content cache started");
 
                 if (stoppingToken.IsCancellationRequested)
                 {
-                    logger.LogWarning("Reload static content cancelled");
+                    logger.LogWarning("Reload shared-content cache cancelled");
 
                     return;
                 }
 
-                if (apiDataModels.Any())
-                {
-                    await ProcessContentAsync(apiDataModels, stoppingToken).ConfigureAwait(false);
+                await ReloadSharedContent(stoppingToken).ConfigureAwait(false);
 
-                    if (stoppingToken.IsCancellationRequested)
-                    {
-                        logger.LogWarning("Reload static content cancelled");
-
-                        return;
-                    }
-                }
-
-                logger.LogInformation("Reload static content completed");
+                logger.LogInformation("Reload All shared-content cache completed");
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Error in static content reload");
+                logger.LogError(ex, "Error in shared-content cache reload");
+                throw;
             }
         }
 
-        public async Task ProcessContentAsync(List<StaticContentItemModel> sharedContent, CancellationToken stoppingToken)
+        private async Task ReloadSharedContent(CancellationToken stoppingToken)
         {
-            logger.LogInformation("Process summary list started");
+            var contentIds = cmsApiClientOptions.ContentIds.Split(",", StringSplitOptions.RemoveEmptyEntries);
 
-            if (stoppingToken.IsCancellationRequested)
+            foreach (var contentId in contentIds)
             {
-                logger.LogWarning("Process summary list cancelled");
+                if (stoppingToken.IsCancellationRequested)
+                {
+                    logger.LogWarning("Reload shared-content cache cancelled");
 
-                return;
+                    return;
+                }
+
+                var apiDataModel = await cmsApiService.GetItemAsync<StaticContentItemApiDataModel>("sharedcontent", new Guid(contentId)).ConfigureAwait(false);
+
+                if (apiDataModel == null)
+                {
+                    logger.LogError($"Shared-content: {contentId} not found in API response");
+                }
+
+                var staticContentItemModel = mapper.Map<StaticContentItemModel>(apiDataModel);
+
+                if (!TryValidateModel(staticContentItemModel))
+                {
+                    logger.LogError($"Validation failure for {staticContentItemModel.Title} - {staticContentItemModel.Url}");
+
+                    return;
+                }
+
+                await staticContentDocumentService.UpsertAsync(staticContentItemModel).ConfigureAwait(false);
             }
-
-            await GetAndSaveItemAsync(sharedContent, stoppingToken).ConfigureAwait(false);
-
-            logger.LogInformation("Process summary list completed");
         }
 
-        public async Task GetAndSaveItemAsync(List<StaticContentItemModel> items, CancellationToken stoppingToken)
+        private bool TryValidateModel<TModel>(TModel model)
+            where TModel : class, ICachedModel
         {
-            _ = items ?? throw new ArgumentNullException(nameof(items));
+            _ = model ?? throw new ArgumentNullException(nameof(model));
 
-            foreach (var item in items)
+            var validationContext = new ValidationContext(model, null, null);
+            var validationResults = new List<ValidationResult>();
+            var isValid = Validator.TryValidateObject(model, validationContext, validationResults, true);
+
+            if (!isValid && validationResults.Any())
             {
-                try
+                foreach (var validationResult in validationResults)
                 {
-                    logger.LogInformation($"Updating static content cache with {item.Id} - {item.Url}");
-
-                    item.PartitionKey = item.PageLocation;
-                    item.CanonicalName = item.skos_prefLabel.Replace(" ", "-").ToLower();
-                    var result = await eventMessageService.UpdateAsync(item).ConfigureAwait(false);
-
-                    if (result == HttpStatusCode.NotFound)
-                    {
-                        logger.LogInformation($"Does not exist, creating static content cache with {item.Id} - {item.Url}");
-
-                        result = await eventMessageService.CreateAsync(item).ConfigureAwait(false);
-
-                        if (result == HttpStatusCode.OK)
-                        {
-                            logger.LogInformation($"Created static content cache with {item.Id} - {item.Url}");
-                        }
-                        else
-                        {
-                            logger.LogError($"Static content cache create error status {result} from {item.Id} - {item.Url}");
-                        }
-                    }
-                    else
-                    {
-                        logger.LogInformation($"Updated static content cache with {item.Id} - {item.Url}");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    logger.LogError(ex, $"Error in get and save for {item?.Id} - {item?.Url}");
+                    logger.LogError($"Error validating {model.Title} - {model.Url}: {string.Join(",", validationResult.MemberNames)} - {validationResult.ErrorMessage}");
                 }
             }
+
+            return isValid;
         }
     }
 }
