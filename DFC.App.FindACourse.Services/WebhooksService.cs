@@ -2,15 +2,14 @@
 using DFC.App.FindACourse.Data.Enums;
 using DFC.App.FindACourse.Data.Models;
 using DFC.Compui.Cosmos.Contracts;
-using DFC.Compui.Cosmos.Models;
 using DFC.Content.Pkg.Netcore.Data.Contracts;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.IO;
+using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace DFC.App.FindACourse.Services
@@ -19,119 +18,87 @@ namespace DFC.App.FindACourse.Services
     {
         private readonly ILogger<WebhooksService> logger;
         private readonly AutoMapper.IMapper mapper;
-        private readonly IEventMessageService<StaticContentItemModel> eventMessageService;
         private readonly ICmsApiService cmsApiService;
-        private readonly IStaticContentReloadService staticContentReloadService;
-        private readonly IContentCacheService contentCacheService;
-        private readonly ISharedContentService sharedContentService;
+        private readonly IDocumentService<StaticContentItemModel> configurationSetDocumentService;
 
         public WebhooksService(
             ILogger<WebhooksService> logger,
             AutoMapper.IMapper mapper,
-            IEventMessageService<StaticContentItemModel> eventMessageService,
             ICmsApiService cmsApiService,
-            IStaticContentReloadService staticContentReloadService,
-            IContentCacheService contentCacheService,
-            ISharedContentService sharedContentService)
+            IDocumentService<StaticContentItemModel> configurationSetDocumentService)
         {
             this.logger = logger;
             this.mapper = mapper;
-            this.eventMessageService = eventMessageService;
             this.cmsApiService = cmsApiService;
-            this.staticContentReloadService = staticContentReloadService;
-            this.contentCacheService = contentCacheService;
-            this.sharedContentService = sharedContentService;
+            this.configurationSetDocumentService = configurationSetDocumentService;
         }
 
-        public async Task<HttpStatusCode> ProcessMessageAsync(WebhookCacheOperation webhookCacheOperation, Guid eventId, Guid sharedContentId, string apiEndpoint)
+        public async Task<HttpStatusCode> ProcessMessageAsync(WebhookCacheOperation webhookCacheOperation, Guid eventId, Guid contentId, string apiEndpoint)
         {
             switch (webhookCacheOperation)
             {
                 case WebhookCacheOperation.Delete:
-                        return await DeleteContentItemAsync(sharedContentId).ConfigureAwait(false);
+                    return await DeleteContentItemAsync(contentId).ConfigureAwait(false);
 
                 case WebhookCacheOperation.CreateOrUpdate:
-                        if (!Uri.TryCreate(apiEndpoint, UriKind.Absolute, out Uri? url))
-                        {
-                            throw new InvalidDataException($"Invalid Api url '{apiEndpoint}' received for Event Id: {eventId}");
-                        }
+                    if (!Uri.TryCreate(apiEndpoint, UriKind.Absolute, out Uri? url))
+                    {
+                        throw new InvalidDataException($"Invalid Api url '{apiEndpoint}' received for Event Id: {eventId}");
+                    }
 
-                        return await ProcessContentAsync(sharedContentId, CancellationToken.None).ConfigureAwait(false);
+                    return await ProcessContentItemAsync(url).ConfigureAwait(false);
 
                 default:
-                        logger.LogError($"Event Id: {eventId} got unknown cache operation - {webhookCacheOperation}");
-                        return HttpStatusCode.BadRequest;
+                    logger.LogError($"Event Id: {eventId} got unknown cache operation - {webhookCacheOperation}");
+                    return HttpStatusCode.BadRequest;
             }
         }
 
-        public async Task<HttpStatusCode> DeleteContentItemAsync(Guid contentItemId)
+        public async Task<HttpStatusCode> ProcessContentItemAsync(Uri url)
         {
-            var sharedContent = await sharedContentService.GetById(contentItemId).ConfigureAwait(false);
+            var apiDataModel = await cmsApiService.GetItemAsync<StaticContentItemApiDataModel>(url).ConfigureAwait(false);
+            var staticContentItemModel = mapper.Map<StaticContentItemModel>(apiDataModel);
 
-            if (sharedContent != null)
+            if (staticContentItemModel == null)
             {
-                // Return httpstatuscode
-                return await sharedContentService.RemoveContentItem(contentItemId).ConfigureAwait(false);
-            }
-            return HttpStatusCode.NoContent;
-        }
-
-        public async Task<HttpStatusCode> ProcessContentAsync(Guid sharedContentId, CancellationToken stoppingToken)
-        {
-            var sharedContent = await sharedContentService.GetById(sharedContentId).ConfigureAwait(false);
-
-            logger.LogInformation("Process summary list started");
-
-            contentCacheService.Clear();
-
-            if (stoppingToken.IsCancellationRequested)
-            {
-                logger.LogWarning("Process summary list cancelled");
-
-                return HttpStatusCode.NotAcceptable;
+                return HttpStatusCode.NoContent;
             }
 
-            await GetAndSaveItemAsync(sharedContent, stoppingToken).ConfigureAwait(false);
+            if (!TryValidateModel(staticContentItemModel))
+            {
+                return HttpStatusCode.BadRequest;
+            }
 
-            return HttpStatusCode.OK;
+            var contentResult = await configurationSetDocumentService.UpsertAsync(staticContentItemModel).ConfigureAwait(false);
+
+            return contentResult;
         }
 
-        public async Task GetAndSaveItemAsync(StaticContentItemModel item, CancellationToken stoppingToken)
+        public async Task<HttpStatusCode> DeleteContentItemAsync(Guid contentId)
         {
-            _ = item ?? throw new ArgumentNullException(nameof(item));
+            var result = await configurationSetDocumentService.DeleteAsync(contentId).ConfigureAwait(false);
 
-            item.PartitionKey = "/";
-            item.CanonicalName = item.skos_prefLabel.Replace(" ", "").ToLower();
-            try
+            return result ? HttpStatusCode.OK : HttpStatusCode.NoContent;
+        }
+
+        public bool TryValidateModel<TModel>(TModel model)
+            where TModel : class, ICachedModel
+        {
+            _ = model ?? throw new ArgumentNullException(nameof(model));
+
+            var validationContext = new ValidationContext(model, null, null);
+            var validationResults = new List<ValidationResult>();
+            var isValid = Validator.TryValidateObject(model, validationContext, validationResults, true);
+
+            if (!isValid && validationResults.Any())
             {
-                logger.LogInformation($"Updating static content cache with {item.Id} - {item.Url}");
-
-                var result = await eventMessageService.UpdateAsync(item).ConfigureAwait(false);
-
-                if (result == HttpStatusCode.NotFound)
+                foreach (var validationResult in validationResults)
                 {
-                    logger.LogInformation($"Does not exist, creating static content cache with {item.Id} - {item.Url}");
-
-                    result = await eventMessageService.CreateAsync(item).ConfigureAwait(false);
-
-                    if (result == HttpStatusCode.OK)
-                    {
-                        logger.LogInformation($"Created static content cache with {item.Id} - {item.Url}");
-                    }
-                    else
-                    {
-                        logger.LogError($"Static content cache create error status {result} from {item.Id} - {item.Url}");
-                    }
-                }
-                else
-                {
-                    logger.LogInformation($"Updated static content cache with {item.Id} - {item.Url}");
+                    logger.LogError($"Error validating {model.Title} - {model.Url}: {string.Join(",", validationResult.MemberNames)} - {validationResult.ErrorMessage}");
                 }
             }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, $"Error in get and save for {item.Id} - {item.Url}");
-            }
+
+            return isValid;
         }
     }
 }

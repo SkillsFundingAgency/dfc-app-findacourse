@@ -30,7 +30,7 @@
                 </li>
                 <li>
                     <span class="govuk-secondary-colour">Cost:</span>
-                    @if (Model.Cost == null)
+                    @if (Model.Cost == null || decimal.Parse(Model.Cost) == 0)
                     {
                         <span>Contact course provider</span> 
                         <details data-module="govuk-details" class="course-cost-desc">
