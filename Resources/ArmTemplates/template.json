@@ -99,6 +99,9 @@
     },
     "ApiName": {
         "type": "string"
+    },
+    "ConfigurationApplicationName": {
+        "type": "string"
     }
   },
   "variables": {
@@ -270,7 +273,7 @@
               },
               {
                 "name": "Configuration__ApplicationName",
-                "value": "DFC-App-Find-a-course"
+                "value": "[Parameters('ConfigurationApplicationName')]"
               },
               {
                 "name": "Logging__ApplicationInsights__LogLevel__Default",

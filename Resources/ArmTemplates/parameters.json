@@ -88,6 +88,9 @@
         },
         "ApiName": {
             "value": "__ApiName__"
+        },
+        "ConfigurationApplicationName": {
+            "value": "__ConfigurationApplicationName__"
         }
     }
 }
