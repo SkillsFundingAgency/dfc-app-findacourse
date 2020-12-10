@@ -82,6 +82,9 @@
         },
         "ApiName": {
             "value": "findacourse"
+        },
+        "ConfigurationApplicationName": {
+            "value": "findacourse"
         }
     }
 }
