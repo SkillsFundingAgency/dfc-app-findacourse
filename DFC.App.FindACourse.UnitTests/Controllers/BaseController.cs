@@ -1,7 +1,7 @@
-﻿using DFC.App.FindACourse.Cache;
-using DFC.App.FindACourse.Controllers;
-using DFC.App.FindACourse.Data.Contracts;
+﻿using DFC.App.FindACourse.Controllers;
+using DFC.App.FindACourse.Data.Models;
 using DFC.App.FindACourse.Services;
+using DFC.Compui.Cosmos.Contracts;
 using DFC.Content.Pkg.Netcore.Data.Models.ClientOptions;
 using DFC.Logger.AppInsights.Contracts;
 using FakeItEasy;
@@ -21,8 +21,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
         {
             FakeLogService = A.Fake<ILogService>();
             FakeFindACoursesService = A.Fake<IFindACourseService>();
-            FakeSharedContentService = A.Fake<ISharedContentService>();
-            FakeCacheService = A.Fake<ICacheService>();
+            FakeStaticContentDocumentService = A.Fake<IDocumentService<StaticContentItemModel>>();
             DummyCmsApiClientOptions = A.Dummy<CmsApiClientOptions>();
         }
 
@@ -44,15 +43,11 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
 
         protected ILogService FakeLogService { get; }
 
-       // protected ILogger<DetailsController> DetailsLogger { get; }
-
         protected IFindACourseService FakeFindACoursesService { get; }
 
         protected AutoMapper.IMapper FakeMapper { get; }
 
-        protected ISharedContentService FakeSharedContentService { get; set; }
-
-        protected ICacheService FakeCacheService { get; set; }
+        protected IDocumentService<StaticContentItemModel> FakeStaticContentDocumentService { get; set; }
 
         protected CmsApiClientOptions DummyCmsApiClientOptions { get; set; }
 
@@ -79,7 +74,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
 
             httpContext.Request.Headers[HeaderNames.Accept] = mediaTypeName;
 
-            var controller = new DetailsController(FakeLogService, FakeFindACoursesService, FakeSharedContentService, FakeCacheService, DummyCmsApiClientOptions)
+            var controller = new DetailsController(FakeLogService, FakeFindACoursesService, FakeStaticContentDocumentService, DummyCmsApiClientOptions)
             {
                 ControllerContext = new ControllerContext()
                 {
