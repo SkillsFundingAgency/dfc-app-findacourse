@@ -20,7 +20,7 @@
                     <span class="govuk-secondary-colour">Start date:</span>
                     @if (Model.StartDate != null)
                     {
-                        <span>@Model.StartDate.Value.ToLongDateString()</span>
+                        <span>@Model.StartDate.Value.ToFormattedString()</span>
                     }
                     else
                     {
