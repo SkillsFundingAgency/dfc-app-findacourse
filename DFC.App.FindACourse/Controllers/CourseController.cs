@@ -345,6 +345,7 @@ namespace DFC.App.FindACourse.Controllers
             {
                 case "Next 3 months":
                     courseSearchFilters.StartDateTo = DateTime.Today.AddMonths(3);
+                    courseSearchFilters.StartDateFrom = DateTime.Today;
                     courseSearchFilters.StartDate = StartDate.SelectDateFrom;
                     break;
                 case "In 3 to 6 months":
