@@ -20,14 +20,17 @@
             <th class="govuk-table__header" scope="row">Location</th>
             <td class="govuk-table__cell">Available nationally</td>
         </tr>
-        <tr class="govuk-table__row">
-            <th class="govuk-table__header" scope="row">Course type</th>
-            <td class="govuk-table__cell">@Model.CourseDetails.AttendanceMode</td>
-        </tr>
+    <tr class="govuk-table__row">
+        <th class="govuk-table__header" scope="row">Course type</th>
+        <td class="govuk-table__cell">@Model.CourseDetails.AttendanceMode</td>
+    </tr>
+    @if (Model.CourseDetails.StartDate != null)
+    {
         <tr class="govuk-table__row">
             <th class="govuk-table__header" scope="row">Course start date</th>
             <td class="govuk-table__cell">@Model.CourseDetails.StartDate.Value.ToFormattedString()</td>
         </tr>
+    }
         <tr class="govuk-table__row">
             <th class="govuk-table__header" scope="row">Cost</th>
             <td class="govuk-table__cell">@Model.CourseDetails.Cost</td>
