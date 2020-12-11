@@ -172,7 +172,7 @@ namespace DFC.App.FindACourse.Controllers
                 IsNewPage = true,
                 IsTest = paramValues.IsTest,
                 SelectedDistanceValue = paramValues.Distance,
-                IsResultBody = true
+                IsResultBody = true,
             };
 
             var newBodyViewModel = GenerateModel(model);
@@ -196,7 +196,16 @@ namespace DFC.App.FindACourse.Controllers
 
                 if (!model.IsTest)
                 {
-                    TempData["params"] = $"searchTerm={paramValues.SearchTerm}&town={paramValues.Town}&courseType={paramValues.CourseType}&courseHours={paramValues.CourseHours}&studyTime={paramValues.CourseStudyTime}&startDate={paramValues.StartDate}&distance={paramValues.Distance}&filtera={paramValues.FilterA}&page={model.RequestPage}";
+                    TempData["params"] = $"{nameof(paramValues.SearchTerm)}={paramValues.SearchTerm}&" +
+                                         $"{nameof(paramValues.Town)}={paramValues.Town}&" +
+                                         $"{nameof(paramValues.CourseType)}={paramValues.CourseType}&" +
+                                         $"{nameof(paramValues.CourseHours)}={paramValues.CourseHours}&" +
+                                         $"studyTime={paramValues.CourseStudyTime}&" +
+                                         $"{nameof(paramValues.StartDate)}={paramValues.StartDate}&" +
+                                         $"{nameof(paramValues.Distance)}={paramValues.Distance}&" +
+                                         $"{nameof(paramValues.FilterA)}={paramValues.FilterA}&" +
+                                         $"{nameof(paramValues.Page)}={paramValues.Page}&" +
+                                         $"{nameof(paramValues.OrderByValue)}={paramValues.OrderByValue}";
                 }
             }
             catch (Exception ex)
@@ -211,7 +220,7 @@ namespace DFC.App.FindACourse.Controllers
         [HttpGet]
         [Route("find-a-course/course/body/course/page")]
         [Route("find-a-course/search/page/body")]
-        public async Task<IActionResult> Page(string searchTerm, string town, string distance, string courseType, string courseHours, string studyTime, string startDate, int page, bool filterA, bool IsTest, string orderBy)
+        public async Task<IActionResult> Page(string searchTerm, string town, string distance, string courseType, string courseHours, string studyTime, string startDate, int page, bool filterA, bool IsTest, string orderByValue)
         {
             logService.LogInformation($"{nameof(this.Page)} has been called");
 
@@ -228,7 +237,7 @@ namespace DFC.App.FindACourse.Controllers
                     StartDateValue = startDate,
                     CurrentSearchTerm = searchTerm,
                     FiltersApplied = filterA,
-                    SelectedOrderByValue = orderBy,
+                    SelectedOrderByValue = orderByValue,
                 },
                 RequestPage = page,
                 IsNewPage = true,
@@ -311,7 +320,7 @@ namespace DFC.App.FindACourse.Controllers
 
             if (model.SideBar.SelectedOrderByValue != null)
             {
-                _ = Enum.TryParse(model.SideBar.SelectedOrderByValue.Replace(" ", ""), out CourseSearchOrderBy sortedByCriteria);
+                _ = Enum.TryParse(model.SideBar.SelectedOrderByValue.Replace(" ", string.Empty), true, out CourseSearchOrderBy sortedByCriteria);
                 model.CourseSearchOrderBy = sortedByCriteria;
             }
             else
@@ -468,13 +477,25 @@ namespace DFC.App.FindACourse.Controllers
             var distance = model.SideBar.DistanceValue;
             var courseType = model.SideBar.CourseType != null && model.SideBar.CourseType.SelectedIds?.Count > 0 ? JsonConvert.SerializeObject(model.SideBar.CourseType.SelectedIds) : null;
             var courseHours = model.SideBar.CourseHours != null && model.SideBar.CourseHours.SelectedIds?.Count > 0 ? JsonConvert.SerializeObject(model.SideBar.CourseHours.SelectedIds) : null;
-            var courseStudyTime = model.SideBar.CourseStudyTime != null && model.SideBar.CourseStudyTime?.SelectedIds.Count > 0 ? JsonConvert.SerializeObject(model.SideBar.CourseStudyTime.SelectedIds) : null;
-            var courseStartDate = model.SideBar.StartDateValue;
+            var studyTime = model.SideBar.CourseStudyTime != null && model.SideBar.CourseStudyTime?.SelectedIds.Count > 0 ? JsonConvert.SerializeObject(model.SideBar.CourseStudyTime.SelectedIds) : null;
+            var startDate = model.SideBar.StartDateValue;
             var searchTerm = sideBarViewModel.CurrentSearchTerm;
-            var filterA = model.SideBar.FiltersApplied;
+            var page = model.RequestPage;
+            var filtera = model.SideBar.FiltersApplied;
+            var orderByValue = model.SideBar.SelectedOrderByValue;
+
             if (!model.IsTest)
             {
-                TempData["params"] = $"searchTerm={searchTerm}&town={town}&courseType={courseType}&courseHours={courseHours}&studyTime={courseStudyTime}&startDate={courseStartDate}&distance={distance}&filtera={filterA}&page={model.RequestPage}";
+                TempData["params"] = $"{nameof(searchTerm)}={searchTerm}&" +
+                                     $"{nameof(town)}={town}&" +
+                                     $"{nameof(courseType)}={courseType}&" +
+                                     $"{nameof(courseHours)}={courseHours}&" +
+                                     $"{nameof(studyTime)}={studyTime}&" +
+                                     $"{nameof(startDate)}={startDate}&" +
+                                     $"{nameof(distance)}={distance}&" +
+                                     $"{nameof(filtera)}={filtera}&" +
+                                     $"{nameof(page)}={page}&" +
+                                     $"{nameof(orderByValue)}={orderByValue}";
             }
 
             model.SideBar = sideBarViewModel;
