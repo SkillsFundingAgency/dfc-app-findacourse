@@ -61,6 +61,36 @@
         },
         "CmsApiClientOptionsBaseAddress": {
             "value": "__CmsApiClientOptionsBaseAddress__"
+        },
+        "SubscriptionSettingsFilterIncludeEventTypes3": {
+            "value": "__SubscriptionSettingsFilterIncludeEventTypes3__"
+        },
+        "SubscriptionSettingsFilterIncludeEventTypes4": {
+            "value": "__SubscriptionSettingsFilterIncludeEventTypes4__"
+        },
+        "SubscriptionSettingsEndpoint": {
+            "value": "__SubscriptionSettingsEndpoint__"
+        },
+        "SubscriptionSettingsSubscriptionServiceEndpoint": {
+            "value": "__SubscriptionSettingsSubscriptionServiceEndpoint__"
+        },
+        "ApimResourceGroup": {
+            "value": "__SharedResourceGroupName__"
+        },
+        "ApimLoggerName": {
+            "value": "__ApimLoggerName__"
+        },
+        "ApimProductInstanceName": {
+            "value": "__ApimProductInstanceName__"
+        },
+        "ApimServiceName": {
+            "value": "__ApimServiceName__"
+        },
+        "ApiName": {
+            "value": "__ApiName__"
+        },
+        "ConfigurationApplicationName": {
+            "value": "__ConfigurationApplicationName__"
         }
     }
 }
