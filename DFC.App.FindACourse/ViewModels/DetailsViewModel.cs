@@ -1,4 +1,5 @@
-﻿using DFC.CompositeInterfaceModels.FindACourseClient;
+﻿using DFC.App.FindACourse.Data.Models;
+using DFC.CompositeInterfaceModels.FindACourseClient;
 
 namespace DFC.App.FindACourse.ViewModels
 {
@@ -7,5 +8,7 @@ namespace DFC.App.FindACourse.ViewModels
         public CourseDetails CourseDetails { get; set; }
 
         public string SearchTerm { get; set; }
+
+        public StaticContentItemModel SpeakToAnAdviser { get; set; }
     }
 }

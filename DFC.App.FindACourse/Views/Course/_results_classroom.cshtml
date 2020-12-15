@@ -1,4 +1,7 @@
-﻿@using System.Text.RegularExpressions;
+﻿@{
+    Layout = null;
+}
+@using System.Text.RegularExpressions;
 @model Course
 @{
     var resultString = Regex.Match(Model.Duration, @"\d+").Value;
@@ -18,7 +21,7 @@
                     <span class="govuk-secondary-colour">Start date:</span>
                     @if (Model.StartDate != null)
                     {
-                        @Model.StartDate.Value.ToLongDateString()
+                        @Model.StartDate.Value.ToFormattedString()
                     }
                     else
                     {
@@ -26,15 +29,7 @@
                     }
                 </li>
                 <li>
-                    <span class="govuk-secondary-colour">Cost:</span>
-                    @if (Model.Cost == null)
-                    {
-                        <span>@Model.CostDescription</span>
-                    }
-                    else
-                    {
-                        <span>£@Model.Cost</span>
-                    }
+                    <partial name="_cost" model="Model"/>
                 </li>
                 <li>
                     <span class="govuk-secondary-colour">Provider:</span> @Model.ProviderName

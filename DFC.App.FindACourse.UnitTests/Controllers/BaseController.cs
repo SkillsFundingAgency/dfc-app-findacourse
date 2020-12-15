@@ -1,5 +1,8 @@
 ﻿using DFC.App.FindACourse.Controllers;
+using DFC.App.FindACourse.Data.Models;
 using DFC.App.FindACourse.Services;
+using DFC.Compui.Cosmos.Contracts;
+using DFC.Content.Pkg.Netcore.Data.Models.ClientOptions;
 using DFC.Logger.AppInsights.Contracts;
 using FakeItEasy;
 using Microsoft.AspNetCore.Http;
@@ -18,6 +21,8 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
         {
             FakeLogService = A.Fake<ILogService>();
             FakeFindACoursesService = A.Fake<IFindACourseService>();
+            FakeStaticContentDocumentService = A.Fake<IDocumentService<StaticContentItemModel>>();
+            DummyCmsApiClientOptions = A.Dummy<CmsApiClientOptions>();
         }
 
         public static IEnumerable<object[]> HtmlMediaTypes => new List<object[]>
@@ -38,11 +43,13 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
 
         protected ILogService FakeLogService { get; }
 
-       // protected ILogger<DetailsController> DetailsLogger { get; }
-
         protected IFindACourseService FakeFindACoursesService { get; }
 
         protected AutoMapper.IMapper FakeMapper { get; }
+
+        protected IDocumentService<StaticContentItemModel> FakeStaticContentDocumentService { get; set; }
+
+        protected CmsApiClientOptions DummyCmsApiClientOptions { get; set; }
 
         protected CourseController BuildCourseController(string mediaTypeName)
         {
@@ -67,7 +74,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
 
             httpContext.Request.Headers[HeaderNames.Accept] = mediaTypeName;
 
-            var controller = new DetailsController(FakeLogService, FakeFindACoursesService)
+            var controller = new DetailsController(FakeLogService, FakeFindACoursesService, FakeStaticContentDocumentService, DummyCmsApiClientOptions)
             {
                 ControllerContext = new ControllerContext()
                 {

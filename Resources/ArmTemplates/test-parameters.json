@@ -11,12 +11,6 @@
         "appSharedStorageAccountName": {
             "value": "dfcdevappsharedstr"
         },
-        "sharedAppServicePlanName": {
-            "value": "dfc-dev-app-shared-asp"
-        },
-        "sharedAppServicePlanResourceGroup": {
-            "value": "dfc-dev-app-sharedresources-rg"
-        },
         "aspSize": {
             "value": "2"
         },
@@ -38,6 +32,9 @@
         "facCosmosAuditCollectionName": {
             "value": "a-test-collection"
         },
+        "facCosmosStaticContentCollectionName": {
+            "value": "another-test-collection"
+        },
         "facAppDatabaseNeedsCreation": {
             "value": true
         },
@@ -55,6 +52,39 @@
         },
         "enableAlerts": {
             "value": false
+        },
+        "CmsApiClientOptionsBaseAddress": {
+            "value": "https://example.net/"
+        },
+        "SubscriptionSettingsFilterIncludeEventTypes3": {
+            "value": "foo"
+        },
+        "SubscriptionSettingsFilterIncludeEventTypes4": {
+            "value": "bar"
+        },
+        "SubscriptionSettingsEndpoint": {
+            "value": "https://example.net/"
+        },
+        "SubscriptionSettingsSubscriptionServiceEndpoint": {
+            "value": "https://example.net/"
+        },
+        "ApimResourceGroup": {
+            "value": "dfc-dev-shared-rg"
+        },
+        "ApimLoggerName": {
+            "value": "composite-ui-logger"
+        },
+        "ApimProductInstanceName": {
+            "value": "composite-ui"
+        },
+        "ApimServiceName": {
+            "value": "dfc-dev-shared-apim"
+        },
+        "ApiName": {
+            "value": "findacourse"
+        },
+        "ConfigurationApplicationName": {
+            "value": "findacourse"
         }
     }
 }

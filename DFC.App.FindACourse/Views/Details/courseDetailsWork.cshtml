@@ -59,10 +59,15 @@
                     <th class="govuk-table__header" scope="row">Course type</th>
                     <td class="govuk-table__cell"><span id="attendance-mode">@Model.CourseDetails.AttendanceMode</span></td>
                 </tr>
-                <tr class="govuk-table__row">
-                    <th class="govuk-table__header" scope="row">Course start date</th>
-                    <td class="govuk-table__cell"><span id="start-date">@Model.CourseDetails.StartDate.Value.ToLongDateString()</span></td>
-                </tr>
+                @if (Model.CourseDetails.StartDate != null)
+                {
+                    <tr class="govuk-table__row">
+                        <th class="govuk-table__header" scope="row">Course start date</th>
+
+                        <td class="govuk-table__cell"><span id="start-date">@Model.CourseDetails.StartDate.Value.ToFormattedString()</span></td>
+
+                    </tr>
+                }
                 <tr class="govuk-table__row">
                     <th class="govuk-table__header" scope="row">Cost</th>
                     <td class="govuk-table__cell">
@@ -76,10 +81,13 @@
                         }
                     </td>
                 </tr>
-                <tr class="govuk-table__row">
-                    <th class="govuk-table__header" scope="row">Cost description</th>
-                    <td class="govuk-table__cell"><span id="additional-price">@Model.CourseDetails.AdditionalPrice</span></td>
-                </tr>
+                @if (!string.IsNullOrEmpty(Model.CourseDetails.CostDescription))
+                {
+                    <tr class="govuk-table__row">
+                        <th class="govuk-table__header" scope="row">Cost description</th>
+                        <td class="govuk-table__cell"><span id="additonal-price">@Model.CourseDetails.CostDescription</span></td>
+                    </tr>
+                }
             </tbody>
         </table>
         @if (!string.IsNullOrWhiteSpace(Model.CourseDetails.Description))

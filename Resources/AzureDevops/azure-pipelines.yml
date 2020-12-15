@@ -43,7 +43,25 @@ jobs:
       targetPath: $(build.artifactstagingdirectory)/PageRegistrations
       artifactName: $(SolutionBaseName).PageRegistrations
 
-#Build and test application
+  - task: PublishPipelineArtifact@1
+    displayName: Publish API import script to Pipeline Artifact
+    inputs:
+      targetPath: "$(Build.SourcesDirectory)/Resources/Scripts"
+      artifactName: ${{ variables.SolutionBaseName }}.Scripts
+
+  - task: PublishPipelineArtifact@1
+    displayName: Publish OpenAPI docs to Pipeline Artifact
+    inputs:
+      targetPath: "$(Build.SourcesDirectory)/DFC.App.FindACourse/OpenAPIDocs"
+      artifactName: ${{ variables.SolutionBaseName }}.OpenAPIDocs
+
+  - task: PublishPipelineArtifact@1
+    displayName: Publish Apim Policy
+    inputs:
+      targetPath: "$(System.DefaultWorkingDirectory)/Resources/ApimPolicy"
+      artifactName: ${{ variables.SolutionBaseName }}.ApimPolicies
+
+#Builds and test application
 - job: BuildDotNetCore
   displayName: Build-DotNetCore
   steps:
@@ -55,3 +73,15 @@ jobs:
       BuildConfiguration: $(BuildConfiguration)
       DotNetCoreVersion: 3.1.101
       PublishWebApp: true
+
+#Build UI functional Tests
+- job: Builduifunctionaltests
+  displayName: Build UI functional tests
+  steps:
+# Build all UI Functional Tests that ends with UI.FunctionalTests
+  - template: AzureDevOpsTemplates\Build\StepTemplates\dfc-dotnetcore-build-sonar.yml@dfc-devops
+    parameters:
+      SolutionBaseName: $(SolutionBaseName).UI.FunctionalTests
+      BuildPlatform: $(BuildPlatform)
+      BuildConfiguration: $(BuildConfiguration)
+      DotNetCoreVersion: 3.1.101

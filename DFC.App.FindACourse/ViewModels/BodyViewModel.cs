@@ -27,5 +27,13 @@ namespace DFC.App.FindACourse.ViewModels
         public bool IsNewPage { get; set; }
 
         public bool FromPaging { get; set; }
+
+        public bool IsTest { get; set; }
+
+        public CourseSearchFilters CourseSearchFilters { get; set; }
+
+        public CourseSearchOrderBy CourseSearchOrderBy { get; set; }
+
+        public bool IsResultBody { get; set; }
     }
 }

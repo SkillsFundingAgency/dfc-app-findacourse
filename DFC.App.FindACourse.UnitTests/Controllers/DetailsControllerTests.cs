@@ -1,12 +1,9 @@
 ﻿using DFC.App.FindACourse.Controllers;
 using DFC.App.FindACourse.Services;
-using DFC.App.FindACourse.ViewModels;
 using DFC.CompositeInterfaceModels.FindACourseClient;
 using FakeItEasy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -33,7 +30,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
 
             A.CallTo(() => courseService.GetCourseDetails(courseId, runId)).Returns(returnedCourseData);
 
-            var result = await controller.Details(courseId, runId, "Maths").ConfigureAwait(false);
+            var result = await controller.Details(courseId, runId, "Maths", null, null, null, null, null, null, null, "false", 1,1).ConfigureAwait(false);
 
             var viewResult = Assert.IsType<ViewResult>(result);
 
