@@ -20,9 +20,12 @@
                 <a class="govuk-link" href="mailto:@Model.CourseDetails.ProviderDetails.EmailAddress" aria-label="EmailTo">@Model.CourseDetails.ProviderDetails.EmailAddress</a>
             </li>
         }
-        <li>
-            <span class="govuk-!-font-weight-bold">Phone:</span> @Model.CourseDetails.ProviderDetails.PhoneNumber
-        </li>
+        @if (!string.IsNullOrEmpty(Model.CourseDetails.ProviderDetails.PhoneNumber))
+        {
+            <li>
+                <span class="govuk-!-font-weight-bold">Phone:</span> @Model.CourseDetails.ProviderDetails.PhoneNumber
+            </li>
+        }
     </ul>
     @if (Model.CourseDetails.ProviderDetails.LearnerSatisfaction > 0 && Model.CourseDetails.ProviderDetails.EmployerSatisfaction > 0)
     {

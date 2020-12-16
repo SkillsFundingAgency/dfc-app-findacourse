@@ -1,42 +1,44 @@
 ﻿@model DetailsViewModel
 
-<div class="secondary-hero govuk-!-margin-bottom-0" id="details-heading-block">
-    <div class="govuk-width-container">
-        <div class="govuk-grid-row">
-            <div class="govuk-grid-column-two-thirds">
-                <h1 class="govuk-heading-l govuk-!-padding-bottom-9">@Html.Raw(Model.CourseDetails.Title)</h1>
+    <section aria-label="Details">
+        <div class="secondary-hero govuk-!-margin-bottom-0" id="details-heading-block">
+            <div class="govuk-width-container">
+                <div class="govuk-grid-row">
+                    <div class="govuk-grid-column-two-thirds">
+                        <h1 class="govuk-heading-l govuk-!-padding-bottom-9">@Html.Raw(Model.CourseDetails.Title)</h1>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-</div>
+    </section>
 
-<div class="govuk-width-container" id="details-body-block">
-    <main class="govuk-main-wrapper govuk-main-wrapper--auto-spacing" id="main-content" role="main">
-        <div class="govuk-grid-row">
-            <div class="govuk-grid-column-two-thirds">
-                @{
-                    switch (Model.CourseDetails.AttendanceMode)
-                    {
-                        case "Classroom based":
-                            <partial name="courseDetailsClassroom" model="Model" />
-                            break;
-                        case "Work based":
-                            <partial name="courseDetailsWork" model="Model" />
-                            break;
-                        case "Online":
-                            <partial name="courseDetailsOnline" model="Model" />
-                            break;
-                        case "Work based national":
-                            <partial name="courseDetailsWorkNational" model="Model" />
-                            break;
-                        default:
-                            break;
+    <div class="govuk-width-container" id="details-body-block">
+        <main class="govuk-main-wrapper govuk-main-wrapper--auto-spacing" id="main-content" role="main">
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-two-thirds">
+                    @{
+                        switch (Model.CourseDetails.AttendanceMode)
+                        {
+                            case "Classroom based":
+                                <partial name="courseDetailsClassroom" model="Model" />
+                                break;
+                            case "Work based":
+                                <partial name="courseDetailsWork" model="Model" />
+                                break;
+                            case "Online":
+                                <partial name="courseDetailsOnline" model="Model" />
+                                break;
+                            case "Work based national":
+                                <partial name="courseDetailsWorkNational" model="Model" />
+                                break;
+                            default:
+                                break;
+                        }
                     }
-                }
+                </div>
+                <div class="govuk-grid-column-one-third">
+                    <partial name="rightbar" />
+                </div>
             </div>
-            <div class="govuk-grid-column-one-third">
-                <partial name="rightbar" />
-            </div>
-        </div>
-    </main>
-</div>
+        </main>
+    </div>
