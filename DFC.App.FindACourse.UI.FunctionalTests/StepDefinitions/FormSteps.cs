@@ -7,6 +7,7 @@ using DFC.App.FindACourse.UI.FunctionalTests.Model;
 using DFC.TestAutomation.UI.Extension;
 using OpenQA.Selenium;
 using System;
+using System.Threading;
 using TechTalk.SpecFlow;
 
 namespace DFC.App.FindACourse.UI.FunctionalTests.StepDefinitions
@@ -46,6 +47,22 @@ namespace DFC.App.FindACourse.UI.FunctionalTests.StepDefinitions
             }
 
             searchBoxes[0].Click();
+        }
+
+        [When(@"I enter (.*) in the location filter")]
+        public void WhenIEnterBirminghamInTheLocationFilter(string location)
+        {
+            var locationFilter = this.Context.GetWebDriver().FindElements(By.Id("location-input"));
+
+            if (!locationFilter.Count.Equals(1))
+            {
+                throw new NotFoundException($"Unable to perform the step: {this.Context.StepContext.StepInfo.Text}. The location filter could not be located.");
+            }
+
+            var locationFilters = locationFilter[0];
+            locationFilters.SendKeys(location);
+            locationFilters.SendKeys(Keys.Tab);
+            Thread.Sleep(5000);
         }
     }
 }

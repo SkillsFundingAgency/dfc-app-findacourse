@@ -26,7 +26,7 @@ namespace DFC.App.FindACourse.UI.FunctionalTests.Pages
 
         public FindACourseLandingPage NavigateToFindACoursePage()
         {
-            this.Context.GetWebDriver().Url = this.Context.GetSettingsLibrary<AppSettings>().AppSettings.AppBaseUrl.ToString();
+            this.Context.GetWebDriver().Url = this.Context.GetSettingsLibrary<AppSettings>().AppSettings.AppBaseUrl.ToString() + "/search";
             return this;
         }
     }
