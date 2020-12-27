@@ -69,5 +69,20 @@ namespace DFC.App.FindACourse.UI.FunctionalTests.StepDefinitions
 
             this.Context.Get<IObjectContext>().UpdateObject("SearchResults", searchResults);
         }
+
+        [When(@"I click on the first search result")]
+        public void WhenIClickTheFirstResult()
+        {
+            Thread.Sleep(5000);
+
+            var results = this.Context.GetWebDriver().FindElements(By.ClassName("govuk-heading-m"));
+            Assert.True(results.Count > 0);
+
+            var firstResult = results[1];
+            this.Context.Get<IObjectContext>().SetObject("FirstResult", firstResult.GetAttribute("innerText"));
+            firstResult.Click();
+
+        }
+
     }
 }

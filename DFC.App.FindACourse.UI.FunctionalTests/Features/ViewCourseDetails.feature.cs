@@ -19,7 +19,7 @@ namespace DFC.App.FindACourse.UI.FunctionalTests.Features
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "3.4.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public partial class SearchForACourseUsingCourseHoursFilterFeature : object, Xunit.IClassFixture<SearchForACourseUsingCourseHoursFilterFeature.FixtureData>, System.IDisposable
+    public partial class ViewCourseDetailsFeature : object, Xunit.IClassFixture<ViewCourseDetailsFeature.FixtureData>, System.IDisposable
     {
         
         private static TechTalk.SpecFlow.ITestRunner testRunner;
@@ -28,10 +28,10 @@ namespace DFC.App.FindACourse.UI.FunctionalTests.Features
         
         private Xunit.Abstractions.ITestOutputHelper _testOutputHelper;
         
-#line 1 "SearchForACourseUsingCourseHours.feature"
+#line 1 "ViewCourseDetails.feature"
 #line hidden
         
-        public SearchForACourseUsingCourseHoursFilterFeature(SearchForACourseUsingCourseHoursFilterFeature.FixtureData fixtureData, DFC_App_FindACourse_UI_FunctionalTests_XUnitAssemblyFixture assemblyFixture, Xunit.Abstractions.ITestOutputHelper testOutputHelper)
+        public ViewCourseDetailsFeature(ViewCourseDetailsFeature.FixtureData fixtureData, DFC_App_FindACourse_UI_FunctionalTests_XUnitAssemblyFixture assemblyFixture, Xunit.Abstractions.ITestOutputHelper testOutputHelper)
         {
             this._testOutputHelper = testOutputHelper;
             this.TestInitialize();
@@ -40,9 +40,8 @@ namespace DFC.App.FindACourse.UI.FunctionalTests.Features
         public static void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features", "SearchForACourseUsingCourseHoursFilter", "\tIn order to find a suitable course\r\n\tAs someone looking to attend a new course\r\n" +
-                    "\tI want to search for courses relevant to me\r\n\tAnd filter the results by course " +
-                    "hours", ProgrammingLanguage.CSharp, ((string[])(null)));
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features", "ViewCourseDetails", "\tIn order to find a suitable course\r\n\tAs someone looking to attend a new course\r\n" +
+                    "\tI want to search for courses relevant to me\r\n\tAnd view the course details", ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -82,16 +81,16 @@ namespace DFC.App.FindACourse.UI.FunctionalTests.Features
             this.TestTearDown();
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="Search for a course using course hours search filter")]
-        [Xunit.TraitAttribute("FeatureTitle", "SearchForACourseUsingCourseHoursFilter")]
-        [Xunit.TraitAttribute("Description", "Search for a course using course hours search filter")]
+        [Xunit.SkippableFactAttribute(DisplayName="View course details for search result")]
+        [Xunit.TraitAttribute("FeatureTitle", "ViewCourseDetails")]
+        [Xunit.TraitAttribute("Description", "View course details for search result")]
         [Xunit.TraitAttribute("Category", "mytag")]
-        public virtual void SearchForACourseUsingCourseHoursSearchFilter()
+        public virtual void ViewCourseDetailsForSearchResult()
         {
             string[] tagsOfScenario = new string[] {
                     "mytag"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Search for a course using course hours search filter", null, tagsOfScenario, argumentsOfScenario);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("View course details for search result", null, tagsOfScenario, argumentsOfScenario);
 #line 8
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -125,10 +124,10 @@ this.ScenarioInitialize(scenarioInfo);
  testRunner.Then("search results are displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
 #line 13
- testRunner.When("I select Full time in the course hours filter", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("I click on the first search result", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 14
- testRunner.Then("search results are updated", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("the course details page is displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
             this.ScenarioCleanup();
@@ -141,12 +140,12 @@ this.ScenarioInitialize(scenarioInfo);
             
             public FixtureData()
             {
-                SearchForACourseUsingCourseHoursFilterFeature.FeatureSetup();
+                ViewCourseDetailsFeature.FeatureSetup();
             }
             
             void System.IDisposable.Dispose()
             {
-                SearchForACourseUsingCourseHoursFilterFeature.FeatureTearDown();
+                ViewCourseDetailsFeature.FeatureTearDown();
             }
         }
     }

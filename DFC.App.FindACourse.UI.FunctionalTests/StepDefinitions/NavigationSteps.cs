@@ -24,6 +24,7 @@ namespace DFC.App.FindACourse.UI.FunctionalTests.StepDefinitions
         private ScenarioContext Context { get; set; }
 
         [Given(@"I am on the (.*) page")]
+        [Then(@"the (.*) page is displayed")]
         public void GivenIAmOnThePage(string pageName)
         {
             switch (pageName.ToLower(CultureInfo.CurrentCulture))
@@ -33,6 +34,10 @@ namespace DFC.App.FindACourse.UI.FunctionalTests.StepDefinitions
                     findACourseHomePage.NavigateToFindACoursePage();
                     var pageHeadingLocator = By.CssSelector("h1.govuk-heading-xl");
                     this.Context.GetHelperLibrary<AppSettings>().WebDriverWaitHelper.WaitForElementToContainText(pageHeadingLocator, "Find a course");
+                    break;
+                case "course details":
+                    var courseDetailsPage = new CourseDetailsPage(this.Context);
+                    courseDetailsPage.CourseDetailsPageDisplayed();
                     break;
 
                 default:

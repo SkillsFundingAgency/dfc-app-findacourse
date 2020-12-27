@@ -2,6 +2,7 @@
 	In order to find a suitable course
 	As someone looking to attend a new course
 	I want to search for courses relevant to me
+	And filter the results by course hours
 
 @mytag
 Scenario: Search for a course using course hours search filter

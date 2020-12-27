@@ -147,5 +147,21 @@ namespace DFC.App.FindACourse.UI.FunctionalTests.StepDefinitions
 
             Thread.Sleep(5000);
         }
+
+        [When(@"I select (.*) in the sort by filter")]
+        public void WhenISelectSortFilter(string sortBy)
+        {
+            var sortByFilter = this.Context.GetWebDriver().FindElement(By.Id("orderBy-Input"));
+
+            if (!sortByFilter.Displayed)
+            {
+                throw new NotFoundException($"Unable to perform the step: {this.Context.StepContext.StepInfo.Text}. The sort by filter could not be located.");
+            }
+
+            var selectElement = new SelectElement(sortByFilter);
+            selectElement.SelectByValue(sortBy);
+            sortByFilter.SendKeys(Keys.Tab);
+            Thread.Sleep(5000);
+        }
     }
 }
