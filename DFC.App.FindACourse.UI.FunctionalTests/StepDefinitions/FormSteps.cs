@@ -6,6 +6,7 @@
 using DFC.App.FindACourse.UI.FunctionalTests.Model;
 using DFC.TestAutomation.UI.Extension;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
 using System;
 using System.Threading;
 using TechTalk.SpecFlow;
@@ -50,7 +51,7 @@ namespace DFC.App.FindACourse.UI.FunctionalTests.StepDefinitions
         }
 
         [When(@"I enter (.*) in the location filter")]
-        public void WhenIEnterBirminghamInTheLocationFilter(string location)
+        public void WhenIEnterLocationInTheLocationFilter(string location)
         {
             var locationFilter = this.Context.GetWebDriver().FindElements(By.Id("location-input"));
 
@@ -62,6 +63,88 @@ namespace DFC.App.FindACourse.UI.FunctionalTests.StepDefinitions
             var locationFilters = locationFilter[0];
             locationFilters.SendKeys(location);
             locationFilters.SendKeys(Keys.Tab);
+            Thread.Sleep(5000);
+        }
+
+        [When(@"I select (.*) in the start date filter")]
+        public void WhenISelectDateFilter(string startDate)
+        {
+            var startDateFilter = this.Context.GetWebDriver().FindElement(By.Id("startdate-select"));
+
+            if (!startDateFilter.Displayed)
+            {
+                throw new NotFoundException($"Unable to perform the step: {this.Context.StepContext.StepInfo.Text}. The start date filter could not be located.");
+            }
+
+            var selectElement = new SelectElement(startDateFilter);
+            selectElement.SelectByValue(startDate);
+            startDateFilter.SendKeys(Keys.Tab);
+            Thread.Sleep(5000);
+        }
+
+        [When(@"I select (.*) in the course type filter")]
+        public void WhenISelectCourseTypeFilter(string courseType)
+        {
+            switch (courseType)
+            {
+                case "Online":
+                    this.Context.GetWebDriver().FindElement(By.Id("SideBar.CourseType.SelectedIds[0]")).Click();
+                    break;
+                case "Classroom based":
+                    this.Context.GetWebDriver().FindElement(By.Id("SideBar.CourseType.SelectedIds[1]")).Click();
+                    break;
+                case "Work based":
+                    this.Context.GetWebDriver().FindElement(By.Id("SideBar.CourseType.SelectedIds[2]")).Click();
+                    break;
+                default:
+                    throw new OperationCanceledException($"Unable to perform the step: {this.Context.StepContext.StepInfo.Text}. The Course type is not found.");
+            }
+
+            Thread.Sleep(5000);
+        }
+
+        [When(@"I select (.*) in the course hours filter")]
+        public void WhenISelectCourseHoursFilter(string courseHours)
+        {
+            switch (courseHours)
+            {
+                case "Full time":
+                    this.Context.GetWebDriver().FindElement(By.Id("SideBar.CourseHours.SelectedIds[0]")).Click();
+                    break;
+                case "Part time":
+                    this.Context.GetWebDriver().FindElement(By.Id("SideBar.CourseHours.SelectedIds[1]")).Click();
+                    break;
+                case "Flexible":
+                    this.Context.GetWebDriver().FindElement(By.Id("SideBar.CourseHours.SelectedIds[2]")).Click();
+                    break;
+                default:
+                    throw new OperationCanceledException($"Unable to perform the step: {this.Context.StepContext.StepInfo.Text}. The Course hours not listed.");
+            }
+
+            Thread.Sleep(5000);
+        }
+
+        [When(@"I select (.*) in the course time filter")]
+        public void WhenISelectCourseTimeFilter(string courseTime)
+        {
+            switch (courseTime)
+            {
+                case "Daytime":
+                    this.Context.GetWebDriver().FindElement(By.Id("SideBar.CourseStudyTime.SelectedIds[0]")).Click();
+                    break;
+                case "Evening":
+                    this.Context.GetWebDriver().FindElement(By.Id("SideBar.CourseStudyTime.SelectedIds[1]")).Click();
+                    break;
+                case "Weekend":
+                    this.Context.GetWebDriver().FindElement(By.Id("SideBar.CourseStudyTime.SelectedIds[2]")).Click();
+                    break;
+                case "Day or block release":
+                    this.Context.GetWebDriver().FindElement(By.Id("SideBar.CourseStudyTime.SelectedIds[3]")).Click();
+                    break;
+                default:
+                    throw new OperationCanceledException($"Unable to perform the step: {this.Context.StepContext.StepInfo.Text}. The Course time option is not listed.");
+            }
+
             Thread.Sleep(5000);
         }
     }

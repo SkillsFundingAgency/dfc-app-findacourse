@@ -58,7 +58,7 @@ namespace DFC.App.FindACourse.UI.FunctionalTests.StepDefinitions
 
             var results = this.Context.GetWebDriver().FindElements(By.ClassName("govuk-!-margin-top-6"));
             Assert.True(results.Count > 0);
-            this.Context.Get<IObjectContext>().SetObject("LocationFilterResultsCount", results.Count);
+            Assert.True(results.Count <= int.Parse(Context.Get<IObjectContext>().GetObject("SearchResultsCount")));
             var searchResults = new List<SearchResult>();
 
             foreach (var resultContainer in results)
