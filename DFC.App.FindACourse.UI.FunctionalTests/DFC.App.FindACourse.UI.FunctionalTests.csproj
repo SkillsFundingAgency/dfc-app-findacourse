@@ -13,6 +13,7 @@
     <SpecFlowObsoleteCodeBehindFiles Remove="Features\SearchForACourseUsingCourseTypeFilter - Copy.feature.cs" />
     <SpecFlowObsoleteCodeBehindFiles Remove="Features\SearchForACourseUsingLocationFilter - Copy.feature.cs" />
     <SpecFlowObsoleteCodeBehindFiles Remove="Features\SearchForACourseUsingStartDateFilter - Copy.feature.cs" />
+    <SpecFlowObsoleteCodeBehindFiles Remove="Features\ViewCourseDetails - Copy.feature.cs" />
   </ItemGroup>
   
   <ItemGroup>
@@ -39,6 +40,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Features\GoBackToSearchResultsFromCourseDetails.feature.cs">
+      <DependentUpon>GoBackToSearchResultsFromCourseDetails.feature</DependentUpon>
+    </Compile>
     <Compile Update="Features\ViewCourseDetails.feature.cs">
       <DependentUpon>ViewCourseDetails.feature</DependentUpon>
       <DesignTime>True</DesignTime>
@@ -76,6 +80,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <SpecFlowFeatureFiles Update="Features\GoBackToSearchResultsFromCourseDetails.feature">
+      <Visible>$(UsingMicrosoftNETSdk)</Visible>
+      <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
+      <LastGenOutput>ViewCourseDetails.feature.cs</LastGenOutput>
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+    </SpecFlowFeatureFiles>
     <SpecFlowFeatureFiles Update="Features\ViewCourseDetails.feature">
       <Visible>$(UsingMicrosoftNETSdk)</Visible>
       <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>

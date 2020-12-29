@@ -33,5 +33,7 @@ namespace DFC.App.FindACourse.UI.FunctionalTests.Pages
             System.Threading.Thread.Sleep(5000);
             return this;
         }
+
+
     }
 }

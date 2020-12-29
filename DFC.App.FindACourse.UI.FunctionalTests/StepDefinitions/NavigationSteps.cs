@@ -44,5 +44,17 @@ namespace DFC.App.FindACourse.UI.FunctionalTests.StepDefinitions
                     throw new OperationCanceledException($"Unable to perform the step: {this.Context.StepContext.StepInfo.Text}. The page name provided was not recognised.");
             }
         }
+
+        [When(@"I click the back to search results link")]
+        public void WhenIClickTheBackToSearchResultsLink()
+        {
+            var backToResults = this.Context.GetWebDriver().FindElement(By.Id("back-to-results"));
+
+            if (!backToResults.Displayed)
+            {
+                throw new OperationCanceledException($"Unable to perform the step: {this.Context.StepContext.StepInfo.Text}. The back to results link is not displayed.");
+            }
+            backToResults.Click();
+        }
     }
 }
