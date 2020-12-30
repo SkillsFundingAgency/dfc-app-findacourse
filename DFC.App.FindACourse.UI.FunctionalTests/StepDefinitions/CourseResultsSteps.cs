@@ -81,7 +81,6 @@ namespace DFC.App.FindACourse.UI.FunctionalTests.StepDefinitions
             var firstResult = results[1];
             this.Context.Get<IObjectContext>().SetObject("FirstResult", firstResult.GetAttribute("innerText"));
             firstResult.Click();
-
         }
 
         [Then(@"I am returned to same search results page")]

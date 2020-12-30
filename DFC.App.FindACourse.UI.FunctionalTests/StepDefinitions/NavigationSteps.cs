@@ -54,6 +54,7 @@ namespace DFC.App.FindACourse.UI.FunctionalTests.StepDefinitions
             {
                 throw new OperationCanceledException($"Unable to perform the step: {this.Context.StepContext.StepInfo.Text}. The back to results link is not displayed.");
             }
+
             backToResults.Click();
         }
     }
