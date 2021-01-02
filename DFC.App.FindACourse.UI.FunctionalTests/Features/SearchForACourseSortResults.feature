@@ -4,7 +4,7 @@
 	I want to search for courses relevant to me
 	And sort the results using the sort by filter
 
-@mytag
+@FindACourse
 Scenario: Search for a course using sort by filter
 	Given I am on the find a course landing page
 	When I enter the search term computer in the search box

@@ -4,7 +4,7 @@
 	I want to search for courses relevant to me
 	And filter the results by course time 
 
-@mytag
+@FindACourse
 Scenario: Search for a course using course time search filter
 	Given I am on the find a course landing page
 	When I enter the search term computer in the search box

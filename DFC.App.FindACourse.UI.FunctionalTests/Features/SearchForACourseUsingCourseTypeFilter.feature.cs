@@ -85,11 +85,11 @@ namespace DFC.App.FindACourse.UI.FunctionalTests.Features
         [Xunit.SkippableFactAttribute(DisplayName="Search for a course using course type search filter")]
         [Xunit.TraitAttribute("FeatureTitle", "SearchForACourseUsingCourseTypeFilter")]
         [Xunit.TraitAttribute("Description", "Search for a course using course type search filter")]
-        [Xunit.TraitAttribute("Category", "mytag")]
+        [Xunit.TraitAttribute("Category", "FindACourse")]
         public virtual void SearchForACourseUsingCourseTypeSearchFilter()
         {
             string[] tagsOfScenario = new string[] {
-                    "mytag"};
+                    "FindACourse"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Search for a course using course type search filter", null, tagsOfScenario, argumentsOfScenario);
 #line 8

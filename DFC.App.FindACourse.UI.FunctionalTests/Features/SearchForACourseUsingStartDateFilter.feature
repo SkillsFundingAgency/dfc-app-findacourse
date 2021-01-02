@@ -4,7 +4,7 @@
 	I want to search for courses relevant to me
 	And filter the results by start date
 
-@mytag
+@FindACourse
 Scenario: Search for a course using start date search filter
 	Given I am on the find a course landing page
 	When I enter the search term chemistry in the search box

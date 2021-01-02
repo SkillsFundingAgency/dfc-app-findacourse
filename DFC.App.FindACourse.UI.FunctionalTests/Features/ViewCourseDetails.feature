@@ -4,7 +4,7 @@
 	I want to search for courses relevant to me
 	And view the course details
 
-@mytag
+@Smoke @FindACourse
 Scenario: View course details for search result
 	Given I am on the find a course landing page
 	When I enter the search term computer in the search box

@@ -85,11 +85,11 @@ namespace DFC.App.FindACourse.UI.FunctionalTests.Features
         [Xunit.SkippableFactAttribute(DisplayName="View course details for search result")]
         [Xunit.TraitAttribute("FeatureTitle", "GoBackToSearchResultsFromCourseDetails")]
         [Xunit.TraitAttribute("Description", "View course details for search result")]
-        [Xunit.TraitAttribute("Category", "mytag")]
+        [Xunit.TraitAttribute("Category", "FindACourse")]
         public virtual void ViewCourseDetailsForSearchResult()
         {
             string[] tagsOfScenario = new string[] {
-                    "mytag"};
+                    "FindACourse"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("View course details for search result", null, tagsOfScenario, argumentsOfScenario);
 #line 9

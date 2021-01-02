@@ -5,7 +5,7 @@
 	And view the course details
 	Then I go back to the search results page
 
-@mytag
+@FindACourse
 Scenario: View course details for search result
 	Given I am on the find a course landing page
 	When I enter the search term computer in the search box
