@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace DFC.App.FindACourse.Data.Models
+﻿namespace DFC.App.FindACourse.Data.Models
 {
     public class ParamValues
     {
