@@ -35,7 +35,7 @@ namespace DFC.App.FindACourse.UI.FunctionalTests.StepDefinitions
             // a wait for the object to go stale. Once it's gone stale then the search results have refreshed.
             Thread.Sleep(5000);
 
-            var results = this.Context.GetWebDriver().FindElements(By.ClassName("govuk-!-margin-top-6"));
+            var results = this.Context.GetWebDriver().FindElements(By.CssSelector(".govuk-\\!-margin-top-6"));
             Assert.True(results.Count > 0);
             this.Context.Get<IObjectContext>().SetObject("SearchResultsCount", results.Count);
             var searchResults = new List<SearchResult>();
@@ -56,7 +56,7 @@ namespace DFC.App.FindACourse.UI.FunctionalTests.StepDefinitions
         {
             Thread.Sleep(5000);
 
-            var results = this.Context.GetWebDriver().FindElements(By.ClassName("govuk-!-margin-top-6"));
+            var results = this.Context.GetWebDriver().FindElements(By.CssSelector(".govuk-\\!-margin-top-6"));
             Assert.True(results.Count > 0);
             Assert.True(results.Count <= int.Parse(Context.Get<IObjectContext>().GetObject("SearchResultsCount")));
             var searchResults = new List<SearchResult>();

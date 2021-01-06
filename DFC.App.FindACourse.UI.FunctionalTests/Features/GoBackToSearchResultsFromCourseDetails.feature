@@ -6,7 +6,7 @@
 	Then I go back to the search results page
 
 @FindACourse
-Scenario: View course details for search result
+Scenario: Go back to search results page from course details
 	Given I am on the find a course landing page
 	When I enter the search term computer in the search box
 	And I click the search button
