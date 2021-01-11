@@ -11,7 +11,7 @@
     var distance = Model.SideBar.DistanceValue;
     var courseType = Html.Raw(Json.Serialize(Model.SideBar.CourseType.SelectedIds));
     var courseHours = Html.Raw(Json.Serialize(Model.SideBar.CourseHours.SelectedIds));
-    var studyTime = Html.Raw(Json.Serialize(Model.SideBar.CourseStudyTime.SelectedIds));
+    var courseStudyTime = Html.Raw(Json.Serialize(Model.SideBar.CourseStudyTime.SelectedIds));
     var startDate = Model.SideBar.StartDateValue;
     var searchTerm = Model.SideBar.CurrentSearchTerm;
     var filterA = Model.SideBar.FiltersApplied;
@@ -21,7 +21,7 @@
                      $"{nameof(town)}={town}&" +
                      $"{nameof(courseType)}={courseType}&" +
                      $"{nameof(courseHours)}={courseHours}&" +
-                     $"{nameof(studyTime)}={studyTime}&" +
+                     $"{nameof(courseStudyTime)}={courseStudyTime}&" +
                      $"{nameof(startDate)}={startDate}&" +
                      $"{nameof(distance)}={distance}&" +
                      $"{nameof(filterA)}={filterA}&" +
