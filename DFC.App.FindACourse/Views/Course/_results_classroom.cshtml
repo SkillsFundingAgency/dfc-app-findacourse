@@ -60,7 +60,7 @@
                     </li>
                 }
                 <li>
-                    <span class="govuk-secondary-colour">Location:</span> @Model.Location
+                    <span class="govuk-secondary-colour">Location:</span> @(Model.LocationDetails?.LocationAddress ?? Model.Location)
                     @if (Model.LocationDetails.Distance > 0)
                     {
                         <span> (@Model.LocationDetails.Distance)</span>
