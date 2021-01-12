@@ -30,31 +30,25 @@
                         <td class="govuk-table__cell"><span id="awarding-organisation">@Model.CourseDetails.AwardingOrganisation</span></td>
                     </tr>
                 }
-                <tr class="govuk-table__row">
-                    <th class="govuk-table__header" scope="row">Location</th>
-                    <td class="govuk-table__cell">
-                        <details class="govuk-details govuk-!-margin-bottom-0" data-module="govuk-details">
-                            <summary class="govuk-details__summary">
-                                <span class="govuk-details__summary-text">East Midlands</span>
-                            </summary>
-                            <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0 location-block">
-                                <li>Derby</li>
-                                <li>Derbyshire</li>
-                                <li>Nottinghamshire</li>
-                            </ul>
-                        </details>
-                        <details class="govuk-details govuk-!-margin-bottom-0" data-module="govuk-details">
-                            <summary class="govuk-details__summary">
-                                <span class="govuk-details__summary-text">London</span>
-                            </summary>
-                            <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0 location-block">
-                                <li>Barking and Dagenham</li>
-                                <li>Barnet</li>
-                                <li>Bexley</li>
-                            </ul>
-                        </details>
-                    </td>
-                </tr>
+                @if (Model.CourseDetails.SubRegions != null && Model.CourseDetails.SubRegions.Any())
+                {
+                    <tr class="govuk-table__row">
+                        <th class="govuk-table__header" scope="row">Location</th>
+                        <td class="govuk-table__cell">
+                            <details class="govuk-details govuk-!-margin-bottom-0" data-module="govuk-details">
+                                <summary class="govuk-details__summary">
+                                    <span class="govuk-details__summary-text">@Model.CourseDetails.SubRegions.First().ParentRegion.Name</span>
+                                </summary>
+                                <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0 location-block">
+                                    @foreach (var subRegion in Model.CourseDetails.SubRegions)
+                                    {
+                                        <li>@subRegion.Name</li>
+                                    }
+                                </ul>
+                            </details>
+                        </td>
+                    </tr>
+                }
                 <tr class="govuk-table__row">
                     <th class="govuk-table__header" scope="row">Course type</th>
                     <td class="govuk-table__cell"><span id="attendance-mode">@Model.CourseDetails.AttendanceMode</span></td>
