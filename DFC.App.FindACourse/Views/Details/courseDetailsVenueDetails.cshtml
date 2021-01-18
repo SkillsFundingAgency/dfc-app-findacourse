@@ -36,14 +36,6 @@
                     {
                         <span id="address-postcode">@Model.Location.Postcode</span><br />
                     }
-                    @if (!string.IsNullOrWhiteSpace(Model.Location.Latitude))
-                    {
-                        <span id="address-Latitude">@Model.Location.Latitude</span><br />
-                    }
-                    @if (!string.IsNullOrWhiteSpace(Model.Location.Longitude))
-                    {
-                        <span id="address-Longitude">@Model.Location.Longitude</span><br />
-                    }
                     @if (!string.IsNullOrWhiteSpace(Model.Location.Latitude) && !string.IsNullOrWhiteSpace(Model.Location.Longitude))
                     {
                         <a id="address-map" href="https://www.google.com/maps/place/@Model.Location.Latitude,@Model.Location.Longitude">Find on Google maps</a>
