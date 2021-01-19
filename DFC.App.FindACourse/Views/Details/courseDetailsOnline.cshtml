@@ -47,14 +47,7 @@
                 <tr class="govuk-table__row">
                     <th class="govuk-table__header" scope="row">Cost</th>
                     <td class="govuk-table__cell">
-                        @if (string.IsNullOrEmpty(Model.CourseDetails.Cost))
-                        {
-                            <span id="cost-value">£0.00</span>
-                        }
-                        else
-                        {
-                            <span id="cost-value">£@string.Format("{0:0.00}", Model.CourseDetails.Cost)</span>
-                        }
+                        <span id="cost-value">£@Model.CourseDetails.Cost.ToDecimalString("N2")</span>
                     </td>
                 </tr>
                 @if (!string.IsNullOrEmpty(Model.CourseDetails.CostDescription))
