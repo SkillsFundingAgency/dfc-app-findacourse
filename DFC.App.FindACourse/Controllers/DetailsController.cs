@@ -66,7 +66,7 @@ namespace DFC.App.FindACourse.Controllers
             {
                 model.SpeakToAnAdviser = await staticContentDocumentService.GetByIdAsync(new Guid(cmsApiClientOptions.ContentIds)).ConfigureAwait(false);
                 model.CourseDetails = await findACourseService.GetCourseDetails(courseId, runId).ConfigureAwait(false);
-                model.CourseRegions = TransformSubRegionsToRegions(model.CourseDetails.SubRegions);
+                model.CourseRegions = model.CourseDetails.SubRegions != null ? TransformSubRegionsToRegions(model.CourseDetails.SubRegions) : null;
             }
             catch (Exception ex)
             {
