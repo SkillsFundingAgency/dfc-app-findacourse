@@ -30,22 +30,25 @@
                         <td class="govuk-table__cell"><span id="awarding-organisation">@Model.CourseDetails.AwardingOrganisation</span></td>
                     </tr>
                 }
-                @if (Model.CourseDetails.SubRegions != null && Model.CourseDetails.SubRegions.Any())
+                @if (Model.CourseRegions != null && Model.CourseRegions.Any())
                 {
                     <tr class="govuk-table__row">
                         <th class="govuk-table__header" scope="row">Location</th>
                         <td class="govuk-table__cell">
-                            <details class="govuk-details govuk-!-margin-bottom-0" data-module="govuk-details">
-                                <summary class="govuk-details__summary">
-                                    <span class="govuk-details__summary-text">@Model.CourseDetails.SubRegions.First().ParentRegion.Name</span>
-                                </summary>
-                                <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0 location-block">
-                                    @foreach (var subRegion in Model.CourseDetails.SubRegions)
-                                    {
-                                        <li>@subRegion.Name</li>
-                                    }
-                                </ul>
-                            </details>
+                            @foreach (var region in Model.CourseRegions)
+                            {
+                                <details class="govuk-details govuk-!-margin-bottom-0" data-module="govuk-details">
+                                    <summary class="govuk-details__summary">
+                                        <span class="govuk-details__summary-text">@region.Name</span>
+                                    </summary>
+                                    <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0 location-block">
+                                        @foreach (var subRegion in region.SubRegions)
+                                        {
+                                            <li>@subRegion</li>
+                                        }
+                                    </ul>
+                                </details>
+                            }
                         </td>
                     </tr>
                 }

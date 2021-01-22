@@ -1,5 +1,6 @@
 ﻿using DFC.App.FindACourse.Data.Models;
 using DFC.CompositeInterfaceModels.FindACourseClient;
+using System.Collections.Generic;
 
 namespace DFC.App.FindACourse.ViewModels
 {
@@ -10,5 +11,7 @@ namespace DFC.App.FindACourse.ViewModels
         public string SearchTerm { get; set; }
 
         public StaticContentItemModel SpeakToAnAdviser { get; set; }
+
+        public IList<CourseRegion> CourseRegions { get; set; }
     }
 }

@@ -1,11 +1,14 @@
 ﻿using DFC.App.FindACourse.Data.Models;
 using DFC.App.FindACourse.Services;
 using DFC.App.FindACourse.ViewModels;
+using DFC.CompositeInterfaceModels.FindACourseClient;
 using DFC.Compui.Cosmos.Contracts;
 using DFC.Content.Pkg.Netcore.Data.Models.ClientOptions;
 using DFC.Logger.AppInsights.Contracts;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace DFC.App.FindACourse.Controllers
@@ -63,6 +66,7 @@ namespace DFC.App.FindACourse.Controllers
             {
                 model.SpeakToAnAdviser = await staticContentDocumentService.GetByIdAsync(new Guid(cmsApiClientOptions.ContentIds)).ConfigureAwait(false);
                 model.CourseDetails = await findACourseService.GetCourseDetails(courseId, runId).ConfigureAwait(false);
+                model.CourseRegions = model.CourseDetails.SubRegions != null ? TransformSubRegionsToRegions(model.CourseDetails.SubRegions) : null;
             }
             catch (Exception ex)
             {
@@ -71,6 +75,20 @@ namespace DFC.App.FindACourse.Controllers
             }
 
             return View(model);
+        }
+
+        private static IList<CourseRegion> TransformSubRegionsToRegions(IList<SubRegion> subRegions)
+        {
+            var result = (from a in subRegions select a.ParentRegion.Name)
+                          .OrderBy(o => o).Distinct()
+                          .Select(s => new CourseRegion
+                          {
+                              Name = s,
+                              SubRegions = (from sr in subRegions where sr.ParentRegion.Name == s select sr.Name).OrderBy(o => o).ToList(),
+                          })
+                          .ToList();
+
+            return result;
         }
     }
 }
