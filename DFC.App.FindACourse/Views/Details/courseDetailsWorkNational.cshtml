@@ -6,15 +6,15 @@
     <tbody class="govuk-table__body">
         <tr class="govuk-table__row">
             <th class="govuk-table__header" scope="row">Qualification name</th>
-            <td class="govuk-table__cell">@Model.CourseDetails.QualificationName</td>
+            <td class="govuk-table__cell">@Html.Raw(Model.CourseDetails.QualificationName)</td>
         </tr>
         <tr class="govuk-table__row">
             <th class="govuk-table__header" scope="row">Qualification level</th>
-            <td class="govuk-table__cell">@Model.CourseDetails.QualificationLevel</td>
+            <td class="govuk-table__cell">@Html.Raw(Model.CourseDetails.QualificationLevel)</td>
         </tr>
         <tr class="govuk-table__row">
             <th class="govuk-table__header" scope="row">Awarding organisation</th>
-            <td class="govuk-table__cell">@Model.CourseDetails.AwardingOrganisation</td>
+            <td class="govuk-table__cell">@Html.Raw(Model.CourseDetails.AwardingOrganisation)</td>
         </tr>
         <tr class="govuk-table__row">
             <th class="govuk-table__header" scope="row">Location</th>
@@ -22,7 +22,7 @@
         </tr>
     <tr class="govuk-table__row">
         <th class="govuk-table__header" scope="row">Course type</th>
-        <td class="govuk-table__cell">@Model.CourseDetails.AttendanceMode</td>
+        <td class="govuk-table__cell">@Html.Raw(Model.CourseDetails.AttendanceMode)</td>
     </tr>
     @if (Model.CourseDetails.StartDate != null)
     {
@@ -33,35 +33,35 @@
     }
         <tr class="govuk-table__row">
             <th class="govuk-table__header" scope="row">Cost</th>
-            <td class="govuk-table__cell">@Model.CourseDetails.Cost</td>
+            <td class="govuk-table__cell">£@Model.CourseDetails.Cost.ToDecimalString("N2")</td>
         </tr>
     @if (!string.IsNullOrEmpty(Model.CourseDetails.CostDescription))
     {
         <tr class="govuk-table__row">
             <th class="govuk-table__header" scope="row">Cost description</th>
-            <td class="govuk-table__cell"><span id="additonal-price">@Model.CourseDetails.CostDescription</span></td>
+            <td class="govuk-table__cell"><span id="additonal-price">@Html.Raw(Model.CourseDetails.CostDescription)</span></td>
         </tr>
     }
     </tbody>
 </table>
 <h2 class="govuk-heading-m" id="whofor">Who this course is for</h2>
-<p>@Model.CourseDetails.Description</p>
+<p>@Html.Raw(Model.CourseDetails.Description)</p>
 <h2 class="govuk-heading-m" id="entry">Entry requirements</h2>
-<p>@Model.CourseDetails.EntryRequirements</p>
+<p>@Html.Raw(Model.CourseDetails.EntryRequirements)</p>
 <h2 class="govuk-heading-m" id="whatlearn">What you'll learn</h2>
-<p>@Model.CourseDetails.WhatYoullLearn</p>
+<p>@Html.Raw(Model.CourseDetails.WhatYoullLearn)</p>
 
 <h2 class="govuk-heading-m" id="howlearn">How you'll learn</h2>
-<p>@Model.CourseDetails.HowYoullLearn</p>
+<p>@Html.Raw(Model.CourseDetails.HowYoullLearn)</p>
 
 <h2 class="govuk-heading-m" id="need">What you'll need to bring</h2>
-<p>@Model.CourseDetails.EquipmentRequired</p>
+<p>@Html.Raw(Model.CourseDetails.EquipmentRequired)</p>
 
 <h2 class="govuk-heading-m" id="assessed">How you'll be assessed</h2>
-<p>@Model.CourseDetails.AssessmentMethod</p>
+<p>@Html.Raw(Model.CourseDetails.AssessmentMethod)</p>
 
 <h2 class="govuk-heading-m" id="next">What you can do next</h2>
-<p>@Model.CourseDetails.NextSteps</p>
+<p>@Html.Raw(Model.CourseDetails.NextSteps)</p>
 
 <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
 <button href="#" role="button" draggable="false" class="govuk-button govuk-button--start" data-module="govuk-button">

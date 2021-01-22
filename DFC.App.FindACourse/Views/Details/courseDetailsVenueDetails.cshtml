@@ -8,7 +8,7 @@
         {
             <tr class="govuk-table__row">
                 <th class="govuk-table__header" scope="row">Name</th>
-                <td class="govuk-table__cell"><span id="venue-name">@Model.VenueName</span></td>
+                <td class="govuk-table__cell"><span id="venue-name">@Html.Raw(Model.VenueName)</span></td>
             </tr>
         }
         @if (!string.IsNullOrWhiteSpace(Model.Location?.Postcode))
@@ -18,23 +18,23 @@
                 <td class="govuk-table__cell">
                     @if (!string.IsNullOrWhiteSpace(Model.Location.AddressLine1))
                     {
-                        <span id="address-line1">@Model.Location.AddressLine1</span><br />
+                        <span id="address-line1">@Html.Raw(Model.Location.AddressLine1)</span><br />
                     }
                     @if (!string.IsNullOrWhiteSpace(Model.Location.AddressLine2))
                     {
-                        <span id="address-line2">@Model.Location.AddressLine2</span><br />
+                        <span id="address-line2">@Html.Raw(Model.Location.AddressLine2)</span><br />
                     }
                     @if (!string.IsNullOrWhiteSpace(Model.Location.Town))
                     {
-                        <span id="address-toen">@Model.Location.Town</span><br />
+                        <span id="address-toen">@Html.Raw(Model.Location.Town)</span><br />
                     }
                     @if (!string.IsNullOrWhiteSpace(Model.Location.County))
                     {
-                        <span id="address-county">@Model.Location.County</span><br />
+                        <span id="address-county">@Html.Raw(Model.Location.County)</span><br />
                     }
                     @if (!string.IsNullOrWhiteSpace(Model.Location.Postcode))
                     {
-                        <span id="address-postcode">@Model.Location.Postcode</span><br />
+                        <span id="address-postcode">@Html.Raw(Model.Location.Postcode)</span><br />
                     }
                     @if (!string.IsNullOrWhiteSpace(Model.Location.Latitude) && !string.IsNullOrWhiteSpace(Model.Location.Longitude))
                     {
@@ -47,28 +47,28 @@
         {
             <tr class="govuk-table__row">
                 <th class="govuk-table__header" scope="row">Email</th>
-                <td class="govuk-table__cell"><a id="email-address" href="mailto:@Model.EmailAddress">@Model.EmailAddress</a></td>
+                <td class="govuk-table__cell"><a id="email-address" href="mailto:@Model.EmailAddress">@Html.Raw(Model.EmailAddress)</a></td>
             </tr>
         }
         @if (!string.IsNullOrWhiteSpace(Model.PhoneNumber))
         {
             <tr class="govuk-table__row">
                 <th class="govuk-table__header" scope="row">Phone</th>
-                <td class="govuk-table__cell"><span id="phone-number">@Model.PhoneNumber</span></td>
+                <td class="govuk-table__cell"><span id="phone-number">@Html.Raw(Model.PhoneNumber)</span></td>
             </tr>
         }
         @if (!string.IsNullOrWhiteSpace(Model.Fax))
         {
             <tr class="govuk-table__row">
                 <th class="govuk-table__header" scope="row">Fax</th>
-                <td class="govuk-table__cell"><span id="fax-number">@Model.Fax</span></td>
+                <td class="govuk-table__cell"><span id="fax-number">@Html.Raw(Model.Fax)</span></td>
             </tr>
         }
         @if (!string.IsNullOrWhiteSpace(Model.Website))
         {
             <tr class="govuk-table__row">
                 <th class="govuk-table__header" scope="row">Website</th>
-                <td class="govuk-table__cell"><a id="website" href="@Model.Website">@Model.Website</a></td>
+                <td class="govuk-table__cell"><a id="website" href="@Model.Website">@Html.Raw(Model.Website)</a></td>
             </tr>
         }
     </tbody>
