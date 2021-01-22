@@ -30,7 +30,14 @@
                         <td class="govuk-table__cell"><span id="awarding-organisation">@Html.Raw(Model.CourseDetails.AwardingOrganisation)</span></td>
                     </tr>
                 }
-                @if (Model.CourseRegions != null && Model.CourseRegions.Any())
+                @if (Model.CourseDetails.National.Value)
+                {
+                    <tr class="govuk-table__row">
+                        <th class="govuk-table__header" scope="row">Location</th>
+                        <td class="govuk-table__cell">Available nationally</td>
+                    </tr>
+                }
+                else if (Model.CourseRegions != null && Model.CourseRegions.Any())
                 {
                     <tr class="govuk-table__row">
                         <th class="govuk-table__header" scope="row">Location</th>
