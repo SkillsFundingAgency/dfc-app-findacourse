@@ -9,7 +9,7 @@
                 {
                     <tr class="govuk-table__row">
                         <th class="govuk-table__header" scope="row">Qualification name</th>
-                        <td class="govuk-table__cell"><span id="qualification-name">@Model.CourseDetails.QualificationName</span></td>
+                        <td class="govuk-table__cell"><span id="qualification-name">@Html.Raw(Model.CourseDetails.QualificationName)</span></td>
                     </tr>
                 }
 
@@ -17,7 +17,7 @@
                 {
                     <tr class="govuk-table__row">
                         <th class="govuk-table__header" scope="row">Qualification level</th>
-                        <td class="govuk-table__cell"><span id="qualification-level">@Model.CourseDetails.QualificationLevel</span></td>
+                        <td class="govuk-table__cell"><span id="qualification-level">@Html.Raw(Model.CourseDetails.QualificationLevel)</span></td>
                     </tr>
                 }
 
@@ -25,12 +25,12 @@
                 {
                     <tr class="govuk-table__row">
                         <th class="govuk-table__header" scope="row">Awarding organisation</th>
-                        <td class="govuk-table__cell"><span id="awarding-organisation">@Model.CourseDetails.AwardingOrganisation</span></td>
+                        <td class="govuk-table__cell"><span id="awarding-organisation">@Html.Raw(Model.CourseDetails.AwardingOrganisation)</span></td>
                     </tr>
                 }
                 <tr class="govuk-table__row">
                     <th class="govuk-table__header" scope="row">Course type</th>
-                    <td class="govuk-table__cell"><span id="attendance-mode">@Model.CourseDetails.AttendanceMode</span></td>
+                    <td class="govuk-table__cell"><span id="attendance-mode">@Html.Raw(Model.CourseDetails.AttendanceMode)</span></td>
                 </tr>
                 @if (Model.CourseDetails.StartDate != null)
                 {
@@ -47,21 +47,14 @@
                 <tr class="govuk-table__row">
                     <th class="govuk-table__header" scope="row">Cost</th>
                     <td class="govuk-table__cell">
-                        @if (string.IsNullOrEmpty(Model.CourseDetails.Cost))
-                        {
-                            <span id="cost-value">£0.00</span>
-                        }
-                        else
-                        {
-                            <span id="cost-value">£@string.Format("{0:0.00}", Model.CourseDetails.Cost)</span>
-                        }
+                        <span id="cost-value">£@Model.CourseDetails.Cost.ToDecimalString("N2")</span>
                     </td>
                 </tr>
                 @if (!string.IsNullOrEmpty(Model.CourseDetails.CostDescription))
                 {
                     <tr class="govuk-table__row">
                         <th class="govuk-table__header" scope="row">Cost description</th>
-                        <td class="govuk-table__cell"><span id="additonal-price">@Model.CourseDetails.CostDescription</span></td>
+                        <td class="govuk-table__cell"><span id="additonal-price">@Html.Raw(Model.CourseDetails.CostDescription)</span></td>
                     </tr>
                 }
             </tbody>
@@ -69,30 +62,30 @@
         @if (!string.IsNullOrWhiteSpace(Model.CourseDetails.Description))
         {
             <h2 class="govuk-heading-m" id="whofor">Who this course is for</h2>
-            <p id="course-description">@Model.CourseDetails.Description</p>
+            <p id="course-description">@Html.Raw(Model.CourseDetails.Description)</p>
         }
 
         @if (!string.IsNullOrWhiteSpace(Model.CourseDetails.EntryRequirements))
         {
             <h2 class="govuk-heading-m" id="entry">Entry requirements</h2>
-            <p id="course-entryrequirements">@Model.CourseDetails.EntryRequirements</p>
+            <p id="course-entryrequirements">@Html.Raw(Model.CourseDetails.EntryRequirements)</p>
         }
 
         @if (!string.IsNullOrWhiteSpace(Model.CourseDetails.WhatYoullLearn))
         {
             <h2 class="govuk-heading-m" id="whatlearn">What you'll learn</h2>
-            <p id="course-what-you-will-learn">@Model.CourseDetails.WhatYoullLearn</p>
+            <p id="course-what-you-will-learn">@Html.Raw(Model.CourseDetails.WhatYoullLearn)</p>
         }
 
         @if (!string.IsNullOrWhiteSpace(Model.CourseDetails.AssessmentMethod))
         {
             <h2 class="govuk-heading-m" id="assessed">How you'll be assessed</h2>
-            <p id="assessment-method">@Model.CourseDetails.AssessmentMethod</p>
+            <p id="assessment-method">@Html.Raw(Model.CourseDetails.AssessmentMethod)</p>
         }
         @if (!string.IsNullOrWhiteSpace(Model.CourseDetails.NextSteps))
         {
             <h2 class="govuk-heading-m" id="next">What you can do next</h2>
-            <p id="next-steps">@Model.CourseDetails.NextSteps</p>
+            <p id="next-steps">@Html.Raw(Model.CourseDetails.NextSteps)</p>
         }
         <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
         @if (Model.CourseDetails.VenueDetails != null && Model.CourseDetails.VenueDetails.Website != null)
@@ -107,5 +100,4 @@
             </form>
         }
         <p><a href="/find-a-course/page?@Model.SearchTerm" class="govuk-back-link" id="back-to-results">Back to results</a></p>
-        <h2 class="govuk-heading-m" id="othervenuesdates">Other venues and dates</h2>
 </div>

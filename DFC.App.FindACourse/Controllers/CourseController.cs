@@ -200,7 +200,7 @@ namespace DFC.App.FindACourse.Controllers
                                          $"{nameof(paramValues.Town)}={paramValues.Town}&" +
                                          $"{nameof(paramValues.CourseType)}={paramValues.CourseType}&" +
                                          $"{nameof(paramValues.CourseHours)}={paramValues.CourseHours}&" +
-                                         $"studyTime={paramValues.CourseStudyTime}&" +
+                                         $"{nameof(paramValues.CourseStudyTime)}={paramValues.CourseStudyTime}&" +
                                          $"{nameof(paramValues.StartDate)}={paramValues.StartDate}&" +
                                          $"{nameof(paramValues.Distance)}={paramValues.Distance}&" +
                                          $"{nameof(paramValues.FilterA)}={paramValues.FilterA}&" +
@@ -220,28 +220,28 @@ namespace DFC.App.FindACourse.Controllers
         [HttpGet]
         [Route("find-a-course/course/body/course/page")]
         [Route("find-a-course/search/page/body")]
-        public async Task<IActionResult> Page(string searchTerm, string town, string distance, string courseType, string courseHours, string studyTime, string startDate, int page, bool filterA, bool IsTest, string orderByValue)
+        public async Task<IActionResult> Page(ParamValues paramValues, bool isTest)
         {
             logService.LogInformation($"{nameof(this.Page)} has been called");
 
             var model = new BodyViewModel
             {
-                CurrentSearchTerm = searchTerm,
+                CurrentSearchTerm = paramValues.SearchTerm,
                 SideBar = new SideBarViewModel
                 {
-                    TownOrPostcode = town,
-                    DistanceValue = distance,
-                    CourseType = ConvertStringToFiltersListViewModel(courseType),
-                    CourseHours = ConvertStringToFiltersListViewModel(courseHours),
-                    CourseStudyTime = ConvertStringToFiltersListViewModel(studyTime),
-                    StartDateValue = startDate,
-                    CurrentSearchTerm = searchTerm,
-                    FiltersApplied = filterA,
-                    SelectedOrderByValue = orderByValue,
+                    TownOrPostcode = paramValues.Town,
+                    DistanceValue = paramValues.Distance,
+                    CourseType = ConvertStringToFiltersListViewModel(paramValues.CourseType),
+                    CourseHours = ConvertStringToFiltersListViewModel(paramValues.CourseHours),
+                    CourseStudyTime = ConvertStringToFiltersListViewModel(paramValues.CourseStudyTime),
+                    StartDateValue = paramValues.StartDate,
+                    CurrentSearchTerm = paramValues.SearchTerm,
+                    FiltersApplied = paramValues.FilterA,
+                    SelectedOrderByValue = paramValues.OrderByValue,
                 },
-                RequestPage = page,
+                RequestPage = paramValues.Page,
                 IsNewPage = true,
-                IsTest = IsTest,
+                IsTest = isTest,
             };
 
             logService.LogInformation($"{nameof(this.Page)} generated the model and ready to pass to the view");
@@ -478,7 +478,7 @@ namespace DFC.App.FindACourse.Controllers
             var distance = model.SideBar.DistanceValue;
             var courseType = model.SideBar.CourseType != null && model.SideBar.CourseType.SelectedIds?.Count > 0 ? JsonConvert.SerializeObject(model.SideBar.CourseType.SelectedIds) : null;
             var courseHours = model.SideBar.CourseHours != null && model.SideBar.CourseHours.SelectedIds?.Count > 0 ? JsonConvert.SerializeObject(model.SideBar.CourseHours.SelectedIds) : null;
-            var studyTime = model.SideBar.CourseStudyTime != null && model.SideBar.CourseStudyTime?.SelectedIds.Count > 0 ? JsonConvert.SerializeObject(model.SideBar.CourseStudyTime.SelectedIds) : null;
+            var courseStudyTime = model.SideBar.CourseStudyTime != null && model.SideBar.CourseStudyTime?.SelectedIds.Count > 0 ? JsonConvert.SerializeObject(model.SideBar.CourseStudyTime.SelectedIds) : null;
             var startDate = model.SideBar.StartDateValue;
             var searchTerm = sideBarViewModel.CurrentSearchTerm;
             var page = model.RequestPage;
@@ -491,7 +491,7 @@ namespace DFC.App.FindACourse.Controllers
                                      $"{nameof(town)}={town}&" +
                                      $"{nameof(courseType)}={courseType}&" +
                                      $"{nameof(courseHours)}={courseHours}&" +
-                                     $"{nameof(studyTime)}={studyTime}&" +
+                                     $"{nameof(courseStudyTime)}={courseStudyTime}&" +
                                      $"{nameof(startDate)}={startDate}&" +
                                      $"{nameof(distance)}={distance}&" +
                                      $"{nameof(filtera)}={filtera}&" +
