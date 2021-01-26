@@ -73,6 +73,7 @@ jobs:
       BuildConfiguration: $(BuildConfiguration)
       DotNetCoreVersion: 3.1.101
       PublishWebApp: true
+      TestSuffix: UnitTests
 
 #Build UI functional Tests
 - job: Builduifunctionaltests
