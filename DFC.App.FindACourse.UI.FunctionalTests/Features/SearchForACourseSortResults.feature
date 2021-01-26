@@ -7,7 +7,7 @@
 @FindACourse
 Scenario: Search for a course using sort by filter
 	Given I am on the find a course landing page
-	When I enter the search term computer in the search box
+	When I enter the search term cybersecurity in the search box
 	And I click the search button
 	Then search results are displayed
 	When I select Start date in the sort by filter
