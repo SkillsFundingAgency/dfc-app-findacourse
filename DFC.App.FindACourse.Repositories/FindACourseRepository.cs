@@ -28,12 +28,30 @@ namespace DFC.App.FindACourse.Repository
 
         public async Task<CourseSearchResult> RetrieveData(CourseSearchProperties properties)
         {
-                return await courseSearchApiService.SearchCoursesAsync(properties).ConfigureAwait(false);
+                //return await courseSearchApiService.SearchCoursesAsync(properties).ConfigureAwait(false);
+
+            var results = await courseSearchApiService.SearchCoursesAsync(properties).ConfigureAwait(false);
+
+            // make one a tlevel for testing only
+            var firstCourse = results.Courses.First();
+            if (firstCourse != null)
+            {
+                firstCourse.TLevelId = Guid.NewGuid().ToString();
+                firstCourse.OfferingType = OfferingType.TLevel;
+                firstCourse.Title = "TLevel (dummy) " + firstCourse.Title;
+            }
+
+            return results;
         }
 
         public async Task<CourseDetails> GetCourseDetails(string id, string runId)
         {
             return await courseSearchApiService.GetCompositeCourseDetailsAsync(id, runId).ConfigureAwait(false);
+        }
+
+        public async Task<TLevelDetails> GetTLevelDetails(string tlevelId)
+        {
+            return await courseSearchApiService.GetTLevelDetailsAsync(tlevelId).ConfigureAwait(false);
         }
     }
 }
