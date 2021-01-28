@@ -224,6 +224,9 @@ namespace DFC.App.FindACourse.Controllers
         {
             logService.LogInformation($"{nameof(this.Page)} has been called");
 
+            var isPostcode = !string.IsNullOrEmpty(paramValues.Town) ? (bool?)paramValues.Town.IsPostcode() : null;
+            paramValues.D = isPostcode.HasValue && isPostcode.Value ? 1 : 0;
+
             var model = new BodyViewModel
             {
                 CurrentSearchTerm = paramValues.SearchTerm,
@@ -238,6 +241,7 @@ namespace DFC.App.FindACourse.Controllers
                     CurrentSearchTerm = paramValues.SearchTerm,
                     FiltersApplied = paramValues.FilterA,
                     SelectedOrderByValue = paramValues.OrderByValue,
+                    D = paramValues.D,
                 },
                 RequestPage = paramValues.Page,
                 SelectedDistanceValue = paramValues.Distance,
@@ -445,6 +449,7 @@ namespace DFC.App.FindACourse.Controllers
             sideBarViewModel.CurrentSearchTerm = model.CurrentSearchTerm;
             sideBarViewModel.FiltersApplied = model.SideBar.FiltersApplied;
             sideBarViewModel.SelectedOrderByValue = model.SideBar.SelectedOrderByValue;
+            sideBarViewModel.D = model.SideBar.D;
 
             if (model.SideBar.CourseType != null && model.SideBar.CourseType.SelectedIds.Any())
             {
