@@ -188,7 +188,7 @@ namespace DFC.App.FindACourse.Controllers
                     }
                 }
 
-                isPostcode = !string.IsNullOrEmpty(paramValues.Town) ? (bool?)IsPostcode(paramValues.Town) : null;
+                isPostcode = !string.IsNullOrEmpty(paramValues.Town) ? (bool?)paramValues.Town.IsPostcode() : null;
 
                 var courseType = model.SideBar.CourseType != null && model.SideBar.CourseType.SelectedIds?.Count > 0 ? JsonConvert.SerializeObject(model.SideBar.CourseType.SelectedIds) : null;
                 var courseHours = model.SideBar.CourseHours != null && model.SideBar.CourseHours.SelectedIds?.Count > 0 ? JsonConvert.SerializeObject(model.SideBar.CourseHours.SelectedIds) : null;
@@ -240,6 +240,7 @@ namespace DFC.App.FindACourse.Controllers
                     SelectedOrderByValue = paramValues.OrderByValue,
                 },
                 RequestPage = paramValues.Page,
+                SelectedDistanceValue = paramValues.Distance,
                 IsNewPage = true,
                 IsTest = isTest,
             };
@@ -285,7 +286,7 @@ namespace DFC.App.FindACourse.Controllers
                 throw new ArgumentNullException(nameof(postcode));
             }
 
-            return IsPostcode(postcode);
+            return postcode.IsPostcode();
         }
 
         private static BodyViewModel GenerateModel(BodyViewModel model)
@@ -364,7 +365,7 @@ namespace DFC.App.FindACourse.Controllers
 
             if (!string.IsNullOrEmpty(model.SideBar.TownOrPostcode))
             {
-                if (IsPostcode(model.SideBar.TownOrPostcode))
+                if (model.SideBar.TownOrPostcode.IsPostcode())
                 {
                     courseSearchFilters.PostCode = NormalizePostcode(model.SideBar.TownOrPostcode);
                     courseSearchFilters.Distance = selectedDistanceValue;
@@ -590,20 +591,6 @@ namespace DFC.App.FindACourse.Controllers
             }
 
             return returnList;
-        }
-
-        private static bool IsPostcode(string townOrPostcode)
-        {
-            townOrPostcode = townOrPostcode.Replace(" ", string.Empty);
-
-            var postcodeRegex = new Regex(@"^([Gg][Ii][Rr] 0[Aa]{2})|((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([A-Za-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9][A-Za-z]?))))\s?[0-9][A-Za-z]{2})");
-
-            if (postcodeRegex.IsMatch(townOrPostcode.ToUpper()))
-            {
-                return true;
-            }
-
-            return false;
         }
 
         private static string NormalizePostcode(string postcode)
