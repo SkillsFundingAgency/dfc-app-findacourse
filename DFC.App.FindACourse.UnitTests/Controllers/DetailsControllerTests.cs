@@ -1,4 +1,5 @@
 ﻿using DFC.App.FindACourse.Controllers;
+using DFC.App.FindACourse.Data.Models;
 using DFC.App.FindACourse.Services;
 using DFC.CompositeInterfaceModels.FindACourseClient;
 using FakeItEasy;
@@ -30,7 +31,13 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
 
             A.CallTo(() => courseService.GetCourseDetails(courseId, runId)).Returns(returnedCourseData);
 
-            var result = await controller.Details(courseId, runId, "Maths", null, null, null, null, null, null, null, "false", 1,1, "StartDate").ConfigureAwait(false);
+            var paramValues = new ParamValues
+            {
+                Page = 1,
+                D = 1,
+                OrderByValue = "StartDate",
+            };
+            var result = await controller.Details(courseId, runId, "Maths", paramValues).ConfigureAwait(false);
 
             var viewResult = Assert.IsType<ViewResult>(result);
 

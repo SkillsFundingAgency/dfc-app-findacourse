@@ -23,5 +23,7 @@
         public bool IsTest { get; set; }
 
         public string OrderByValue { get; set; }
+
+        public int D { get; set; }
     }
 }
