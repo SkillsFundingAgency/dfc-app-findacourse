@@ -1,4 +1,5 @@
 ﻿using DFC.App.FindACourse.Data.Models;
+using DFC.App.FindACourse.Extensions;
 using DFC.App.FindACourse.Services;
 using DFC.App.FindACourse.ViewModels;
 using DFC.CompositeInterfaceModels.FindACourseClient;
@@ -35,27 +36,29 @@ namespace DFC.App.FindACourse.Controllers
         [HttpGet]
         [Route("find-a-course/search/details/body")]
         [Route("find-a-course/details/body")]
-        public async Task<IActionResult> Details(string courseId, string runId, string searchTerm, string currentSearchTerm, string town, string courseType,
-                                                 string courseHours, string courseStudyTime, string startDate, string distance, string filtera, int page, int d, string orderByValue)
+        public async Task<IActionResult> Details(string courseId, string runId, string currentSearchTerm, ParamValues paramValues)
         {
             logService.LogInformation($"{nameof(this.Details)} has been called");
             var model = new DetailsViewModel();
-            if (searchTerm == null && currentSearchTerm != null)
+            if (paramValues.SearchTerm == null && currentSearchTerm != null)
             {
-                searchTerm = currentSearchTerm;
+                paramValues.SearchTerm = currentSearchTerm;
             }
 
-            model.SearchTerm = $"{nameof(searchTerm)}={searchTerm}&" +
-                               $"{nameof(town)}={town}&" +
-                               $"{nameof(courseType)}={courseType}&" +
-                               $"{nameof(courseHours)}={courseHours}&" +
-                               $"{nameof(courseStudyTime)}={courseStudyTime}&" +
-                               $"{nameof(startDate)}={startDate}&" +
-                               $"{nameof(distance)}={distance}&" +
-                               $"{nameof(filtera)}={filtera}&" +
-                               $"{nameof(page)}={page}&" +
-                               $"{nameof(d)}={d}&" +
-                               $"{nameof(orderByValue)}={orderByValue}";
+            var isPostcode = !string.IsNullOrEmpty(paramValues.Town) ? (bool?)paramValues.Town.IsPostcode() : null;
+            paramValues.D = isPostcode.HasValue && isPostcode.Value ? 1 : 0;
+
+            model.SearchTerm = $"{nameof(paramValues.SearchTerm)}={paramValues.SearchTerm}&" +
+                               $"{nameof(paramValues.Town)}={paramValues.Town}&" +
+                               $"{nameof(paramValues.CourseType)}={paramValues.CourseType}&" +
+                               $"{nameof(paramValues.CourseHours)}={paramValues.CourseHours}&" +
+                               $"{nameof(paramValues.CourseStudyTime)}={paramValues.CourseStudyTime}&" +
+                               $"{nameof(paramValues.StartDate)}={paramValues.StartDate}&" +
+                               $"{nameof(paramValues.Distance)}={paramValues.Distance}&" +
+                               $"{nameof(paramValues.FilterA)}={paramValues.FilterA}&" +
+                               $"{nameof(paramValues.Page)}={paramValues.Page}&" +
+                               $"{nameof(paramValues.D)}={paramValues.D}&" +
+                               $"{nameof(paramValues.OrderByValue)}={paramValues.OrderByValue}";
 
             if (string.IsNullOrEmpty(courseId) || string.IsNullOrEmpty(runId))
             {

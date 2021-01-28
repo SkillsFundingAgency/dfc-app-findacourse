@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
 	<CodeAnalysisRuleSet>../DFC.Digital.CodeAnalysis.ruleset</CodeAnalysisRuleSet>
-	  <ProjectGuid>{6358EDF3-2F0D-4E25-A505-A6923AD48F81}</ProjectGuid>
+	  <ProjectGuid>{6358edf3-2f0d-4e25-a505-a6923ad48f81}</ProjectGuid>
   </PropertyGroup>
 
 	<ItemGroup>
