@@ -127,6 +127,7 @@
     <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
     @if (!string.IsNullOrWhiteSpace(Model.CourseDetails?.VenueDetails?.Website))
     {
+
         <partial name="courseDetailsVenueDetails" model="Model.CourseDetails.VenueDetails" />
     }
     <p><a href="/find-a-course/page?@Model.SearchTerm" class="govuk-back-link" id="back-to-results">Back to results</a></p>

@@ -1,4 +1,5 @@
-﻿using DFC.App.FindACourse.Controllers;
+﻿using AutoMapper;
+using DFC.App.FindACourse.Controllers;
 using DFC.App.FindACourse.Data.Models;
 using DFC.App.FindACourse.Services;
 using DFC.Compui.Cosmos.Contracts;
@@ -23,6 +24,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
             FakeFindACoursesService = A.Fake<IFindACourseService>();
             FakeStaticContentDocumentService = A.Fake<IDocumentService<StaticContentItemModel>>();
             DummyCmsApiClientOptions = A.Dummy<CmsApiClientOptions>();
+            FakeMapper = A.Fake<IMapper>();
         }
 
         public static IEnumerable<object[]> HtmlMediaTypes => new List<object[]>
@@ -45,7 +47,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
 
         protected IFindACourseService FakeFindACoursesService { get; }
 
-        protected AutoMapper.IMapper FakeMapper { get; }
+        protected IMapper FakeMapper { get; }
 
         protected IDocumentService<StaticContentItemModel> FakeStaticContentDocumentService { get; set; }
 
@@ -74,7 +76,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
 
             httpContext.Request.Headers[HeaderNames.Accept] = mediaTypeName;
 
-            var controller = new DetailsController(FakeLogService, FakeFindACoursesService, FakeStaticContentDocumentService, DummyCmsApiClientOptions)
+            var controller = new DetailsController(FakeLogService, FakeFindACoursesService, FakeStaticContentDocumentService, DummyCmsApiClientOptions, FakeMapper)
             {
                 ControllerContext = new ControllerContext()
                 {

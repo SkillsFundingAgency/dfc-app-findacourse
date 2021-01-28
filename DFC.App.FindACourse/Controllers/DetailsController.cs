@@ -88,7 +88,7 @@ namespace DFC.App.FindACourse.Controllers
         public async Task<IActionResult> TLevelDetails(string tlevelId, string searchTerm, string currentSearchTerm, string town, string courseType,
                                              string courseHours, string courseStudyTime, string startDate, string distance, string filtera, int page, int d, string orderByValue)
         {
-            logService.LogInformation($"{nameof(this.Details)} has been called");
+            logService.LogInformation($"{nameof(this.TLevelDetails)} has been called");
             var model = new TLevelDetailsViewModel();
             if (searchTerm == null && currentSearchTerm != null)
             {
@@ -124,7 +124,7 @@ namespace DFC.App.FindACourse.Controllers
                     $"The values passed were: course id: {tlevelId}");
             }
 
-            return View("tlevelDetails",model);
+            return View("tlevelDetails", model);
         }
 
         private static IList<CourseRegion> TransformSubRegionsToRegions(IList<SubRegion> subRegions)
