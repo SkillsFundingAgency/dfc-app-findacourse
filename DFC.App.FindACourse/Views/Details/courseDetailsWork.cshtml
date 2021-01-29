@@ -129,7 +129,7 @@
             <p id="course-nextsteps">@Html.Raw(Model.CourseDetails.NextSteps)</p>
         }
 
-        @if (Model.CourseDetails.VenueDetails != null && Model.CourseDetails.VenueDetails.Website != null)
+        @*@if (Model.CourseDetails.VenueDetails != null && Model.CourseDetails.VenueDetails.Website != null)
         {
             <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
             <form action="@Model.CourseDetails.VenueDetails.Website" id="venue-form">
@@ -140,6 +140,6 @@
                     </svg>
                 </button>
             </form>
-        }
+        }*@
         <p><a href="/find-a-course/page?@Model.SearchTerm" class="govuk-back-link" id="back-to-results">Back to results</a></p>
 </div>
