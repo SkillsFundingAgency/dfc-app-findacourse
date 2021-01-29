@@ -1,11 +1,15 @@
 ﻿using DFC.App.FindACourse.Data.Models;
+using DFC.App.FindACourse.Extensions;
 using DFC.App.FindACourse.Services;
 using DFC.App.FindACourse.ViewModels;
+using DFC.CompositeInterfaceModels.FindACourseClient;
 using DFC.Compui.Cosmos.Contracts;
 using DFC.Content.Pkg.Netcore.Data.Models.ClientOptions;
 using DFC.Logger.AppInsights.Contracts;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace DFC.App.FindACourse.Controllers
@@ -32,27 +36,29 @@ namespace DFC.App.FindACourse.Controllers
         [HttpGet]
         [Route("find-a-course/search/details/body")]
         [Route("find-a-course/details/body")]
-        public async Task<IActionResult> Details(string courseId, string runId, string searchTerm, string currentSearchTerm, string town, string courseType,
-                                                      string courseHours, string studyTime, string startDate, string distance, string filtera, int page, int d, string orderByValue)
+        public async Task<IActionResult> Details(string courseId, string runId, string currentSearchTerm, ParamValues paramValues)
         {
             logService.LogInformation($"{nameof(this.Details)} has been called");
             var model = new DetailsViewModel();
-            if (searchTerm == null && currentSearchTerm != null)
+            if (paramValues.SearchTerm == null && currentSearchTerm != null)
             {
-                searchTerm = currentSearchTerm;
+                paramValues.SearchTerm = currentSearchTerm;
             }
 
-            model.SearchTerm = $"{nameof(searchTerm)}={searchTerm}&" + 
-                               $"{nameof(town)}={town}&" +
-                               $"{nameof(courseType)}={courseType}&" +
-                               $"{nameof(courseHours)}={courseHours}&" +
-                               $"{nameof(studyTime)}={studyTime}&" +
-                               $"{nameof(startDate)}={startDate}&" +
-                               $"{nameof(distance)}={distance}&" +
-                               $"{nameof(filtera)}={filtera}&" +
-                               $"{nameof(page)}={page}&" +
-                               $"{nameof(d)}={d}&" +
-                               $"{nameof(orderByValue)}={orderByValue}";
+            var isPostcode = !string.IsNullOrEmpty(paramValues.Town) ? (bool?)paramValues.Town.IsPostcode() : null;
+            paramValues.D = isPostcode.HasValue && isPostcode.Value ? 1 : 0;
+
+            model.SearchTerm = $"{nameof(paramValues.SearchTerm)}={paramValues.SearchTerm}&" +
+                               $"{nameof(paramValues.Town)}={paramValues.Town}&" +
+                               $"{nameof(paramValues.CourseType)}={paramValues.CourseType}&" +
+                               $"{nameof(paramValues.CourseHours)}={paramValues.CourseHours}&" +
+                               $"{nameof(paramValues.CourseStudyTime)}={paramValues.CourseStudyTime}&" +
+                               $"{nameof(paramValues.StartDate)}={paramValues.StartDate}&" +
+                               $"{nameof(paramValues.Distance)}={paramValues.Distance}&" +
+                               $"{nameof(paramValues.FilterA)}={paramValues.FilterA}&" +
+                               $"{nameof(paramValues.Page)}={paramValues.Page}&" +
+                               $"{nameof(paramValues.D)}={paramValues.D}&" +
+                               $"{nameof(paramValues.OrderByValue)}={paramValues.OrderByValue}";
 
             if (string.IsNullOrEmpty(courseId) || string.IsNullOrEmpty(runId))
             {
@@ -63,6 +69,7 @@ namespace DFC.App.FindACourse.Controllers
             {
                 model.SpeakToAnAdviser = await staticContentDocumentService.GetByIdAsync(new Guid(cmsApiClientOptions.ContentIds)).ConfigureAwait(false);
                 model.CourseDetails = await findACourseService.GetCourseDetails(courseId, runId).ConfigureAwait(false);
+                model.CourseRegions = model.CourseDetails.SubRegions != null ? TransformSubRegionsToRegions(model.CourseDetails.SubRegions) : null;
             }
             catch (Exception ex)
             {
@@ -71,6 +78,20 @@ namespace DFC.App.FindACourse.Controllers
             }
 
             return View(model);
+        }
+
+        private static IList<CourseRegion> TransformSubRegionsToRegions(IList<SubRegion> subRegions)
+        {
+            var result = (from a in subRegions select a.ParentRegion.Name)
+                          .OrderBy(o => o).Distinct()
+                          .Select(s => new CourseRegion
+                          {
+                              Name = s,
+                              SubRegions = (from sr in subRegions where sr.ParentRegion.Name == s select sr.Name).OrderBy(o => o).ToList(),
+                          })
+                          .ToList();
+
+            return result;
         }
     }
 }

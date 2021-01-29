@@ -24,6 +24,7 @@ namespace DFC.App.FindACourse.UI.FunctionalTests.StepDefinitions
         private ScenarioContext Context { get; set; }
 
         [Given(@"I am on the (.*) page")]
+        [Then(@"the (.*) page is displayed")]
         public void GivenIAmOnThePage(string pageName)
         {
             switch (pageName.ToLower(CultureInfo.CurrentCulture))
@@ -34,10 +35,27 @@ namespace DFC.App.FindACourse.UI.FunctionalTests.StepDefinitions
                     var pageHeadingLocator = By.CssSelector("h1.govuk-heading-xl");
                     this.Context.GetHelperLibrary<AppSettings>().WebDriverWaitHelper.WaitForElementToContainText(pageHeadingLocator, "Find a course");
                     break;
+                case "course details":
+                    var courseDetailsPage = new CourseDetailsPage(this.Context);
+                    courseDetailsPage.CourseDetailsPageDisplayed();
+                    break;
 
                 default:
                     throw new OperationCanceledException($"Unable to perform the step: {this.Context.StepContext.StepInfo.Text}. The page name provided was not recognised.");
             }
+        }
+
+        [When(@"I click the back to search results link")]
+        public void WhenIClickTheBackToSearchResultsLink()
+        {
+            var backToResults = this.Context.GetWebDriver().FindElement(By.Id("back-to-results"));
+
+            if (!backToResults.Displayed)
+            {
+                throw new OperationCanceledException($"Unable to perform the step: {this.Context.StepContext.StepInfo.Text}. The back to results link is not displayed.");
+            }
+
+            backToResults.Click();
         }
     }
 }

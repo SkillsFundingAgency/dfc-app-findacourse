@@ -188,7 +188,7 @@ namespace DFC.App.FindACourse.Controllers
                     }
                 }
 
-                isPostcode = !string.IsNullOrEmpty(paramValues.Town) ? (bool?)IsPostcode(paramValues.Town) : null;
+                isPostcode = !string.IsNullOrEmpty(paramValues.Town) ? (bool?)paramValues.Town.IsPostcode() : null;
 
                 var courseType = model.SideBar.CourseType != null && model.SideBar.CourseType.SelectedIds?.Count > 0 ? JsonConvert.SerializeObject(model.SideBar.CourseType.SelectedIds) : null;
                 var courseHours = model.SideBar.CourseHours != null && model.SideBar.CourseHours.SelectedIds?.Count > 0 ? JsonConvert.SerializeObject(model.SideBar.CourseHours.SelectedIds) : null;
@@ -200,7 +200,7 @@ namespace DFC.App.FindACourse.Controllers
                                          $"{nameof(paramValues.Town)}={paramValues.Town}&" +
                                          $"{nameof(paramValues.CourseType)}={paramValues.CourseType}&" +
                                          $"{nameof(paramValues.CourseHours)}={paramValues.CourseHours}&" +
-                                         $"studyTime={paramValues.CourseStudyTime}&" +
+                                         $"{nameof(paramValues.CourseStudyTime)}={paramValues.CourseStudyTime}&" +
                                          $"{nameof(paramValues.StartDate)}={paramValues.StartDate}&" +
                                          $"{nameof(paramValues.Distance)}={paramValues.Distance}&" +
                                          $"{nameof(paramValues.FilterA)}={paramValues.FilterA}&" +
@@ -220,28 +220,33 @@ namespace DFC.App.FindACourse.Controllers
         [HttpGet]
         [Route("find-a-course/course/body/course/page")]
         [Route("find-a-course/search/page/body")]
-        public async Task<IActionResult> Page(string searchTerm, string town, string distance, string courseType, string courseHours, string studyTime, string startDate, int page, bool filterA, bool IsTest, string orderByValue)
+        public async Task<IActionResult> Page(ParamValues paramValues, bool isTest)
         {
             logService.LogInformation($"{nameof(this.Page)} has been called");
 
+            var isPostcode = !string.IsNullOrEmpty(paramValues.Town) ? (bool?)paramValues.Town.IsPostcode() : null;
+            paramValues.D = isPostcode.HasValue && isPostcode.Value ? 1 : 0;
+
             var model = new BodyViewModel
             {
-                CurrentSearchTerm = searchTerm,
+                CurrentSearchTerm = paramValues.SearchTerm,
                 SideBar = new SideBarViewModel
                 {
-                    TownOrPostcode = town,
-                    DistanceValue = distance,
-                    CourseType = ConvertStringToFiltersListViewModel(courseType),
-                    CourseHours = ConvertStringToFiltersListViewModel(courseHours),
-                    CourseStudyTime = ConvertStringToFiltersListViewModel(studyTime),
-                    StartDateValue = startDate,
-                    CurrentSearchTerm = searchTerm,
-                    FiltersApplied = filterA,
-                    SelectedOrderByValue = orderByValue,
+                    TownOrPostcode = paramValues.Town,
+                    DistanceValue = paramValues.Distance,
+                    CourseType = ConvertStringToFiltersListViewModel(paramValues.CourseType),
+                    CourseHours = ConvertStringToFiltersListViewModel(paramValues.CourseHours),
+                    CourseStudyTime = ConvertStringToFiltersListViewModel(paramValues.CourseStudyTime),
+                    StartDateValue = paramValues.StartDate,
+                    CurrentSearchTerm = paramValues.SearchTerm,
+                    FiltersApplied = paramValues.FilterA,
+                    SelectedOrderByValue = paramValues.OrderByValue,
+                    D = paramValues.D,
                 },
-                RequestPage = page,
+                RequestPage = paramValues.Page,
+                SelectedDistanceValue = paramValues.Distance,
                 IsNewPage = true,
-                IsTest = IsTest,
+                IsTest = isTest,
             };
 
             logService.LogInformation($"{nameof(this.Page)} generated the model and ready to pass to the view");
@@ -285,7 +290,7 @@ namespace DFC.App.FindACourse.Controllers
                 throw new ArgumentNullException(nameof(postcode));
             }
 
-            return IsPostcode(postcode);
+            return postcode.IsPostcode();
         }
 
         private static BodyViewModel GenerateModel(BodyViewModel model)
@@ -364,7 +369,7 @@ namespace DFC.App.FindACourse.Controllers
 
             if (!string.IsNullOrEmpty(model.SideBar.TownOrPostcode))
             {
-                if (IsPostcode(model.SideBar.TownOrPostcode))
+                if (model.SideBar.TownOrPostcode.IsPostcode())
                 {
                     courseSearchFilters.PostCode = NormalizePostcode(model.SideBar.TownOrPostcode);
                     courseSearchFilters.Distance = selectedDistanceValue;
@@ -444,6 +449,7 @@ namespace DFC.App.FindACourse.Controllers
             sideBarViewModel.CurrentSearchTerm = model.CurrentSearchTerm;
             sideBarViewModel.FiltersApplied = model.SideBar.FiltersApplied;
             sideBarViewModel.SelectedOrderByValue = model.SideBar.SelectedOrderByValue;
+            sideBarViewModel.D = model.SideBar.D;
 
             if (model.SideBar.CourseType != null && model.SideBar.CourseType.SelectedIds.Any())
             {
@@ -478,7 +484,7 @@ namespace DFC.App.FindACourse.Controllers
             var distance = model.SideBar.DistanceValue;
             var courseType = model.SideBar.CourseType != null && model.SideBar.CourseType.SelectedIds?.Count > 0 ? JsonConvert.SerializeObject(model.SideBar.CourseType.SelectedIds) : null;
             var courseHours = model.SideBar.CourseHours != null && model.SideBar.CourseHours.SelectedIds?.Count > 0 ? JsonConvert.SerializeObject(model.SideBar.CourseHours.SelectedIds) : null;
-            var studyTime = model.SideBar.CourseStudyTime != null && model.SideBar.CourseStudyTime?.SelectedIds.Count > 0 ? JsonConvert.SerializeObject(model.SideBar.CourseStudyTime.SelectedIds) : null;
+            var courseStudyTime = model.SideBar.CourseStudyTime != null && model.SideBar.CourseStudyTime?.SelectedIds.Count > 0 ? JsonConvert.SerializeObject(model.SideBar.CourseStudyTime.SelectedIds) : null;
             var startDate = model.SideBar.StartDateValue;
             var searchTerm = sideBarViewModel.CurrentSearchTerm;
             var page = model.RequestPage;
@@ -491,7 +497,7 @@ namespace DFC.App.FindACourse.Controllers
                                      $"{nameof(town)}={town}&" +
                                      $"{nameof(courseType)}={courseType}&" +
                                      $"{nameof(courseHours)}={courseHours}&" +
-                                     $"{nameof(studyTime)}={studyTime}&" +
+                                     $"{nameof(courseStudyTime)}={courseStudyTime}&" +
                                      $"{nameof(startDate)}={startDate}&" +
                                      $"{nameof(distance)}={distance}&" +
                                      $"{nameof(filtera)}={filtera}&" +
@@ -590,20 +596,6 @@ namespace DFC.App.FindACourse.Controllers
             }
 
             return returnList;
-        }
-
-        private static bool IsPostcode(string townOrPostcode)
-        {
-            townOrPostcode = townOrPostcode.Replace(" ", string.Empty);
-
-            var postcodeRegex = new Regex(@"^([Gg][Ii][Rr] 0[Aa]{2})|((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([A-Za-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9][A-Za-z]?))))\s?[0-9][A-Za-z]{2})");
-
-            if (postcodeRegex.IsMatch(townOrPostcode.ToUpper()))
-            {
-                return true;
-            }
-
-            return false;
         }
 
         private static string NormalizePostcode(string postcode)
