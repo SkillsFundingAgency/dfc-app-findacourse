@@ -16,7 +16,6 @@
     var searchTerm = Model.SideBar.CurrentSearchTerm;
     var filterA = Model.SideBar.FiltersApplied;
     var orderByValue = Model.SideBar.SelectedOrderByValue;
-    var D = Model.SideBar.D;
 
     var parameters = $"{nameof(searchTerm)}={searchTerm}&" +
              $"{nameof(town)}={town}&" +
@@ -26,8 +25,7 @@
              $"{nameof(startDate)}={startDate}&" +
              $"{nameof(distance)}={distance}&" +
              $"{nameof(filterA)}={filterA}&" +
-             $"{nameof(orderByValue)}={orderByValue}&" +
-             $"{nameof(D)}={D}";
+             $"{nameof(orderByValue)}={orderByValue}";
     var nextLinkParams = $"{parameters}&page={nextPage}";
     var previousLinkParams = $"{parameters}&page={previousPage}";
     var id = Model.IsResultBody ? "fac-result-list-Result" : "fac-result-list";
