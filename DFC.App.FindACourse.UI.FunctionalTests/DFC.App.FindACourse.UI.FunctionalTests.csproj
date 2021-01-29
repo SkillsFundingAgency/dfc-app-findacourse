@@ -2,16 +2,26 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <ProjectGuid>{1FF680BC-6E33-4B40-92AE-D5D4131AD1A5}</ProjectGuid>
+    <ProjectGuid>{1ff680bc-6e33-4b40-92ae-d5d4131ad1a5}</ProjectGuid>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
+
+  <ItemGroup>
+    <SpecFlowObsoleteCodeBehindFiles Remove="Features\SearchForACourse - Copy.feature.cs" />
+    <SpecFlowObsoleteCodeBehindFiles Remove="Features\SearchForACourseUsingCourseHours - Copy.feature.cs" />
+    <SpecFlowObsoleteCodeBehindFiles Remove="Features\SearchForACourseUsingCourseTime - Copy.feature.cs" />
+    <SpecFlowObsoleteCodeBehindFiles Remove="Features\SearchForACourseUsingCourseTypeFilter - Copy.feature.cs" />
+    <SpecFlowObsoleteCodeBehindFiles Remove="Features\SearchForACourseUsingLocationFilter - Copy.feature.cs" />
+    <SpecFlowObsoleteCodeBehindFiles Remove="Features\SearchForACourseUsingStartDateFilter - Copy.feature.cs" />
+    <SpecFlowObsoleteCodeBehindFiles Remove="Features\ViewCourseDetails - Copy.feature.cs" />
+  </ItemGroup>
   
   <ItemGroup>
     <AdditionalFiles Include="..\stylecop.json" Link="stylecop.json" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="DFC.TestAutomation.UI" Version="1.0.120" />
+    <PackageReference Include="DFC.TestAutomation.UI" Version="1.0.141" />
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.3.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -30,9 +40,94 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Features\GoBackToSearchResultsFromCourseDetails.feature.cs">
+      <DependentUpon>GoBackToSearchResultsFromCourseDetails.feature</DependentUpon>
+    </Compile>
+    <Compile Update="Features\ViewCourseDetails.feature.cs">
+      <DependentUpon>ViewCourseDetails.feature</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Features\SearchForACourseSortResults.feature.cs">
+      <DependentUpon>SearchForACourseSortResults.feature</DependentUpon>
+    </Compile>
+    <Compile Update="Features\SearchForACourseUsingCourseTime.feature.cs">
+      <DependentUpon>SearchForACourseUsingCourseTime.feature</DependentUpon>
+    </Compile>
+    <Compile Update="Features\SearchForACourseUsingCourseHours.feature.cs">
+      <DependentUpon>SearchForACourseUsingCourseHours.feature</DependentUpon>
+    </Compile>
+    <Compile Update="Features\SearchForACourseUsingCourseTypeFilter.feature.cs">
+      <DependentUpon>SearchForACourseUsingCourseTypeFilter.feature</DependentUpon>
+    </Compile>
+    <Compile Update="Features\SearchForACourseUsingStartDateFilter.feature.cs">
+      <DependentUpon>SearchForACourseUsingStartDateFilter.feature</DependentUpon>
+    </Compile>
+    <Compile Update="Features\SearchForACourseUsingLocationFilter.feature.cs">
+      <DependentUpon>SearchForACourseUsingLocationFilter.feature</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="appsettings.template.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <SpecFlowFeatureFiles Update="Features\GoBackToSearchResultsFromCourseDetails.feature">
+      <Visible>$(UsingMicrosoftNETSdk)</Visible>
+      <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
+      <LastGenOutput>ViewCourseDetails.feature.cs</LastGenOutput>
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+    </SpecFlowFeatureFiles>
+    <SpecFlowFeatureFiles Update="Features\ViewCourseDetails.feature">
+      <Visible>$(UsingMicrosoftNETSdk)</Visible>
+      <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>ViewCourseDetails.feature.cs</LastGenOutput>
+    </SpecFlowFeatureFiles>
+    <SpecFlowFeatureFiles Update="Features\SearchForACourseSortResults.feature">
+      <Visible>$(UsingMicrosoftNETSdk)</Visible>
+      <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
+      <LastGenOutput>SearchForACourseUsingLocationFilter.feature.cs</LastGenOutput>
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+    </SpecFlowFeatureFiles>
+    <SpecFlowFeatureFiles Update="Features\SearchForACourseUsingCourseTime.feature">
+      <Visible>$(UsingMicrosoftNETSdk)</Visible>
+      <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
+      <LastGenOutput>SearchForACourseUsingLocationFilter.feature.cs</LastGenOutput>
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+    </SpecFlowFeatureFiles>
+    <SpecFlowFeatureFiles Update="Features\SearchForACourseUsingCourseHours.feature">
+      <Visible>$(UsingMicrosoftNETSdk)</Visible>
+      <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
+      <LastGenOutput>SearchForACourseUsingLocationFilter.feature.cs</LastGenOutput>
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+    </SpecFlowFeatureFiles>
+    <SpecFlowFeatureFiles Update="Features\SearchForACourseUsingCourseTypeFilter.feature">
+      <Visible>$(UsingMicrosoftNETSdk)</Visible>
+      <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
+      <LastGenOutput>SearchForACourseUsingLocationFilter.feature.cs</LastGenOutput>
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+    </SpecFlowFeatureFiles>
+    <SpecFlowFeatureFiles Update="Features\SearchForACourseUsingStartDateFilter.feature">
+      <Visible>$(UsingMicrosoftNETSdk)</Visible>
+      <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
+      <LastGenOutput>SearchForACourseUsingLocationFilter.feature.cs</LastGenOutput>
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+    </SpecFlowFeatureFiles>
+    <SpecFlowFeatureFiles Update="Features\SearchForACourseUsingLocationFilter.feature">
+      <Visible>$(UsingMicrosoftNETSdk)</Visible>
+      <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>SearchForACourseUsingLocationFilter.feature.cs</LastGenOutput>
+    </SpecFlowFeatureFiles>
   </ItemGroup>
 
 </Project>

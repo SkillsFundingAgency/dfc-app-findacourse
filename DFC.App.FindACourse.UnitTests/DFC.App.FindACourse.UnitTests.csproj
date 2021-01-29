@@ -4,7 +4,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <IsPackable>false</IsPackable>
     <CodeAnalysisRuleSet>../UnitTests.CodeAnalysis.ruleset</CodeAnalysisRuleSet>
- 	  <ProjectGuid>{84788D59-022E-46DB-964F-213E57F17E25}</ProjectGuid>
+ 	  <ProjectGuid>{84788d59-022e-46db-964f-213e57f17e25}</ProjectGuid>
  </PropertyGroup>
 
   <ItemGroup>

@@ -35,8 +35,9 @@ namespace DFC.App.FindACourse.UI.FunctionalTests.StepDefinitions
             // a wait for the object to go stale. Once it's gone stale then the search results have refreshed.
             Thread.Sleep(5000);
 
-            var results = this.Context.GetWebDriver().FindElements(By.ClassName("govuk-!-margin-top-6"));
+            var results = this.Context.GetWebDriver().FindElements(By.CssSelector(".govuk-\\!-margin-top-6"));
             Assert.True(results.Count > 0);
+            this.Context.Get<IObjectContext>().SetObject("SearchResultsCount", results.Count);
             var searchResults = new List<SearchResult>();
 
             foreach (var resultContainer in results)
@@ -48,6 +49,55 @@ namespace DFC.App.FindACourse.UI.FunctionalTests.StepDefinitions
             // This should read like the following line. This is a bug with the nuget package:
             // this.Context.GetObjectContext().SetObject("SearchResults", searchResults);
             this.Context.Get<IObjectContext>().SetObject("SearchResults", searchResults);
+        }
+
+        [Then(@"search results are updated")]
+        public void ThenSearchResultsAreUpdated()
+        {
+            Thread.Sleep(5000);
+
+            var results = this.Context.GetWebDriver().FindElements(By.CssSelector(".govuk-\\!-margin-top-6"));
+            Assert.True(results.Count > 0);
+            Assert.True(results.Count <= int.Parse(Context.Get<IObjectContext>().GetObject("SearchResultsCount")));
+            var searchResults = new List<SearchResult>();
+
+            foreach (var resultContainer in results)
+            {
+                var searchResult = new SearchResultSupport(this.Context, resultContainer).GetResult();
+                searchResults.Add(searchResult);
+            }
+
+            this.Context.Get<IObjectContext>().UpdateObject("SearchResults", searchResults);
+        }
+
+        [When(@"I click on the first search result")]
+        public void WhenIClickTheFirstResult()
+        {
+            Thread.Sleep(5000);
+
+            var results = this.Context.GetWebDriver().FindElements(By.ClassName("govuk-heading-m"));
+            Assert.True(results.Count > 0);
+
+            var firstResult = results[1];
+            this.Context.Get<IObjectContext>().SetObject("FirstResult", firstResult.GetAttribute("innerText"));
+            firstResult.Click();
+        }
+
+        [Then(@"I am returned to same search results page")]
+        public void ThenIAmReturnedToSameSearchResultsPage()
+        {
+            Thread.Sleep(5000);
+
+            var results = this.Context.GetWebDriver().FindElements(By.ClassName("govuk-heading-m"));
+            Assert.True(results.Count > 0);
+
+            var firstResult = results[1];
+            this.Context.Get<IObjectContext>().SetObject("BackToFirstResult", firstResult.GetAttribute("innerText"));
+
+            if (!(this.Context.Get<IObjectContext>().GetObject("FirstResult").ToString() == this.Context.Get<IObjectContext>().GetObject("BackToFirstResult").ToString()))
+            {
+                throw new OperationCanceledException($"Unable to perform the step: {this.Context.StepContext.StepInfo.Text}. Unexpected results displayed on going back from course details page.");
+            }
         }
     }
 }

@@ -4,29 +4,33 @@
 // </copyright>
 
 using DFC.App.FindACourse.UI.FunctionalTests.Model;
+using DFC.TestAutomation.UI;
 using DFC.TestAutomation.UI.Extension;
+using OpenQA.Selenium;
 using System;
 using TechTalk.SpecFlow;
 
 namespace DFC.App.FindACourse.UI.FunctionalTests.Pages
 {
-    internal class FindACourseLandingPage
+    internal class CourseDetailsPage
     {
-        public FindACourseLandingPage(ScenarioContext context)
+        public CourseDetailsPage(ScenarioContext context)
         {
             this.Context = context;
 
             if (this.Context == null)
             {
-                throw new NullReferenceException("The scenario context is null. The find a course landing page cannot be initialised.");
+                throw new NullReferenceException("The scenario context is null. The course details cannot be initialised.");
             }
         }
 
         private ScenarioContext Context { get; set; }
 
-        public FindACourseLandingPage NavigateToFindACoursePage()
+        public CourseDetailsPage CourseDetailsPageDisplayed()
         {
-            this.Context.GetWebDriver().Url = this.Context.GetSettingsLibrary<AppSettings>().AppSettings.AppBaseUrl.ToString() + "/search";
+            var pageHeadingLocator = By.ClassName("govuk-heading-l");
+            this.Context.GetHelperLibrary<AppSettings>().WebDriverWaitHelper.WaitForElementToContainText(pageHeadingLocator, this.Context.Get<IObjectContext>().GetObject("FirstResult"));
+            System.Threading.Thread.Sleep(5000);
             return this;
         }
     }

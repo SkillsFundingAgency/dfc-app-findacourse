@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace DFC.App.FindACourse.Data.Models
+﻿namespace DFC.App.FindACourse.Data.Models
 {
     public class ParamValues
     {
@@ -25,5 +23,7 @@ namespace DFC.App.FindACourse.Data.Models
         public bool IsTest { get; set; }
 
         public string OrderByValue { get; set; }
+
+        public int D { get; set; }
     }
 }
