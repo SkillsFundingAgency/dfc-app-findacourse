@@ -44,7 +44,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
             var model = Assert.IsAssignableFrom<HeadViewModel>(viewResult.ViewData.Model);
 
             Assert.NotNull(model);
-            Assert.Equal("Results | Find a course | National careers service", model.Title);
+            Assert.Equal("Results | Find a course | National Careers Service", model.Title);
 
             controller.Dispose();
         }
