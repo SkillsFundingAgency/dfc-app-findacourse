@@ -145,5 +145,23 @@ namespace DFC.App.FindACourse.Services.UnitTests
             A.CallTo(() => repository.GetCourseDetails(courseId, runId)).MustHaveHappenedOnceExactly();
             A.Equals(result, returnedCourseDetails);
         }
+
+        [Test]
+        public void GetTLevelDetailsTest()
+        {
+            // Set up
+            const string tlevelId = "6707d15a-5a19-4c18-9cc8-570573bb5d67";
+            var repository = A.Fake<IFindACourseRepository>();
+            A.CallTo(() => repository.GetTLevelDetails(tlevelId)).Returns(A.Dummy<TLevelDetails>());
+
+            var findACourseService = new FindACourseService(repository);
+
+            //Act
+            var result = findACourseService.GetTLevelDetails(tlevelId).Result;
+
+            //Assert
+            A.CallTo(() => repository.GetTLevelDetails(tlevelId)).MustHaveHappenedOnceExactly();
+            A.Equals(result, A.Dummy<TLevelDetails>());
+        }
     }
 }

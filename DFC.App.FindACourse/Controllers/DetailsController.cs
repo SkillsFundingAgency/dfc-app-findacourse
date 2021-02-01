@@ -88,10 +88,15 @@ namespace DFC.App.FindACourse.Controllers
         [HttpGet]
         [Route("find-a-course/search/tdetails/body")]
         [Route("find-a-course/tdetails/body")]
-        public async Task<IActionResult> TLevelDetails(string tlevelId, string searchTerm, string currentSearchTerm, string town, string courseType,
-                                             string courseHours, string courseStudyTime, string startDate, string distance, string filtera, int page, int d, string orderByValue)
+        public async Task<IActionResult> TLevelDetails(string tlevelId, string searchTerm, string currentSearchTerm, string town, string courseType, string courseHours, string courseStudyTime, string startDate, string distance, string filtera, int page, int d, string orderByValue)
         {
             logService.LogInformation($"{nameof(this.TLevelDetails)} has been called");
+
+            if (string.IsNullOrEmpty(tlevelId))
+            {
+                throw new ArgumentNullException(nameof(tlevelId));
+            }
+
             var model = new TLevelDetailsViewModel();
             if (searchTerm == null && currentSearchTerm != null)
             {
@@ -110,24 +115,40 @@ namespace DFC.App.FindACourse.Controllers
                                $"{nameof(d)}={d}&" +
                                $"{nameof(orderByValue)}={orderByValue}";
 
-            if (string.IsNullOrEmpty(tlevelId))
-            {
-                throw new ArgumentNullException("Course Id and/or runId does not have a value");
-            }
-
             try
             {
                 model.TlevelDetails = await findACourseService.GetTLevelDetails(tlevelId).ConfigureAwait(false);
                 model.DetailsRightBarViewModel.Provider = mapper.Map<ProviderViewModel>(model.TlevelDetails.ProviderDetails);
                 model.DetailsRightBarViewModel.SpeakToAnAdviser = await staticContentDocumentService.GetByIdAsync(new Guid(cmsApiClientOptions.ContentIds)).ConfigureAwait(false);
+
+                model.TlevelDetails.Venues.Add(GetDummyVenue("Venue one"));
+                model.TlevelDetails.Venues.Add(GetDummyVenue("Venue two"));
             }
             catch (Exception ex)
             {
-                logService.LogError($"Get course details caused an error: {ex}. " +
-                    $"The values passed were: course id: {tlevelId}");
+                logService.LogError($"Get tlevel details caused an error: {ex}. The values passed were: tlevel id: {tlevelId}");
             }
 
             return View("tlevelDetails", model);
+        }
+
+        //To remove once we get real data
+        private static Venue GetDummyVenue(string name)
+        {
+            var venue = new Venue() { VenueName = name, PhoneNumber = "12345 678", Website = "https://bbc.com" };
+            venue.EmailAddress = "g@fr.com";
+            venue.Location = new Address()
+            {
+                AddressLine1 = "AddressLine1",
+                AddressLine2 = "AddressLine2",
+                Town = "Town1",
+                Postcode = "P11 5DF",
+                County = "West Midlands",
+                Latitude = "52.54715579704134",
+                Longitude = "-1.8226955723337404",
+            };
+
+            return venue;
         }
 
         private static IList<CourseRegion> TransformSubRegionsToRegions(IList<SubRegion> subRegions)
