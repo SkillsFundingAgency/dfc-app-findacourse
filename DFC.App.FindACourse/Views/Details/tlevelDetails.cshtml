@@ -4,7 +4,7 @@
         <div class="govuk-width-container">
             <div class="govuk-grid-row">
                 <div class="govuk-grid-column-two-thirds">
-                    <h1 class="govuk-heading-l govuk-!-padding-bottom-9">@Html.Raw(Model.TlevelDetails.Qualification.TLevelName) - checkThis</h1>
+                    <h1 class="govuk-heading-l govuk-!-padding-bottom-9">@Html.Raw(Model.TlevelDetails.Qualification.TLevelName)</h1>
                 </div>
             </div>
         </div>
@@ -153,11 +153,10 @@
                                         <td class="govuk-table__cell">
                                             @if (Model.TlevelDetails.Website != null)
                                             {
-                                                <a class="govuk-link" href="@Model.TlevelDetails.Website" id="other-website-@counter">View course</a>
+                                                <a class="govuk-link" href="@Model.TlevelDetails.Website" id="other-website-@(counter++)">View course</a>
                                             }
                                         </td>
                                     </tr>
-                                    @(counter++)
                                 }
                             </tbody>
                         </table>

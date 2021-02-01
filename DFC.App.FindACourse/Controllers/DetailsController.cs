@@ -43,26 +43,15 @@ namespace DFC.App.FindACourse.Controllers
         public async Task<IActionResult> Details(string courseId, string runId, string currentSearchTerm, ParamValues paramValues)
         {
             logService.LogInformation($"{nameof(this.Details)} has been called");
-            var model = new DetailsViewModel();
-            if (paramValues.SearchTerm == null && currentSearchTerm != null)
+
+            if (paramValues == null)
             {
-                paramValues.SearchTerm = currentSearchTerm;
+                throw new ArgumentNullException(nameof(paramValues));
             }
 
-            var isPostcode = !string.IsNullOrEmpty(paramValues.Town) ? (bool?)paramValues.Town.IsPostcode() : null;
-            paramValues.D = isPostcode.HasValue && isPostcode.Value ? 1 : 0;
+            var model = new DetailsViewModel();
 
-            model.SearchTerm = $"{nameof(paramValues.SearchTerm)}={paramValues.SearchTerm}&" +
-                               $"{nameof(paramValues.Town)}={paramValues.Town}&" +
-                               $"{nameof(paramValues.CourseType)}={paramValues.CourseType}&" +
-                               $"{nameof(paramValues.CourseHours)}={paramValues.CourseHours}&" +
-                               $"{nameof(paramValues.CourseStudyTime)}={paramValues.CourseStudyTime}&" +
-                               $"{nameof(paramValues.StartDate)}={paramValues.StartDate}&" +
-                               $"{nameof(paramValues.Distance)}={paramValues.Distance}&" +
-                               $"{nameof(paramValues.FilterA)}={paramValues.FilterA}&" +
-                               $"{nameof(paramValues.Page)}={paramValues.Page}&" +
-                               $"{nameof(paramValues.D)}={paramValues.D}&" +
-                               $"{nameof(paramValues.OrderByValue)}={paramValues.OrderByValue}";
+            model.SearchTerm = FormatSearchParameters(paramValues, currentSearchTerm);
 
             if (string.IsNullOrEmpty(courseId) || string.IsNullOrEmpty(runId))
             {
@@ -88,32 +77,23 @@ namespace DFC.App.FindACourse.Controllers
         [HttpGet]
         [Route("find-a-course/search/tdetails/body")]
         [Route("find-a-course/tdetails/body")]
-        public async Task<IActionResult> TLevelDetails(string tlevelId, string searchTerm, string currentSearchTerm, string town, string courseType, string courseHours, string courseStudyTime, string startDate, string distance, string filtera, int page, int d, string orderByValue)
+        public async Task<IActionResult> TLevelDetails(string tlevelId, string currentSearchTerm, ParamValues paramValues)
         {
             logService.LogInformation($"{nameof(this.TLevelDetails)} has been called");
 
-            if (string.IsNullOrEmpty(tlevelId))
+            if (paramValues == null)
             {
-                throw new ArgumentNullException(nameof(tlevelId));
+                throw new ArgumentNullException(nameof(paramValues));
             }
 
             var model = new TLevelDetailsViewModel();
-            if (searchTerm == null && currentSearchTerm != null)
+
+            if (paramValues.SearchTerm == null && currentSearchTerm != null)
             {
-                searchTerm = currentSearchTerm;
+                paramValues.SearchTerm = currentSearchTerm;
             }
 
-            model.SearchTerm = $"{nameof(searchTerm)}={searchTerm}&" +
-                               $"{nameof(town)}={town}&" +
-                               $"{nameof(courseType)}={courseType}&" +
-                               $"{nameof(courseHours)}={courseHours}&" +
-                               $"{nameof(courseStudyTime)}={courseStudyTime}&" +
-                               $"{nameof(startDate)}={startDate}&" +
-                               $"{nameof(distance)}={distance}&" +
-                               $"{nameof(filtera)}={filtera}&" +
-                               $"{nameof(page)}={page}&" +
-                               $"{nameof(d)}={d}&" +
-                               $"{nameof(orderByValue)}={orderByValue}";
+            model.SearchTerm = FormatSearchParameters(paramValues, currentSearchTerm);
 
             try
             {
@@ -121,8 +101,9 @@ namespace DFC.App.FindACourse.Controllers
                 model.DetailsRightBarViewModel.Provider = mapper.Map<ProviderViewModel>(model.TlevelDetails.ProviderDetails);
                 model.DetailsRightBarViewModel.SpeakToAnAdviser = await staticContentDocumentService.GetByIdAsync(new Guid(cmsApiClientOptions.ContentIds)).ConfigureAwait(false);
 
-                model.TlevelDetails.Venues.Add(GetDummyVenue("Venue one"));
-                model.TlevelDetails.Venues.Add(GetDummyVenue("Venue two"));
+                model.TlevelDetails.Venues.Add(GetDummyVenue("Test Venue one"));
+                model.TlevelDetails.Venues.Add(GetDummyVenue("Test Venue two"));
+                model.TlevelDetails.Qualification.TLevelName = model.TlevelDetails.Qualification.TLevelName + " - Test TLevelName needs to be removed";
             }
             catch (Exception ex)
             {
@@ -149,6 +130,31 @@ namespace DFC.App.FindACourse.Controllers
             };
 
             return venue;
+        }
+
+        private static string FormatSearchParameters(ParamValues paramValues, string currentSearchTerm)
+        {
+            if (paramValues.SearchTerm == null && currentSearchTerm != null)
+            {
+                paramValues.SearchTerm = currentSearchTerm;
+            }
+
+            var isPostcode = !string.IsNullOrEmpty(paramValues.Town) ? (bool?)paramValues.Town.IsPostcode() : null;
+            paramValues.D = isPostcode.HasValue && isPostcode.Value ? 1 : 0;
+
+            var searchTerm = $"{nameof(paramValues.SearchTerm)}={paramValues.SearchTerm}&" +
+                               $"{nameof(paramValues.Town)}={paramValues.Town}&" +
+                               $"{nameof(paramValues.CourseType)}={paramValues.CourseType}&" +
+                               $"{nameof(paramValues.CourseHours)}={paramValues.CourseHours}&" +
+                               $"{nameof(paramValues.CourseStudyTime)}={paramValues.CourseStudyTime}&" +
+                               $"{nameof(paramValues.StartDate)}={paramValues.StartDate}&" +
+                               $"{nameof(paramValues.Distance)}={paramValues.Distance}&" +
+                               $"{nameof(paramValues.FilterA)}={paramValues.FilterA}&" +
+                               $"{nameof(paramValues.Page)}={paramValues.Page}&" +
+                               $"{nameof(paramValues.D)}={paramValues.D}&" +
+                               $"{nameof(paramValues.OrderByValue)}={paramValues.OrderByValue}";
+
+            return searchTerm;
         }
 
         private static IList<CourseRegion> TransformSubRegionsToRegions(IList<SubRegion> subRegions)

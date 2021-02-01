@@ -9,6 +9,7 @@ using FakeItEasy;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
+using System;
 using System.Collections.Generic;
 using System.Net.Mime;
 
@@ -17,13 +18,15 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
     public class BaseController
     {
         protected const string DefaultHelpArticleName = "help";
+        protected const string testContentId = "87dfb08e-13ec-42ff-9405-5bbde048827a";
+
 
         public BaseController()
         {
             FakeLogService = A.Fake<ILogService>();
             FakeFindACoursesService = A.Fake<IFindACourseService>();
             FakeStaticContentDocumentService = A.Fake<IDocumentService<StaticContentItemModel>>();
-            DummyCmsApiClientOptions = A.Dummy<CmsApiClientOptions>();
+            CmsApiClientOptions = new CmsApiClientOptions() { ContentIds = testContentId };
             FakeMapper = A.Fake<IMapper>();
         }
 
@@ -51,7 +54,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
 
         protected IDocumentService<StaticContentItemModel> FakeStaticContentDocumentService { get; set; }
 
-        protected CmsApiClientOptions DummyCmsApiClientOptions { get; set; }
+        protected CmsApiClientOptions CmsApiClientOptions { get; set; }
 
         protected CourseController BuildCourseController(string mediaTypeName)
         {
@@ -76,7 +79,9 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
 
             httpContext.Request.Headers[HeaderNames.Accept] = mediaTypeName;
 
-            var controller = new DetailsController(FakeLogService, FakeFindACoursesService, FakeStaticContentDocumentService, DummyCmsApiClientOptions, FakeMapper)
+            A.CallTo(() => FakeStaticContentDocumentService.GetByIdAsync(A<Guid>.Ignored, null)).Returns(new StaticContentItemModel() { Title = nameof(StaticContentItemModel.Title) });
+
+            var controller = new DetailsController(FakeLogService, FakeFindACoursesService, FakeStaticContentDocumentService, CmsApiClientOptions, FakeMapper)
             {
                 ControllerContext = new ControllerContext()
                 {
