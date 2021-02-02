@@ -42,7 +42,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
                 D = 1,
                 OrderByValue = "StartDate",
             };
-            var result = await controller.Details(courseId, runId, "Maths", paramValues).ConfigureAwait(false);
+            var result = await controller.Details(courseId, runId, null, "Maths", paramValues).ConfigureAwait(false);
 
             var viewResult = Assert.IsType<ViewResult>(result);
 

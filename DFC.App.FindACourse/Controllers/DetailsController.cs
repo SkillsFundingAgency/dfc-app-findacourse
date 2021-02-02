@@ -40,7 +40,8 @@ namespace DFC.App.FindACourse.Controllers
         [HttpGet]
         [Route("find-a-course/search/details/body")]
         [Route("find-a-course/details/body")]
-        public async Task<IActionResult> Details(string courseId, string runId, string currentSearchTerm, ParamValues paramValues)
+        [Route("find-a-course/search/course-details/body")]
+        public async Task<IActionResult> Details(string courseId, string runId, string r, string currentSearchTerm, ParamValues paramValues)
         {
             logService.LogInformation($"{nameof(this.Details)} has been called");
 
@@ -49,7 +50,9 @@ namespace DFC.App.FindACourse.Controllers
                 throw new ArgumentNullException(nameof(paramValues));
             }
 
-            var model = new DetailsViewModel();
+            runId ??= r;
+            var isPostcode = !string.IsNullOrEmpty(paramValues.Town) ? (bool?)paramValues.Town.IsPostcode() : null;
+            paramValues.D = isPostcode.HasValue && isPostcode.Value ? 1 : 0;
 
             model.SearchTerm = FormatSearchParameters(paramValues, currentSearchTerm);
 
