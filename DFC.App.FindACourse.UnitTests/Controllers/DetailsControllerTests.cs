@@ -59,7 +59,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
             var paramValues = new ParamValues();
 
             //Act
-            var result = await controller.Details(courseId, runId, "testSearchTerm", paramValues).ConfigureAwait(false);
+            var result = await controller.Details(courseId, runId, null, "testSearchTerm", paramValues).ConfigureAwait(false);
 
             //Asserts
             var viewResult = Assert.IsType<ViewResult>(result);
@@ -76,10 +76,12 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
             var controller = BuildDetailsController("*/*");
 
             // act
-            Func<Task> act = async () => await controller.Details(courseId, runId, "testSearchTerm", null).ConfigureAwait(false);
+            Func<Task> act = async () => await controller.Details(courseId, runId, null, "testSearchTerm", null).ConfigureAwait(false);
 
             // assert
             act.Should().Throw<ArgumentNullException>();
+
+            controller.Dispose();
         }
 
         [Theory]
@@ -141,6 +143,8 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
 
             // assert
             act.Should().Throw<ArgumentNullException>();
+
+            controller.Dispose();
         }
 
         private TLevelDetails GetTestTLevel()

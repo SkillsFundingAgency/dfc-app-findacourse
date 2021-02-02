@@ -50,9 +50,9 @@ namespace DFC.App.FindACourse.Controllers
                 throw new ArgumentNullException(nameof(paramValues));
             }
 
+            var model = new DetailsViewModel();
+
             runId ??= r;
-            var isPostcode = !string.IsNullOrEmpty(paramValues.Town) ? (bool?)paramValues.Town.IsPostcode() : null;
-            paramValues.D = isPostcode.HasValue && isPostcode.Value ? 1 : 0;
 
             model.SearchTerm = FormatSearchParameters(paramValues, currentSearchTerm);
 
@@ -146,16 +146,16 @@ namespace DFC.App.FindACourse.Controllers
             paramValues.D = isPostcode.HasValue && isPostcode.Value ? 1 : 0;
 
             var searchTerm = $"{nameof(paramValues.SearchTerm)}={paramValues.SearchTerm}&" +
-                               $"{nameof(paramValues.Town)}={paramValues.Town}&" +
-                               $"{nameof(paramValues.CourseType)}={paramValues.CourseType}&" +
-                               $"{nameof(paramValues.CourseHours)}={paramValues.CourseHours}&" +
-                               $"{nameof(paramValues.CourseStudyTime)}={paramValues.CourseStudyTime}&" +
-                               $"{nameof(paramValues.StartDate)}={paramValues.StartDate}&" +
-                               $"{nameof(paramValues.Distance)}={paramValues.Distance}&" +
-                               $"{nameof(paramValues.FilterA)}={paramValues.FilterA}&" +
-                               $"{nameof(paramValues.Page)}={paramValues.Page}&" +
-                               $"{nameof(paramValues.D)}={paramValues.D}&" +
-                               $"{nameof(paramValues.OrderByValue)}={paramValues.OrderByValue}";
+                             $"{nameof(paramValues.Town)}={paramValues.Town}&" +
+                             $"{nameof(paramValues.CourseType)}={paramValues.CourseType}&" +
+                             $"{nameof(paramValues.CourseHours)}={paramValues.CourseHours}&" +
+                             $"{nameof(paramValues.CourseStudyTime)}={paramValues.CourseStudyTime}&" +
+                             $"{nameof(paramValues.StartDate)}={paramValues.StartDate}&" +
+                             $"{nameof(paramValues.Distance)}={paramValues.Distance}&" +
+                             $"{nameof(paramValues.FilterA)}={paramValues.FilterA}&" +
+                             $"{nameof(paramValues.Page)}={paramValues.Page}&" +
+                             $"{nameof(paramValues.D)}={paramValues.D}&" +
+                             $"{nameof(paramValues.OrderByValue)}={paramValues.OrderByValue}";
 
             return searchTerm;
         }
