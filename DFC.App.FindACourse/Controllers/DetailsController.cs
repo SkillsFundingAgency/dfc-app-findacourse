@@ -104,9 +104,12 @@ namespace DFC.App.FindACourse.Controllers
                 model.DetailsRightBarViewModel.Provider = mapper.Map<ProviderViewModel>(model.TlevelDetails.ProviderDetails);
                 model.DetailsRightBarViewModel.SpeakToAnAdviser = await staticContentDocumentService.GetByIdAsync(new Guid(cmsApiClientOptions.ContentIds)).ConfigureAwait(false);
 
-                model.TlevelDetails.Venues.Add(GetDummyVenue("Test Venue one"));
-                model.TlevelDetails.Venues.Add(GetDummyVenue("Test Venue two"));
-                model.TlevelDetails.Qualification.TLevelName = model.TlevelDetails.Qualification.TLevelName + " - Test TLevelName needs to be removed";
+                if (paramValues.IsTest)
+                {
+                    model.TlevelDetails.Venues.Add(GetDummyVenue("Test Venue one"));
+                    model.TlevelDetails.Venues.Add(GetDummyVenue("Test Venue two"));
+                    model.TlevelDetails.Qualification.TLevelName = model.TlevelDetails.Qualification.TLevelName + " - Test TLevelName needs to be removed";
+                }
             }
             catch (Exception ex)
             {
