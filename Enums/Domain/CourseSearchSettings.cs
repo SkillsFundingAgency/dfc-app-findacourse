@@ -10,5 +10,4 @@ namespace DFC.App.FindACourse.Data.Domain
 
         public string HealthCheckKeyWords { get; set; }
     }
-
 }

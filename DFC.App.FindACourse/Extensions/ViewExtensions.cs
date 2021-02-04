@@ -23,7 +23,7 @@ namespace DFC.App.FindACourse.Extensions
                 IViewEngine viewEngine = controller.HttpContext.RequestServices.GetService(typeof(ICompositeViewEngine)) as ICompositeViewEngine;
                 ViewEngineResult viewResult = viewEngine.GetView(viewName, viewName, !partial);
 
-                if (viewResult.Success == false)
+                if (!viewResult.Success)
                 {
                     return $"A view with the name {viewName} could not be found";
                 }
@@ -34,10 +34,9 @@ namespace DFC.App.FindACourse.Extensions
                     controller.ViewData,
                     controller.TempData,
                     writer,
-                    new HtmlHelperOptions()
-                );
+                    new HtmlHelperOptions());
 
-                await viewResult.View.RenderAsync(viewContext);
+                await viewResult.View.RenderAsync(viewContext).ConfigureAwait(false);
 
                 return writer.GetStringBuilder().ToString();
             }

@@ -3,37 +3,42 @@ using DFC.CompositeInterfaceModels.FindACourseClient;
 using FakeItEasy;
 using NUnit.Framework;
 using System.Collections.Generic;
-using System.Net;
 using Xunit;
 using Fac = DFC.FindACourseClient;
 
 namespace DFC.App.FindACourse.Services.UnitTests
 {
     [Trait("Category", "Find a course Service Unit Tests")]
-    public class Tests
+    public class FindACourseServiceTest
     {
         [Test]
         public void CheckIfFilteredDataReturnsData()
         {
             //Arrange
             var repository = A.Fake<IFindACourseRepository>();
-            var courseProperties = new CourseSearchProperties();
-            courseProperties.Page = 1;
+            var courseProperties = new CourseSearchProperties
+            {
+                Page = 1,
+            };
             courseProperties.Filters.SearchTerm = "Maths";
             courseProperties.Filters.CourseType = new List<CourseType> { CourseType.All };
             courseProperties.Filters.CourseHours = new List<CourseHours> { CourseHours.All };
 
-            var courseSearchFilters = new CourseSearchFilters();
-            courseSearchFilters.SearchTerm = "Maths";
-            courseSearchFilters.CourseType = new List<CourseType> { CourseType.All };
-            courseSearchFilters.CourseHours = new List<CourseHours> { CourseHours.All };
-
-            var returnedCourseData = new CourseSearchResult();
-            returnedCourseData.Courses = new List<Course>
+            var courseSearchFilters = new CourseSearchFilters
             {
-                new Course { Title= "Maths", CourseId = "1", AttendancePattern = "Online"}
+                SearchTerm = "Maths",
+                CourseType = new List<CourseType> { CourseType.All },
+                CourseHours = new List<CourseHours> { CourseHours.All },
             };
-            
+
+            var returnedCourseData = new CourseSearchResult
+            {
+                Courses = new List<Course>
+                {
+                    new Course { Title = "Maths", CourseId = "1", AttendancePattern = "Online", },
+                },
+            };
+
             var findACourseService = new FindACourseService(repository);
 
             A.CallTo(() => repository.RetrieveData(A<CourseSearchProperties>.Ignored)).Returns(returnedCourseData);
@@ -43,17 +48,16 @@ namespace DFC.App.FindACourse.Services.UnitTests
 
             //Assert
             A.CallTo(() => repository.RetrieveData(A<CourseSearchProperties>.Ignored)).MustHaveHappenedOnceExactly();
-            A.Equals(result, returnedCourseData);
+            Assert.AreEqual(returnedCourseData, result);
         }
 
         [Test]
-        public void CheckEnumOfCourseTypeIsReturned() 
+        public void CheckEnumOfCourseTypeIsReturned()
         {
             //Arrange
             var repository = A.Fake<IFindACourseRepository>();
             var findACourseService = new FindACourseService(repository);
-            var returnList = new List<CourseType>() { CourseType.All, CourseType.ClassroomBased, 
-                                                    CourseType.ClassroomBased, CourseType.WorkBased };
+            var returnList = new List<CourseType> { CourseType.All, CourseType.ClassroomBased, CourseType.ClassroomBased, CourseType.WorkBased, };
 
             A.CallTo(() => repository.GetFilter<CourseType>()).Returns(returnList);
 
@@ -61,7 +65,7 @@ namespace DFC.App.FindACourse.Services.UnitTests
             var result = findACourseService.GetFilterByName<CourseType>();
 
             //Assert
-            A.Equals(result.Count, 4) ;
+            Assert.AreEqual(4, result.Count);
         }
 
         [Test]
@@ -70,8 +74,7 @@ namespace DFC.App.FindACourse.Services.UnitTests
             //Arrange
             var repository = A.Fake<IFindACourseRepository>();
             var findACourseService = new FindACourseService(repository);
-            var returnList = new List<CourseHours>() { CourseHours.All, CourseHours.Flexible,
-                                                    CourseHours.Fulltime, CourseHours.PartTime };
+            var returnList = new List<CourseHours> { CourseHours.All, CourseHours.Flexible, CourseHours.Fulltime, CourseHours.PartTime };
 
             A.CallTo(() => repository.GetFilter<CourseHours>()).Returns(returnList);
 
@@ -79,7 +82,7 @@ namespace DFC.App.FindACourse.Services.UnitTests
             var result = findACourseService.GetFilterByName<CourseHours>();
 
             //Assert
-            A.Equals(result.Count, 4);
+            Assert.AreEqual(4, result.Count);
         }
 
         [Test]
@@ -88,8 +91,7 @@ namespace DFC.App.FindACourse.Services.UnitTests
             //Arrange
             var repository = A.Fake<IFindACourseRepository>();
             var findACourseService = new FindACourseService(repository);
-            var returnList = new List<Fac.StudyMode>() { Fac.StudyMode.Flexible, Fac.StudyMode.FullTime,
-                                                    Fac.StudyMode.PartTime, Fac.StudyMode.Undefined };
+            var returnList = new List<Fac.StudyMode> { Fac.StudyMode.Flexible, Fac.StudyMode.FullTime, Fac.StudyMode.PartTime, Fac.StudyMode.Undefined, };
 
             A.CallTo(() => repository.GetFilter<Fac.StudyMode>()).Returns(returnList);
 
@@ -97,7 +99,7 @@ namespace DFC.App.FindACourse.Services.UnitTests
             var result = findACourseService.GetFilterByName<Fac.StudyMode>();
 
             //Assert
-            A.Equals(result.Count, 4);
+            Assert.AreEqual(4, result.Count);
         }
 
         [Test]
@@ -106,8 +108,7 @@ namespace DFC.App.FindACourse.Services.UnitTests
             //Arrange
             var repository = A.Fake<IFindACourseRepository>();
             var findACourseService = new FindACourseService(repository);
-            var returnList = new List<StartDate>() { StartDate.Anytime, StartDate.FromToday,
-                                                    StartDate.SelectDateFrom };
+            var returnList = new List<StartDate> { StartDate.Anytime, StartDate.FromToday, StartDate.SelectDateFrom, };
 
             A.CallTo(() => repository.GetFilter<StartDate>()).Returns(returnList);
 
@@ -115,8 +116,8 @@ namespace DFC.App.FindACourse.Services.UnitTests
             var result = findACourseService.GetFilterByName<StartDate>();
 
             //Assert
-            A.Equals(result.Count, 3);
-            A.Equals(result.GetType(), typeof(List<StartDate>));
+            Assert.AreEqual(3, result.Count);
+            Assert.AreEqual(result.GetType(), result.GetType());
         }
 
         [Test]
@@ -129,9 +130,9 @@ namespace DFC.App.FindACourse.Services.UnitTests
 
             var returnedCourseDetails = new CourseDetails
             {
-               Title = "Maths in a unit test",
-               Description = "This is a maths in a top class description",
-               EntryRequirements = "Bring yourself and a brain", 
+                Title = "Maths in a unit test",
+                Description = "This is a maths in a top class description",
+                EntryRequirements = "Bring yourself and a brain",
             };
 
             var findACourseService = new FindACourseService(repository);
@@ -143,7 +144,7 @@ namespace DFC.App.FindACourse.Services.UnitTests
 
             //Assert
             A.CallTo(() => repository.GetCourseDetails(courseId, runId)).MustHaveHappenedOnceExactly();
-            A.Equals(result, returnedCourseDetails);
+            Assert.AreEqual(returnedCourseDetails, result);
         }
     }
 }
