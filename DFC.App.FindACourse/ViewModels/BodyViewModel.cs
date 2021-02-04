@@ -1,11 +1,12 @@
-﻿using DFC.App.FindACourse.Data.Domain;
-using DFC.CompositeInterfaceModels.FindACourseClient;
+﻿using DFC.CompositeInterfaceModels.FindACourseClient;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace DFC.App.FindACourse.ViewModels
 {
+    [ExcludeFromCodeCoverage]
     public class BodyViewModel
     {
         public string CurrentSearchTerm { get; set; }

@@ -1,5 +1,8 @@
-﻿namespace DFC.App.FindACourse.Data.Domain
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace DFC.App.FindACourse.Data.Domain
 {
+    [ExcludeFromCodeCoverage]
     public class Filter
     {
         public string Id { get; set; }

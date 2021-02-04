@@ -1,13 +1,15 @@
 ﻿using GdsCheckboxList.Models;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace DFC.App.FindACourse.ViewModels
 {
+    [ExcludeFromCodeCoverage]
     public class FiltersListViewModel
     {
         public FiltersListViewModel()
         {
-            this.SelectedIds = new List<string>();
+            SelectedIds = new List<string>();
         }
 
         public string FilterText { get; set; }

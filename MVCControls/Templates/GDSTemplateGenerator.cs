@@ -1,5 +1,4 @@
 ﻿using GdsCheckboxList.Models;
-using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -31,7 +30,7 @@ namespace GdsCheckboxList.Templates
                     $"<label class=\"checkbox{disabledClass} govuk-label govuk-checkboxes__label\" for=\"{idValue}\">" + items[i].Title +
                     $"</label>" +
                     $"</div>"
-                ) ;
+                );
             }
             stringBuilder.Append("</div>");
 

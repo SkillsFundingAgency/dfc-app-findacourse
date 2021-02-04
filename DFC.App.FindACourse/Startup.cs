@@ -31,10 +31,11 @@ using Polly;
 using Polly.Extensions.Http;
 using Polly.Registry;
 using System;
-using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace DFC.App.FindACourse
 {
+    [ExcludeFromCodeCoverage]
     public class Startup
     {
         public const string CourseSearchAppSettings = "Configuration:CourseSearch";
