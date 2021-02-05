@@ -50,24 +50,5 @@ namespace DFC.App.FindACourse.Services
             tlevelDetails.Venues = tlevelDetails.Venues?.OrderByDescending(m => m.Id == tlevelLocationId).ToList();
             return tlevelDetails;
         }
-
-        //To remove once we get real data
-        private static Venue GetDummyVenue(string name, string id)
-        {
-            var venue = new Venue() { VenueName = name, PhoneNumber = "12345 678", Website = "https://bbc.com", Id = id };
-            venue.EmailAddress = "g@fr.com";
-            venue.Location = new Address()
-            {
-                AddressLine1 = "AddressLine1",
-                AddressLine2 = "AddressLine2",
-                Town = "Town1",
-                Postcode = "P11 5DF",
-                County = "West Midlands",
-                Latitude = "52.54715579704134",
-                Longitude = "-1.8226955723337404",
-            };
-
-            return venue;
-        }
     }
 }
