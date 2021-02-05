@@ -1,7 +1,6 @@
 using DFC.App.FindACourse.Repository;
 using DFC.CompositeInterfaceModels.FindACourseClient;
 using FakeItEasy;
-using NUnit.Framework;
 using System.Collections.Generic;
 using Xunit;
 using Fac = DFC.FindACourseClient;
@@ -9,9 +8,26 @@ using Fac = DFC.FindACourseClient;
 namespace DFC.App.FindACourse.Services.UnitTests
 {
     [Trait("Category", "Find a course Service Unit Tests")]
-    public class FindACourseServiceTest
+    public class FindACourseServiceTests
     {
-        [Test]
+        [Fact]
+        public void PingAsyncReturnsSuccess()
+        {
+            //Arrange
+            const bool expectedResult = true;
+            var repository = A.Fake<IFindACourseRepository>();
+            var findACourseService = new FindACourseService(repository);
+
+            A.CallTo(() => repository.PingAsync()).Returns(expectedResult);
+
+            //Act
+            var result = findACourseService.PingAsync();
+
+            //Assert
+            Assert.Equal(expectedResult, result);
+        }
+
+        [Fact]
         public void CheckIfFilteredDataReturnsData()
         {
             //Arrange
@@ -48,10 +64,10 @@ namespace DFC.App.FindACourse.Services.UnitTests
 
             //Assert
             A.CallTo(() => repository.RetrieveData(A<CourseSearchProperties>.Ignored)).MustHaveHappenedOnceExactly();
-            Assert.AreEqual(returnedCourseData, result);
+            Assert.Equal(returnedCourseData, result);
         }
 
-        [Test]
+        [Fact]
         public void CheckEnumOfCourseTypeIsReturned()
         {
             //Arrange
@@ -65,10 +81,10 @@ namespace DFC.App.FindACourse.Services.UnitTests
             var result = findACourseService.GetFilterByName<CourseType>();
 
             //Assert
-            Assert.AreEqual(4, result.Count);
+            Assert.Equal(4, result.Count);
         }
 
-        [Test]
+        [Fact]
         public void CheckEnumOfCourseHoursIsReturned()
         {
             //Arrange
@@ -82,10 +98,10 @@ namespace DFC.App.FindACourse.Services.UnitTests
             var result = findACourseService.GetFilterByName<CourseHours>();
 
             //Assert
-            Assert.AreEqual(4, result.Count);
+            Assert.Equal(4, result.Count);
         }
 
-        [Test]
+        [Fact]
         public void CheckEnumOfCourseStudyTypeIsReturned()
         {
             //Arrange
@@ -99,10 +115,10 @@ namespace DFC.App.FindACourse.Services.UnitTests
             var result = findACourseService.GetFilterByName<Fac.StudyMode>();
 
             //Assert
-            Assert.AreEqual(4, result.Count);
+            Assert.Equal(4, result.Count);
         }
 
-        [Test]
+        [Fact]
         public void CheckEnumOfCourseStartDateIsReturned()
         {
             //Arrange
@@ -116,11 +132,11 @@ namespace DFC.App.FindACourse.Services.UnitTests
             var result = findACourseService.GetFilterByName<StartDate>();
 
             //Assert
-            Assert.AreEqual(3, result.Count);
-            Assert.AreEqual(result.GetType(), result.GetType());
+            Assert.Equal(3, result.Count);
+            Assert.Equal(result.GetType(), result.GetType());
         }
 
-        [Test]
+        [Fact]
         public void EnsureCourseDetailsReturnsData()
         {
             //Arrange
@@ -144,7 +160,7 @@ namespace DFC.App.FindACourse.Services.UnitTests
 
             //Assert
             A.CallTo(() => repository.GetCourseDetails(courseId, runId)).MustHaveHappenedOnceExactly();
-            Assert.AreEqual(returnedCourseDetails, result);
+            Assert.Equal(returnedCourseDetails, result);
         }
     }
 }
