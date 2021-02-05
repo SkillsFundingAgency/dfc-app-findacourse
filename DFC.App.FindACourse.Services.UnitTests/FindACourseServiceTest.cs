@@ -1,18 +1,17 @@
 using DFC.App.FindACourse.Repository;
 using DFC.CompositeInterfaceModels.FindACourseClient;
 using FakeItEasy;
-using NUnit.Framework;
 using System.Collections.Generic;
-using System.Net;
+using System.Linq;
 using Xunit;
 using Fac = DFC.FindACourseClient;
 
 namespace DFC.App.FindACourse.Services.UnitTests
 {
     [Trait("Category", "Find a course Service Unit Tests")]
-    public class Tests
+    public class FindACourseServiceTest
     {
-        [Test]
+        [Fact]
         public void CheckIfFilteredDataReturnsData()
         {
             //Arrange
@@ -46,7 +45,7 @@ namespace DFC.App.FindACourse.Services.UnitTests
             A.Equals(result, returnedCourseData);
         }
 
-        [Test]
+        [Fact]
         public void CheckEnumOfCourseTypeIsReturned() 
         {
             //Arrange
@@ -64,7 +63,7 @@ namespace DFC.App.FindACourse.Services.UnitTests
             A.Equals(result.Count, 4) ;
         }
 
-        [Test]
+        [Fact]
         public void CheckEnumOfCourseHoursIsReturned()
         {
             //Arrange
@@ -82,7 +81,7 @@ namespace DFC.App.FindACourse.Services.UnitTests
             A.Equals(result.Count, 4);
         }
 
-        [Test]
+        [Fact]
         public void CheckEnumOfCourseStudyTypeIsReturned()
         {
             //Arrange
@@ -100,7 +99,7 @@ namespace DFC.App.FindACourse.Services.UnitTests
             A.Equals(result.Count, 4);
         }
 
-        [Test]
+        [Fact]
         public void CheckEnumOfCourseStartDateIsReturned()
         {
             //Arrange
@@ -119,7 +118,7 @@ namespace DFC.App.FindACourse.Services.UnitTests
             A.Equals(result.GetType(), typeof(List<StartDate>));
         }
 
-        [Test]
+        [Fact]
         public void EnsureCourseDetailsReturnsData()
         {
             //Arrange
@@ -146,22 +145,53 @@ namespace DFC.App.FindACourse.Services.UnitTests
             A.Equals(result, returnedCourseDetails);
         }
 
-        [Test]
+        [Fact]
         public void GetTLevelDetailsTest()
         {
             // Set up
-            const string tlevelId = "6707d15a-5a19-4c18-9cc8-570573bb5d67";
+            const string tlevelId = "DummyTLevelId";
+            const string TLevelLocationId = "DummyTLevelLocationId";
+
             var repository = A.Fake<IFindACourseRepository>();
             A.CallTo(() => repository.GetTLevelDetails(tlevelId)).Returns(A.Dummy<TLevelDetails>());
 
             var findACourseService = new FindACourseService(repository);
 
             //Act
-            var result = findACourseService.GetTLevelDetails(tlevelId).Result;
+            var result = findACourseService.GetTLevelDetails(tlevelId, TLevelLocationId)
+                .Result;
 
             //Assert
             A.CallTo(() => repository.GetTLevelDetails(tlevelId)).MustHaveHappenedOnceExactly();
             A.Equals(result, A.Dummy<TLevelDetails>());
+        }
+
+        [Theory]
+        [InlineData("id3", "VenueThree")]
+        [InlineData("id2", "VenueTwo")]
+        public void RequestedVenueIdIsFirstInTheList(string venueId, string expectedFirstVenue)
+        {
+            // Set up
+            var repository = A.Fake<IFindACourseRepository>();
+
+            A.CallTo(() => repository.GetTLevelDetails(A<string>.Ignored)).Returns(GetTLevelDetails());
+
+            var findACourseService = new FindACourseService(repository);
+
+            //Act
+            var result = findACourseService.GetTLevelDetails("DummyTLevelId", venueId).Result;
+
+            //Assert
+            A.Equals(result.Venues.FirstOrDefault().VenueName, expectedFirstVenue);
+        }
+
+        private static TLevelDetails GetTLevelDetails()
+        {
+            var tTLevelDetails = new TLevelDetails() { Venues = new List<Venue>() };
+            tTLevelDetails.Venues.Add(new Venue() { VenueName = "VenueOne", Id = "Id1" });
+            tTLevelDetails.Venues.Add(new Venue() { VenueName = "VenueTwo", Id = "Id2" });
+            tTLevelDetails.Venues.Add(new Venue() { VenueName = "VenueThree", Id = "Id3" });
+            return tTLevelDetails;
         }
     }
 }

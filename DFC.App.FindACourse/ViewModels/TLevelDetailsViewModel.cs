@@ -9,7 +9,6 @@ namespace DFC.App.FindACourse.ViewModels
         public TLevelDetailsViewModel()
         {
             DetailsRightBarViewModel = new DetailsRightBarViewModel();
-            Venues = new List<string>();
         }
 
         public TLevelDetails TlevelDetails { get; set; }
@@ -17,7 +16,5 @@ namespace DFC.App.FindACourse.ViewModels
         public string SearchTerm { get; set; }
 
         public DetailsRightBarViewModel DetailsRightBarViewModel { get; set; }
-
-        public List<string> Venues { get; set; }
     }
 }

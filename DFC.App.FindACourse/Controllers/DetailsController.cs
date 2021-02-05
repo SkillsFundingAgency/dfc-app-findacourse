@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace DFC.App.FindACourse.Controllers
@@ -70,8 +71,11 @@ namespace DFC.App.FindACourse.Controllers
             }
             catch (Exception ex)
             {
-                logService.LogError($"Get course details caused an error: {ex}. " +
-                    $"The values passed were: course id: {courseId} and run id: {runId}");
+                logService.LogError($"Get course details caused an error: {ex}. The values passed were: course id: {courseId} and run id: {runId}");
+
+                //Retuen an error code to cause the problem page to be displayed, previously this was returning OK with an empty model,
+                //this causes errors in the view and then goes to the problem page
+                return StatusCode((int)HttpStatusCode.FailedDependency);
             }
 
             return View(model);
@@ -80,7 +84,7 @@ namespace DFC.App.FindACourse.Controllers
         [HttpGet]
         [Route("find-a-course/search/tdetails/body")]
         [Route("find-a-course/tdetails/body")]
-        public async Task<IActionResult> TLevelDetails(string tlevelId, string currentSearchTerm, ParamValues paramValues)
+        public async Task<IActionResult> TLevelDetails(string tlevelId, string tlevelLocationId, string currentSearchTerm, ParamValues paramValues)
         {
             logService.LogInformation($"{nameof(this.TLevelDetails)} has been called");
 
@@ -100,42 +104,17 @@ namespace DFC.App.FindACourse.Controllers
 
             try
             {
-                model.TlevelDetails = await findACourseService.GetTLevelDetails(tlevelId).ConfigureAwait(false);
+                model.TlevelDetails = await findACourseService.GetTLevelDetails(tlevelId, tlevelLocationId).ConfigureAwait(false);
                 model.DetailsRightBarViewModel.Provider = mapper.Map<ProviderViewModel>(model.TlevelDetails.ProviderDetails);
                 model.DetailsRightBarViewModel.SpeakToAnAdviser = await staticContentDocumentService.GetByIdAsync(new Guid(cmsApiClientOptions.ContentIds)).ConfigureAwait(false);
-
-                if (paramValues.IsTest)
-                {
-                    model.TlevelDetails.Venues.Add(GetDummyVenue("Test Venue one"));
-                    model.TlevelDetails.Venues.Add(GetDummyVenue("Test Venue two"));
-                    model.TlevelDetails.Qualification.TLevelName = model.TlevelDetails.Qualification.TLevelName + " - Test TLevelName needs to be removed";
-                }
             }
             catch (Exception ex)
             {
                 logService.LogError($"Get tlevel details caused an error: {ex}. The values passed were: tlevel id: {tlevelId}");
+                return StatusCode((int)HttpStatusCode.FailedDependency);
             }
 
             return View("tlevelDetails", model);
-        }
-
-        //To remove once we get real data
-        private static Venue GetDummyVenue(string name)
-        {
-            var venue = new Venue() { VenueName = name, PhoneNumber = "12345 678", Website = "https://bbc.com" };
-            venue.EmailAddress = "g@fr.com";
-            venue.Location = new Address()
-            {
-                AddressLine1 = "AddressLine1",
-                AddressLine2 = "AddressLine2",
-                Town = "Town1",
-                Postcode = "P11 5DF",
-                County = "West Midlands",
-                Latitude = "52.54715579704134",
-                Longitude = "-1.8226955723337404",
-            };
-
-            return venue;
         }
 
         private static string FormatSearchParameters(ParamValues paramValues, string currentSearchTerm)
@@ -148,7 +127,7 @@ namespace DFC.App.FindACourse.Controllers
             var isPostcode = !string.IsNullOrEmpty(paramValues.Town) ? (bool?)paramValues.Town.IsPostcode() : null;
             paramValues.D = isPostcode.HasValue && isPostcode.Value ? 1 : 0;
 
-            var searchTerm = $"{nameof(paramValues.SearchTerm)}={paramValues.SearchTerm}&" +
+            var searchTerm = $"{nameof(paramValues.SearchTerm)}={paramValues.SearchTerm}&" +    
                              $"{nameof(paramValues.Town)}={paramValues.Town}&" +
                              $"{nameof(paramValues.CourseType)}={paramValues.CourseType}&" +
                              $"{nameof(paramValues.CourseHours)}={paramValues.CourseHours}&" +

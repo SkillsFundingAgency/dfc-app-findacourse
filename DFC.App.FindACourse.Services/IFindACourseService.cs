@@ -36,6 +36,6 @@ namespace DFC.App.FindACourse.Services
         /// <returns>Task of course details.</returns>
         Task<CourseDetails> GetCourseDetails(string courseId, string runId);
 
-        Task<TLevelDetails> GetTLevelDetails(string tlevelId);
+        Task<TLevelDetails> GetTLevelDetails(string tlevelId, string tlevelLocationId);
     }
 }

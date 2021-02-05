@@ -115,7 +115,7 @@
 
                     @if (Model.TlevelDetails.Venues.Any())
                     {
-                        <h2 class="govuk-heading-m" id="venue">Venue@(Model.Venues.Count() > 1 ? "s" : string.Empty) for this course</h2>
+                        <h2 class="govuk-heading-m" id="venue">Venue@(Model.TlevelDetails.Venues.Count() > 1 ? "s" : string.Empty) for this course</h2>
                         <partial name="courseDetailsVenueDetails" model=Model.TlevelDetails.Venues.FirstOrDefault() />
                     }
 
