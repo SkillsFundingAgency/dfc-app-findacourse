@@ -2,6 +2,7 @@ using DFC.App.FindACourse.Repository;
 using DFC.CompositeInterfaceModels.FindACourseClient;
 using FakeItEasy;
 using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 using Fac = DFC.FindACourseClient;
 
