@@ -3,9 +3,11 @@ using GdsCheckboxList.Models;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace GdsCheckboxList.TagHelpers
 {
+    [ExcludeFromCodeCoverage]
     public class CheckBoxListTagHelper : TagHelper
     {
         public string Name { get; set; }
