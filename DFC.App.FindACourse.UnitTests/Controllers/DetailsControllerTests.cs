@@ -69,7 +69,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
         }
 
         [Fact]
-        public async Task GetCourseDEtailsThrowsExceptionForNullPramVaules()
+        public void GetCourseDEtailsThrowsExceptionForNullPramVaules()
         {
             // arrange
             var controller = BuildDetailsController("*/*");
@@ -133,7 +133,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
         }
 
         [Fact]
-        public async Task GetTLevelThrowsExceptionForNullPramVaules()
+        public void GetTLevelThrowsExceptionForNullPramVaules()
         {
             // arrange
             var controller = BuildDetailsController("*/*");

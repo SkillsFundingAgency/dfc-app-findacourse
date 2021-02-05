@@ -60,13 +60,6 @@
                                 </tr>
                             }
 
-                            <tr class="govuk-table__row">
-                                <th class="govuk-table__header" scope="row">Cost</th>
-                                <td class="govuk-table__cell">
-                                    <span id="cost-value">£@Model.TlevelDetails.Cost.ToDecimalString("N2")</span>
-                                </td>
-                            </tr>
-
                             @if (!string.IsNullOrEmpty(Model.TlevelDetails.CostDescription))
                             {
                                 <tr class="govuk-table__row">
@@ -132,7 +125,7 @@
                     @if (Model.TlevelDetails.Venues.Count > 1)
                     {
                         <h2 class="govuk-heading-m" id="othervenuesdates">Other venues and dates</h2>
-                        <table class="govuk-table">
+                        <table class="govuk-table"  aria-describedby="othervenuesdates">
                             <tbody class="govuk-table__body">
                                 <tr class="govuk-table__row">
                                     <th class="govuk-table__header">Venue</th>
