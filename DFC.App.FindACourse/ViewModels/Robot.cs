@@ -1,21 +1,23 @@
-﻿using System.Text;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Text;
 
 namespace DFC.App.FindACourse.ViewModels
 {
+    [ExcludeFromCodeCoverage]
     public class Robot
     {
         private readonly StringBuilder robotData;
 
         public Robot()
         {
-            this.robotData = new StringBuilder();
+            robotData = new StringBuilder();
         }
 
         public string Data => robotData.ToString();
 
         public void Add(string text)
         {
-            this.robotData.AppendLine(text);
+            robotData.AppendLine(text);
         }
     }
 }

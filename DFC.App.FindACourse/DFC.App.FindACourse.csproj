@@ -35,7 +35,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DFC.App.FindACourse.Services\DFC.App.FindACourse.Services.csproj" />
-    <ProjectReference Include="..\MVCControls\Gds.CheckboxList.csproj" />
+    <ProjectReference Include="..\Gds.CheckboxList\Gds.CheckboxList.csproj" />
   </ItemGroup>
 
 </Project>

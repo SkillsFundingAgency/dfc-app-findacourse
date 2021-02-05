@@ -2,9 +2,11 @@
 using DFC.Compui.Cosmos.Contracts;
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace DFC.App.FindACourse.Data.Models
 {
+    [ExcludeFromCodeCoverage]
     public class StaticContentItemModel : DocumentModel, ICachedModel
     {
         public const string DefaultPartitionKey = "shared-content";

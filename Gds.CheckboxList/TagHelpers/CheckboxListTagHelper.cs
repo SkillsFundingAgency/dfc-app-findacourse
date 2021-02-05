@@ -1,15 +1,19 @@
-﻿using Microsoft.AspNetCore.Razor.TagHelpers;
-using GdsCheckboxList.Factory;
+﻿using GdsCheckboxList.Factory;
 using GdsCheckboxList.Models;
+using Microsoft.AspNetCore.Razor.TagHelpers;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace GdsCheckboxList.TagHelpers
 {
+    [ExcludeFromCodeCoverage]
     public class CheckBoxListTagHelper : TagHelper
     {
         public string Name { get; set; }
+
         public List<CheckBoxItem> Items { get; set; }
+
         public TemplateType Template { get; set; }
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
@@ -19,7 +23,7 @@ namespace GdsCheckboxList.TagHelpers
                 throw new Exception("item property of checkbox-list cannot be null");
             }
 
-            if (String.IsNullOrEmpty(Name))
+            if (string.IsNullOrEmpty(Name))
             {
                 throw new Exception("name property of checkbox-list cannot be null or empty");
             }

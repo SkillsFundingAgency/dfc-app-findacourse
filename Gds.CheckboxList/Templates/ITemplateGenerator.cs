@@ -1,5 +1,4 @@
 ﻿using GdsCheckboxList.Models;
-using System;
 using System.Collections.Generic;
 
 namespace GdsCheckboxList.Templates
