@@ -28,8 +28,7 @@ namespace GdsCheckboxList.Templates
                     $"<label class=\"checkbox{disabledClass}\" for=\"{idValue}\">" +
                         $"<input name=\"{nameValue}\" value=\"{items[i].Id}\" type =\"checkbox\" id=\"{idValue}\" {checkedValue} {disabledValue}>{items[i].Title}" +
                     $"</label>" +
-                    $"<br>"
-                );
+                    $"<br>");
             }
 
             return stringBuilder.ToString();
