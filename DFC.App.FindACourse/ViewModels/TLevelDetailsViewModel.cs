@@ -4,18 +4,16 @@ using System.Collections.Generic;
 
 namespace DFC.App.FindACourse.ViewModels
 {
-    public class DetailsViewModel
+    public class TLevelDetailsViewModel
     {
-        public DetailsViewModel()
+        public TLevelDetailsViewModel()
         {
             DetailsRightBarViewModel = new DetailsRightBarViewModel();
         }
 
-        public CourseDetails CourseDetails { get; set; }
+        public TLevelDetails TlevelDetails { get; set; }
 
         public string SearchTerm { get; set; }
-
-        public IList<CourseRegion> CourseRegions { get; set; }
 
         public DetailsRightBarViewModel DetailsRightBarViewModel { get; set; }
     }
