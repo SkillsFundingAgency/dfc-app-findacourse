@@ -162,5 +162,54 @@ namespace DFC.App.FindACourse.Services.UnitTests
             A.CallTo(() => repository.GetCourseDetails(courseId, runId)).MustHaveHappenedOnceExactly();
             Assert.Equal(returnedCourseDetails, result);
         }
+
+        [Fact]
+        public void GetTLevelDetailsTest()
+        {
+            // Set up
+            const string tlevelId = "DummyTLevelId";
+            const string TLevelLocationId = "DummyTLevelLocationId";
+
+            var repository = A.Fake<IFindACourseRepository>();
+            A.CallTo(() => repository.GetTLevelDetails(tlevelId)).Returns(A.Dummy<TLevelDetails>());
+
+            var findACourseService = new FindACourseService(repository);
+
+            //Act
+            var result = findACourseService.GetTLevelDetails(tlevelId, TLevelLocationId)
+                .Result;
+
+            //Assert
+            A.CallTo(() => repository.GetTLevelDetails(tlevelId)).MustHaveHappenedOnceExactly();
+            A.Equals(result, A.Dummy<TLevelDetails>());
+        }
+
+        [Theory]
+        [InlineData("id3", "VenueThree")]
+        [InlineData("id2", "VenueTwo")]
+        public void RequestedVenueIdIsFirstInTheList(string venueId, string expectedFirstVenue)
+        {
+            // Set up
+            var repository = A.Fake<IFindACourseRepository>();
+
+            A.CallTo(() => repository.GetTLevelDetails(A<string>.Ignored)).Returns(GetTLevelDetails());
+
+            var findACourseService = new FindACourseService(repository);
+
+            //Act
+            var result = findACourseService.GetTLevelDetails("DummyTLevelId", venueId).Result;
+
+            //Assert
+            A.Equals(result.Venues.FirstOrDefault().VenueName, expectedFirstVenue);
+        }
+
+        private static TLevelDetails GetTLevelDetails()
+        {
+            var tTLevelDetails = new TLevelDetails() { Venues = new List<Venue>() };
+            tTLevelDetails.Venues.Add(new Venue() { VenueName = "VenueOne", Id = "Id1" });
+            tTLevelDetails.Venues.Add(new Venue() { VenueName = "VenueTwo", Id = "Id2" });
+            tTLevelDetails.Venues.Add(new Venue() { VenueName = "VenueThree", Id = "Id3" });
+            return tTLevelDetails;
+        }
     }
 }

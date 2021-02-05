@@ -9,9 +9,7 @@
 }
 
 <div class="govuk-!-margin-top-6">
-    <h2 class="govuk-heading-m">
-        <a class="govuk-link" href="/find-a-course/details?courseId=@Model.CourseId&runId=@Model.RunId&@TempData["params"]">@Html.Raw(Model.Title)</a>
-    </h2>
+    <partial name="_result_heading" model="Model" />
     <p>@Html.Raw(Model.Description)</p>
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-one-half">
@@ -29,7 +27,7 @@
                     }
                 </li>
                 <li>
-                    <partial name="_cost" model="Model"/>
+                    <partial name="_cost" model="Model" />
                 </li>
                 <li>
                     <span class="govuk-secondary-colour">Provider:</span> @Html.Raw(Model.ProviderName)

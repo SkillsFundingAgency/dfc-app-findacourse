@@ -35,5 +35,10 @@ namespace DFC.App.FindACourse.Repository
         {
             return await courseSearchApiService.GetCompositeCourseDetailsAsync(id, runId).ConfigureAwait(false);
         }
+
+        public async Task<TLevelDetails> GetTLevelDetails(string tlevelId)
+        {
+            return await courseSearchApiService.GetTLevelDetailsAsync(tlevelId).ConfigureAwait(false);
+        }
     }
 }

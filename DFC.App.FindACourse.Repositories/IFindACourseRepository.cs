@@ -33,5 +33,7 @@ namespace DFC.App.FindACourse.Repository
         /// <param name="runId">Course Run Id.</param>
         /// <returns>Course Details.</returns>
         Task<CourseDetails> GetCourseDetails(string id, string runId);
+
+        Task<TLevelDetails> GetTLevelDetails(string tlevelId);
     }
 }
