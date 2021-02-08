@@ -8,6 +8,7 @@ using DFC.Logger.AppInsights.Contracts;
 using FakeItEasy;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Net.Http.Headers;
 using System;
 using System.Collections.Generic;
@@ -59,6 +60,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
         protected CourseController BuildCourseController(string mediaTypeName)
         {
             var httpContext = new DefaultHttpContext();
+            var fakeTempDataProvider = A.Fake<ITempDataProvider>();
 
             httpContext.Request.Headers[HeaderNames.Accept] = mediaTypeName;
 
@@ -68,6 +70,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
                 {
                     HttpContext = httpContext,
                 },
+                TempData = new TempDataDictionary(httpContext, fakeTempDataProvider),
             };
 
             return controller;
