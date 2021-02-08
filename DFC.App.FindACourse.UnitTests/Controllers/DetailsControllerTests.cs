@@ -69,7 +69,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
         }
 
         [Fact]
-        public void GetCourseDEtailsThrowsExceptionForNullPramVaules()
+        public void GetCourseDetailsThrowsExceptionForNullPramVaules()
         {
             // arrange
             var controller = BuildDetailsController("*/*");
