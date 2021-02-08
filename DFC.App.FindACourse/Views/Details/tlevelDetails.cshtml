@@ -128,9 +128,9 @@
                         <table class="govuk-table"  aria-describedby="othervenuesdates">
                             <tbody class="govuk-table__body">
                                 <tr class="govuk-table__row">
-                                    <th class="govuk-table__header">Venue</th>
-                                    <th class="govuk-table__header">Start date</th>
-                                    <th class="govuk-table__header">Options</th>
+                                    <th class="govuk-table__header" scope="col">Venue</th>
+                                    <th class="govuk-table__header" scope="col">Start date</th>
+                                    <th class="govuk-table__header" scope="col">Options</th>
                                 </tr>
                                 @{int counter = 1;}
                                 @foreach (Venue venue in Model.TlevelDetails.Venues.Skip(1))

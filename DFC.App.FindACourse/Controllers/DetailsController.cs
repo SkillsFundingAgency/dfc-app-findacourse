@@ -101,18 +101,9 @@ namespace DFC.App.FindACourse.Controllers
             }
 
             model.SearchTerm = FormatSearchParameters(paramValues, currentSearchTerm);
-
-            try
-            {
-                model.TlevelDetails = await findACourseService.GetTLevelDetails(tlevelId, tlevelLocationId).ConfigureAwait(false);
-                model.DetailsRightBarViewModel.Provider = mapper.Map<ProviderViewModel>(model.TlevelDetails.ProviderDetails);
-                model.DetailsRightBarViewModel.SpeakToAnAdviser = await staticContentDocumentService.GetByIdAsync(new Guid(cmsApiClientOptions.ContentIds)).ConfigureAwait(false);
-            }
-            catch (Exception ex)
-            {
-                logService.LogError($"Get tlevel details caused an error: {ex}. The values passed were: tlevel id: {tlevelId}");
-                return StatusCode((int)HttpStatusCode.FailedDependency);
-            }
+            model.TlevelDetails = await findACourseService.GetTLevelDetails(tlevelId, tlevelLocationId).ConfigureAwait(false);
+            model.DetailsRightBarViewModel.Provider = mapper.Map<ProviderViewModel>(model.TlevelDetails.ProviderDetails);
+            model.DetailsRightBarViewModel.SpeakToAnAdviser = await staticContentDocumentService.GetByIdAsync(new Guid(cmsApiClientOptions.ContentIds)).ConfigureAwait(false);
 
             return View("tlevelDetails", model);
         }
@@ -127,7 +118,7 @@ namespace DFC.App.FindACourse.Controllers
             var isPostcode = !string.IsNullOrEmpty(paramValues.Town) ? (bool?)paramValues.Town.IsPostcode() : null;
             paramValues.D = isPostcode.HasValue && isPostcode.Value ? 1 : 0;
 
-            var searchTerm = $"{nameof(paramValues.SearchTerm)}={paramValues.SearchTerm}&" +    
+            var searchTerm = $"{nameof(paramValues.SearchTerm)}={paramValues.SearchTerm}&" +
                              $"{nameof(paramValues.Town)}={paramValues.Town}&" +
                              $"{nameof(paramValues.CourseType)}={paramValues.CourseType}&" +
                              $"{nameof(paramValues.CourseHours)}={paramValues.CourseHours}&" +
