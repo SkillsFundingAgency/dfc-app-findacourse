@@ -101,18 +101,9 @@ namespace DFC.App.FindACourse.Controllers
             }
 
             model.SearchTerm = FormatSearchParameters(paramValues, currentSearchTerm);
-
-            try
-            {
-                model.TlevelDetails = await findACourseService.GetTLevelDetails(tlevelId, tlevelLocationId).ConfigureAwait(false);
-                model.DetailsRightBarViewModel.Provider = mapper.Map<ProviderViewModel>(model.TlevelDetails.ProviderDetails);
-                model.DetailsRightBarViewModel.SpeakToAnAdviser = await staticContentDocumentService.GetByIdAsync(new Guid(cmsApiClientOptions.ContentIds)).ConfigureAwait(false);
-            }
-            catch (Exception ex)
-            {
-                logService.LogError($"Get tlevel details caused an error: {ex}. The values passed were: tlevel id: {tlevelId}");
-                return StatusCode((int)HttpStatusCode.FailedDependency);
-            }
+            model.TlevelDetails = await findACourseService.GetTLevelDetails(tlevelId, tlevelLocationId).ConfigureAwait(false);
+            model.DetailsRightBarViewModel.Provider = mapper.Map<ProviderViewModel>(model.TlevelDetails.ProviderDetails);
+            model.DetailsRightBarViewModel.SpeakToAnAdviser = await staticContentDocumentService.GetByIdAsync(new Guid(cmsApiClientOptions.ContentIds)).ConfigureAwait(false);
 
             return View("tlevelDetails", model);
         }
