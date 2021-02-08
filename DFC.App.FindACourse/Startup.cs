@@ -3,6 +3,7 @@ using DFC.App.FindACourse.Data.Contracts;
 using DFC.App.FindACourse.Data.Domain;
 using DFC.App.FindACourse.Data.Models;
 using DFC.App.FindACourse.Framework;
+using DFC.App.FindACourse.Helpers;
 using DFC.App.FindACourse.HostedServices;
 using DFC.App.FindACourse.Repository;
 using DFC.App.FindACourse.Services;
@@ -93,6 +94,7 @@ namespace DFC.App.FindACourse
             services.AddTransient<IApiDataProcessorService, ApiDataProcessorService>();
             services.AddTransient<IApiCacheService, ApiCacheService>();
             services.AddTransient<IWebhooksService, WebhooksService>();
+            services.AddTransient<IViewHelper, ViewHelper>();
             services.AddTransient<MemoryCache>();
 
             var policyRegistry = services.AddPolicyRegistry();

@@ -1,4 +1,6 @@
-﻿using DFC.App.FindACourse.Services;
+﻿using DFC.App.FindACourse.Controllers;
+using DFC.App.FindACourse.Data.Models;
+using DFC.App.FindACourse.Services;
 using DFC.App.FindACourse.ViewModels;
 using DFC.CompositeInterfaceModels.FindACourseClient;
 using FakeItEasy;
@@ -6,6 +8,7 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Mime;
 using System.Threading.Tasks;
 using Xunit;
@@ -152,11 +155,11 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
                     DistanceValue = "15 miles",
                     CourseType = new FiltersListViewModel
                     {
-                         SelectedIds = new List<string> { "Online" },
+                        SelectedIds = new List<string> { "Online" },
                     },
                     CourseHours = new FiltersListViewModel
                     {
-                         SelectedIds = new List<string> { "Full time" },
+                        SelectedIds = new List<string> { "Full time" },
                     },
                     CourseStudyTime = new FiltersListViewModel
                     {
@@ -184,6 +187,125 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
         }
 
         [Theory]
+        [InlineData("CV1 2WT")]
+        [InlineData("Coventry")]
+        [InlineData("")]
+        public async Task PageReturnsSuccess(string town)
+        {
+            // arrange
+            var controller = BuildCourseController(MediaTypeNames.Text.Html);
+            var paramValues = new ParamValues
+            {
+                Town = town,
+                CourseType = "Online",
+                CourseHours = "Full time",
+                CourseStudyTime = "Daytime",
+            };
+            var returnedCourseData = new CourseSearchResult
+            {
+                Courses = new List<Course>
+                {
+                    new Course { Title = "Maths", CourseId = "1", AttendancePattern = "Online", Description = "This is a test description - over 220 chars" + new string(' ', 220) },
+                },
+            };
+
+            A.CallTo(() => FakeFindACoursesService.GetFilteredData(A<CourseSearchFilters>.Ignored, CourseSearchOrderBy.Relevance, 1)).Returns(returnedCourseData);
+
+            // act
+            var result = await controller.Page(paramValues, true).ConfigureAwait(false);
+
+            // assert
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = Assert.IsAssignableFrom<BodyViewModel>(viewResult.ViewData.Model);
+            Assert.NotNull(model.Results);
+
+            controller.Dispose();
+        }
+
+        [Fact]
+        public async Task AjaxChangedReturnsSuccess()
+        {
+            // arrange
+            var controller = BuildCourseController(MediaTypeNames.Text.Html);
+            var paramValues = new ParamValues
+            {
+                Town = "CV1 2WT",
+                CourseType = "Online",
+                CourseHours = "Full time",
+                CourseStudyTime = "Daytime",
+            };
+            var appdata = System.Text.Json.JsonSerializer.Serialize(paramValues);
+            var returnedCourseData = new CourseSearchResult
+            {
+                ResultProperties = new CourseSearchResultProperties
+                {
+                    Page = 1,
+                    TotalResultCount = 1,
+                    TotalPages = 1,
+                },
+                Courses = new List<Course>
+                {
+                    new Course { Title = "Maths", CourseId = "1", AttendancePattern = "Online", Description = "This is a test description - over 220 chars" + new string(' ', 220) },
+                },
+            };
+
+            A.CallTo(() => FakeFindACoursesService.GetFilteredData(A<CourseSearchFilters>.Ignored, A<CourseSearchOrderBy>.Ignored, A<int>.Ignored)).Returns(returnedCourseData);
+            A.CallTo(() => FakeViewHelper.RenderViewAsync(A<CourseController>.Ignored, A<string>.Ignored, A<BodyViewModel>.Ignored, A<bool>.Ignored)).Returns("<p>some markup</p>");
+
+            // act
+            var result = await controller.AjaxChanged(appdata).ConfigureAwait(false);
+
+            // assert
+            Assert.False(string.IsNullOrWhiteSpace(result.HTML));
+            Assert.Equal(returnedCourseData.Courses.ToList().Count, result.Count);
+            Assert.True(result.IsPostcode);
+
+            controller.Dispose();
+        }
+
+        [Fact]
+        public async Task AjaxChangedCatchesException()
+        {
+            // arrange
+            var controller = BuildCourseController(MediaTypeNames.Text.Html);
+            var paramValues = new ParamValues
+            {
+                Town = "CV1 2WT",
+                CourseType = "Online",
+                CourseHours = "Full time",
+                CourseStudyTime = "Daytime",
+            };
+            var appdata = System.Text.Json.JsonSerializer.Serialize(paramValues);
+
+            A.CallTo(() => FakeFindACoursesService.GetFilteredData(A<CourseSearchFilters>.Ignored, A<CourseSearchOrderBy>.Ignored, A<int>.Ignored)).Throws(new Exception());
+            A.CallTo(() => FakeViewHelper.RenderViewAsync(A<CourseController>.Ignored, A<string>.Ignored, A<BodyViewModel>.Ignored, A<bool>.Ignored)).Returns("<p>some markup</p>");
+
+            // act
+            var result = await controller.AjaxChanged(appdata).ConfigureAwait(false);
+
+            // assert
+            Assert.False(string.IsNullOrWhiteSpace(result.HTML));
+            Assert.Equal(0, result.Count);
+            Assert.Null(result.IsPostcode);
+
+            controller.Dispose();
+        }
+
+        [Fact]
+        public async Task AjaxChangedReturnsArgumentNullExceptionForMissingParameters()
+        {
+            // arrange
+            var controller = BuildCourseController(MediaTypeNames.Text.Html);
+
+            // act
+            Func<Task> act = async () => await controller.AjaxChanged(null).ConfigureAwait(false);
+
+            // assert
+            act.Should().Throw<ArgumentNullException>();
+            controller.Dispose();
+        }
+
+        [Theory]
         [MemberData(nameof(HtmlMediaTypes))]
         public async Task CourseControllerFilterResultsThrowsException(string mediaTypeName)
         {
@@ -204,7 +326,6 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
             // assert
             var viewResult = Assert.IsType<ViewResult>(result);
             var model = Assert.IsAssignableFrom<BodyViewModel>(viewResult.ViewData.Model);
-
             Assert.Null(model.Results);
 
             controller.Dispose();
@@ -230,17 +351,19 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
             controller.Dispose();
         }
 
-        [Fact]
-        public async Task CourseControllerIsValidPostcodeReturnsSuccess()
+        [Theory]
+        [InlineData("\"CV1 2WT\"", true)]
+        [InlineData("\"Coventry\"", false)]
+        public async Task CourseControllerIsValidPostcodeReturnsSuccess(string town, bool expectedResult)
         {
             // arrange
             var controller = BuildCourseController(MediaTypeNames.Text.Html);
 
             // act
-            var result = await controller.IsValidPostcode("\"CV1 2WT\"").ConfigureAwait(false);
+            var result = await controller.IsValidPostcode(town).ConfigureAwait(false);
 
             // assert
-            Assert.True(result);
+            Assert.Equal(expectedResult, result);
 
             controller.Dispose();
         }
@@ -252,7 +375,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
             var controller = BuildCourseController(MediaTypeNames.Text.Html);
 
             // act
-            Func<Task> act = async () => await controller.IsValidPostcode(null).ConfigureAwait(false);
+            Func<Task> act = async () => await controller.IsValidPostcode("\"\"").ConfigureAwait(false);
 
             // assert
             act.Should().Throw<ArgumentNullException>();

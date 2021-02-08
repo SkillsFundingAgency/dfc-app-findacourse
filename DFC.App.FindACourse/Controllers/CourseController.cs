@@ -2,6 +2,7 @@
 using DFC.App.FindACourse.Data.Helpers;
 using DFC.App.FindACourse.Data.Models;
 using DFC.App.FindACourse.Extensions;
+using DFC.App.FindACourse.Helpers;
 using DFC.App.FindACourse.Services;
 using DFC.App.FindACourse.ViewModels;
 using DFC.CompositeInterfaceModels.FindACourseClient;
@@ -23,11 +24,13 @@ namespace DFC.App.FindACourse.Controllers
     {
         private readonly ILogService logService;
         private readonly IFindACourseService findACourseService;
+        private readonly IViewHelper viewHelper;
 
-        public CourseController(ILogService logService, IFindACourseService findACourseService)
+        public CourseController(ILogService logService, IFindACourseService findACourseService, IViewHelper viewHelper)
         {
             this.logService = logService;
             this.findACourseService = findACourseService;
+            this.viewHelper = viewHelper;
         }
 
         [HttpGet]
@@ -143,13 +146,13 @@ namespace DFC.App.FindACourse.Controllers
         [Route("api/get/find-a-course/search/{appData}/ajax")]
         public async Task<AjaxModel> AjaxChanged(string appData)
         {
-            var paramValues = System.Text.Json.JsonSerializer.Deserialize<ParamValues>(appData);
-            bool? isPostcode = null;
-
-            if (paramValues == null)
+            if (string.IsNullOrWhiteSpace(appData))
             {
                 throw new ArgumentNullException(nameof(appData));
             }
+
+            var paramValues = System.Text.Json.JsonSerializer.Deserialize<ParamValues>(appData);
+            bool? isPostcode = null;
 
             var model = new BodyViewModel
             {
@@ -207,7 +210,7 @@ namespace DFC.App.FindACourse.Controllers
                 logService.LogError($"{nameof(this.FilterResults)} threw an exception" + ex.Message);
             }
 
-            var viewAsString = await this.RenderViewAsync("~/Views/Course/_results.cshtml", model, true).ConfigureAwait(false);
+            var viewAsString = await viewHelper.RenderViewAsync(this, "~/Views/Course/_results.cshtml", model, true).ConfigureAwait(false);
             return new AjaxModel { HTML = viewAsString, Count = model.Results?.ResultProperties != null ? model.Results.ResultProperties.TotalResultCount : 0, IsPostcode = isPostcode };
         }
 
@@ -279,7 +282,7 @@ namespace DFC.App.FindACourse.Controllers
         {
             var postcode = System.Text.Json.JsonSerializer.Deserialize<string>(appdata);
 
-            if (postcode == null)
+            if (string.IsNullOrWhiteSpace(postcode))
             {
                 throw new ArgumentNullException(nameof(appdata));
             }
