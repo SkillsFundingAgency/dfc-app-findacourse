@@ -111,21 +111,20 @@
                         <h2 class="govuk-heading-m" id="venue">Venue@(Model.TlevelDetails.Venues.Count() > 1 ? "s" : string.Empty) for this course</h2>
                         <partial name="courseDetailsVenueDetails" model=Model.TlevelDetails.Venues.FirstOrDefault() />
                     }
+             
+                    <a href="@Model.TlevelDetails.Website" role="button" draggable="false" class="govuk-button govuk-button--start" data-module="govuk-button">
+                        Go to course
+                        <svg class="govuk-button__start-icon" xmlns="http://www.w3.org/2000/svg" width="17.5" height="19" viewBox="0 0 33 40" aria-hidden="true" focusable="false">
+                            <path fill="currentColor" d="M0 0h13l20 20-20 20H0l20-20z" />
+                        </svg>
+                    </a>
 
-                    <form action="@Model.TlevelDetails.Website" id="venue-form">
-                        <button href="@Model.TlevelDetails.Website" role="button" draggable="false" class="govuk-button govuk-button--start" data-module="govuk-button">
-                            Go to course
-                            <svg class="govuk-button__start-icon" xmlns="http://www.w3.org/2000/svg" width="17.5" height="19" viewBox="0 0 33 40" role="presentation" focusable="false">
-                                <path fill="currentColor" d="M0 0h13l20 20-20 20H0l20-20z"></path>
-                            </svg>
-                        </button>
-                    </form>
                     <p><a href="/find-a-course/page?@Model.SearchTerm" class="govuk-back-link" id="back-to-results">Back to results</a></p>
 
                     @if (Model.TlevelDetails.Venues.Count > 1)
                     {
                         <h2 class="govuk-heading-m" id="othervenuesdates">Other venues and dates</h2>
-                        <table class="govuk-table"  aria-describedby="othervenuesdates">
+                        <table class="govuk-table" aria-describedby="othervenuesdates">
                             <tbody class="govuk-table__body">
                                 <tr class="govuk-table__row">
                                     <th class="govuk-table__header" scope="col">Venue</th>
