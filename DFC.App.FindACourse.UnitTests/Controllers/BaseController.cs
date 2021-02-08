@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DFC.App.FindACourse.Controllers;
 using DFC.App.FindACourse.Data.Models;
+using DFC.App.FindACourse.Helpers;
 using DFC.App.FindACourse.Services;
 using DFC.Compui.Cosmos.Contracts;
 using DFC.Content.Pkg.Netcore.Data.Models.ClientOptions;
@@ -8,6 +9,7 @@ using DFC.Logger.AppInsights.Contracts;
 using FakeItEasy;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Net.Http.Headers;
 using System;
 using System.Collections.Generic;
@@ -28,6 +30,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
             FakeStaticContentDocumentService = A.Fake<IDocumentService<StaticContentItemModel>>();
             CmsApiClientOptions = new CmsApiClientOptions() { ContentIds = testContentId };
             FakeMapper = A.Fake<IMapper>();
+            FakeViewHelper = A.Fake<IViewHelper>();
         }
 
         public static IEnumerable<object[]> HtmlMediaTypes => new List<object[]>
@@ -50,6 +53,8 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
 
         protected IFindACourseService FakeFindACoursesService { get; }
 
+        protected IViewHelper FakeViewHelper { get; }
+
         protected IMapper FakeMapper { get; }
 
         protected IDocumentService<StaticContentItemModel> FakeStaticContentDocumentService { get; set; }
@@ -59,15 +64,18 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
         protected CourseController BuildCourseController(string mediaTypeName)
         {
             var httpContext = new DefaultHttpContext();
+            var fakeTempDataProvider = A.Fake<ITempDataProvider>();
 
             httpContext.Request.Headers[HeaderNames.Accept] = mediaTypeName;
+            httpContext.RequestServices = A.Fake<IServiceProvider>();
 
-            var controller = new CourseController(FakeLogService, FakeFindACoursesService)
+            var controller = new CourseController(FakeLogService, FakeFindACoursesService, FakeViewHelper)
             {
                 ControllerContext = new ControllerContext()
                 {
                     HttpContext = httpContext,
                 },
+                TempData = new TempDataDictionary(httpContext, fakeTempDataProvider),
             };
 
             return controller;

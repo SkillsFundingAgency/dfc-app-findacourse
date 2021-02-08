@@ -73,7 +73,7 @@ namespace DFC.App.FindACourse.Controllers
             {
                 logService.LogError($"Get course details caused an error: {ex}. The values passed were: course id: {courseId} and run id: {runId}");
 
-                //Retuen an error code to cause the problem page to be displayed, previously this was returning OK with an empty model,
+                //Return an error code to cause the problem page to be displayed, previously this was returning OK with an empty model,
                 //this causes errors in the view and then goes to the problem page
                 return StatusCode((int)HttpStatusCode.FailedDependency);
             }
