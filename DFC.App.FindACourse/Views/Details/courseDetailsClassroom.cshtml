@@ -125,7 +125,7 @@
         <p id="next-steps">@Html.Raw(Model.CourseDetails.NextSteps)</p>
     }
     <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
-    @if (!string.IsNullOrWhiteSpace(Model.CourseDetails?.VenueDetails?.Website))
+    @if (!string.IsNullOrWhiteSpace(Model.CourseDetails?.VenueDetails?.VenueName))
     {
         <h2 class="govuk-heading-m" id="venue">Venue for this course</h2>
         <partial name="courseDetailsVenueDetails" model="Model.CourseDetails.VenueDetails" />

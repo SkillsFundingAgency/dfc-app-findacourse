@@ -69,7 +69,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
         }
 
         [Fact]
-        public async Task GetCourseDEtailsThrowsExceptionForNullPramVaules()
+        public void GetCourseDetailsThrowsExceptionForNullPramVaules()
         {
             // arrange
             var controller = BuildDetailsController("*/*");
@@ -112,28 +112,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
         }
 
         [Fact]
-        public async Task GetTlevelReturnsFailedOnServiceErrors()
-        {
-            //Set Up
-            A.CallTo(() => FakeFindACoursesService.GetTLevelDetails(A<string>.Ignored, A<string>.Ignored)).Throws(new SystemException());
-
-            var controller = BuildDetailsController("*/*");
-
-            var paramValues = new ParamValues();
-
-            //Act
-            var result = await controller.TLevelDetails(TLevelId, TLevelLocationId, "testSearchTerm", paramValues).ConfigureAwait(false);
-
-            //Asserts
-            var resultStatus = result as StatusCodeResult;
-            resultStatus.StatusCode.Should().Be((int) HttpStatusCode.FailedDependency);
-            A.CallTo(() => FakeLogService.LogError(A<string>.Ignored)).MustHaveHappenedOnceExactly();
-
-            controller.Dispose();
-        }
-
-        [Fact]
-        public async Task GetTLevelThrowsExceptionForNullPramVaules()
+        public void GetTLevelThrowsExceptionForNullPramVaules()
         {
             // arrange
             var controller = BuildDetailsController("*/*");
