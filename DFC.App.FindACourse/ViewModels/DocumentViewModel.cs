@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Html;
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace DFC.App.FindACourse.ViewModels
 {
+    [ExcludeFromCodeCoverage]
     public class DocumentViewModel
     {
         public BreadcrumbViewModel Breadcrumb { get; set; }

@@ -30,6 +30,8 @@
             <button class="govuk-button filters-button" id="show-filters-button">Show filters</button>
             <form action="/find-a-course/filterresults" method="get" class="find-a-course-page" id="fac-filter-form">
                 @Html.HiddenFor(m => m.CurrentSearchTerm)
+                @Html.HiddenFor(m => m.RequestPage)
+
                 <div class="govuk-grid-row">
 
                     <div class="govuk-grid-column-one-third">
@@ -37,7 +39,7 @@
                     </div>
 
                     <div class="govuk-grid-column-two-thirds">
-                        <partial name="_counter" model="Model" />
+                        <partial name="_resultsTop" model="Model" />
 
                         <hr class="govuk-section-break govuk-section-break--visible">
 

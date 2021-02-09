@@ -3,6 +3,7 @@ using DFC.App.FindACourse.Data.Contracts;
 using DFC.App.FindACourse.Data.Domain;
 using DFC.App.FindACourse.Data.Models;
 using DFC.App.FindACourse.Framework;
+using DFC.App.FindACourse.Helpers;
 using DFC.App.FindACourse.HostedServices;
 using DFC.App.FindACourse.Repository;
 using DFC.App.FindACourse.Services;
@@ -31,10 +32,11 @@ using Polly;
 using Polly.Extensions.Http;
 using Polly.Registry;
 using System;
-using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace DFC.App.FindACourse
 {
+    [ExcludeFromCodeCoverage]
     public class Startup
     {
         public const string CourseSearchAppSettings = "Configuration:CourseSearch";
@@ -92,10 +94,10 @@ namespace DFC.App.FindACourse
             services.AddTransient<IApiDataProcessorService, ApiDataProcessorService>();
             services.AddTransient<IApiCacheService, ApiCacheService>();
             services.AddTransient<IWebhooksService, WebhooksService>();
+            services.AddTransient<IViewHelper, ViewHelper>();
             services.AddTransient<MemoryCache>();
 
             var policyRegistry = services.AddPolicyRegistry();
-            var policyOptions = Configuration.GetSection(CourseSearchClientPolicySettings).Get<PolicyOptions>() ?? new PolicyOptions();
             services.AddFindACourseTransientFaultHandlingPolicies(courseSearchClientSettings, policyRegistry);
 
             services.AddHostedServiceTelemetryWrapper();
@@ -107,15 +109,8 @@ namespace DFC.App.FindACourse
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Latest);
         }
 
-        private static void AddPolicies(IPolicyRegistry<string> policyRegistry)
-        {
-            var policyOptions = new PolicyOptions() { HttpRetry = new RetryPolicyOptions(), HttpCircuitBreaker = new CircuitBreakerPolicyOptions() };
-            policyRegistry.Add(nameof(PolicyOptions.HttpRetry), HttpPolicyExtensions.HandleTransientHttpError().WaitAndRetryAsync(policyOptions.HttpRetry.Count, retryAttempt => TimeSpan.FromSeconds(Math.Pow(policyOptions.HttpRetry.BackoffPower, retryAttempt))));
-            policyRegistry.Add(nameof(PolicyOptions.HttpCircuitBreaker), HttpPolicyExtensions.HandleTransientHttpError().CircuitBreakerAsync(policyOptions.HttpCircuitBreaker.ExceptionsAllowedBeforeBreaking, policyOptions.HttpCircuitBreaker.DurationOfBreak));
-        }
-
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IMapper mapper)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {

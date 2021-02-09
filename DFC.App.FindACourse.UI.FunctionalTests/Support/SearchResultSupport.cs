@@ -109,7 +109,6 @@ namespace DFC.App.FindACourse.UI.FunctionalTests.Support
             var courseTypeFound = false;
             foreach (var detail in details)
             {
-                var tester = detail.Text;
                 if (detail.Text.ToLower(CultureInfo.CurrentCulture).Contains("course type"))
                 {
                     var parentNode = this.Context.GetHelperLibrary<AppSettings>().JavaScriptHelper.GetParentElement(detail);

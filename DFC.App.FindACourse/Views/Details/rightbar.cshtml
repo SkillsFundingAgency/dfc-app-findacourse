@@ -1,38 +1,38 @@
-﻿@model DetailsViewModel
+﻿@model DetailsRightBarViewModel
 
 <div class="app-related-items">
 
     <h2 class="govuk-heading-m govuk-!-margin-top-2">Course provider</h2>
-    <p class="govuk-body-lead">@Model.CourseDetails.ProviderName</p>
+    <p class="govuk-body-lead">@Html.Raw(Model.Provider.Name)</p>
 
     <ul class="govuk-list govuk-!-font-size-16">
-        @if (!string.IsNullOrWhiteSpace(Model.CourseDetails.ProviderDetails.Website))
+        @if (!string.IsNullOrWhiteSpace(Model.Provider.Website))
         {
             <li>
                 <span class="govuk-!-font-weight-bold">Website:</span>
-                <a class="govuk-link" href="@Model.CourseDetails.ProviderDetails.Website">@Model.CourseDetails.ProviderDetails.Website</a>
+                <a class="govuk-link" href="@Model.Provider.Website">@Html.Raw(Model.Provider.Website)</a>
             </li>
         }
-        @if (!string.IsNullOrEmpty(Model.CourseDetails.ProviderDetails.EmailAddress))
+        @if (!string.IsNullOrEmpty(Model.Provider.EmailAddress))
         {
             <li>
                 <span class="govuk-!-font-weight-bold">Email:</span>
-                <a class="govuk-link" href="mailto:@Model.CourseDetails.ProviderDetails.EmailAddress" aria-label="EmailTo">@Model.CourseDetails.ProviderDetails.EmailAddress</a>
+                <a class="govuk-link" href="mailto:@Model.Provider.EmailAddress" aria-label="EmailTo">@Html.Raw(Model.Provider.EmailAddress)</a>
             </li>
         }
-        @if (!string.IsNullOrEmpty(Model.CourseDetails.ProviderDetails.PhoneNumber))
+        @if (!string.IsNullOrEmpty(Model.Provider.PhoneNumber))
         {
             <li>
-                <span class="govuk-!-font-weight-bold">Phone:</span> @Model.CourseDetails.ProviderDetails.PhoneNumber
+                <span class="govuk-!-font-weight-bold">Phone:</span> @Html.Raw(Model.Provider.PhoneNumber)
             </li>
         }
     </ul>
-    @if (Model.CourseDetails.ProviderDetails.LearnerSatisfaction > 0 && Model.CourseDetails.ProviderDetails.EmployerSatisfaction > 0)
+    @if (Model.Provider.LearnerSatisfaction > 0 && Model.Provider.EmployerSatisfaction > 0)
     {
         <h2 class="govuk-heading-m">Provider performance information</h2>
-        <p class="govuk-body govuk-!-font-size-48 govuk-!-font-weight-bold govuk-!-margin-bottom-2">@Model.CourseDetails.ProviderDetails.LearnerSatisfaction</p>
+        <p class="govuk-body govuk-!-font-size-48 govuk-!-font-weight-bold govuk-!-margin-bottom-2">@Model.Provider.LearnerSatisfaction</p>
         <p class="govuk-body-s govuk-!-font-weight-bold">out of 10 for learner satisfaction</p>
-        <p class="govuk-body govuk-!-font-size-48 govuk-!-font-weight-bold govuk-!-margin-bottom-2">@Model.CourseDetails.ProviderDetails.EmployerSatisfaction</p>
+        <p class="govuk-body govuk-!-font-size-48 govuk-!-font-weight-bold govuk-!-margin-bottom-2">@Model.Provider.EmployerSatisfaction</p>
         <p class="govuk-body-s govuk-!-font-weight-bold">out of 10 for employer satisfaction</p>
     }
 </div>

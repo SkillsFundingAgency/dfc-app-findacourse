@@ -1,5 +1,8 @@
-﻿namespace DFC.App.FindACourse.ViewModels
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace DFC.App.FindACourse.ViewModels
 {
+    [ExcludeFromCodeCoverage]
     public class HealthItemViewModel
     {
         public string Service { get; set; }

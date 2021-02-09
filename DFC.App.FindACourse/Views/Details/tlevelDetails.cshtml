@@ -1,0 +1,163 @@
+﻿@model TLevelDetailsViewModel
+<section aria-label="Details">
+    <div class="secondary-hero govuk-!-margin-bottom-0" id="details-heading-block">
+        <div class="govuk-width-container">
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-two-thirds">
+                    <h1 class="govuk-heading-l govuk-!-padding-bottom-9">@Html.Raw(Model.TlevelDetails.Qualification.TLevelName)</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="govuk-width-container" id="details-body-block">
+    <main class="govuk-main-wrapper govuk-main-wrapper--auto-spacing" id="main-content" role="main">
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds">
+                <div id="tlevel-details-block">
+                    <h2 class="govuk-heading-m" id="courseDetails">Course details</h2>
+                    <table class="govuk-table">
+                        <caption class="govuk-visually-hidden">Table with course details</caption>
+                        <tbody class="govuk-table__body">
+                            @if (!string.IsNullOrWhiteSpace(Model.TlevelDetails.Qualification.TLevelName))
+                            {
+                                <tr class="govuk-table__row">
+                                    <th class="govuk-table__header" scope="row">Qualification name</th>
+                                    <td class="govuk-table__cell"><span id="qualification-name">@Html.Raw(Model.TlevelDetails.Qualification.TLevelName)</span></td>
+                                </tr>
+                            }
+
+                            @if (!string.IsNullOrWhiteSpace(Model.TlevelDetails.Qualification.QualificationLevel))
+                            {
+                                <tr class="govuk-table__row">
+                                    <th class="govuk-table__header" scope="row">Qualification level</th>
+                                    <td class="govuk-table__cell"><span id="qualification-level">@Html.Raw(Model.TlevelDetails.Qualification.QualificationLevel)</span></td>
+                                </tr>
+                            }
+
+                            @if (Model.TlevelDetails.StartDate != null)
+                            {
+                                <tr class="govuk-table__row">
+                                    <th class="govuk-table__header" scope="row">Course start date</th>
+                                    <td class="govuk-table__cell"><span id="start-date">@Model.TlevelDetails.StartDate.Value.ToFormattedString()</span></td>
+                                </tr>
+                            }
+
+                            @if (!string.IsNullOrEmpty(Model.TlevelDetails.Duration))
+                            {
+                                <tr class="govuk-table__row">
+                                    <th class="govuk-table__header" scope="row">Duration</th>
+                                    <td class="govuk-table__cell"><span id="duration">@Html.Raw(Model.TlevelDetails.Duration)</span></td>
+                                </tr>
+                            }
+
+                            @if (!string.IsNullOrEmpty(Model.TlevelDetails.DeliveryMode))
+                            {
+                                <tr class="govuk-table__row">
+                                    <th class="govuk-table__header" scope="row">Course Type</th>
+                                    <td class="govuk-table__cell"><span id="course-type">@Html.Raw(Model.TlevelDetails.DeliveryMode)</span></td>
+                                </tr>
+                            }
+
+                            @if (!string.IsNullOrEmpty(Model.TlevelDetails.CostDescription))
+                            {
+                                <tr class="govuk-table__row">
+                                    <th class="govuk-table__header" scope="row">Cost description</th>
+                                    <td class="govuk-table__cell"><span id="cost-description">@Html.Raw(Model.TlevelDetails.CostDescription)</span></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                    @if (!string.IsNullOrWhiteSpace(Model.TlevelDetails.WhoFor))
+                    {
+                        <h2 class="govuk-heading-m" id="whothiscourseisfor">Who this course is for</h2>
+                        <p id="who-this-course-is-for">@Html.Raw(Model.TlevelDetails.WhoFor)</p>
+                    }
+
+                    @if (!string.IsNullOrWhiteSpace(Model.TlevelDetails.EntryRequirements))
+                    {
+                        <h2 class="govuk-heading-m" id="entryrequirements">Entry requirements</h2>
+                        <p id="entry-requirements">@Html.Raw(Model.TlevelDetails.EntryRequirements)</p>
+                    }
+
+                    @if (!string.IsNullOrWhiteSpace(Model.TlevelDetails.WhatYoullLearn))
+                    {
+                        <h2 class="govuk-heading-m" id="howyouwilllearn">What you'll learn</h2>
+                        <p id="what-you-will-learn">@Html.Raw(Model.TlevelDetails.WhatYoullLearn)</p>
+                    }
+
+                    @if (!string.IsNullOrWhiteSpace(Model.TlevelDetails.HowYoullLearn))
+                    {
+                        <h2 class="govuk-heading-m" id="howlearn">How you'll learn</h2>
+                        <p id="how-you-will-learn">@Html.Raw(Model.TlevelDetails.HowYoullLearn)</p>
+                    }
+
+                    @if (!string.IsNullOrWhiteSpace(Model.TlevelDetails.HowYoullBeAssessed))
+                    {
+                        <h2 class="govuk-heading-m" id="howyouwillbeassessed">How you'll be assessed</h2>
+                        <p id="how-you-will-be-assessed">@Html.Raw(Model.TlevelDetails.HowYoullBeAssessed)</p>
+                    }
+
+                    @if (!string.IsNullOrWhiteSpace(Model.TlevelDetails.WhatYouCanDoNext))
+                    {
+                        <h2 class="govuk-heading-m" id="nextsteps">Next steps</h2>
+                        <p id="next-steps">@Html.Raw(Model.TlevelDetails.WhatYouCanDoNext))</p>
+                    }
+
+                    @if (Model.TlevelDetails.Venues.Any())
+                    {
+                        <h2 class="govuk-heading-m" id="venue">Venue@(Model.TlevelDetails.Venues.Count() > 1 ? "s" : string.Empty) for this course</h2>
+                        <partial name="courseDetailsVenueDetails" model=Model.TlevelDetails.Venues.FirstOrDefault() />
+                    }
+             
+                    <a href="@Model.TlevelDetails.Website" role="button" draggable="false" class="govuk-button govuk-button--start" data-module="govuk-button">
+                        Go to course
+                        <svg class="govuk-button__start-icon" xmlns="http://www.w3.org/2000/svg" width="17.5" height="19" viewBox="0 0 33 40" aria-hidden="true" focusable="false">
+                            <path fill="currentColor" d="M0 0h13l20 20-20 20H0l20-20z" />
+                        </svg>
+                    </a>
+
+                    <p><a href="/find-a-course/page?@Model.SearchTerm" class="govuk-back-link" id="back-to-results">Back to results</a></p>
+
+                    @if (Model.TlevelDetails.Venues.Count > 1)
+                    {
+                        <h2 class="govuk-heading-m" id="othervenuesdates">Other venues and dates</h2>
+                        <table class="govuk-table" aria-describedby="othervenuesdates">
+                            <tbody class="govuk-table__body">
+                                <tr class="govuk-table__row">
+                                    <th class="govuk-table__header" scope="col">Venue</th>
+                                    <th class="govuk-table__header" scope="col">Start date</th>
+                                    <th class="govuk-table__header" scope="col">Options</th>
+                                </tr>
+                                @{int counter = 1;}
+                                @foreach (Venue venue in Model.TlevelDetails.Venues.Skip(1))
+                                {
+                                    <tr class="govuk-table__row">
+                                        <td class="govuk-table__cell"><span id="other-venue-name-@counter">@Html.Raw(venue.VenueName)</span></td>
+                                        <td class="govuk-table__cell">
+                                            @if (Model.TlevelDetails.StartDate != null)
+                                            {
+                                                <span id="other-startdate-@counter">@Model.TlevelDetails.StartDate.Value.ToFormattedString()</span>
+                                            }
+                                        </td>
+                                        <td class="govuk-table__cell">
+                                            @if (Model.TlevelDetails.Website != null)
+                                            {
+                                                <a class="govuk-link" href="@Model.TlevelDetails.Website" id="other-website-@(counter++)">View course</a>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                </div>
+            </div>
+            <div class="govuk-grid-column-one-third">
+                <partial name="rightbar" model="Model.DetailsRightBarViewModel" />
+            </div>
+        </div>
+    </main>
+</div>

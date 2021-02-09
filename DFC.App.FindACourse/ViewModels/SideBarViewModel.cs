@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace DFC.App.FindACourse.ViewModels
 {
+    [ExcludeFromCodeCoverage]
     public class SideBarViewModel
     {
         public string TownOrPostcode { get; set; }
@@ -30,5 +31,6 @@ namespace DFC.App.FindACourse.ViewModels
 
         public List<SelectListItem> StartDateOptions { get; set; }
 
+        public int D { get; set; }
     }
 }
