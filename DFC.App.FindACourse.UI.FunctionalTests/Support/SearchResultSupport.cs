@@ -125,7 +125,6 @@ namespace DFC.App.FindACourse.UI.FunctionalTests.Support
                 throw new OperationCanceledException("No course type data was found within the search result container. As all results should have a course type value, the container is not recognised.");
             }
 
-            var locationFound = false;
             foreach (var detail in details)
             {
                 if (detail.Text.ToLower(CultureInfo.CurrentCulture).Contains("location"))
@@ -133,14 +132,8 @@ namespace DFC.App.FindACourse.UI.FunctionalTests.Support
                     var parentNode = this.Context.GetHelperLibrary<AppSettings>().JavaScriptHelper.GetParentElement(detail);
                     var locationValue = parentNode.Text.Replace("Location:", string.Empty).Trim();
                     searchResult.Location = locationValue;
-                    locationFound = true;
                     break;
                 }
-            }
-
-            if (!locationFound)
-            {
-                throw new OperationCanceledException("No location data was found within the search result container. As all results should have a location value, the container is not recognised.");
             }
 
             foreach (var detail in details)
