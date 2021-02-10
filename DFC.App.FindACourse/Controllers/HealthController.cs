@@ -12,8 +12,6 @@ namespace DFC.App.FindACourse.Controllers
 {
     public class HealthController : Controller
     {
-        private const string SuccessMessage = "Document store is available";
-
         private readonly ILogger<HealthController> logger;
         private readonly IFindACourseService findACourseService;
         private readonly string resourceName;
@@ -22,47 +20,48 @@ namespace DFC.App.FindACourse.Controllers
         {
             this.logger = logger;
             this.findACourseService = findACourseService;
-            this.resourceName = typeof(Program).Namespace;
+            resourceName = typeof(Program).Namespace;
         }
 
         [HttpGet]
         [Route("health")]
         public async Task<IActionResult> Health()
         {
-            this.logger.LogInformation($"{nameof(this.Health)} has been called");
+            logger.LogInformation($"{nameof(this.Health)} has been called");
 
             try
             {
-                var isHealthy = this.findACourseService.PingAsync();
+                var isHealthy = findACourseService.PingAsync();
                 if (isHealthy)
                 {
-                    this.logger.LogInformation($"{nameof(this.Health)} responded with: {this.resourceName} - {SuccessMessage}");
+                    const string message = "Document store is available";
+                    logger.LogInformation($"{nameof(Health)} responded with: {resourceName} - {message}");
 
-                    var viewModel = this.CreateHealthViewModel();
+                    var viewModel = CreateHealthViewModel(message);
 
-                    return this.NegotiateContentResult(viewModel);
+                    return this.NegotiateContentResult(viewModel, viewModel.HealthItems);
                 }
 
-                this.logger.LogError($"{nameof(this.Health)}: Ping to {this.resourceName} has failed");
+                logger.LogError($"{nameof(this.Health)}: Ping to {resourceName} has failed");
             }
             catch (Exception ex)
             {
-                this.logger.LogError(ex, $"{nameof(this.Health)}: {this.resourceName} exception: {ex.Message}");
+                logger.LogError(ex, $"{nameof(this.Health)}: {resourceName} exception: {ex.Message}");
             }
 
-            return this.StatusCode((int)HttpStatusCode.ServiceUnavailable);
+            return StatusCode((int)HttpStatusCode.ServiceUnavailable);
         }
 
         [HttpGet]
         [Route("health/ping")]
         public IActionResult Ping()
         {
-            this.logger.LogInformation($"{nameof(this.Ping)} has been called");
+            logger.LogInformation($"{nameof(this.Ping)} has been called");
 
-            return this.Ok();
+            return Ok();
         }
 
-        private HealthViewModel CreateHealthViewModel()
+        private HealthViewModel CreateHealthViewModel(string message)
         {
             return new HealthViewModel
             {
@@ -70,8 +69,8 @@ namespace DFC.App.FindACourse.Controllers
                 {
                     new HealthItemViewModel
                     {
-                        Service = this.resourceName,
-                        Message = SuccessMessage,
+                        Service = resourceName,
+                        Message = message,
                     },
                 },
             };

@@ -8,6 +8,6 @@
 
         MoreThan6Months = 2,
 
-        Flexible = 3
+        Flexible = 3,
     }
 }

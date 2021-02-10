@@ -1,6 +1,7 @@
 ﻿using DFC.App.FindACourse.Repository;
 using DFC.CompositeInterfaceModels.FindACourseClient;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace DFC.App.FindACourse.Services
@@ -39,6 +40,15 @@ namespace DFC.App.FindACourse.Services
         public async Task<CourseDetails> GetCourseDetails(string courseId, string runId)
         {
             return await repository.GetCourseDetails(courseId, runId).ConfigureAwait(false);
+        }
+
+        public async Task<TLevelDetails> GetTLevelDetails(string tlevelId, string tlevelLocationId)
+        {
+            var tlevelDetails = await repository.GetTLevelDetails(tlevelId).ConfigureAwait(false);
+
+            //put the requested venue at the top if possible
+            tlevelDetails.Venues = tlevelDetails.Venues?.OrderByDescending(m => m.Id == tlevelLocationId).ToList();
+            return tlevelDetails;
         }
     }
 }

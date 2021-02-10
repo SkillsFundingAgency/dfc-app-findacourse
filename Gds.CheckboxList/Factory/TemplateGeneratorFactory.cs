@@ -1,11 +1,13 @@
 ﻿using GdsCheckboxList.Models;
 using GdsCheckboxList.Templates;
+using System.Diagnostics.CodeAnalysis;
 
 namespace GdsCheckboxList.Factory
 {
     /// <summary>
     /// Factory class used to generate Template generator
     /// </summary>
+    [ExcludeFromCodeCoverage]
     internal static class TemplateGeneratorFactory
     {
         /// <summary>

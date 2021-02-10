@@ -3,11 +3,13 @@ using DFC.Compui.Telemetry.HostedService;
 using DFC.Content.Pkg.Netcore.Data.Models.ClientOptions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace DFC.App.FindACourse.HostedServices
 {
+    [ExcludeFromCodeCoverage]
     public class StaticContentReloadBackgroundService : BackgroundService
     {
         private readonly ILogger<StaticContentReloadBackgroundService> logger;

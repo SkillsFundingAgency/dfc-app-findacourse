@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace DFC.App.FindACourse.ViewModels
 {
+    [ExcludeFromCodeCoverage]
     public class CourseRegion
     {
         public string Name { get; set; }

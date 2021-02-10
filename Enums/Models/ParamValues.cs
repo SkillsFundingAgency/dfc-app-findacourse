@@ -1,5 +1,8 @@
-﻿namespace DFC.App.FindACourse.Data.Models
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace DFC.App.FindACourse.Data.Models
 {
+    [ExcludeFromCodeCoverage]
     public class ParamValues
     {
         public string SearchTerm { get; set; }

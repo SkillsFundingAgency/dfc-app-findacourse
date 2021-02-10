@@ -73,14 +73,12 @@ namespace DFC.App.FindACourse.UI.FunctionalTests.StepDefinitions
         [When(@"I click on the first search result")]
         public void WhenIClickTheFirstResult()
         {
-            Thread.Sleep(5000);
-
+            Thread.Sleep(2000);
             var results = this.Context.GetWebDriver().FindElements(By.ClassName("govuk-heading-m"));
             Assert.True(results.Count > 0);
-
             var firstResult = results[1];
             this.Context.Get<IObjectContext>().SetObject("FirstResult", firstResult.GetAttribute("innerText"));
-            firstResult.Click();
+            this.Context.GetWebDriver().FindElement(By.LinkText(this.Context.Get<IObjectContext>().GetObject("FirstResult"))).Click();
         }
 
         [Then(@"I am returned to same search results page")]

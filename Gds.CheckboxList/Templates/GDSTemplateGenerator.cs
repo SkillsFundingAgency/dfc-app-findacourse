@@ -1,14 +1,15 @@
 ﻿using GdsCheckboxList.Models;
-using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 namespace GdsCheckboxList.Templates
 {
     /// <summary>
-    /// Basic template generator class used to generate basic HTML markup
+    /// Basic template generator class used to generate basic HTML markup.
     /// <inpu>
     /// </summary>
+    [ExcludeFromCodeCoverage]
     internal class GDSTemplateGenerator : ITemplateGenerator
     {
         public string Generate(string name, List<CheckBoxItem> items)
@@ -30,9 +31,9 @@ namespace GdsCheckboxList.Templates
                     $"<input class=\"govuk-checkboxes__input\" id=\"{idValue}\" name=\"{nameValue}\" type=\"checkbox\" value=\"{items[i].Id}\" {checkedValue} {disabledValue}>" +
                     $"<label class=\"checkbox{disabledClass} govuk-label govuk-checkboxes__label\" for=\"{idValue}\">" + items[i].Title +
                     $"</label>" +
-                    $"</div>"
-                ) ;
+                    $"</div>");
             }
+
             stringBuilder.Append("</div>");
 
             return stringBuilder.ToString();

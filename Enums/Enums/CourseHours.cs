@@ -6,6 +6,6 @@
 
         PartTime = 1,
 
-        Flexible = 2
+        Flexible = 2,
     }
 }
