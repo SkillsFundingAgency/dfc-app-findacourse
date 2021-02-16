@@ -73,37 +73,37 @@
                     @if (!string.IsNullOrWhiteSpace(Model.TlevelDetails.WhoFor))
                     {
                         <h2 class="govuk-heading-m" id="whothiscourseisfor">Who this course is for</h2>
-                        <p id="who-this-course-is-for">@Html.Raw(Model.TlevelDetails.WhoFor)</p>
+                        <p id="who-this-course-is-for">@Html.Raw(@Html.HtmlFormat(Model.TlevelDetails.WhoFor))</p>
                     }
 
                     @if (!string.IsNullOrWhiteSpace(Model.TlevelDetails.EntryRequirements))
                     {
                         <h2 class="govuk-heading-m" id="entryrequirements">Entry requirements</h2>
-                        <p id="entry-requirements">@Html.Raw(Model.TlevelDetails.EntryRequirements)</p>
+                        <p id="entry-requirements">@Html.Raw(@Html.HtmlFormat(Model.TlevelDetails.EntryRequirements))</p>
                     }
 
                     @if (!string.IsNullOrWhiteSpace(Model.TlevelDetails.WhatYoullLearn))
                     {
                         <h2 class="govuk-heading-m" id="howyouwilllearn">What you'll learn</h2>
-                        <p id="what-you-will-learn">@Html.Raw(Model.TlevelDetails.WhatYoullLearn)</p>
+                        <p id="what-you-will-learn">@Html.Raw(@Html.HtmlFormat(Model.TlevelDetails.WhatYoullLearn))</p>
                     }
 
                     @if (!string.IsNullOrWhiteSpace(Model.TlevelDetails.HowYoullLearn))
                     {
                         <h2 class="govuk-heading-m" id="howlearn">How you'll learn</h2>
-                        <p id="how-you-will-learn">@Html.Raw(Model.TlevelDetails.HowYoullLearn)</p>
+                        <p id="how-you-will-learn">@Html.Raw(@Html.HtmlFormat(Model.TlevelDetails.HowYoullLearn))</p>
                     }
 
                     @if (!string.IsNullOrWhiteSpace(Model.TlevelDetails.HowYoullBeAssessed))
                     {
                         <h2 class="govuk-heading-m" id="howyouwillbeassessed">How you'll be assessed</h2>
-                        <p id="how-you-will-be-assessed">@Html.Raw(Model.TlevelDetails.HowYoullBeAssessed)</p>
+                        <p id="how-you-will-be-assessed">@Html.Raw(@Html.HtmlFormat(Model.TlevelDetails.HowYoullBeAssessed))</p>
                     }
 
                     @if (!string.IsNullOrWhiteSpace(Model.TlevelDetails.WhatYouCanDoNext))
                     {
                         <h2 class="govuk-heading-m" id="nextsteps">Next steps</h2>
-                        <p id="next-steps">@Html.Raw(Model.TlevelDetails.WhatYouCanDoNext))</p>
+                        <p id="next-steps">@Html.Raw(@Html.HtmlFormat(Model.TlevelDetails.WhatYouCanDoNext))</p>
                     }
 
                     @if (Model.TlevelDetails.Venues.Any())
@@ -111,7 +111,7 @@
                         <h2 class="govuk-heading-m" id="venue">Venue@(Model.TlevelDetails.Venues.Count() > 1 ? "s" : string.Empty) for this course</h2>
                         <partial name="courseDetailsVenueDetails" model=Model.TlevelDetails.Venues.FirstOrDefault() />
                     }
-             
+
                     <a href="@Model.TlevelDetails.Website" role="button" draggable="false" class="govuk-button govuk-button--start" data-module="govuk-button">
                         Go to course
                         <svg class="govuk-button__start-icon" xmlns="http://www.w3.org/2000/svg" width="17.5" height="19" viewBox="0 0 33 40" aria-hidden="true" focusable="false">
