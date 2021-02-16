@@ -73,37 +73,37 @@
                     @if (!string.IsNullOrWhiteSpace(Model.TlevelDetails.WhoFor))
                     {
                         <h2 class="govuk-heading-m" id="whothiscourseisfor">Who this course is for</h2>
-                        <p id="who-this-course-is-for">@Html.Raw(@Html.HtmlFormat(Model.TlevelDetails.WhoFor))</p>
+                        <p id="who-this-course-is-for">@Html.Raw(Html.HtmlFormat(Model.TlevelDetails.WhoFor))</p>
                     }
 
                     @if (!string.IsNullOrWhiteSpace(Model.TlevelDetails.EntryRequirements))
                     {
                         <h2 class="govuk-heading-m" id="entryrequirements">Entry requirements</h2>
-                        <p id="entry-requirements">@Html.Raw(@Html.HtmlFormat(Model.TlevelDetails.EntryRequirements))</p>
+                        <p id="entry-requirements">@Html.Raw(Html.HtmlFormat(Model.TlevelDetails.EntryRequirements))</p>
                     }
 
                     @if (!string.IsNullOrWhiteSpace(Model.TlevelDetails.WhatYoullLearn))
                     {
                         <h2 class="govuk-heading-m" id="howyouwilllearn">What you'll learn</h2>
-                        <p id="what-you-will-learn">@Html.Raw(@Html.HtmlFormat(Model.TlevelDetails.WhatYoullLearn))</p>
+                        <p id="what-you-will-learn">@Html.Raw(Html.HtmlFormat(Model.TlevelDetails.WhatYoullLearn))</p>
                     }
 
                     @if (!string.IsNullOrWhiteSpace(Model.TlevelDetails.HowYoullLearn))
                     {
                         <h2 class="govuk-heading-m" id="howlearn">How you'll learn</h2>
-                        <p id="how-you-will-learn">@Html.Raw(@Html.HtmlFormat(Model.TlevelDetails.HowYoullLearn))</p>
+                        <p id="how-you-will-learn">@Html.Raw(Html.HtmlFormat(Model.TlevelDetails.HowYoullLearn))</p>
                     }
 
                     @if (!string.IsNullOrWhiteSpace(Model.TlevelDetails.HowYoullBeAssessed))
                     {
                         <h2 class="govuk-heading-m" id="howyouwillbeassessed">How you'll be assessed</h2>
-                        <p id="how-you-will-be-assessed">@Html.Raw(@Html.HtmlFormat(Model.TlevelDetails.HowYoullBeAssessed))</p>
+                        <p id="how-you-will-be-assessed">@Html.Raw(Html.HtmlFormat(Model.TlevelDetails.HowYoullBeAssessed))</p>
                     }
 
                     @if (!string.IsNullOrWhiteSpace(Model.TlevelDetails.WhatYouCanDoNext))
                     {
                         <h2 class="govuk-heading-m" id="nextsteps">Next steps</h2>
-                        <p id="next-steps">@Html.Raw(@Html.HtmlFormat(Model.TlevelDetails.WhatYouCanDoNext))</p>
+                        <p id="next-steps">@Html.Raw(Html.HtmlFormat(Model.TlevelDetails.WhatYouCanDoNext))</p>
                     }
 
                     @if (Model.TlevelDetails.Venues.Any())

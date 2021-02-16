@@ -61,30 +61,30 @@
         @if (!string.IsNullOrWhiteSpace(Model.CourseDetails.Description))
         {
             <h2 class="govuk-heading-m" id="whofor">Who this course is for</h2>
-            <p id="course-description">@Html.Raw(@Html.HtmlFormat(Model.CourseDetails.Description))</p>
+            <p id="course-description">@Html.Raw(Html.HtmlFormat(Model.CourseDetails.Description))</p>
         }
 
         @if (!string.IsNullOrWhiteSpace(Model.CourseDetails.EntryRequirements))
         {
             <h2 class="govuk-heading-m" id="entry">Entry requirements</h2>
-            <p id="course-entryrequirements">@Html.Raw(@Html.HtmlFormat(Model.CourseDetails.EntryRequirements))</p>
+            <p id="course-entryrequirements">@Html.Raw(Html.HtmlFormat(Model.CourseDetails.EntryRequirements))</p>
         }
 
         @if (!string.IsNullOrWhiteSpace(Model.CourseDetails.WhatYoullLearn))
         {
             <h2 class="govuk-heading-m" id="whatlearn">What you'll learn</h2>
-            <p id="course-what-you-will-learn">@Html.Raw(@Html.HtmlFormat(Model.CourseDetails.WhatYoullLearn))</p>
+            <p id="course-what-you-will-learn">@Html.Raw(Html.HtmlFormat(Model.CourseDetails.WhatYoullLearn))</p>
         }
 
         @if (!string.IsNullOrWhiteSpace(Model.CourseDetails.AssessmentMethod))
         {
             <h2 class="govuk-heading-m" id="assessed">How you'll be assessed</h2>
-            <p id="assessment-method">@Html.Raw(@Html.HtmlFormat(Model.CourseDetails.AssessmentMethod))</p>
+            <p id="assessment-method">@Html.Raw(Html.HtmlFormat(Model.CourseDetails.AssessmentMethod))</p>
         }
         @if (!string.IsNullOrWhiteSpace(Model.CourseDetails.NextSteps))
         {
             <h2 class="govuk-heading-m" id="next">What you can do next</h2>
-            <p id="next-steps">@Html.Raw(@Html.HtmlFormat(Model.CourseDetails.NextSteps))</p>
+            <p id="next-steps">@Html.Raw(Html.HtmlFormat(Model.CourseDetails.NextSteps))</p>
         }
         <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
         @*@if (Model.CourseDetails.VenueDetails != null && Model.CourseDetails.VenueDetails.Website != null)
