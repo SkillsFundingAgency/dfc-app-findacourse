@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DFC.App.FindACourse.Helpers
 {
-    public static class HTMLHelpers
+    public static class HtmlHelpers
     {
         public static IHtmlContent HtmlFormat(this IHtmlHelper htmlHelper, string content)
         {

@@ -18,13 +18,26 @@ namespace DFC.App.FindACourse.UnitTests
         [InlineData("aa\r\n \r\nbb", "aa<br/> <br/>bb")]
         public void HtmlFormatsCorrectly(string input, string expectedOutput)
         {
-            //Act
+            //Setup
             var fakeHelper = A.Fake<IHtmlHelper>();
 
-            var output = HTMLHelpers.HtmlFormat(fakeHelper, input);
+            //Act
+            var output = HtmlHelpers.HtmlFormat(fakeHelper, input);
 
             //Asserts
             output.ToString().Should().Be(expectedOutput);
+        }
+
+        [Fact]
+        public void FormatThrowsExceptionForNullParamValues()
+        {
+            //Setup
+            var fakeHelper = A.Fake<IHtmlHelper>();
+
+            Action act = () => HtmlHelpers.HtmlFormat(fakeHelper, null);
+
+            //Assert
+            act.Should().Throw<ArgumentNullException>();
         }
 
     }
