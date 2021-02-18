@@ -8,7 +8,7 @@
                 @if (!string.IsNullOrWhiteSpace(Model.CourseDetails.QualificationName))
                 {
                     <tr class="govuk-table__row">
-                        <th class="govuk-table__header" scope="row">Qualification name</th>
+                        <th class="govuk-table__header govuk-!-width-one-half" scope="row">Qualification name</th>
                         <td class="govuk-table__cell"><span id="qualification-name">@Html.Raw(Model.CourseDetails.QualificationName)</span></td>
                     </tr>
                 }
@@ -16,7 +16,7 @@
                 @if (!string.IsNullOrWhiteSpace(Model.CourseDetails.QualificationLevel))
                 {
                     <tr class="govuk-table__row">
-                        <th class="govuk-table__header" scope="row">Qualification level</th>
+                        <th class="govuk-table__header govuk-!-width-one-half" scope="row">Qualification level</th>
                         <td class="govuk-table__cell"><span id="qualification-level">@Html.Raw(Model.CourseDetails.QualificationLevel)</span></td>
                     </tr>
                 }
@@ -24,18 +24,18 @@
                 @if (!string.IsNullOrWhiteSpace(Model.CourseDetails.AwardingOrganisation))
                 {
                     <tr class="govuk-table__row">
-                        <th class="govuk-table__header" scope="row">Awarding organisation</th>
+                        <th class="govuk-table__header govuk-!-width-one-half" scope="row">Awarding organisation</th>
                         <td class="govuk-table__cell"><span id="awarding-organisation">@Html.Raw(Model.CourseDetails.AwardingOrganisation)</span></td>
                     </tr>
                 }
                 <tr class="govuk-table__row">
-                    <th class="govuk-table__header" scope="row">Course type</th>
+                    <th class="govuk-table__header govuk-!-width-one-half" scope="row">Course type</th>
                     <td class="govuk-table__cell"><span id="attendance-mode">@Html.Raw(Model.CourseDetails.AttendanceMode)</span></td>
                 </tr>
                 @if (Model.CourseDetails.StartDate != null)
                 {
                     <tr>
-                        <th class="govuk-table__header" scope="row">Course start date</th>
+                        <th class="govuk-table__header govuk-!-width-one-half" scope="row">Course start date</th>
                         <td class="govuk-table__cell">
 
                             <span id="start-date">@Model.CourseDetails.StartDate.Value.ToFormattedString()</span>
@@ -44,7 +44,7 @@
                     </tr>
                 }
                 <tr class="govuk-table__row">
-                    <th class="govuk-table__header" scope="row">Cost</th>
+                    <th class="govuk-table__header govuk-!-width-one-half" scope="row">Cost</th>
                     <td class="govuk-table__cell">
                         <span id="cost-value">£@Model.CourseDetails.Cost.ToDecimalString("N2")</span>
                     </td>
@@ -52,7 +52,7 @@
                 @if (!string.IsNullOrEmpty(Model.CourseDetails.CostDescription))
                 {
                     <tr class="govuk-table__row">
-                        <th class="govuk-table__header" scope="row">Cost description</th>
+                        <th class="govuk-table__header govuk-!-width-one-half" scope="row">Cost description</th>
                         <td class="govuk-table__cell"><span id="additonal-price">@Html.Raw(Model.CourseDetails.CostDescription)</span></td>
                     </tr>
                 }
