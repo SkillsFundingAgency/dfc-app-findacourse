@@ -141,32 +141,34 @@
     </form>*@
 
     <p><a href="/find-a-course/page?@Model.SearchTerm" class="govuk-back-link" id="back-to-results">Back to results</a></p>
-    @if (Model.CourseDetails.VenueDetails != null)
+   
+    @if (Model.CourseDetails.AlternativeCourseRuns.Any())
     {
         <h2 class="govuk-heading-m" id="othervenuesdates">Other venues and dates</h2>
         <table class="govuk-table">
             <tbody class="govuk-table__body">
                 <tr class="govuk-table__row">
-                    <th class="govuk-table__header">Venue</th>
-                    <th class="govuk-table__header">Start date</th>
-                    <th class="govuk-table__header">Options</th>
+                    <th class="govuk-table__header" scope="col">Venue</th>
+                    <th class="govuk-table__header" scope="col">Start date</th>
+                    <th class="govuk-table__header" scope="col">Options</th>
                 </tr>
-                <tr class="govuk-table__row">
-                    <td class="govuk-table__cell"><span id="venue-name">@Html.Raw(Model.CourseDetails.VenueDetails.VenueName)</span></td>
-                    <td class="govuk-table__cell">
-                        @if (Model.CourseDetails.StartDate != null)
-                        {
-                            <span id="startdate">@Model.CourseDetails.StartDate.Value.ToFormattedString()</span>
-                        }
-                    </td>
-                    <td class="govuk-table__cell">
-                        @if (Model.CourseDetails.VenueDetails.Website != null)
-                        {
-                            <a class="govuk-link" href="@Model.CourseDetails.VenueDetails.Website" id="website">View course</a>
-                        }
-                    </td>
-                </tr>
-            </tbody>
+                @{int counter = 1;}
+                @foreach (AlternativeCourseRun courseRun in Model.CourseDetails.AlternativeCourseRuns)
+                {
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell"><span id="other-venue-name-@counter">@Html.Raw(courseRun.VenueName)</span></td>
+                        <td class="govuk-table__cell">
+                            @if (courseRun.StartDate != null)
+                            {
+                                <span id="other-startdate-@counter">@courseRun.StartDate.Value.ToFormattedString()</span>
+                            }
+                        </td>
+                        <td class="govuk-table__cell">
+                            <a class="govuk-link" id="other-website-@(counter++)" href="/find-a-course/details?courseId=@Model.CourseDetails.CourseId&runId=@courseRun.RunId&@Model.SearchTerm">View course</a>
+                        </td>
+                    </tr>
+                }
+                </tbody>
         </table>
     }
 </div>
