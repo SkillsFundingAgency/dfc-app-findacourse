@@ -10,7 +10,7 @@
                 @if (!string.IsNullOrWhiteSpace(Model.CourseDetails.QualificationName))
                 {
                     <tr class="govuk-table__row">
-                        <th class="govuk-table__header govuk-!-width-one-half" scope="row">Qualification name</th>
+                        <th class="govuk-table__header" scope="row">Qualification name</th>
                         <td class="govuk-table__cell"><span id="qualification-name">@Html.Raw(Model.CourseDetails.QualificationName)</span></td>
                     </tr>
                 }
