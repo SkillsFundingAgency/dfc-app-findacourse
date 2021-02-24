@@ -23,7 +23,7 @@
                             @if (!string.IsNullOrWhiteSpace(Model.TlevelDetails.Qualification.TLevelName))
                             {
                                 <tr class="govuk-table__row">
-                                    <th class="govuk-table__header govuk-!-width-one-half" scope="row">Qualification name</th>
+                                    <th class="govuk-table__header" scope="row">Qualification name</th>
                                     <td class="govuk-table__cell"><span id="qualification-name">@Html.Raw(Model.TlevelDetails.Qualification.TLevelName)</span></td>
                                 </tr>
                             }
@@ -31,7 +31,7 @@
                             @if (!string.IsNullOrWhiteSpace(Model.TlevelDetails.Qualification.QualificationLevel))
                             {
                                 <tr class="govuk-table__row">
-                                    <th class="govuk-table__header govuk-!-width-one-half" scope="row">Qualification level</th>
+                                    <th class="govuk-table__header" scope="row">Qualification level</th>
                                     <td class="govuk-table__cell"><span id="qualification-level">@Html.Raw(Model.TlevelDetails.Qualification.QualificationLevel)</span></td>
                                 </tr>
                             }
@@ -39,7 +39,7 @@
                             @if (Model.TlevelDetails.StartDate != null)
                             {
                                 <tr class="govuk-table__row">
-                                    <th class="govuk-table__header govuk-!-width-one-half" scope="row">Course start date</th>
+                                    <th class="govuk-table__header" scope="row">Course start date</th>
                                     <td class="govuk-table__cell"><span id="start-date">@Model.TlevelDetails.StartDate.Value.ToFormattedString()</span></td>
                                 </tr>
                             }
@@ -47,7 +47,7 @@
                             @if (!string.IsNullOrEmpty(Model.TlevelDetails.Duration))
                             {
                                 <tr class="govuk-table__row">
-                                    <th class="govuk-table__header govuk-!-width-one-half" scope="row">Duration</th>
+                                    <th class="govuk-table__header" scope="row">Duration</th>
                                     <td class="govuk-table__cell"><span id="duration">@Html.Raw(Model.TlevelDetails.Duration)</span></td>
                                 </tr>
                             }
@@ -55,7 +55,7 @@
                             @if (!string.IsNullOrEmpty(Model.TlevelDetails.DeliveryMode))
                             {
                                 <tr class="govuk-table__row">
-                                    <th class="govuk-table__header govuk-!-width-one-half" scope="row">Course Type</th>
+                                    <th class="govuk-table__header" scope="row">Course Type</th>
                                     <td class="govuk-table__cell"><span id="course-type">@Html.Raw(Model.TlevelDetails.DeliveryMode)</span></td>
                                 </tr>
                             }
@@ -63,7 +63,7 @@
                             @if (!string.IsNullOrEmpty(Model.TlevelDetails.CostDescription))
                             {
                                 <tr class="govuk-table__row">
-                                    <th class="govuk-table__header govuk-!-width-one-half" scope="row">Cost description</th>
+                                    <th class="govuk-table__header" scope="row">Cost description</th>
                                     <td class="govuk-table__cell"><span id="cost-description">@Html.Raw(Model.TlevelDetails.CostDescription)</span></td>
                                 </tr>
                             }
@@ -145,7 +145,7 @@
                                         <td class="govuk-table__cell">
                                             @if (Model.TlevelDetails.Website != null)
                                             {
-                                                <a class="govuk-link" href="@Model.TlevelDetails.Website" id="other-website-@(counter++)">View course</a>
+                                                <a class="govuk-link" href="/find-a-course/tdetails?tlevelId=@Model.TlevelDetails.TLevelId&tlevelLocationId=@venue.Id&@Model.SearchTerm" id="other-website-@(counter++)">View course</a>
                                             }
                                         </td>
                                     </tr>
