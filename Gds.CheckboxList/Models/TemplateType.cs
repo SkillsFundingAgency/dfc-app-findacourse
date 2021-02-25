@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace GdsCheckboxList.Models
+﻿namespace GdsCheckboxList.Models
 {
     /// <summary>
     /// Template types for checkbox type input
@@ -17,6 +13,6 @@ namespace GdsCheckboxList.Models
         /// <summary>
         /// Basic checkbox input markup using Bootstrap 3
         /// </summary>
-        GDS
+        GDS,
     }
 }

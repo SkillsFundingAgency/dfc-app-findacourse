@@ -2,6 +2,7 @@
 using DFC.App.FindACourse.Data.Helpers;
 using DFC.App.FindACourse.Data.Models;
 using DFC.App.FindACourse.Extensions;
+using DFC.App.FindACourse.Helpers;
 using DFC.App.FindACourse.Services;
 using DFC.App.FindACourse.ViewModels;
 using DFC.CompositeInterfaceModels.FindACourseClient;
@@ -23,11 +24,13 @@ namespace DFC.App.FindACourse.Controllers
     {
         private readonly ILogService logService;
         private readonly IFindACourseService findACourseService;
+        private readonly IViewHelper viewHelper;
 
-        public CourseController(ILogService logService, IFindACourseService findACourseService)
+        public CourseController(ILogService logService, IFindACourseService findACourseService, IViewHelper viewHelper)
         {
             this.logService = logService;
             this.findACourseService = findACourseService;
+            this.viewHelper = viewHelper;
         }
 
         [HttpGet]
@@ -119,9 +122,7 @@ namespace DFC.App.FindACourse.Controllers
         {
             logService.LogInformation($"{nameof(this.Body)} has been called");
 
-            var model = new BodyViewModel();
-
-            model = new BodyViewModel { Content = new HtmlString("Find a course: Body element") };
+            var model = new BodyViewModel { Content = new HtmlString("Find a course: Body element") };
             model.SideBar = GetSideBarViewModel();
             model.SideBar.OrderByOptions = ListFilters.GetOrderByOptions();
 
@@ -145,13 +146,13 @@ namespace DFC.App.FindACourse.Controllers
         [Route("api/get/find-a-course/search/{appData}/ajax")]
         public async Task<AjaxModel> AjaxChanged(string appData)
         {
+            if (string.IsNullOrWhiteSpace(appData))
+            {
+                throw new ArgumentNullException(nameof(appData));
+            }
+
             var paramValues = System.Text.Json.JsonSerializer.Deserialize<ParamValues>(appData);
             bool? isPostcode = null;
-
-            if (paramValues == null)
-            {
-                throw new ArgumentNullException(nameof(paramValues));
-            }
 
             var model = new BodyViewModel
             {
@@ -190,10 +191,6 @@ namespace DFC.App.FindACourse.Controllers
 
                 isPostcode = !string.IsNullOrEmpty(paramValues.Town) ? (bool?)paramValues.Town.IsPostcode() : null;
 
-                var courseType = model.SideBar.CourseType != null && model.SideBar.CourseType.SelectedIds?.Count > 0 ? JsonConvert.SerializeObject(model.SideBar.CourseType.SelectedIds) : null;
-                var courseHours = model.SideBar.CourseHours != null && model.SideBar.CourseHours.SelectedIds?.Count > 0 ? JsonConvert.SerializeObject(model.SideBar.CourseHours.SelectedIds) : null;
-                var courseStudyTime = model.SideBar.CourseStudyTime != null && model.SideBar.CourseStudyTime?.SelectedIds.Count > 0 ? JsonConvert.SerializeObject(model.SideBar.CourseStudyTime.SelectedIds) : null;
-
                 if (!model.IsTest)
                 {
                     TempData["params"] = $"{nameof(paramValues.SearchTerm)}={paramValues.SearchTerm}&" +
@@ -213,7 +210,7 @@ namespace DFC.App.FindACourse.Controllers
                 logService.LogError($"{nameof(this.FilterResults)} threw an exception" + ex.Message);
             }
 
-            var viewAsString = await this.RenderViewAsync("~/Views/Course/_results.cshtml", model, true).ConfigureAwait(false);
+            var viewAsString = await viewHelper.RenderViewAsync(this, "~/Views/Course/_results.cshtml", model, true).ConfigureAwait(false);
             return new AjaxModel { HTML = viewAsString, Count = model.Results?.ResultProperties != null ? model.Results.ResultProperties.TotalResultCount : 0, IsPostcode = isPostcode };
         }
 
@@ -285,108 +282,12 @@ namespace DFC.App.FindACourse.Controllers
         {
             var postcode = System.Text.Json.JsonSerializer.Deserialize<string>(appdata);
 
-            if (postcode == null)
+            if (string.IsNullOrWhiteSpace(postcode))
             {
-                throw new ArgumentNullException(nameof(postcode));
+                throw new ArgumentNullException(nameof(appdata));
             }
 
             return postcode.IsPostcode();
-        }
-
-        private static BodyViewModel GenerateModel(BodyViewModel model)
-        {
-            var courseTypeList = new List<CourseType>();
-            var courseHoursList = new List<CourseHours>();
-            var courseStudyTimeList = new List<Fac.AttendancePattern>();
-            var selectedStartDateValue = StartDate.Anytime;
-
-            float selectedDistanceValue = 10;
-
-            if (model.SelectedDistanceValue != null)
-            {
-                var resultString = Regex.Match(model.SelectedDistanceValue, @"\d+").Value;
-                _ = float.TryParse(resultString, out selectedDistanceValue);
-            }
-
-            if (model.SideBar.CourseType != null && model.SideBar.CourseType.SelectedIds.Any())
-            {
-                courseTypeList = ConvertToEnumList<CourseType>(model.SideBar.CourseType.SelectedIds);
-            }
-
-            if (model.SideBar.CourseHours != null && model.SideBar.CourseHours.SelectedIds.Any())
-            {
-                courseHoursList = ConvertToEnumList<CourseHours>(model.SideBar.CourseHours.SelectedIds);
-            }
-
-            if (model.SideBar.CourseStudyTime != null && model.SideBar.CourseStudyTime.SelectedIds.Any())
-            {
-                courseStudyTimeList = ConvertToEnumList<Fac.AttendancePattern>(model.SideBar.CourseStudyTime.SelectedIds);
-            }
-
-            if (model.SideBar.SelectedOrderByValue != null)
-            {
-                _ = Enum.TryParse(model.SideBar.SelectedOrderByValue.Replace(" ", string.Empty), true, out CourseSearchOrderBy sortedByCriteria);
-                model.CourseSearchOrderBy = sortedByCriteria;
-            }
-            else
-            {
-                var sortedByCriteria = CourseSearchOrderBy.Relevance;
-                model.CourseSearchOrderBy = sortedByCriteria;
-            }
-
-            var courseSearchFilters = new CourseSearchFilters
-            {
-                SearchTerm = model.CurrentSearchTerm,
-                CourseType = courseTypeList,
-                CourseHours = courseHoursList,
-                StartDate = selectedStartDateValue,
-                CourseStudyTime = courseStudyTimeList,
-                Distance = selectedDistanceValue,
-            };
-
-            model.SideBar.FiltersApplied = model.FromPaging ? model.SideBar.FiltersApplied : true;
-
-            switch (model.SideBar.StartDateValue)
-            {
-                case "Next 3 months":
-                    courseSearchFilters.StartDateTo = DateTime.Today.AddMonths(3);
-                    courseSearchFilters.StartDateFrom = DateTime.Today;
-                    courseSearchFilters.StartDate = StartDate.SelectDateFrom;
-                    break;
-                case "In 3 to 6 months":
-                    courseSearchFilters.StartDateFrom = DateTime.Today.AddMonths(3);
-                    courseSearchFilters.StartDateTo = DateTime.Today.AddMonths(6);
-                    courseSearchFilters.StartDate = StartDate.SelectDateFrom;
-                    break;
-                case "More than 6 months":
-                    courseSearchFilters.StartDateFrom = DateTime.Today.AddMonths(6);
-                    courseSearchFilters.StartDate = StartDate.SelectDateFrom;
-                    break;
-                default:
-                    courseSearchFilters.StartDate = StartDate.Anytime;
-                    break;
-            }
-
-            if (!string.IsNullOrEmpty(model.SideBar.TownOrPostcode))
-            {
-                if (model.SideBar.TownOrPostcode.IsPostcode())
-                {
-                    courseSearchFilters.PostCode = NormalizePostcode(model.SideBar.TownOrPostcode);
-                    courseSearchFilters.Distance = selectedDistanceValue;
-                    courseSearchFilters.DistanceSpecified = true;
-                }
-                else
-                {
-                    courseSearchFilters.Town = "\u0022" + model.SideBar.TownOrPostcode + "\u0022";
-                }
-            }
-
-            // Enter filters criteria here
-            model.RequestPage = (model.RequestPage > 1) ? model.RequestPage : 1;
-
-            model.CourseSearchFilters = courseSearchFilters;
-
-            return model;
         }
 
         [HttpGet]
@@ -513,6 +414,141 @@ namespace DFC.App.FindACourse.Controllers
             return View("Body", model);
         }
 
+        private static BodyViewModel GenerateModel(BodyViewModel model)
+        {
+            var courseTypeList = new List<CourseType>();
+            var courseHoursList = new List<CourseHours>();
+            var courseStudyTimeList = new List<Fac.AttendancePattern>();
+            var selectedStartDateValue = StartDate.Anytime;
+
+            float selectedDistanceValue = 10;
+
+            if (model.SelectedDistanceValue != null)
+            {
+                var resultString = Regex.Match(model.SelectedDistanceValue, @"\d+").Value;
+                _ = float.TryParse(resultString, out selectedDistanceValue);
+            }
+
+            if (model.SideBar.CourseType != null && model.SideBar.CourseType.SelectedIds.Any())
+            {
+                courseTypeList = ConvertToEnumList<CourseType>(model.SideBar.CourseType.SelectedIds);
+            }
+
+            if (model.SideBar.CourseHours != null && model.SideBar.CourseHours.SelectedIds.Any())
+            {
+                courseHoursList = ConvertToEnumList<CourseHours>(model.SideBar.CourseHours.SelectedIds);
+            }
+
+            if (model.SideBar.CourseStudyTime != null && model.SideBar.CourseStudyTime.SelectedIds.Any())
+            {
+                courseStudyTimeList = ConvertToEnumList<Fac.AttendancePattern>(model.SideBar.CourseStudyTime.SelectedIds);
+            }
+
+            if (model.SideBar.SelectedOrderByValue != null)
+            {
+                _ = Enum.TryParse(model.SideBar.SelectedOrderByValue.Replace(" ", string.Empty), true, out CourseSearchOrderBy sortedByCriteria);
+                model.CourseSearchOrderBy = sortedByCriteria;
+            }
+            else
+            {
+                var sortedByCriteria = CourseSearchOrderBy.Relevance;
+                model.CourseSearchOrderBy = sortedByCriteria;
+            }
+
+            var courseSearchFilters = new CourseSearchFilters
+            {
+                SearchTerm = model.CurrentSearchTerm,
+                CourseType = courseTypeList,
+                CourseHours = courseHoursList,
+                StartDate = selectedStartDateValue,
+                CourseStudyTime = courseStudyTimeList,
+                Distance = selectedDistanceValue,
+            };
+
+            model.SideBar.FiltersApplied = model.FromPaging ? model.SideBar.FiltersApplied : true;
+
+            switch (model.SideBar.StartDateValue)
+            {
+                case "Next 3 months":
+                    courseSearchFilters.StartDateTo = DateTime.Today.AddMonths(3);
+                    courseSearchFilters.StartDateFrom = DateTime.Today;
+                    courseSearchFilters.StartDate = StartDate.SelectDateFrom;
+                    break;
+                case "In 3 to 6 months":
+                    courseSearchFilters.StartDateFrom = DateTime.Today.AddMonths(3);
+                    courseSearchFilters.StartDateTo = DateTime.Today.AddMonths(6);
+                    courseSearchFilters.StartDate = StartDate.SelectDateFrom;
+                    break;
+                case "More than 6 months":
+                    courseSearchFilters.StartDateFrom = DateTime.Today.AddMonths(6);
+                    courseSearchFilters.StartDate = StartDate.SelectDateFrom;
+                    break;
+                default:
+                    courseSearchFilters.StartDate = StartDate.Anytime;
+                    break;
+            }
+
+            if (!string.IsNullOrEmpty(model.SideBar.TownOrPostcode))
+            {
+                if (model.SideBar.TownOrPostcode.IsPostcode())
+                {
+                    courseSearchFilters.PostCode = NormalizePostcode(model.SideBar.TownOrPostcode);
+                    courseSearchFilters.Distance = selectedDistanceValue;
+                    courseSearchFilters.DistanceSpecified = true;
+                }
+                else
+                {
+                    courseSearchFilters.Town = "\u0022" + model.SideBar.TownOrPostcode + "\u0022";
+                }
+            }
+
+            // Enter filters criteria here
+            model.RequestPage = (model.RequestPage > 1) ? model.RequestPage : 1;
+
+            model.CourseSearchFilters = courseSearchFilters;
+
+            return model;
+        }
+
+        private static FiltersListViewModel ConvertStringToFiltersListViewModel(string listView)
+        {
+            var model = new FiltersListViewModel();
+
+            if (listView != null)
+            {
+                listView = listView.Replace('"', ' ').Replace('[', ' ').Replace(']', ' ').Trim();
+
+                var list = listView.Split(",").Select(x => x.Trim()).ToList();
+
+                model.SelectedIds = list;
+            }
+
+            return model;
+        }
+
+        private static List<T> ConvertToEnumList<T>(List<string> listToConvert)
+           where T : struct
+        {
+            var returnList = new List<T>();
+
+            foreach (var type in listToConvert)
+            {
+                var removedSpaces = type.Replace(" ", string.Empty);
+                Enum.TryParse<T>(removedSpaces, true, out T result);
+                returnList.Add(result);
+            }
+
+            return returnList;
+        }
+
+        private static string NormalizePostcode(string postcode)
+        {
+            postcode = postcode.Trim();
+            postcode = postcode.Replace(" ", string.Empty);
+
+            return postcode.Insert(postcode.Length - 3, " ");
+        }
+
         private FiltersListViewModel MapFilter(string text, string title, List<Filter> lstFilter)
         {
             logService.LogInformation($"{nameof(this.MapFilter)} has been called for {title}");
@@ -552,22 +588,6 @@ namespace DFC.App.FindACourse.Controllers
             return model;
         }
 
-        private static FiltersListViewModel ConvertStringToFiltersListViewModel(string listView)
-        {
-            var model = new FiltersListViewModel();
-
-            if (listView != null)
-            {
-                listView = listView.Replace('"', ' ').Replace('[', ' ').Replace(']', ' ').Trim();
-
-                var list = listView.Split(",").Select(x => x.Trim()).ToList();
-
-                model.SelectedIds = list;
-            }
-
-            return model;
-        }
-
         [ResponseCache(Duration = 43200)]
         private SideBarViewModel GetSideBarViewModel()
         {
@@ -581,29 +601,6 @@ namespace DFC.App.FindACourse.Controllers
             };
 
             return sideBarViewModel;
-        }
-
-        private static List<T> ConvertToEnumList<T>(List<string> listToConvert)
-            where T : struct
-        {
-            var returnList = new List<T>();
-
-            foreach (var type in listToConvert)
-            {
-                var removedSpaces = type.Replace(" ", string.Empty);
-                Enum.TryParse<T>(removedSpaces, true, out T result);
-                returnList.Add(result);
-            }
-
-            return returnList;
-        }
-
-        private static string NormalizePostcode(string postcode)
-        {
-            postcode = postcode.Trim();
-            postcode = postcode.Replace(" ", string.Empty);
-
-            return postcode.Insert(postcode.Length - 3, " ");
         }
     }
 }

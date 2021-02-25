@@ -8,6 +8,6 @@
 
         Weekend = 2,
 
-        DayOrBlockRelease = 3
+        DayOrBlockRelease = 3,
     }
 }

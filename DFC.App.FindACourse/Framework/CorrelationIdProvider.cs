@@ -1,24 +1,24 @@
 ﻿using DFC.Logger.AppInsights.Contracts;
 using Microsoft.AspNetCore.Http;
 using System;
-using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace DFC.App.FindACourse.Framework
 {
+    [ExcludeFromCodeCoverage]
     public class CorrelationIdProvider : ICorrelationIdProvider
     {
         private const string CorrelationId = "CorrelationId";
 
         private readonly IHttpContextAccessor httpContextAccessor;
 
-        string ICorrelationIdProvider.CorrelationId { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
         public CorrelationIdProvider(IHttpContextAccessor httpContextAccessor)
         {
             this.httpContextAccessor = httpContextAccessor;
         }
+
+        string ICorrelationIdProvider.CorrelationId { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public string GetId()
         {

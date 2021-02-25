@@ -1,0 +1,11 @@
+﻿@model Course
+<h2 class="govuk-heading-m">
+    @if (Model.OfferingType == OfferingType.TLevel)
+    {
+        <a class="govuk-link" href="/find-a-course/tdetails?tlevelId=@Model.TLevelId&tlevelLocationId=@Model.TLevelLocationId&@TempData["params"]">@Html.Raw(Model.Title)</a>
+    }
+    else
+    {
+        <a class="govuk-link" href="/find-a-course/details?courseId=@Model.CourseId&runId=@Model.RunId&@TempData["params"]">@Html.Raw(Model.Title)</a>
+    }
+</h2>
