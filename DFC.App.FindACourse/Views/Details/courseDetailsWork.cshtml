@@ -1,145 +1,141 @@
 ﻿@model DetailsViewModel
-@{ 
+@{
 
 }
-    <div id="work-details-block">
-        <h2 class="govuk-heading-m" id="courseDetails">Course details</h2>
-        <table class="govuk-table">
-            <caption class="govuk-visually-hidden">Table with course details</caption>
-            <tbody class="govuk-table__body">
-                @if (!string.IsNullOrWhiteSpace(Model.CourseDetails.QualificationName))
-                {
-                    <tr class="govuk-table__row">
-                        <th class="govuk-table__header" scope="row">Qualification name</th>
-                        <td class="govuk-table__cell"><span id="qualification-name">@Html.Raw(Model.CourseDetails.QualificationName)</span></td>
-                    </tr>
-                }
-
-                @if (!string.IsNullOrWhiteSpace(Model.CourseDetails.QualificationLevel))
-                {
-                    <tr class="govuk-table__row">
-                        <th class="govuk-table__header" scope="row">Qualification level</th>
-                        <td class="govuk-table__cell"><span id="qualification-level">@Html.Raw(Model.CourseDetails.QualificationLevel)</span></td>
-                    </tr>
-                }
-
-                @if (!string.IsNullOrWhiteSpace(Model.CourseDetails.AwardingOrganisation))
-                {
-                    <tr class="govuk-table__row">
-                        <th class="govuk-table__header" scope="row">Awarding organisation</th>
-                        <td class="govuk-table__cell"><span id="awarding-organisation">@Html.Raw(Model.CourseDetails.AwardingOrganisation)</span></td>
-                    </tr>
-                }
-                @if (Model.CourseDetails.National)
-                {
-                    <tr class="govuk-table__row">
-                        <th class="govuk-table__header" scope="row">Location</th>
-                        <td class="govuk-table__cell">Available nationally</td>
-                    </tr>
-                }
-                else if (Model.CourseRegions != null && Model.CourseRegions.Any())
-                {
-                    <tr class="govuk-table__row">
-                        <th class="govuk-table__header" scope="row">Location</th>
-                        <td class="govuk-table__cell">
-                            @foreach (var region in Model.CourseRegions)
-                            {
-                                <details class="govuk-details govuk-!-margin-bottom-0" data-module="govuk-details">
-                                    <summary class="govuk-details__summary">
-                                        <span class="govuk-details__summary-text">@region.Name</span>
-                                    </summary>
-                                    <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0 location-block">
-                                        @foreach (var subRegion in region.SubRegions)
-                                        {
-                                            <li>@subRegion</li>
-                                        }
-                                    </ul>
-                                </details>
-                            }
-                        </td>
-                    </tr>
-                }
+<div id="work-details-block">
+    <h2 class="govuk-heading-m" id="courseDetails">Course details</h2>
+    <table class="govuk-table">
+        <caption class="govuk-visually-hidden">Table with course details</caption>
+        <tbody class="govuk-table__body">
+            <partial name="CourseQualificationDetails" model="Model" />
+            @if (Model.CourseDetails.National)
+            {
                 <tr class="govuk-table__row">
-                    <th class="govuk-table__header" scope="row">Course type</th>
-                    <td class="govuk-table__cell"><span id="attendance-mode">@Html.Raw(Model.CourseDetails.AttendanceMode)</span></td>
+                    <th class="govuk-table__header" scope="row">Location</th>
+                    <td class="govuk-table__cell">Available nationally</td>
                 </tr>
-                @if (Model.CourseDetails.StartDate != null)
-                {
-                    <tr class="govuk-table__row">
-                        <th class="govuk-table__header" scope="row">Course start date</th>
-
-                        <td class="govuk-table__cell"><span id="start-date">@Model.CourseDetails.StartDate.Value.ToFormattedString()</span></td>
-
-                    </tr>
-                }
+            }
+            else if (Model.CourseRegions != null && Model.CourseRegions.Any())
+            {
                 <tr class="govuk-table__row">
-                    <th class="govuk-table__header" scope="row">Cost</th>
+                    <th class="govuk-table__header" scope="row">Location</th>
                     <td class="govuk-table__cell">
-                        <span id="cost-value">£@Model.CourseDetails.Cost.ToDecimalString("N2")</span>
+                        @foreach (var region in Model.CourseRegions)
+                        {
+                            <details class="govuk-details govuk-!-margin-bottom-0" data-module="govuk-details">
+                                <summary class="govuk-details__summary">
+                                    <span class="govuk-details__summary-text">@region.Name</span>
+                                </summary>
+                                <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0 location-block">
+                                    @foreach (var subRegion in region.SubRegions)
+                                    {
+                                        <li>@subRegion</li>
+                                    }
+                                </ul>
+                            </details>
+                        }
                     </td>
                 </tr>
-                @if (!string.IsNullOrEmpty(Model.CourseDetails.CostDescription))
-                {
-                    <tr class="govuk-table__row">
-                        <th class="govuk-table__header" scope="row">Cost description</th>
-                        <td class="govuk-table__cell"><span id="additonal-price">@Html.Raw(Model.CourseDetails.CostDescription)</span></td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+            }
+            <tr class="govuk-table__row">
+                <th class="govuk-table__header" scope="row">Course type</th>
+                <td class="govuk-table__cell"><span id="attendance-mode">@Html.Raw(Model.CourseDetails.AttendanceMode)</span></td>
+            </tr>
+            @if (Model.CourseDetails.StartDate != null)
+            {
+                <tr class="govuk-table__row">
+                    <th class="govuk-table__header" scope="row">Course start date</th>
+
+                    <td class="govuk-table__cell"><span id="start-date">@Model.CourseDetails.StartDate.Value.ToFormattedString()</span></td>
+
+                </tr>
+            }
+            <tr class="govuk-table__row">
+                <th class="govuk-table__header" scope="row">Cost</th>
+                <td class="govuk-table__cell">
+                    <span id="cost-value">£@Model.CourseDetails.Cost.ToDecimalString("N2")</span>
+                </td>
+            </tr>
+            @if (!string.IsNullOrEmpty(Model.CourseDetails.CostDescription))
+            {
+                <tr class="govuk-table__row">
+                    <th class="govuk-table__header" scope="row">Cost description</th>
+                    <td class="govuk-table__cell"><span id="additonal-price">@Html.Raw(Model.CourseDetails.CostDescription)</span></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="govuk-accordion" data-module="govuk-accordion" id="accordion-default">
         @if (!string.IsNullOrWhiteSpace(Model.CourseDetails.Description))
         {
-            <h2 class="govuk-heading-m" id="whofor">Who this course is for</h2>
-            <p id="course-description">@Html.Raw(Html.HtmlFormat(Model.CourseDetails.Description))</p>
+            @await Html.PartialAsync("CourseAccordionItem", new AccordionViewModel
+               {
+                   Description = Model.CourseDetails.Description,
+                   Title = "Who this course is for",
+                   SubText = "Discover the learning experience and opportunities you can expect from this course.",
+                   SectionName = "WhoThisCourseIsFor",
+               })
         }
-
         @if (!string.IsNullOrWhiteSpace(Model.CourseDetails.EntryRequirements))
         {
-            <h2 class="govuk-heading-m" id="entry">Entry requirements</h2>
-            <p id="course-entryrequirements">@Html.Raw(Html.HtmlFormat(Model.CourseDetails.EntryRequirements))</p>
+            @await Html.PartialAsync("CourseAccordionItem", new AccordionViewModel
+            {
+                Description = Model.CourseDetails.EntryRequirements,
+                Title = "Entry requirements",
+                SubText = "Find out what qualifications and skills you will need for this course.",
+                SectionName = "EntryRequirements",
+            })
         }
-
         @if (!string.IsNullOrWhiteSpace(Model.CourseDetails.WhatYoullLearn))
         {
-            <h2 class="govuk-heading-m" id="whatlearn">What you'll learn</h2>
-            <p id="course-what-you-will-learn">@Html.Raw(Html.HtmlFormat(Model.CourseDetails.WhatYoullLearn))</p>
+            @await Html.PartialAsync("CourseAccordionItem", new AccordionViewModel
+            {
+                Description = Model.CourseDetails.WhatYoullLearn,
+                Title = "What you'll learn",
+                SubText = "View the key features of this course.",
+                SectionName = "WhatYouWillLearn",
+            })
         }
-
         @if (!string.IsNullOrWhiteSpace(Model.CourseDetails.HowYoullLearn))
         {
-            <h2 class="govuk-heading-m" id="howlearn">How you'll learn</h2>
-            <p id="course-how-you-will-learn">@Html.Raw(Html.HtmlFormat(Model.CourseDetails.HowYoullLearn))</p>
+            @await Html.PartialAsync("CourseAccordionItem", new AccordionViewModel
+            {
+                Description = Model.CourseDetails.HowYoullLearn,
+                Title = "How you'll learn",
+                SubText = "Understand how the course will be delivered.",
+                SectionName = "HowYouWillLearn",
+            })
         }
-
         @if (!string.IsNullOrWhiteSpace(Model.CourseDetails.EquipmentRequired))
         {
-            <h2 class="govuk-heading-m" id="need">What you'll need to bring</h2>
-            <p id="course-what-you-will-need-to-bring">@Html.Raw(Html.HtmlFormat(Model.CourseDetails.EquipmentRequired))</p>
+            @await Html.PartialAsync("CourseAccordionItem", new AccordionViewModel
+            {
+                Description = Model.CourseDetails.EntryRequirements,
+                Title = "What you'll need to bring",
+                SubText = "Find out what material you will need.",
+                SectionName = "WhatYouWillNeedToBring",
+            })
         }
-
         @if (!string.IsNullOrWhiteSpace(Model.CourseDetails.AssessmentMethod))
         {
-            <h2 class="govuk-heading-m" id="assessed">How you'll be assessed</h2>
-            <p id="course-assessment-method">@Html.Raw(Html.HtmlFormat(Model.CourseDetails.AssessmentMethod))</p>
+            @await Html.PartialAsync("CourseAccordionItem", new AccordionViewModel
+            {
+                Description = Model.CourseDetails.AssessmentMethod,
+                Title = "How you'll be assessed ",
+                SubText = "Find out more about exams, assignments and assessments.",
+                SectionName = "HowYouWillBeAssessed",
+            })
         }
-
         @if (!string.IsNullOrWhiteSpace(Model.CourseDetails.NextSteps))
         {
-            <h2 class="govuk-heading-m" id="next">What you can do next</h2>
-            <p id="course-nextsteps">@Html.Raw(Html.HtmlFormat(Model.CourseDetails.NextSteps))</p>
+            @await Html.PartialAsync("CourseAccordionItem", new AccordionViewModel
+            {
+                Description = Model.CourseDetails.NextSteps,
+                Title = "What you can do next  ",
+                SubText = "Look at the further opportunities available.",
+                SectionName = "WhatYouCanDoNext",
+            })
         }
-
-        @*@if (Model.CourseDetails.VenueDetails != null && Model.CourseDetails.VenueDetails.Website != null)
-        {
-            <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
-            <form action="@Model.CourseDetails.VenueDetails.Website" id="venue-form">
-                <button href="@Model.CourseDetails.VenueDetails.Website" role="button" draggable="false" class="govuk-button govuk-button--start" data-module="govuk-button">
-                    Go to course provider
-                    <svg class="govuk-button__start-icon" xmlns="http://www.w3.org/2000/svg" width="17.5" height="19" viewBox="0 0 33 40" role="presentation" focusable="false">
-                        <path fill="currentColor" d="M0 0h13l20 20-20 20H0l20-20z"></path>
-                    </svg>
-                </button>
-            </form>
-        }*@
-        <p><a href="/find-a-course/page?@Model.SearchTerm" class="govuk-back-link" id="back-to-results">Back to results</a></p>
+    </div>
+    <p><a href="/find-a-course/page?@Model.SearchTerm" class="govuk-back-link" id="back-to-results">Back to results</a></p>
 </div>

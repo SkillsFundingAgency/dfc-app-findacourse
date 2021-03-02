@@ -1,0 +1,10 @@
+﻿@model AccordionViewModel
+<div class="govuk-accordion__section">
+    <div class="govuk-accordion__section-header">
+        <h2 class="govuk-accordion__section-heading">  <button type="button" id="assessed" aria-controls="accordion-default-content-6" class="govuk-accordion__section-button" aria-describedby="accordion-default-summary-@Model.SectionName" aria-expanded="false"> @Model.Title<span class="govuk-accordion__icon" aria-hidden="true"></span></button></h2>
+        <div class="govuk-accordion__section-summary govuk-body" id="accordion-with-summary-sections-summary-@Model.SectionName"> @Model.SubText</div>
+    </div>
+    <div id="accordion-default-content-@Model.SectionName" class="govuk-accordion__section-content" aria-labelledby="accordion-default-heading-@Model.SectionName">
+        <p id="course-assessment-method">@Html.Raw(Model.Description)</p>
+    </div>
+</div>
