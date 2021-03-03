@@ -37,56 +37,11 @@
             </tbody>
         </table>
         <div class="govuk-accordion" data-module="govuk-accordion" id="accordion-default">
-            @if (!string.IsNullOrWhiteSpace(Model.CourseDetails.Description))
-            {
-                @await Html.PartialAsync("CourseAccordionItem", new AccordionViewModel
-                {
-                    Description = Model.CourseDetails.Description,
-                    Title = "Who this course is for",
-                    SubText = "Discover the learning experience and opportunities you can expect from this course.",
-                    SectionName = "WhoThisCourseIsFor",
-                })
-            }
-            @if (!string.IsNullOrWhiteSpace(Model.CourseDetails.EntryRequirements))
-            {
-                @await Html.PartialAsync("CourseAccordionItem", new AccordionViewModel
-                {
-                    Description = Model.CourseDetails.EntryRequirements,
-                    Title = "Entry requirements",
-                    SubText = "Find out what qualifications and skills you will need for this course.",
-                    SectionName = "EntryRequirements",
-                })
-            }
-            @if (!string.IsNullOrWhiteSpace(Model.CourseDetails.WhatYoullLearn))
-            {
-                @await Html.PartialAsync("CourseAccordionItem", new AccordionViewModel
-                {
-                    Description = Model.CourseDetails.WhatYoullLearn,
-                    Title = "What you'll learn",
-                    SubText = "View the key features of this course.",
-                    SectionName = "WhatYouWillLearn",
-                })
-            }
-            @if (!string.IsNullOrWhiteSpace(Model.CourseDetails.AssessmentMethod))
-            {
-                @await Html.PartialAsync("CourseAccordionItem", new AccordionViewModel
-                {
-                    Description = Model.CourseDetails.AssessmentMethod,
-                    Title = "How you'll be assessed ",
-                    SubText = "Find out more about exams, assignments and assessments.",
-                    SectionName = "HowYouWillBeAssessed",
-                })
-            }
-            @if (!string.IsNullOrWhiteSpace(Model.CourseDetails.NextSteps))
-            {
-                @await Html.PartialAsync("CourseAccordionItem", new AccordionViewModel
-                {
-                    Description = Model.CourseDetails.NextSteps,
-                    Title = "What you can do next  ",
-                    SubText = "Look at the further opportunities available.",
-                    SectionName = "WhatYouCanDoNext",
-                })
-            }
+            <partial name="AccordionSections/WhoTheCourseIsFor" model="Model" />
+            <partial name="AccordionSections/EntryRequirements" model="Model" />
+            <partial name="AccordionSections/WhatYouWillLearn" model="Model" />
+            <partial name="AccordionSections/HowYouWillBeAssessed" model="Model" />
+            <partial name="AccordionSections/WhatYouCanDoNext" model="Model" />
         </div>
         <p><a href="/find-a-course/page?@Model.SearchTerm" class="govuk-back-link" id="back-to-results">Back to results</a></p>
 </div>
