@@ -5,29 +5,7 @@
         <table class="govuk-table">
             <caption class="govuk-visually-hidden">Table with course details</caption>
             <tbody class="govuk-table__body">
-                @if (!string.IsNullOrWhiteSpace(Model.CourseDetails.QualificationName))
-                {
-                    <tr class="govuk-table__row">
-                        <th class="govuk-table__header" scope="row">Qualification name</th>
-                        <td class="govuk-table__cell"><span id="qualification-name">@Html.Raw(Model.CourseDetails.QualificationName)</span></td>
-                    </tr>
-                }
-
-                @if (!string.IsNullOrWhiteSpace(Model.CourseDetails.QualificationLevel))
-                {
-                    <tr class="govuk-table__row">
-                        <th class="govuk-table__header" scope="row">Qualification level</th>
-                        <td class="govuk-table__cell"><span id="qualification-level">@Html.Raw(Model.CourseDetails.QualificationLevel)</span></td>
-                    </tr>
-                }
-
-                @if (!string.IsNullOrWhiteSpace(Model.CourseDetails.AwardingOrganisation))
-                {
-                    <tr class="govuk-table__row">
-                        <th class="govuk-table__header" scope="row">Awarding organisation</th>
-                        <td class="govuk-table__cell"><span id="awarding-organisation">@Html.Raw(Model.CourseDetails.AwardingOrganisation)</span></td>
-                    </tr>
-                }
+            <partial name="CourseQualificationDetails"/>
                 <tr class="govuk-table__row">
                     <th class="govuk-table__header" scope="row">Course type</th>
                     <td class="govuk-table__cell"><span id="attendance-mode">@Html.Raw(Model.CourseDetails.AttendanceMode)</span></td>
@@ -58,45 +36,12 @@
                 }
             </tbody>
         </table>
-        @if (!string.IsNullOrWhiteSpace(Model.CourseDetails.Description))
-        {
-            <h2 class="govuk-heading-m" id="whofor">Who this course is for</h2>
-            <p id="course-description">@Html.Raw(Html.HtmlFormat(Model.CourseDetails.Description))</p>
-        }
-
-        @if (!string.IsNullOrWhiteSpace(Model.CourseDetails.EntryRequirements))
-        {
-            <h2 class="govuk-heading-m" id="entry">Entry requirements</h2>
-            <p id="course-entryrequirements">@Html.Raw(Html.HtmlFormat(Model.CourseDetails.EntryRequirements))</p>
-        }
-
-        @if (!string.IsNullOrWhiteSpace(Model.CourseDetails.WhatYoullLearn))
-        {
-            <h2 class="govuk-heading-m" id="whatlearn">What you'll learn</h2>
-            <p id="course-what-you-will-learn">@Html.Raw(Html.HtmlFormat(Model.CourseDetails.WhatYoullLearn))</p>
-        }
-
-        @if (!string.IsNullOrWhiteSpace(Model.CourseDetails.AssessmentMethod))
-        {
-            <h2 class="govuk-heading-m" id="assessed">How you'll be assessed</h2>
-            <p id="assessment-method">@Html.Raw(Html.HtmlFormat(Model.CourseDetails.AssessmentMethod))</p>
-        }
-        @if (!string.IsNullOrWhiteSpace(Model.CourseDetails.NextSteps))
-        {
-            <h2 class="govuk-heading-m" id="next">What you can do next</h2>
-            <p id="next-steps">@Html.Raw(Html.HtmlFormat(Model.CourseDetails.NextSteps))</p>
-        }
-        <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
-        @*@if (Model.CourseDetails.VenueDetails != null && Model.CourseDetails.VenueDetails.Website != null)
-        {
-            <form action="@Model.CourseDetails.VenueDetails.Website" id="venue-form">
-                <button href="@Model.CourseDetails.VenueDetails.Website" role="button" draggable="false" class="govuk-button govuk-button--start" data-module="govuk-button">
-                    Go to course provider
-                    <svg class="govuk-button__start-icon" xmlns="http://www.w3.org/2000/svg" width="17.5" height="19" viewBox="0 0 33 40" role="presentation" focusable="false">
-                        <path fill="currentColor" d="M0 0h13l20 20-20 20H0l20-20z"></path>
-                    </svg>
-                </button>
-            </form>
-        }*@
+        <div class="govuk-accordion" data-module="govuk-accordion" id="accordion-default">
+            <partial name="AccordionSections/WhoTheCourseIsFor"/>
+            <partial name="AccordionSections/EntryRequirements"/>
+            <partial name="AccordionSections/WhatYouWillLearn"/>
+            <partial name="AccordionSections/HowYouWillBeAssessed"/>
+            <partial name="AccordionSections/WhatYouCanDoNext"/>
+        </div>
         <p><a href="/find-a-course/page?@Model.SearchTerm" class="govuk-back-link" id="back-to-results">Back to results</a></p>
 </div>

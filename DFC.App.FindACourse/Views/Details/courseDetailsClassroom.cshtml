@@ -5,29 +5,7 @@
     <table class="govuk-table">
         <caption class="govuk-visually-hidden">Table with course details</caption>
         <tbody class="govuk-table__body">
-        @if (!string.IsNullOrWhiteSpace(Model.CourseDetails.QualificationName))
-        {
-            <tr class="govuk-table__row">
-                <th class="govuk-table__header" scope="row">Qualification name</th>
-                <td class="govuk-table__cell"><span id="qualification-name">@Html.Raw(Model.CourseDetails.QualificationName)</span></td>
-            </tr>
-        }
-
-        @if (!string.IsNullOrWhiteSpace(Model.CourseDetails.QualificationLevel))
-        {
-            <tr class="govuk-table__row">
-                <th class="govuk-table__header" scope="row">Qualification level</th>
-                <td class="govuk-table__cell"><span id="qualification-level">@Html.Raw(Model.CourseDetails.QualificationLevel)</span></td>
-            </tr>
-        }
-
-        @if (!string.IsNullOrWhiteSpace(Model.CourseDetails.AwardingOrganisation))
-        {
-            <tr class="govuk-table__row">
-                <th class="govuk-table__header" scope="row">Awarding organisation</th>
-                <td class="govuk-table__cell"><span id="awarding-organisation">@Html.Raw(Model.CourseDetails.AwardingOrganisation)</span></td>
-            </tr>
-        }
+            <partial name="CourseQualificationDetails"/>
         <tr class="govuk-table__row">
             <th class="govuk-table__header" scope="row">Course type</th>
             <td class="govuk-table__cell"><span id="attendance-mode">@Html.Raw(Model.CourseDetails.AttendanceMode)</span></td>
@@ -80,69 +58,13 @@
     
     <div class="govuk-accordion" data-module="govuk-accordion" id="accordion-default">
         @*<div class="govuk-accordion__controls"><button type="button" class="govuk-accordion__open-all" aria-expanded="false">Open all<span class="govuk-visually-hidden"> sections</span></button></div>*@
-        <div class="govuk-accordion__section">
-            <div class="govuk-accordion__section-header">
-                <h2 class="govuk-accordion__section-heading">  <button type="button" id="whofor" aria-controls="accordion-default-content-1" class="govuk-accordion__section-button" aria-describedby="accordion-default-summary-1" aria-expanded="false"> Who this course is for <span class="govuk-accordion__icon" aria-hidden="true"></span></button></h2>
-                <div class="govuk-accordion__section-summary govuk-body" id="accordion-with-summary-sections-summary-1"> Discover the learning experience and opportunities you can expect from this course. </div>
-            </div>
-            <div id="accordion-default-content-2" class="govuk-accordion__section-content" aria-labelledby="accordion-default-heading-2">
-                <p id="course-description">@Html.Raw(Html.HtmlFormat(Model.CourseDetails.Description))</p>
-            </div>
-        </div>
-        <div class="govuk-accordion__section">
-            <div class="govuk-accordion__section-header">
-                <h2 class="govuk-accordion__section-heading">  <button type="button" id="entry" aria-controls="accordion-default-content-2" class="govuk-accordion__section-button" aria-describedby="accordion-default-summary-2" aria-expanded="false"> Entry requirements <span class="govuk-accordion__icon" aria-hidden="true"></span></button></h2>
-                <div class="govuk-accordion__section-summary govuk-body" id="accordion-with-summary-sections-summary-1"> Find out what qualifications and skills you will need for this course </div>
-            </div>
-            <div id="accordion-default-content-3" class="govuk-accordion__section-content" aria-labelledby="accordion-default-heading-3">
-                <p id="course-entryrequirements">@Html.Raw(Html.HtmlFormat(Model.CourseDetails.EntryRequirements))</p>
-            </div>
-        </div>
-        @if (!string.IsNullOrWhiteSpace(Model.CourseDetails.WhatYoullLearn))
-        {
-            <div class="govuk-accordion__section">
-                <div class="govuk-accordion__section-header">
-                    <h2 class="govuk-accordion__section-heading">  <button type="button" id="whatlearn" aria-controls="accordion-default-content-3" class="govuk-accordion__section-button" aria-describedby="accordion-default-summary-3" aria-expanded="false"> What you'll learn <span class="govuk-accordion__icon" aria-hidden="true"></span></button></h2>
-                    <div class="govuk-accordion__section-summary govuk-body" id="accordion-with-summary-sections-summary-1"> View the key features of this course. </div>
-                </div>
-                <div id="accordion-default-content-1" class="govuk-accordion__section-content" aria-labelledby="accordion-default-heading-1">
-                    <p id="course-what-you-will-learn">@Html.Raw(Html.HtmlFormat(Model.CourseDetails.WhatYoullLearn))</p>
-                </div>
-            </div>}
-        @if (!string.IsNullOrWhiteSpace(Model.CourseDetails.HowYoullLearn))
-        {
-            <div class="govuk-accordion__section">
-                <div class="govuk-accordion__section-header">
-                    <h2 class="govuk-accordion__section-heading">  <button type="button" id="howlearn" aria-controls="accordion-default-content-4" class="govuk-accordion__section-button" aria-describedby="accordion-default-summary-4" aria-expanded="false"> How you'll learn <span class="govuk-accordion__icon" aria-hidden="true"></span></button></h2>
-                    <div class="govuk-accordion__section-summary govuk-body" id="accordion-with-summary-sections-summary-1"> Understand how the course will be delivered. </div>
-                </div>
-                <div id="accordion-default-content-4" class="govuk-accordion__section-content" aria-labelledby="accordion-default-heading-4">
-                    <p id="course-how-you-will-learn">@Html.Raw(Html.HtmlFormat(Model.CourseDetails.HowYoullLearn))</p>
-                </div>
-            </div>}
-        @if (!string.IsNullOrWhiteSpace(Model.CourseDetails.EquipmentRequired)){
-        <div class="govuk-accordion__section">
-            <div class="govuk-accordion__section-header">
-                <h2 class="govuk-accordion__section-heading">  <button type="button" id="need" aria-controls="accordion-default-content-5" class="govuk-accordion__section-button" aria-describedby="accordion-default-summary-5" aria-expanded="false"> What you'll need to bring <span class="govuk-accordion__icon" aria-hidden="true"></span></button></h2>
-                <div class="govuk-accordion__section-summary govuk-body" id="accordion-with-summary-sections-summary-1"> Find out what material you will need. </div>
-            </div>
-            <div id="accordion-default-content-4" class="govuk-accordion__section-content" aria-labelledby="accordion-default-heading-4">
-                <p id="equipment-required">@Html.Raw(Html.HtmlFormat(Model.CourseDetails.EquipmentRequired))</p>
-            </div>
-        </div>
-        }
-    @if (!string.IsNullOrWhiteSpace(Model.CourseDetails.AssessmentMethod))
-    {
-        <div class="govuk-accordion__section">
-            <div class="govuk-accordion__section-header">
-                <h2 class="govuk-accordion__section-heading"> <button type="button" id="assessed" aria-controls="accordion-default-content-6" class="govuk-accordion__section-button" aria-describedby="accordion-default-summary-6" aria-expanded="false"> How you'll be assessed <span class="govuk-accordion__icon" aria-hidden="true"></span></button></h2>
-                <div class="govuk-accordion__section-summary govuk-body" id="accordion-with-summary-sections-summary-1"> Find out more about exams, assignments and assessments. </div>
-            </div>
-            <div id="accordion-default-content-4" class="govuk-accordion__section-content" aria-labelledby="accordion-default-heading-4">
-                <p id="assessment-method">@Html.Raw(Html.HtmlFormat(Model.CourseDetails.AssessmentMethod))</p>
-            </div>
-        </div>
-    }
+        <partial name="AccordionSections/WhoTheCourseIsFor"/>
+        <partial name="AccordionSections/EntryRequirements"/>
+        <partial name="AccordionSections/WhatYouWillLearn"/>
+        <partial name="AccordionSections/HowYouWillLearn"/>
+        <partial name="AccordionSections/WhatYouWillNeedToBring"/>
+        <partial name="AccordionSections/HowYouWillBeAssessed"/>
+
         @if (!string.IsNullOrWhiteSpace(Model.CourseDetails.NextSteps))
         {
             <div class="govuk-accordion__section">
@@ -153,44 +75,46 @@
                 <div id="accordion-default-content-4" class="govuk-accordion__section-content" aria-labelledby="accordion-default-heading-4">
                     <p id="next-steps">@Html.Raw(Html.HtmlFormat(Model.CourseDetails.NextSteps))</p>
                 </div>
-            </div>}
+            </div>
+
+        }
         <div class="govuk-accordion__section">
             <div class="govuk-accordion__section-header">
                 <h2 class="govuk-accordion__section-heading">  <button type="button" id="next" aria-controls="accordion-default-content-8" class="govuk-accordion__section-button" aria-expanded="false">Venue for this course<span class="govuk-accordion__icon" aria-hidden="true"></span></button></h2>
             </div>
             <div id="accordion-default-content-4" class="govuk-accordion__section-content" aria-labelledby="accordion-default-heading-4">
-                
+
                 <partial name="courseDetailsVenueDetails" model="Model.CourseDetails.VenueDetails" />
 
-            @if (Model.CourseDetails.AlternativeCourseRuns.Any())
-            {
-                <h2 class="govuk-heading-m" id="othervenuesdates">Other venues and dates</h2>
-                <table class="govuk-table">
-                    <tbody class="govuk-table__body">
-                    <tr class="govuk-table__row">
-                        <th class="govuk-table__header" scope="col">Venue</th>
-                        <th class="govuk-table__header" scope="col">Start date</th>
-                        <th class="govuk-table__header" scope="col">Options</th>
-                    </tr>
-                    @{ int counter = 1; }
-                    @foreach (AlternativeCourseRun courseRun in Model.CourseDetails.AlternativeCourseRuns)
-                    {
-                        <tr class="govuk-table__row">
-                            <td class="govuk-table__cell"><span id="other-venue-name-@counter">@Html.Raw(courseRun.VenueName)</span></td>
-                            <td class="govuk-table__cell">
-                                @if (courseRun.StartDate != null)
-                                {
-                                    <span id="other-startdate-@counter">@courseRun.StartDate.Value.ToFormattedString()</span>
-                                }
-                            </td>
-                            <td class="govuk-table__cell">
-                                <a class="govuk-link" id="other-website-@(counter++)" href="/find-a-course/details?courseId=@Model.CourseDetails.CourseId&runId=@courseRun.RunId&@Model.SearchTerm">View course</a>
-                            </td>
-                        </tr>
-                    }
-                    </tbody>
-                </table>
-            }
+                @if (Model.CourseDetails.AlternativeCourseRuns.Any())
+                {
+                    <h2 class="govuk-heading-m" id="othervenuesdates">Other venues and dates</h2>
+                    <table class="govuk-table">
+                        <tbody class="govuk-table__body">
+                            <tr class="govuk-table__row">
+                                <th class="govuk-table__header" scope="col">Venue</th>
+                                <th class="govuk-table__header" scope="col">Start date</th>
+                                <th class="govuk-table__header" scope="col">Options</th>
+                            </tr>
+                            @{ int counter = 1; }
+                            @foreach (AlternativeCourseRun courseRun in Model.CourseDetails.AlternativeCourseRuns)
+                            {
+                                <tr class="govuk-table__row">
+                                    <td class="govuk-table__cell"><span id="other-venue-name-@counter">@Html.Raw(courseRun.VenueName)</span></td>
+                                    <td class="govuk-table__cell">
+                                        @if (courseRun.StartDate != null)
+                                        {
+                                            <span id="other-startdate-@counter">@courseRun.StartDate.Value.ToFormattedString()</span>
+                                        }
+                                    </td>
+                                    <td class="govuk-table__cell">
+                                        <a class="govuk-link" id="other-website-@(counter++)" href="/find-a-course/details?courseId=@Model.CourseDetails.CourseId&runId=@courseRun.RunId&@Model.SearchTerm">View course</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
             </div>
         </div>
     </div>

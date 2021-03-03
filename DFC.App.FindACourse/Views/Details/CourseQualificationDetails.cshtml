@@ -1,0 +1,24 @@
+﻿@model DetailsViewModel
+@if (!string.IsNullOrWhiteSpace(Model.CourseDetails.QualificationName))
+{
+    <tr class="govuk-table__row">
+        <th class="govuk-table__header" scope="row">Qualification name</th>
+        <td class="govuk-table__cell"><span id="qualification-name">@Html.Raw(Model.CourseDetails.QualificationName)</span></td>
+    </tr>
+}
+
+@if (!string.IsNullOrWhiteSpace(Model.CourseDetails.QualificationLevel))
+{
+    <tr class="govuk-table__row">
+        <th class="govuk-table__header" scope="row">Qualification level</th>
+        <td class="govuk-table__cell"><span id="qualification-level">@Html.Raw(Model.CourseDetails.QualificationLevel)</span></td>
+    </tr>
+}
+
+@if (!string.IsNullOrWhiteSpace(Model.CourseDetails.AwardingOrganisation))
+{
+    <tr class="govuk-table__row">
+        <th class="govuk-table__header" scope="row">Awarding organisation</th>
+        <td class="govuk-table__cell"><span id="awarding-organisation">@Html.Raw(Model.CourseDetails.AwardingOrganisation)</span></td>
+    </tr>
+}
