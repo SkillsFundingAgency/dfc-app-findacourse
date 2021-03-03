@@ -5,7 +5,7 @@
         <table class="govuk-table">
             <caption class="govuk-visually-hidden">Table with course details</caption>
             <tbody class="govuk-table__body">
-            <partial name="CourseQualificationDetails" model="Model" />
+            <partial name="CourseQualificationDetails"/>
                 <tr class="govuk-table__row">
                     <th class="govuk-table__header" scope="row">Course type</th>
                     <td class="govuk-table__cell"><span id="attendance-mode">@Html.Raw(Model.CourseDetails.AttendanceMode)</span></td>
@@ -37,11 +37,11 @@
             </tbody>
         </table>
         <div class="govuk-accordion" data-module="govuk-accordion" id="accordion-default">
-            <partial name="AccordionSections/WhoTheCourseIsFor" model="Model" />
-            <partial name="AccordionSections/EntryRequirements" model="Model" />
-            <partial name="AccordionSections/WhatYouWillLearn" model="Model" />
-            <partial name="AccordionSections/HowYouWillBeAssessed" model="Model" />
-            <partial name="AccordionSections/WhatYouCanDoNext" model="Model" />
+            <partial name="AccordionSections/WhoTheCourseIsFor"/>
+            <partial name="AccordionSections/EntryRequirements"/>
+            <partial name="AccordionSections/WhatYouWillLearn"/>
+            <partial name="AccordionSections/HowYouWillBeAssessed"/>
+            <partial name="AccordionSections/WhatYouCanDoNext"/>
         </div>
         <p><a href="/find-a-course/page?@Model.SearchTerm" class="govuk-back-link" id="back-to-results">Back to results</a></p>
 </div>
