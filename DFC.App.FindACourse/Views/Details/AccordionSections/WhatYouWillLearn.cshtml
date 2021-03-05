@@ -1,10 +1,11 @@
-﻿@if (!string.IsNullOrWhiteSpace(Model.CourseDetails.WhatYoullLearn))
+﻿@model AccordionSetUpModel
+@if (!string.IsNullOrWhiteSpace(Model.DetailsViewModel.CourseDetails.WhatYoullLearn))
 {
     @await Html.PartialAsync("CourseAccordionItem", new AccordionViewModel
     {
-        Description = Model.CourseDetails.WhatYoullLearn,
+        Description = Model.DetailsViewModel.CourseDetails.WhatYoullLearn,
         Title = "What you'll learn",
         SubText = "View the key features of this course.",
-        SectionName = "WhatYouWillLearn",
+        SectionName = @Model.Position,
     })
 }
