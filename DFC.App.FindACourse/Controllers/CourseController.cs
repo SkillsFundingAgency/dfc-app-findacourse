@@ -25,12 +25,14 @@ namespace DFC.App.FindACourse.Controllers
         private readonly ILogService logService;
         private readonly IFindACourseService findACourseService;
         private readonly IViewHelper viewHelper;
+        private readonly ILocationService locationService;
 
-        public CourseController(ILogService logService, IFindACourseService findACourseService, IViewHelper viewHelper)
+        public CourseController(ILogService logService, IFindACourseService findACourseService, IViewHelper viewHelper, ILocationService locationService)
         {
             this.logService = logService;
             this.findACourseService = findACourseService;
             this.viewHelper = viewHelper;
+            this.locationService = locationService;
         }
 
         [HttpGet]
@@ -41,6 +43,8 @@ namespace DFC.App.FindACourse.Controllers
             {
                 Documents = new List<IndexDocumentViewModel> { new IndexDocumentViewModel { CanonicalName = "Index" } },
             };
+
+            var loc = locationService.GetSuggestedLocationsAsync("nun").Result;
 
             return this.NegotiateContentResult(viewModel);
         }
