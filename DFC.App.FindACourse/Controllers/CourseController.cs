@@ -44,8 +44,6 @@ namespace DFC.App.FindACourse.Controllers
                 Documents = new List<IndexDocumentViewModel> { new IndexDocumentViewModel { CanonicalName = "Index" } },
             };
 
-            var loc = locationService.GetSuggestedLocationsAsync("nun").Result;
-
             return this.NegotiateContentResult(viewModel);
         }
 
@@ -292,6 +290,19 @@ namespace DFC.App.FindACourse.Controllers
             }
 
             return postcode.IsPostcode();
+        }
+
+        [HttpGet]
+        [Route("api/get/find-a-course/suggestlocationsasync")]
+        public async Task<ActionResult> SuggestLocationsAsync(bool highlights, bool fuzzy, string term)
+        {
+            var suggestedResults = await locationService.GetSuggestedLocationsAsync(term).ConfigureAwait(false);
+
+            // Convert the suggested query results to a list that can be displayed in the client.
+            List<string> suggestions = suggestedResults.Select(x => x.LocationName).ToList();
+
+            // Return the list of suggestions.
+            return new JsonResult(suggestions);
         }
 
         [HttpGet]
