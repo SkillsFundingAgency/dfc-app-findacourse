@@ -85,6 +85,12 @@
         },
         "ConfigurationApplicationName": {
             "value": "findacourse"
+        },
+        "apimProxyAddress": {
+            "value": "https://foo.api.nationalcareersservice.org.uk"
+        },
+        "apimCompositeKey": {
+            "value": "not-a-real-key"
         }
     }
 }

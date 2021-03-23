@@ -86,22 +86,28 @@
       "type": "string"
     },
     "ApimResourceGroup": {
-        "type": "string"
+      "type": "string"
     },
     "ApimLoggerName": {
-        "type": "string"
+      "type": "string"
     },
     "ApimProductInstanceName": {
-        "type": "string"
+      "type": "string"
     },
     "ApimServiceName": {
-        "type": "string"
+      "type": "string"
     },
     "ApiName": {
-        "type": "string"
+      "type": "string"
     },
     "ConfigurationApplicationName": {
-        "type": "string"
+      "type": "string"
+    },
+    "apimProxyAddress": {
+      "type": "string"
+    },
+    "apimCompositeKey": {
+      "type": "securestring"
     }
   },
   "variables": {
@@ -382,12 +388,40 @@
               {
                 "name": "Configuration__CosmosDbConnections__StaticContent__PartitionKey",
                 "value": "[variables('facCosmosAuditCollectionPartitionKey')]"
+              },
+              {
+                "name": "LocationServiceOptions__BaseAddress",
+                "value": "[concat(parameters('apimProxyAddress'),'/locationservices/suggest/')]"
+              },
+              {
+                "name": "LocationServiceOptions__APIKey",
+                "value": "[parameters('apimCompositeKey')]"
+              },
+              {
+                "name": "LocationServiceOptions__RequestTimeOutSeconds",
+                "value": 10
+              },
+              {
+                "name": "LocationServiceOptions__Policies__HttpCircuitBreaker__DurationOfBreak",
+                "value": "00:00:10"
+              },
+              {
+                "name": "LocationServiceOptions__Policies__HttpCircuitBreaker__ExceptionsAllowedBeforeBreaking",
+                "value": 3
+              },
+              {
+                "name": "LocationServiceOptions__Policies__HttpRetry__BackoffPower",
+                "value": 2
+              },
+              {
+                "name": "LocationServiceOptions__Policies__HttpRetry__Count",
+                "value": 3
               }
             ]
           }
         }
       },
-      "dependsOn": ["[variables('AppServiceAppInsightsName')]"]
+      "dependsOn": [ "[variables('AppServiceAppInsightsName')]" ]
     },
     {
       "name": "[variables('CosmosDbDatabaseName')]",
@@ -448,7 +482,7 @@
           }
         }
       },
-      "dependsOn": ["[variables('CosmosDbDatabaseName')]"]
+      "dependsOn": [ "[variables('CosmosDbDatabaseName')]" ]
     },
     {
       "apiVersion": "2017-05-10",
@@ -479,7 +513,7 @@
           }
         }
       },
-      "dependsOn": ["[variables('CosmosDbDatabaseName')]"]
+      "dependsOn": [ "[variables('CosmosDbDatabaseName')]" ]
     },
     {
       "name": "[variables('ApiName')]",
@@ -513,7 +547,7 @@
       "apiVersion": "2019-05-01",
       "name": "[concat(variables('appServiceAppInsightsName'), '-metric-exceptions')]",
       "type": "Microsoft.Resources/deployments",
-      "dependsOn": ["[variables('appServiceAppInsightsName')]"],
+      "dependsOn": [ "[variables('appServiceAppInsightsName')]" ],
       "properties": {
         "mode": "Incremental",
         "templateLink": {
@@ -564,7 +598,7 @@
       "apiVersion": "2019-05-01",
       "name": "[concat(variables('appServiceAppInsightsName'), '-failure-anomaly-v2')]",
       "type": "Microsoft.Resources/deployments",
-      "dependsOn": ["[variables('appServiceAppInsightsName')]"],
+      "dependsOn": [ "[variables('appServiceAppInsightsName')]" ],
       "properties": {
         "mode": "Incremental",
         "templateLink": {
