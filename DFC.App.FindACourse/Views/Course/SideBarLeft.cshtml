@@ -12,16 +12,7 @@
         </span>
         <input type="text" asp-for="TownOrPostcode" aria-label="TownOrPostcode" name="SideBar.TownOrPostcode" class="govuk-input govuk-input--width-10" id="location-input" />
         <span asp-validation-for="TownOrPostcode" class="text-danger" id="location-validator"></span>
-    </div>
-
-    <div class="govuk-form-group" id="location1-block">
-        <label class="govuk-label govuk-!-font-weight-bold" for="location1" id="location1-label">
-            Location search
-        </label>
-        <span id="location1-hint" class="govuk-hint">
-            <label aria-label="LocationLabel">Enter a town or postcode</label>
-        </span>
-        <input id="location1" />
+        @Html.Hidden("selectedLocationCords")
     </div>
 
     <div id="distance-block" class="govuk-form-group">

@@ -1,4 +1,5 @@
-﻿using DFC.App.FindACourse.Data.Domain;
+﻿using AutoMapper;
+using DFC.App.FindACourse.Data.Domain;
 using DFC.App.FindACourse.Data.Helpers;
 using DFC.App.FindACourse.Data.Models;
 using DFC.App.FindACourse.Extensions;
@@ -293,16 +294,25 @@ namespace DFC.App.FindACourse.Controllers
         }
 
         [HttpGet]
-        [Route("api/get/find-a-course/suggestlocationsasync")]
-        public async Task<ActionResult> SuggestLocationsAsync(bool highlights, bool fuzzy, string term)
+        [Route("api/get/find-a-course/suggestlocationsasync/{term}")]
+        public async Task<JsonResult> SuggestLocationsAsync(string term)
         {
-            var suggestedResults = await locationService.GetSuggestedLocationsAsync(term).ConfigureAwait(false);
+           try
+           {
+                var suggestedResults = await locationService.GetSuggestedLocationsAsync(term).ConfigureAwait(false);
+                List<LocationSuggestViewModel> suggestedLocations = suggestedResults.Select(x => new LocationSuggestViewModel
+                {
+                    Label = $"{x.LocationName} ({x.LocalAuthorityName})",
+                    Value = $"{x.Longitude}|{x.Latitude}",
+                }).ToList();
 
-            // Convert the suggested query results to a list that can be displayed in the client.
-            List<string> suggestions = suggestedResults.Select(x => x.LocationName).ToList();
-
-            // Return the list of suggestions.
-            return new JsonResult(suggestions);
+                return new JsonResult(suggestedLocations);
+            }
+            catch (Exception ex)
+            {
+                logService.LogError($"{nameof(this.SuggestLocationsAsync)} threw an exception" + ex.Message);
+                throw;
+            }
         }
 
         [HttpGet]

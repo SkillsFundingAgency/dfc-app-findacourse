@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace DFC.App.FindACourse.Data.Models
+﻿namespace DFC.App.FindACourse.Data.Models
 {
     public class Location
     {
