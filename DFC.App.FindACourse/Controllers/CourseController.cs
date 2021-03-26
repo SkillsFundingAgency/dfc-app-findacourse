@@ -26,14 +26,12 @@ namespace DFC.App.FindACourse.Controllers
         private readonly ILogService logService;
         private readonly IFindACourseService findACourseService;
         private readonly IViewHelper viewHelper;
-        private readonly ILocationService locationService;
 
-        public CourseController(ILogService logService, IFindACourseService findACourseService, IViewHelper viewHelper, ILocationService locationService)
+        public CourseController(ILogService logService, IFindACourseService findACourseService, IViewHelper viewHelper)
         {
             this.logService = logService;
             this.findACourseService = findACourseService;
             this.viewHelper = viewHelper;
-            this.locationService = locationService;
         }
 
         [HttpGet]
@@ -155,7 +153,8 @@ namespace DFC.App.FindACourse.Controllers
             }
 
             var paramValues = System.Text.Json.JsonSerializer.Deserialize<ParamValues>(appData);
-            bool? isPostcode = null;
+
+            var isPostcode = !string.IsNullOrEmpty(paramValues.Town) ? (bool?)paramValues.Town.IsPostcode() : null;
 
             var model = new BodyViewModel
             {
@@ -171,6 +170,7 @@ namespace DFC.App.FindACourse.Controllers
                     CurrentSearchTerm = paramValues.SearchTerm,
                     FiltersApplied = paramValues.FilterA,
                     SelectedOrderByValue = paramValues.OrderByValue,
+                    Coordinates = paramValues.Coordinates,
                 },
                 RequestPage = paramValues.Page,
                 IsNewPage = true,
@@ -180,6 +180,12 @@ namespace DFC.App.FindACourse.Controllers
             };
 
             var newBodyViewModel = GenerateModel(model);
+
+            //Untill location is supported by the FAC API we need to pass in the town as normal
+            if (!isPostcode == true && !string.IsNullOrEmpty(paramValues.Coordinates))
+            {
+                newBodyViewModel.CourseSearchFilters.Town = newBodyViewModel.CourseSearchFilters.Town.Substring(0, newBodyViewModel.CourseSearchFilters.Town.IndexOf(" (", StringComparison.Ordinal)) + "\"";
+            }
 
             try
             {
@@ -192,8 +198,6 @@ namespace DFC.App.FindACourse.Controllers
                     }
                 }
 
-                isPostcode = !string.IsNullOrEmpty(paramValues.Town) ? (bool?)paramValues.Town.IsPostcode() : null;
-
                 if (!model.IsTest)
                 {
                     TempData["params"] = $"{nameof(paramValues.SearchTerm)}={paramValues.SearchTerm}&" +
@@ -205,7 +209,8 @@ namespace DFC.App.FindACourse.Controllers
                                          $"{nameof(paramValues.Distance)}={paramValues.Distance}&" +
                                          $"{nameof(paramValues.FilterA)}={paramValues.FilterA}&" +
                                          $"{nameof(paramValues.Page)}={paramValues.Page}&" +
-                                         $"{nameof(paramValues.OrderByValue)}={paramValues.OrderByValue}";
+                                         $"{nameof(paramValues.OrderByValue)}={paramValues.OrderByValue}&" +
+                                         $"{nameof(paramValues.Coordinates)}={paramValues.Coordinates}";
                 }
             }
             catch (Exception ex)
@@ -291,28 +296,6 @@ namespace DFC.App.FindACourse.Controllers
             }
 
             return postcode.IsPostcode();
-        }
-
-        [HttpGet]
-        [Route("api/get/find-a-course/suggestlocationsasync/{term}")]
-        public async Task<JsonResult> SuggestLocationsAsync(string term)
-        {
-           try
-           {
-                var suggestedResults = await locationService.GetSuggestedLocationsAsync(term).ConfigureAwait(false);
-                List<LocationSuggestViewModel> suggestedLocations = suggestedResults.Select(x => new LocationSuggestViewModel
-                {
-                    Label = $"{x.LocationName} ({x.LocalAuthorityName})",
-                    Value = $"{x.Longitude}|{x.Latitude}",
-                }).ToList();
-
-                return new JsonResult(suggestedLocations);
-            }
-            catch (Exception ex)
-            {
-                logService.LogError($"{nameof(this.SuggestLocationsAsync)} threw an exception" + ex.Message);
-                throw;
-            }
         }
 
         [HttpGet]

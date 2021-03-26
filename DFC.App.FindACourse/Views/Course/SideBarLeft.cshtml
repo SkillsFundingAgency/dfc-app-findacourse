@@ -12,7 +12,7 @@
         </span>
         <input type="text" asp-for="TownOrPostcode" aria-label="TownOrPostcode" name="SideBar.TownOrPostcode" class="govuk-input govuk-input--width-10" id="location-input" />
         <span asp-validation-for="TownOrPostcode" class="text-danger" id="location-validator"></span>
-        @Html.Hidden("selectedLocationCords")
+        @Html.Hidden("coordinates")
     </div>
 
     <div id="distance-block" class="govuk-form-group">

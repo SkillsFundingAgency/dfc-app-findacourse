@@ -28,5 +28,7 @@ namespace DFC.App.FindACourse.Data.Models
         public string OrderByValue { get; set; }
 
         public int D { get; set; }
+
+        public string Coordinates { get; set; }
     }
 }
