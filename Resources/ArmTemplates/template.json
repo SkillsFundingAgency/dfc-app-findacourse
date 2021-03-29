@@ -391,7 +391,7 @@
               },
               {
                 "name": "LocationServiceOptions__BaseAddress",
-                "value": "[concat(parameters('apimProxyAddress'),'/locationservices/suggest/')]"
+                "value": "[concat(parameters('apimProxyAddress'),'/LocationServices/Location/suggestlocations')]"
               },
               {
                 "name": "LocationServiceOptions__APIKey",
