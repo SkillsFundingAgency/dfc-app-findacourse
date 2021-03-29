@@ -40,10 +40,10 @@ namespace DFC.App.FindACourse.Services.UnitTests
             var locationService = new LocationService(fakeLogger, httpClient);
 
             //Act
-            var actual = await locationService.GetSuggestedLocationsAsync("testTerm").ConfigureAwait(false);
+            var result = await locationService.GetSuggestedLocationsAsync("testTerm").ConfigureAwait(false);
 
             //Assert
-            actual.Should().BeEquivalentTo(expectedResponse);
+            result.Should().BeEquivalentTo(expectedResponse);
 
             httpResponse.Dispose();
             httpClient.Dispose();

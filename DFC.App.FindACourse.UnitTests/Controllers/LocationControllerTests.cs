@@ -15,6 +15,7 @@ using Newtonsoft.Json;
 using System.Linq;
 using FluentAssertions;
 using System.Net;
+using System;
 
 namespace DFC.App.FindACourse.UnitTests.Controllers
 {
@@ -52,6 +53,32 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
 
             resultList.FirstOrDefault().Label.Should().Be($"{testLocation.LocationName} ({testLocation.LocalAuthorityName})");
             resultList.FirstOrDefault().Value.Should().Be($"{testLocation.Longitude}|{testLocation.Latitude}");
+
+            controller.Dispose();
+        }
+
+        [Fact]
+        public async Task SuggestLocationsAsyncHandlesErrorsGracefuly()
+        {
+            // arrange
+            var testTerm = "TestTerm";
+            var suggestedLocations = GetTestSuggestedLocations();
+            var testLocation = suggestedLocations.FirstOrDefault();
+            var controller = BuildLocationController(MediaTypeNames.Text.Html);
+
+            A.CallTo(() => fakeLocationsService.GetSuggestedLocationsAsync(A<string>.Ignored)).Throws(new Exception());
+
+            // act
+            var jsonResult = await controller.SuggestLocationsAsync(testTerm).ConfigureAwait(false);
+
+            // assets
+            var resultObject = Assert.IsType<JsonResult>(jsonResult);
+            var resultList = resultObject.Value as IEnumerable<LocationSuggestViewModel>;
+
+            resultList.Count().Should().Be(1);
+
+            resultList.FirstOrDefault().Label.Should().Be(testTerm);
+            resultList.FirstOrDefault().Value.Should().Be(string.Empty);
 
             controller.Dispose();
         }

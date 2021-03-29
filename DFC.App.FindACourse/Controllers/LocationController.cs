@@ -22,6 +22,7 @@ namespace DFC.App.FindACourse.Controllers
 
         [HttpGet]
         [Route("api/get/find-a-course/suggestlocationsasync/{term}")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "Do not want any errors for been retuned to the frontend UI for Ajax calls.")]
         public async Task<JsonResult> SuggestLocationsAsync(string term)
         {
             try
@@ -37,8 +38,17 @@ namespace DFC.App.FindACourse.Controllers
             catch (Exception ex)
             {
                 logService.LogError($"{nameof(this.SuggestLocationsAsync)} threw an exception" + ex.Message);
-                throw;
             }
+
+            //if there are any errors return the term that the user has typed.
+            return new JsonResult(new List<LocationSuggestViewModel>
+            {
+                new LocationSuggestViewModel()
+                {
+                    Label = term,
+                    Value = string.Empty,
+                },
+            });
         }
     }
 }
