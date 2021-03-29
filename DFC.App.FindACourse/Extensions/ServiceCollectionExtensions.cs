@@ -1,4 +1,5 @@
-﻿using DFC.Content.Pkg.Netcore.Data.Models.ClientOptions;
+﻿using DFC.App.FindACourse.Data.Domain;
+using DFC.Content.Pkg.Netcore.Data.Models.ClientOptions;
 using DFC.Content.Pkg.Netcore.Data.Models.PollyOptions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,11 +16,11 @@ namespace DFC.App.FindACourse.Extensions
     [ExcludeFromCodeCoverage]
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddPolicies(
+        public static IServiceCollection AddStandardPolicies(
             this IServiceCollection services,
             IPolicyRegistry<string> policyRegistry,
             string keyPrefix,
-            PolicyOptions policyOptions)
+            FacPolicyOptions policyOptions)
         {
             _ = policyOptions ?? throw new ArgumentNullException(nameof(policyOptions));
 
@@ -50,7 +51,7 @@ namespace DFC.App.FindACourse.Extensions
                     string circuitBreakerPolicyName)
                     where TClient : class
                     where TImplementation : class, TClient
-                    where TClientOptions : ClientOptionsModel, new()
+                    where TClientOptions : FacHttpClientOptions, new()
         {
             return services
                 .Configure<TClientOptions>(configuration?.GetSection(configurationSectionName))

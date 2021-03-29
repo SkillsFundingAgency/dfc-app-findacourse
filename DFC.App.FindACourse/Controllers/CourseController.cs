@@ -1,4 +1,5 @@
-﻿using DFC.App.FindACourse.Data.Domain;
+﻿using AutoMapper;
+using DFC.App.FindACourse.Data.Domain;
 using DFC.App.FindACourse.Data.Helpers;
 using DFC.App.FindACourse.Data.Models;
 using DFC.App.FindACourse.Extensions;
@@ -152,7 +153,8 @@ namespace DFC.App.FindACourse.Controllers
             }
 
             var paramValues = System.Text.Json.JsonSerializer.Deserialize<ParamValues>(appData);
-            bool? isPostcode = null;
+
+            var isPostcode = !string.IsNullOrEmpty(paramValues.Town) ? (bool?)paramValues.Town.IsPostcode() : null;
 
             var model = new BodyViewModel
             {
@@ -168,6 +170,7 @@ namespace DFC.App.FindACourse.Controllers
                     CurrentSearchTerm = paramValues.SearchTerm,
                     FiltersApplied = paramValues.FilterA,
                     SelectedOrderByValue = paramValues.OrderByValue,
+                    Coordinates = paramValues.Coordinates,
                 },
                 RequestPage = paramValues.Page,
                 IsNewPage = true,
@@ -177,6 +180,12 @@ namespace DFC.App.FindACourse.Controllers
             };
 
             var newBodyViewModel = GenerateModel(model);
+
+            //Untill location is supported by the FAC API we need to pass in the town as normal
+            if (!isPostcode == true && !string.IsNullOrEmpty(paramValues.Coordinates))
+            {
+                newBodyViewModel.CourseSearchFilters.Town = newBodyViewModel.CourseSearchFilters.Town.Substring(0, newBodyViewModel.CourseSearchFilters.Town.IndexOf(" (", StringComparison.Ordinal)) + "\"";
+            }
 
             try
             {
@@ -189,8 +198,6 @@ namespace DFC.App.FindACourse.Controllers
                     }
                 }
 
-                isPostcode = !string.IsNullOrEmpty(paramValues.Town) ? (bool?)paramValues.Town.IsPostcode() : null;
-
                 if (!model.IsTest)
                 {
                     TempData["params"] = $"{nameof(paramValues.SearchTerm)}={paramValues.SearchTerm}&" +
@@ -202,7 +209,8 @@ namespace DFC.App.FindACourse.Controllers
                                          $"{nameof(paramValues.Distance)}={paramValues.Distance}&" +
                                          $"{nameof(paramValues.FilterA)}={paramValues.FilterA}&" +
                                          $"{nameof(paramValues.Page)}={paramValues.Page}&" +
-                                         $"{nameof(paramValues.OrderByValue)}={paramValues.OrderByValue}";
+                                         $"{nameof(paramValues.OrderByValue)}={paramValues.OrderByValue}&" +
+                                         $"{nameof(paramValues.Coordinates)}={paramValues.Coordinates}";
                 }
             }
             catch (Exception ex)

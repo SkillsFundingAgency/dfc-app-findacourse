@@ -91,6 +91,12 @@
         },
         "ConfigurationApplicationName": {
             "value": "__ConfigurationApplicationName__"
+        },
+        "apimProxyAddress": {
+            "value": "__apimProxyAddress__"
+        },
+        "apimCompositeKey": {
+            "value": "__apimCompositeKey__"
         }
     }
 }

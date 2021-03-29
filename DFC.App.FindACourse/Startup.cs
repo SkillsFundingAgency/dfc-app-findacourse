@@ -2,6 +2,7 @@
 using DFC.App.FindACourse.Data.Contracts;
 using DFC.App.FindACourse.Data.Domain;
 using DFC.App.FindACourse.Data.Models;
+using DFC.App.FindACourse.Extensions;
 using DFC.App.FindACourse.Framework;
 using DFC.App.FindACourse.Helpers;
 using DFC.App.FindACourse.HostedServices;
@@ -44,6 +45,8 @@ namespace DFC.App.FindACourse
         public const string CourseSearchClientAuditSettings = "Configuration:CourseSearchClient:CosmosAuditConnection";
         public const string CourseSearchClientPolicySettings = "Configuration:CourseSearchClient:Policies";
         public const string StaticCosmosDbConfigAppSettings = "Configuration:CosmosDbConnections:StaticContent";
+        public const string LocationServiceSettings = "LocationServiceOptions";
+        public const string LocationServicePolicySettings = "LocationServiceOptions:Policies";
 
         private readonly IWebHostEnvironment env;
 
@@ -95,6 +98,7 @@ namespace DFC.App.FindACourse
             services.AddTransient<IApiCacheService, ApiCacheService>();
             services.AddTransient<IWebhooksService, WebhooksService>();
             services.AddTransient<IViewHelper, ViewHelper>();
+            services.AddTransient<ILocationService, LocationService>();
             services.AddTransient<MemoryCache>();
 
             var policyRegistry = services.AddPolicyRegistry();
@@ -105,6 +109,12 @@ namespace DFC.App.FindACourse
             services.AddHostedService<StaticContentReloadBackgroundService>();
 
             services.AddApiServices(Configuration, policyRegistry);
+
+            services.AddSingleton(Configuration.GetSection(LocationServiceSettings).Get<LocationServiceOptions>() ?? new LocationServiceOptions());
+            var facPolicyOptions = Configuration.GetSection(LocationServicePolicySettings).Get<FacPolicyOptions>() ?? new FacPolicyOptions();
+
+            services.AddStandardPolicies(policyRegistry, nameof(LocationServiceOptions), facPolicyOptions)
+               .AddHttpClient<ILocationService, LocationService, LocationServiceOptions>(Configuration, nameof(LocationServiceOptions), nameof(FacPolicyOptions.HttpRetry), nameof(FacPolicyOptions.HttpCircuitBreaker));
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Latest);
         }

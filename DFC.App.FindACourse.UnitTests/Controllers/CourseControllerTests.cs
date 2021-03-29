@@ -286,7 +286,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
             // assert
             Assert.False(string.IsNullOrWhiteSpace(result.HTML));
             Assert.Equal(0, result.Count);
-            Assert.Null(result.IsPostcode);
+            Assert.Equal(true, result.IsPostcode);
 
             controller.Dispose();
         }
