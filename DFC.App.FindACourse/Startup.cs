@@ -48,7 +48,6 @@ namespace DFC.App.FindACourse
         public const string LocationServiceSettings = "LocationServiceOptions";
         public const string LocationServicePolicySettings = "LocationServiceOptions:Policies";
 
-
         private readonly IWebHostEnvironment env;
 
         public Startup(IConfiguration configuration, IWebHostEnvironment env)

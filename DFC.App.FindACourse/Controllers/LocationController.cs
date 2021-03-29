@@ -24,7 +24,6 @@ namespace DFC.App.FindACourse.Controllers
         [Route("api/get/find-a-course/suggestlocationsasync/{term}")]
         public async Task<JsonResult> SuggestLocationsAsync(string term)
         {
-            var startTime = DateTime.Now;
             try
             {
                 var suggestedResults = await locationService.GetSuggestedLocationsAsync(term).ConfigureAwait(false);
@@ -33,9 +32,6 @@ namespace DFC.App.FindACourse.Controllers
                     Label = $"{x.LocationName} ({x.LocalAuthorityName})",
                     Value = $"{x.Longitude}|{x.Latitude}",
                 }).ToList();
-
-                //var msg = $"location request took {(DateTime.Now - startTime).TotalSeconds} seconds";
-                //logService.LogInformation(msg);
                 return new JsonResult(suggestedLocations);
             }
             catch (Exception ex)
