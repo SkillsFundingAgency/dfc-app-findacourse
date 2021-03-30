@@ -42,7 +42,7 @@
     {
       "Name": "Ajax-Location",
       "IsHealthy": true,
-      "AjaxEndpoint": "https://__AppServiceName__.__appServiceDomain__/api/get/find-a-course/suggestlocationsasync",
+      "AjaxEndpoint": "https://__AppServiceName__.__appServiceDomain__/api/get/find-a-course/suggestlocationsasync/{0}",
       "HealthCheckRequired": true,
       "OfflineHtml": "<div class=\"govuk-width-container\"><H3>Location Search Service Unavailable</H3></div>"
     }
