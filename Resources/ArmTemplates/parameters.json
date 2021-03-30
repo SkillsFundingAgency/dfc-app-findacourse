@@ -95,8 +95,8 @@
         "apimProxyAddress": {
             "value": "__apimProxyAddress__"
         },
-        "apimCompositeKey": {
-            "value": "__apimCompositeKey__"
+        "apimLocationServicesKey": {
+            "value": "__apimLocationServicesKey__"
         }
     }
 }
