@@ -106,7 +106,7 @@
     "apimProxyAddress": {
       "type": "string"
     },
-    "apimCompositeKey": {
+    "apimLocationServicesKey": {
       "type": "securestring"
     }
   },
@@ -395,7 +395,7 @@
               },
               {
                 "name": "LocationServiceOptions__APIKey",
-                "value": "[parameters('apimCompositeKey')]"
+                "value": "[parameters('apimLocationServicesKey')]"
               },
               {
                 "name": "LocationServiceOptions__RequestTimeOutSeconds",
