@@ -45,8 +45,6 @@ namespace DFC.App.FindACourse
         public const string CourseSearchClientAuditSettings = "Configuration:CourseSearchClient:CosmosAuditConnection";
         public const string CourseSearchClientPolicySettings = "Configuration:CourseSearchClient:Policies";
         public const string StaticCosmosDbConfigAppSettings = "Configuration:CosmosDbConnections:StaticContent";
-        public const string LocationServiceSettings = "LocationServiceOptions";
-        public const string LocationServicePolicySettings = "LocationServiceOptions:Policies";
         private const string AzureSearchAppSettings = "AzureSearch";
 
         private readonly IWebHostEnvironment env;
