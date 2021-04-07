@@ -103,10 +103,13 @@
     "ConfigurationApplicationName": {
       "type": "string"
     },
-    "apimProxyAddress": {
+    "AzureSearchEndpointUri": {
       "type": "string"
     },
-    "apimLocationServicesKey": {
+    "AzureSearchSearchServiceName": {
+      "type": "string"
+    },
+    "AzureSearchSearchServiceAdminAPIKey": {
       "type": "securestring"
     }
   },
@@ -201,7 +204,7 @@
             "value": "app"
           },
           "deployStagingSlot": {
-            "value": false
+            "value": true
           },
           "appServiceAppSettings": {
             "value": [
@@ -390,32 +393,28 @@
                 "value": "[variables('facCosmosAuditCollectionPartitionKey')]"
               },
               {
-                "name": "LocationServiceOptions__BaseAddress",
-                "value": "[concat(parameters('apimProxyAddress'),'/LocationServices/Location/suggestlocations')]"
+                "name": "AzureSearch__EndpointUri",
+                "value": "[parameters('AzureSearchEndpointUri')]"
               },
               {
-                "name": "LocationServiceOptions__APIKey",
-                "value": "[parameters('apimLocationServicesKey')]"
+                "name": "AzureSearch__LocationSearchIndex",
+                "value": "dfc-digital-locations"
               },
               {
-                "name": "LocationServiceOptions__RequestTimeOutSeconds",
-                "value": 10
+                "name": "AzureSearch__SearchServiceName",
+                "value": "[parameters('AzureSearchSearchServiceName')]"
               },
               {
-                "name": "LocationServiceOptions__Policies__HttpCircuitBreaker__DurationOfBreak",
-                "value": "00:00:10"
+                "name": "AzureSearch__SearchServiceAdminAPIKey",
+                "value": "[parameters('AzureSearchSearchServiceAdminAPIKey')]"
               },
               {
-                "name": "LocationServiceOptions__Policies__HttpCircuitBreaker__ExceptionsAllowedBeforeBreaking",
-                "value": 3
+                "name": "WEBSITE_RUN_FROM_PACKAGE",
+                "value": "1"
               },
               {
-                "name": "LocationServiceOptions__Policies__HttpRetry__BackoffPower",
-                "value": 2
-              },
-              {
-                "name": "LocationServiceOptions__Policies__HttpRetry__Count",
-                "value": 3
+                "name": "WEBSITE_ADD_SITENAME_BINDINGS_IN_APPHOST_CONFIG",
+                "value": "1"
               }
             ]
           }

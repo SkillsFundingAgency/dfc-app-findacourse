@@ -97,6 +97,15 @@
         },
         "apimLocationServicesKey": {
             "value": "__apimLocationServicesKey__"
+        },
+        "AzureSearchEndpointUri": {
+            "value": "__AzureSearchServiceUri__"
+        },
+        "AzureSearchSearchServiceName": {
+            "value": "__AzureSearchServiceName__"
+        },
+        "AzureSearchSearchServiceAdminAPIKey": {
+            "value": "__AzureSearchServiceAdminKey__"
         }
     }
 }
