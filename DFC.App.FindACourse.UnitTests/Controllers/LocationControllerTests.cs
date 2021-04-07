@@ -83,9 +83,9 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
             controller.Dispose();
         }
 
-        private IEnumerable<Location> GetTestSuggestedLocations()
+        private IEnumerable<SearchLocationIndex> GetTestSuggestedLocations()
         {
-            yield return new Location()
+            yield return new SearchLocationIndex()
             {
                 LocationId = "123",
                 LocationName = "LN1",
