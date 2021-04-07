@@ -1,6 +1,12 @@
-﻿namespace DFC.App.FindACourse.Data.Models
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Text;
+
+namespace DFC.App.FindACourse.Data.Models
 {
-    public class Location
+    [ExcludeFromCodeCoverage]
+    public partial class SearchLocationIndex
     {
         public string LocationId { get; set; }
 

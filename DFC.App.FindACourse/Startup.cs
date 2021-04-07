@@ -45,8 +45,7 @@ namespace DFC.App.FindACourse
         public const string CourseSearchClientAuditSettings = "Configuration:CourseSearchClient:CosmosAuditConnection";
         public const string CourseSearchClientPolicySettings = "Configuration:CourseSearchClient:Policies";
         public const string StaticCosmosDbConfigAppSettings = "Configuration:CosmosDbConnections:StaticContent";
-        public const string LocationServiceSettings = "LocationServiceOptions";
-        public const string LocationServicePolicySettings = "LocationServiceOptions:Policies";
+        private const string AzureSearchAppSettings = "AzureSearch";
 
         private readonly IWebHostEnvironment env;
 
@@ -98,7 +97,6 @@ namespace DFC.App.FindACourse
             services.AddTransient<IApiCacheService, ApiCacheService>();
             services.AddTransient<IWebhooksService, WebhooksService>();
             services.AddTransient<IViewHelper, ViewHelper>();
-            services.AddTransient<ILocationService, LocationService>();
             services.AddTransient<MemoryCache>();
 
             var policyRegistry = services.AddPolicyRegistry();
@@ -110,11 +108,9 @@ namespace DFC.App.FindACourse
 
             services.AddApiServices(Configuration, policyRegistry);
 
-            services.AddSingleton(Configuration.GetSection(LocationServiceSettings).Get<LocationServiceOptions>() ?? new LocationServiceOptions());
-            var facPolicyOptions = Configuration.GetSection(LocationServicePolicySettings).Get<FacPolicyOptions>() ?? new FacPolicyOptions();
-
-            services.AddStandardPolicies(policyRegistry, nameof(LocationServiceOptions), facPolicyOptions)
-               .AddHttpClient<ILocationService, LocationService, LocationServiceOptions>(Configuration, nameof(LocationServiceOptions), nameof(FacPolicyOptions.HttpRetry), nameof(FacPolicyOptions.HttpCircuitBreaker));
+            var azureSearchOptions = Configuration.GetSection(AzureSearchAppSettings).Get<AzureSearchIndexConfig>() ?? new AzureSearchIndexConfig();
+            services.AddSingleton(azureSearchOptions);
+            services.AddSingleton<ILocationService, LocationService>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Latest);
         }
