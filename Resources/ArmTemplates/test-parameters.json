@@ -86,11 +86,14 @@
         "ConfigurationApplicationName": {
             "value": "findacourse"
         },
-        "apimProxyAddress": {
-            "value": "https://foo.api.nationalcareersservice.org.uk"
+        "AzureSearchEndpointUri": {
+            "value": "AzureSearchEndpointUri"
         },
-        "apimLocationServicesKey": {
-            "value": "not-a-real-key"
+        "AzureSearchSearchServiceName": {
+            "value": "AzureSearchSearchServiceName"
+        },
+        "AzureSearchSearchServiceAdminAPIKey": {
+            "value": "AzureSearchSearchServiceAdminAPIKey"
         }
     }
 }
