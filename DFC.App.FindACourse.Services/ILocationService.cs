@@ -6,6 +6,6 @@ namespace DFC.App.FindACourse.Services
 {
     public interface ILocationService
     {
-        Task<IEnumerable<Location>> GetSuggestedLocationsAsync(string term);
+        Task<IEnumerable<SearchLocationIndex>> GetSuggestedLocationsAsync(string term);
     }
 }
