@@ -92,12 +92,6 @@
         "ConfigurationApplicationName": {
             "value": "__ConfigurationApplicationName__"
         },
-        "apimProxyAddress": {
-            "value": "__apimProxyAddress__"
-        },
-        "apimLocationServicesKey": {
-            "value": "__apimLocationServicesKey__"
-        },
         "AzureSearchEndpointUri": {
             "value": "__AzureSearchServiceUri__"
         },
@@ -105,7 +99,7 @@
             "value": "__AzureSearchServiceName__"
         },
         "AzureSearchSearchServiceAdminAPIKey": {
-            "value": "__AzureSearchServiceAdminKey__"
+            "value": "__LocationAPISearchKey__"
         }
     }
 }
