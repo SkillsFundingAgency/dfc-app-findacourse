@@ -99,7 +99,7 @@
             "value": "__AzureSearchServiceName__"
         },
         "AzureSearchSearchServiceAdminAPIKey": {
-            "value": "__AzureSearchServiceAdminKey__"
+            "value": "__LocationAPISearchKey__"
         }
     }
 }
