@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -181,12 +182,6 @@ namespace DFC.App.FindACourse.Controllers
 
             var newBodyViewModel = GenerateModel(model);
 
-            //Untill location is supported by the FAC API we need to pass in the town as normal
-            if (!isPostcode == true && !string.IsNullOrEmpty(paramValues.Coordinates))
-            {
-                newBodyViewModel.CourseSearchFilters.Town = newBodyViewModel.CourseSearchFilters.Town.Substring(0, newBodyViewModel.CourseSearchFilters.Town.IndexOf(" (", StringComparison.Ordinal)) + "\"";
-            }
-
             try
             {
                 model.Results = await findACourseService.GetFilteredData(newBodyViewModel.CourseSearchFilters, newBodyViewModel.CourseSearchOrderBy, model.RequestPage).ConfigureAwait(false);
@@ -219,7 +214,8 @@ namespace DFC.App.FindACourse.Controllers
             }
 
             var viewAsString = await viewHelper.RenderViewAsync(this, "~/Views/Course/_results.cshtml", model, true).ConfigureAwait(false);
-            return new AjaxModel { HTML = viewAsString, Count = model.Results?.ResultProperties != null ? model.Results.ResultProperties.TotalResultCount : 0, IsPostcode = isPostcode };
+            var showDistanceSelector = isPostcode == true || !string.IsNullOrEmpty(model.SideBar.Coordinates);
+            return new AjaxModel { HTML = viewAsString, Count = model.Results?.ResultProperties != null ? model.Results.ResultProperties.TotalResultCount : 0, ShowDistanceSelector = showDistanceSelector };
         }
 
         [HttpGet]
@@ -501,6 +497,15 @@ namespace DFC.App.FindACourse.Controllers
                 if (model.SideBar.TownOrPostcode.IsPostcode())
                 {
                     courseSearchFilters.PostCode = NormalizePostcode(model.SideBar.TownOrPostcode);
+                    courseSearchFilters.Distance = selectedDistanceValue;
+                    courseSearchFilters.DistanceSpecified = true;
+                }
+                else if (!string.IsNullOrEmpty(model.SideBar.Coordinates))
+                {
+                    //using logitutde and latitude
+                    var coordinates = model.SideBar.Coordinates.Split('|');
+                    courseSearchFilters.Longitude = double.Parse(coordinates[0], CultureInfo.InvariantCulture);
+                    courseSearchFilters.Latitude = double.Parse(coordinates[1], CultureInfo.InvariantCulture);
                     courseSearchFilters.Distance = selectedDistanceValue;
                     courseSearchFilters.DistanceSpecified = true;
                 }

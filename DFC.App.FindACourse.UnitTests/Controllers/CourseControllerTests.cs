@@ -222,14 +222,18 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
             controller.Dispose();
         }
 
-        [Fact]
-        public async Task AjaxChangedReturnsSuccess()
+        [Theory]
+        [InlineData ("CV1 2WT", null, true)]
+        [InlineData("TestTown", null, false)]
+        [InlineData(null, "1.23|3.45", true)]
+        public async Task AjaxChangedReturnsSuccessWithCorrectStates(string townOrPostcode, string coordinates, bool expectedShowDistanceSelector)
         {
             // arrange
             var controller = BuildCourseController(MediaTypeNames.Text.Html);
             var paramValues = new ParamValues
             {
-                Town = "CV1 2WT",
+                Town = townOrPostcode,
+                Coordinates = coordinates,
                 CourseType = "Online",
                 CourseHours = "Full time",
                 CourseStudyTime = "Daytime",
@@ -258,7 +262,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
             // assert
             Assert.False(string.IsNullOrWhiteSpace(result.HTML));
             Assert.Equal(returnedCourseData.Courses.ToList().Count, result.Count);
-            Assert.True(result.IsPostcode);
+            result.ShowDistanceSelector.Should().Be(expectedShowDistanceSelector);
 
             controller.Dispose();
         }
@@ -286,7 +290,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
             // assert
             Assert.False(string.IsNullOrWhiteSpace(result.HTML));
             Assert.Equal(0, result.Count);
-            Assert.Equal(true, result.IsPostcode);
+            Assert.Equal(true, result.ShowDistanceSelector);
 
             controller.Dispose();
         }
