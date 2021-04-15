@@ -155,8 +155,6 @@ namespace DFC.App.FindACourse.Controllers
 
             var paramValues = System.Text.Json.JsonSerializer.Deserialize<ParamValues>(appData);
 
-            var isPostcode = !string.IsNullOrEmpty(paramValues.Town) ? (bool?)paramValues.Town.IsPostcode() : null;
-
             var model = new BodyViewModel
             {
                 CurrentSearchTerm = paramValues.SearchTerm,
@@ -487,9 +485,6 @@ namespace DFC.App.FindACourse.Controllers
 
             // Enter filters criteria here
             model.RequestPage = (model.RequestPage > 1) ? model.RequestPage : 1;
-
-            
-
             return model;
         }
 
