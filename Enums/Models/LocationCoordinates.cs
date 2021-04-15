@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Diagnostics.CodeAnalysis;
 
 namespace DFC.App.FindACourse.Data.Models
 {
+    [ExcludeFromCodeCoverage]
     public class LocationCoordinates
     {
         public bool AreValid { get; set; }
