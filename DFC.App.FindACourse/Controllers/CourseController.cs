@@ -214,8 +214,7 @@ namespace DFC.App.FindACourse.Controllers
             }
 
             var viewAsString = await viewHelper.RenderViewAsync(this, "~/Views/Course/_results.cshtml", model, true).ConfigureAwait(false);
-            var showDistanceSelector = isPostcode == true || !string.IsNullOrEmpty(model.SideBar.Coordinates);
-            return new AjaxModel { HTML = viewAsString, Count = model.Results?.ResultProperties != null ? model.Results.ResultProperties.TotalResultCount : 0, ShowDistanceSelector = showDistanceSelector };
+            return new AjaxModel { HTML = viewAsString, Count = model.Results?.ResultProperties != null ? model.Results.ResultProperties.TotalResultCount : 0, ShowDistanceSelector = newBodyViewModel.CourseSearchFilters.DistanceSpecified };
         }
 
         [HttpGet]
@@ -425,14 +424,6 @@ namespace DFC.App.FindACourse.Controllers
             var courseStudyTimeList = new List<Fac.AttendancePattern>();
             var selectedStartDateValue = StartDate.Anytime;
 
-            float selectedDistanceValue = 10;
-
-            if (model.SelectedDistanceValue != null)
-            {
-                var resultString = Regex.Match(model.SelectedDistanceValue, @"\d+").Value;
-                _ = float.TryParse(resultString, out selectedDistanceValue);
-            }
-
             if (model.SideBar.CourseType != null && model.SideBar.CourseType.SelectedIds.Any())
             {
                 courseTypeList = ConvertToEnumList<CourseType>(model.SideBar.CourseType.SelectedIds);
@@ -466,7 +457,6 @@ namespace DFC.App.FindACourse.Controllers
                 CourseHours = courseHoursList,
                 StartDate = selectedStartDateValue,
                 CourseStudyTime = courseStudyTimeList,
-                Distance = selectedDistanceValue,
             };
 
             model.SideBar.FiltersApplied = model.FromPaging ? model.SideBar.FiltersApplied : true;
@@ -492,6 +482,29 @@ namespace DFC.App.FindACourse.Controllers
                     break;
             }
 
+            // Added in location parameters
+            model.CourseSearchFilters = AddInLocationRequestParameters(model, courseSearchFilters);
+
+            // Enter filters criteria here
+            model.RequestPage = (model.RequestPage > 1) ? model.RequestPage : 1;
+
+            
+
+            return model;
+        }
+
+        private static CourseSearchFilters AddInLocationRequestParameters(BodyViewModel model, CourseSearchFilters courseSearchFilters)
+        {
+            float selectedDistanceValue = 10;
+
+            if (model.SelectedDistanceValue != null)
+            {
+                var resultString = Regex.Match(model.SelectedDistanceValue, @"\d+").Value;
+                _ = float.TryParse(resultString, out selectedDistanceValue);
+            }
+
+            courseSearchFilters.Distance = selectedDistanceValue;
+
             if (!string.IsNullOrEmpty(model.SideBar.TownOrPostcode))
             {
                 if (model.SideBar.TownOrPostcode.IsPostcode())
@@ -500,27 +513,55 @@ namespace DFC.App.FindACourse.Controllers
                     courseSearchFilters.Distance = selectedDistanceValue;
                     courseSearchFilters.DistanceSpecified = true;
                 }
-                else if (!string.IsNullOrEmpty(model.SideBar.Coordinates))
-                {
-                    //using logitutde and latitude
-                    var coordinates = model.SideBar.Coordinates.Split('|');
-                    courseSearchFilters.Longitude = double.Parse(coordinates[0], CultureInfo.InvariantCulture);
-                    courseSearchFilters.Latitude = double.Parse(coordinates[1], CultureInfo.InvariantCulture);
-                    courseSearchFilters.Distance = selectedDistanceValue;
-                    courseSearchFilters.DistanceSpecified = true;
-                }
                 else
                 {
-                    courseSearchFilters.Town = "\u0022" + model.SideBar.TownOrPostcode + "\u0022";
+                    var locationCoordinates = GetCoordinates(model.SideBar.Coordinates);
+                    if (locationCoordinates.AreValid)
+                    {
+                        //using logitutde and latitude
+                        courseSearchFilters.Longitude = locationCoordinates.Longitude;
+                        courseSearchFilters.Latitude = locationCoordinates.Latitude;
+                        courseSearchFilters.Distance = selectedDistanceValue;
+                        courseSearchFilters.DistanceSpecified = true;
+                    }
+                    else
+                    {
+                        courseSearchFilters.Town = "\u0022" + model.SideBar.TownOrPostcode + "\u0022";
+                    }
                 }
             }
 
-            // Enter filters criteria here
-            model.RequestPage = (model.RequestPage > 1) ? model.RequestPage : 1;
+            return courseSearchFilters;
+        }
 
-            model.CourseSearchFilters = courseSearchFilters;
+        private static LocationCoordinates GetCoordinates(string coordinates)
+        {
+            var locationCoordinates = new LocationCoordinates() { AreValid = false };
+            if (!string.IsNullOrEmpty(coordinates))
+            {
+                var coordinate = coordinates.Split('|');
+                if (coordinate.Length == 2)
+                {
+                    double convertedDouble;
+                    if (!double.TryParse(coordinate[0], out convertedDouble))
+                    {
+                        return locationCoordinates;
+                    }
 
-            return model;
+                    locationCoordinates.Longitude = convertedDouble;
+
+                    if (!double.TryParse(coordinate[1], out convertedDouble))
+                    {
+                        return locationCoordinates;
+                    }
+
+                    locationCoordinates.Latitude = convertedDouble;
+
+                    locationCoordinates.AreValid = true;
+                }
+            }
+
+            return locationCoordinates;
         }
 
         private static FiltersListViewModel ConvertStringToFiltersListViewModel(string listView)

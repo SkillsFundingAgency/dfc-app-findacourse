@@ -181,7 +181,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
 
             var result = await controller.FilterResults(bodyViewModel).ConfigureAwait(false);
 
-            var viewResult = Assert.IsType<ViewResult>(result);
+            Assert.IsType<ViewResult>(result);
 
             controller.Dispose();
         }
@@ -223,9 +223,12 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
         }
 
         [Theory]
-        [InlineData ("CV1 2WT", null, true)]
+        [InlineData("CV1 2WT", null, true)]
         [InlineData("TestTown", null, false)]
-        [InlineData(null, "1.23|3.45", true)]
+        [InlineData("TownWithCords", "1.23|3.45", true)]
+        [InlineData("TownWithInvalidCords", "invalid|3.45", false)]
+        [InlineData("TownWithInvalidCords", "1.23|invalid", false)]
+        [InlineData("TownWithInvalidCords", "invalid", false)]
         public async Task AjaxChangedReturnsSuccessWithCorrectStates(string townOrPostcode, string coordinates, bool expectedShowDistanceSelector)
         {
             // arrange
