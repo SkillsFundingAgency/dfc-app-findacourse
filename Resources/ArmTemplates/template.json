@@ -111,7 +111,10 @@
     },
     "AzureSearchSearchServiceAdminAPIKey": {
       "type": "securestring"
-    }
+    },
+    "AzureSearchMaxNumberToSuggest": {
+      "type": "string"
+    },
   },
   "variables": {
     "appServiceAppInsightsName": "[concat(parameters('resourcePrefix'), '-ai')]",
@@ -407,6 +410,10 @@
               {
                 "name": "AzureSearch__SearchServiceAdminAPIKey",
                 "value": "[parameters('AzureSearchSearchServiceAdminAPIKey')]"
+              },
+              {
+                "name": "AzureSearch__SearchMaxNumberToSuggest",
+                "value": "[parameters('AzureSearchSearchMaxNumberToSuggest')]"
               },
               {
                 "name": "WEBSITE_RUN_FROM_PACKAGE",
