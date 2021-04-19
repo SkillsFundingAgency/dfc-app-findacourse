@@ -413,7 +413,7 @@
               },
               {
                 "name": "AzureSearch__SearchMaxNumberToSuggest",
-                "value": "[parameters('AzureSearchSearchMaxNumberToSuggest')]"
+                "value": "[parameters('AzureSearchMaxNumberToSuggest')]"
               },
               {
                 "name": "WEBSITE_RUN_FROM_PACKAGE",
