@@ -94,6 +94,10 @@
         },
         "AzureSearchSearchServiceAdminAPIKey": {
             "value": "AzureSearchSearchServiceAdminAPIKey"
+        },
+        "AzureSearchMaxNumberToSuggest": {
+            "value": "AzureSearchMaxNumberToSuggest"
         }
+
     }
 }

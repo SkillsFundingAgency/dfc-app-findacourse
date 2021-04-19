@@ -100,6 +100,9 @@
         },
         "AzureSearchSearchServiceAdminAPIKey": {
             "value": "__LocationAPISearchKey__"
+        },
+        "AzureSearchMaxNumberToSuggest": {
+            "value": "__LocationMaxNumberToSuggest__"
         }
     }
 }
