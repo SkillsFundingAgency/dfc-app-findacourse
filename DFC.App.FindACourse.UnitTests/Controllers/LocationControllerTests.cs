@@ -1,21 +1,19 @@
 ﻿using DFC.App.FindACourse.Controllers;
+using DFC.App.FindACourse.Data.Models;
 using DFC.App.FindACourse.Services;
 using DFC.App.FindACourse.ViewModels;
 using DFC.Logger.AppInsights.Contracts;
+using FakeItEasy;
+using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
-using System.Net.Mime;
-using FakeItEasy;
-using Xunit;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using DFC.App.FindACourse.Data.Models;
-using Newtonsoft.Json;
-using System.Linq;
-using FluentAssertions;
-using System.Net;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Mime;
+using System.Threading.Tasks;
+using Xunit;
 
 namespace DFC.App.FindACourse.UnitTests.Controllers
 {
@@ -63,7 +61,6 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
             // arrange
             var testTerm = "TestTerm";
             var suggestedLocations = GetTestSuggestedLocations();
-            var testLocation = suggestedLocations.FirstOrDefault();
             var controller = BuildLocationController(MediaTypeNames.Text.Html);
 
             A.CallTo(() => fakeLocationsService.GetSuggestedLocationsAsync(A<string>.Ignored)).Throws(new Exception());
