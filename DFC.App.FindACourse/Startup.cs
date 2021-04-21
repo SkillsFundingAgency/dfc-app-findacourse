@@ -2,6 +2,7 @@
 using DFC.App.FindACourse.Data.Contracts;
 using DFC.App.FindACourse.Data.Domain;
 using DFC.App.FindACourse.Data.Models;
+using DFC.App.FindACourse.Extensions;
 using DFC.App.FindACourse.Framework;
 using DFC.App.FindACourse.Helpers;
 using DFC.App.FindACourse.HostedServices;
@@ -44,6 +45,7 @@ namespace DFC.App.FindACourse
         public const string CourseSearchClientAuditSettings = "Configuration:CourseSearchClient:CosmosAuditConnection";
         public const string CourseSearchClientPolicySettings = "Configuration:CourseSearchClient:Policies";
         public const string StaticCosmosDbConfigAppSettings = "Configuration:CosmosDbConnections:StaticContent";
+        private const string AzureSearchAppSettings = "AzureSearch";
 
         private readonly IWebHostEnvironment env;
 
@@ -105,6 +107,10 @@ namespace DFC.App.FindACourse
             services.AddHostedService<StaticContentReloadBackgroundService>();
 
             services.AddApiServices(Configuration, policyRegistry);
+
+            var azureSearchOptions = Configuration.GetSection(AzureSearchAppSettings).Get<AzureSearchIndexConfig>() ?? new AzureSearchIndexConfig();
+            services.AddSingleton(azureSearchOptions);
+            services.AddSingleton<ILocationService, LocationService>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Latest);
         }
