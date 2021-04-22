@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using DFC.App.FindACourse.Data.Domain;
+﻿using DFC.App.FindACourse.Data.Domain;
 using DFC.App.FindACourse.Data.Helpers;
 using DFC.App.FindACourse.Data.Models;
 using DFC.App.FindACourse.Extensions;
@@ -14,8 +13,8 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Fac = DFC.FindACourseClient;
@@ -169,7 +168,7 @@ namespace DFC.App.FindACourse.Controllers
                     CurrentSearchTerm = paramValues.SearchTerm,
                     FiltersApplied = paramValues.FilterA,
                     SelectedOrderByValue = paramValues.OrderByValue,
-                    Coordinates = paramValues.Coordinates,
+                    Coordinates = WebUtility.HtmlEncode(paramValues.Coordinates),
                 },
                 RequestPage = paramValues.Page,
                 IsNewPage = true,
@@ -203,7 +202,7 @@ namespace DFC.App.FindACourse.Controllers
                                          $"{nameof(paramValues.FilterA)}={paramValues.FilterA}&" +
                                          $"{nameof(paramValues.Page)}={paramValues.Page}&" +
                                          $"{nameof(paramValues.OrderByValue)}={paramValues.OrderByValue}&" +
-                                         $"{nameof(paramValues.Coordinates)}={paramValues.Coordinates}";
+                                         $"{nameof(paramValues.Coordinates)}={WebUtility.HtmlEncode(paramValues.Coordinates)}";
                 }
             }
             catch (Exception ex)
@@ -240,6 +239,7 @@ namespace DFC.App.FindACourse.Controllers
                     FiltersApplied = paramValues.FilterA,
                     SelectedOrderByValue = paramValues.OrderByValue,
                     D = paramValues.D,
+                    Coordinates = WebUtility.HtmlEncode(paramValues.Coordinates),
                 },
                 RequestPage = paramValues.Page,
                 SelectedDistanceValue = paramValues.Distance,
@@ -351,6 +351,7 @@ namespace DFC.App.FindACourse.Controllers
             sideBarViewModel.CurrentSearchTerm = model.CurrentSearchTerm;
             sideBarViewModel.FiltersApplied = model.SideBar.FiltersApplied;
             sideBarViewModel.SelectedOrderByValue = model.SideBar.SelectedOrderByValue;
+            sideBarViewModel.Coordinates = model.SideBar.Coordinates;
             sideBarViewModel.D = model.SideBar.D;
 
             if (model.SideBar.CourseType != null && model.SideBar.CourseType.SelectedIds.Any())
@@ -392,6 +393,7 @@ namespace DFC.App.FindACourse.Controllers
             var page = model.RequestPage;
             var filtera = model.SideBar.FiltersApplied;
             var orderByValue = model.SideBar.SelectedOrderByValue;
+            var coordinates = model.SideBar.Coordinates;
 
             if (!model.IsTest)
             {
@@ -404,7 +406,8 @@ namespace DFC.App.FindACourse.Controllers
                                      $"{nameof(distance)}={distance}&" +
                                      $"{nameof(filtera)}={filtera}&" +
                                      $"{nameof(page)}={page}&" +
-                                     $"{nameof(orderByValue)}={orderByValue}";
+                                     $"{nameof(orderByValue)}={orderByValue}&" +
+                                     $"{nameof(coordinates)}={WebUtility.HtmlEncode(coordinates)}";
             }
 
             model.SideBar = sideBarViewModel;
