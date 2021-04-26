@@ -114,7 +114,7 @@
     },
     "AzureSearchMaxNumberToSuggest": {
       "type": "string"
-    },
+    }
   },
   "variables": {
     "appServiceAppInsightsName": "[concat(parameters('resourcePrefix'), '-ai')]",
