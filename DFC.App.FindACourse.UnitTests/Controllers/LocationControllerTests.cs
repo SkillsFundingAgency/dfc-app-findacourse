@@ -60,7 +60,6 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
         {
             // arrange
             var testTerm = "TestTerm";
-            var suggestedLocations = GetTestSuggestedLocations();
             var controller = BuildLocationController(MediaTypeNames.Text.Html);
 
             A.CallTo(() => fakeLocationsService.GetSuggestedLocationsAsync(A<string>.Ignored)).Throws(new Exception());
