@@ -32,5 +32,7 @@ namespace DFC.App.FindACourse.ViewModels
         public List<SelectListItem> StartDateOptions { get; set; }
 
         public int D { get; set; }
+
+        public string Coordinates { get; set; }
     }
 }

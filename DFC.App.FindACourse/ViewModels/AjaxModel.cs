@@ -9,6 +9,6 @@ namespace DFC.App.FindACourse.ViewModels
 
         public int Count { get; set; }
 
-        public bool? IsPostcode { get; set; }
+        public bool? ShowDistanceSelector { get; set; }
     }
 }

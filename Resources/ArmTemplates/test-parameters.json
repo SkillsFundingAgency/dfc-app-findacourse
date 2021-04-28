@@ -85,6 +85,19 @@
         },
         "ConfigurationApplicationName": {
             "value": "findacourse"
+        },
+        "AzureSearchEndpointUri": {
+            "value": "AzureSearchEndpointUri"
+        },
+        "AzureSearchSearchServiceName": {
+            "value": "AzureSearchSearchServiceName"
+        },
+        "AzureSearchSearchServiceAdminAPIKey": {
+            "value": "AzureSearchSearchServiceAdminAPIKey"
+        },
+        "AzureSearchMaxNumberToSuggest": {
+            "value": "AzureSearchMaxNumberToSuggest"
         }
+
     }
 }
