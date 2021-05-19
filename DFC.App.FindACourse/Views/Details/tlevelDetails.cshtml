@@ -70,42 +70,15 @@
                         </tbody>
                     </table>
 
-                    @if (!string.IsNullOrWhiteSpace(Model.TlevelDetails.WhoFor))
-                    {
-                        <h2 class="govuk-heading-m" id="whothiscourseisfor">Who this course is for</h2>
-                        <p id="who-this-course-is-for">@Html.Raw(Html.HtmlFormat(Model.TlevelDetails.WhoFor))</p>
-                    }
-
-                    @if (!string.IsNullOrWhiteSpace(Model.TlevelDetails.EntryRequirements))
-                    {
-                        <h2 class="govuk-heading-m" id="entryrequirements">Entry requirements</h2>
-                        <p id="entry-requirements">@Html.Raw(Html.HtmlFormat(Model.TlevelDetails.EntryRequirements))</p>
-                    }
-
-                    @if (!string.IsNullOrWhiteSpace(Model.TlevelDetails.WhatYoullLearn))
-                    {
-                        <h2 class="govuk-heading-m" id="howyouwilllearn">What you'll learn</h2>
-                        <p id="what-you-will-learn">@Html.Raw(Html.HtmlFormat(Model.TlevelDetails.WhatYoullLearn))</p>
-                    }
-
-                    @if (!string.IsNullOrWhiteSpace(Model.TlevelDetails.HowYoullLearn))
-                    {
-                        <h2 class="govuk-heading-m" id="howlearn">How you'll learn</h2>
-                        <p id="how-you-will-learn">@Html.Raw(Html.HtmlFormat(Model.TlevelDetails.HowYoullLearn))</p>
-                    }
-
-                    @if (!string.IsNullOrWhiteSpace(Model.TlevelDetails.HowYoullBeAssessed))
-                    {
-                        <h2 class="govuk-heading-m" id="howyouwillbeassessed">How you'll be assessed</h2>
-                        <p id="how-you-will-be-assessed">@Html.Raw(Html.HtmlFormat(Model.TlevelDetails.HowYoullBeAssessed))</p>
-                    }
-
-                    @if (!string.IsNullOrWhiteSpace(Model.TlevelDetails.WhatYouCanDoNext))
-                    {
-                        <h2 class="govuk-heading-m" id="nextsteps">Next steps</h2>
-                        <p id="next-steps">@Html.Raw(Html.HtmlFormat(Model.TlevelDetails.WhatYouCanDoNext))</p>
-                    }
-
+                    <div class="govuk-accordion" data-module="govuk-accordion" id="accordion-default">
+                        @(await Html.PartialAsync("AccordionSections/WhoTheCourseIsFor", new AccordionSetUpModel {SectionText = Model.TlevelDetails.WhoFor, Position = "1"}))
+                        @(await Html.PartialAsync("AccordionSections/EntryRequirements", new AccordionSetUpModel {SectionText = Model.TlevelDetails.EntryRequirements, Position = "2"}))
+                        @(await Html.PartialAsync("AccordionSections/WhatYouWillLearn", new AccordionSetUpModel {SectionText = Model.TlevelDetails.WhatYoullLearn, Position = "3"}))
+                        @(await Html.PartialAsync("AccordionSections/howyouwilllearn", new AccordionSetUpModel {SectionText = Model.TlevelDetails.HowYoullLearn, Position = "4"}))
+                        @(await Html.PartialAsync("AccordionSections/HowYouWillBeAssessed", new AccordionSetUpModel {SectionText = Model.TlevelDetails.HowYoullBeAssessed, Position = "5"}))
+                        @(await Html.PartialAsync("AccordionSections/WhatYouCanDoNext", new AccordionSetUpModel {SectionText = Model.TlevelDetails.WhatYouCanDoNext, Position = "6"}))
+                    </div>
+                
                     @if (Model.TlevelDetails.Venues.Any())
                     {
                         <h2 class="govuk-heading-m" id="venue">Venue for this course</h2>
