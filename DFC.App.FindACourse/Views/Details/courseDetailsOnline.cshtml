@@ -37,11 +37,11 @@
             </tbody>
         </table>
         <div class="govuk-accordion" data-module="govuk-accordion" id="accordion-default">
-            @(await Html.PartialAsync("AccordionSections/WhoTheCourseIsFor", new AccordionSetUpModel {DetailsViewModel = Model, Position = "1"}))
-            @(await Html.PartialAsync("AccordionSections/EntryRequirements", new AccordionSetUpModel {DetailsViewModel = Model, Position = "2"}))
-            @(await Html.PartialAsync("AccordionSections/WhatYouWillLearn", new AccordionSetUpModel {DetailsViewModel = Model, Position = "3"}))
-            @(await Html.PartialAsync("AccordionSections/HowYouWillBeAssessed", new AccordionSetUpModel {DetailsViewModel = Model, Position = "4"}))
-            @(await Html.PartialAsync("AccordionSections/WhatYouCanDoNext", new AccordionSetUpModel {DetailsViewModel = Model, Position = "5"}))
+            @(await Html.PartialAsync("AccordionSections/WhoTheCourseIsFor", new AccordionSetUpModel {SectionText = Model.CourseDetails.Description, Position = "1"}))
+            @(await Html.PartialAsync("AccordionSections/EntryRequirements", new AccordionSetUpModel {SectionText = Model.CourseDetails.EntryRequirements, Position = "2"}))
+            @(await Html.PartialAsync("AccordionSections/WhatYouWillLearn", new AccordionSetUpModel {SectionText = Model.CourseDetails.WhatYoullLearn, Position = "3"}))
+            @(await Html.PartialAsync("AccordionSections/HowYouWillBeAssessed", new AccordionSetUpModel {SectionText = Model.CourseDetails.AssessmentMethod, Position = "4"}))
+            @(await Html.PartialAsync("AccordionSections/WhatYouCanDoNext", new AccordionSetUpModel {SectionText = Model.CourseDetails.NextSteps, Position = "5"}))
         </div>
         <p><a href="/find-a-course/page?@Model.SearchTerm" class="govuk-back-link" id="back-to-results">Back to results</a></p>
 </div>

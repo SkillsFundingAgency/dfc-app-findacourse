@@ -1,9 +1,9 @@
 ﻿@model AccordionSetUpModel
-@if (!string.IsNullOrWhiteSpace(Model.DetailsViewModel.CourseDetails.NextSteps))
+@if (!string.IsNullOrWhiteSpace(Model.SectionText))
 {
     @await Html.PartialAsync("CourseAccordionItem", new AccordionViewModel
     {
-        Description = Model.DetailsViewModel.CourseDetails.NextSteps,
+        Description = Model.SectionText,
         Title = "What you can do next  ",
         SubText = "Look at the further opportunities available.",
         SectionName = Model.Position,
