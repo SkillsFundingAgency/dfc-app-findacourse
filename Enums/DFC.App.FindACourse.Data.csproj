@@ -20,7 +20,7 @@
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 	  </PackageReference>
-		<PackageReference Include="DFC.Content.Pkg.Netcore" Version="1.0.85" />
+		<PackageReference Include="DFC.Content.Pkg.Netcore" Version="1.0.87" />
 	</ItemGroup>
 
 </Project>
