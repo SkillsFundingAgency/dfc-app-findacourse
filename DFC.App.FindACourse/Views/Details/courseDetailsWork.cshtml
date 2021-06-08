@@ -7,7 +7,7 @@
     <table class="govuk-table">
         <caption class="govuk-visually-hidden">Table with course details</caption>
         <tbody class="govuk-table__body">
-            <partial name="CourseQualificationDetails"/>
+            <partial name="CourseQualificationDetails" />
             @if (Model.CourseDetails.National)
             {
                 <tr class="govuk-table__row">
@@ -50,12 +50,15 @@
 
                 </tr>
             }
-            <tr class="govuk-table__row">
-                <th class="govuk-table__header" scope="row">Cost</th>
-                <td class="govuk-table__cell">
-                    <span id="cost-value">£@Model.CourseDetails.Cost.ToDecimalString("N2")</span>
-                </td>
-            </tr>
+            @if (!string.IsNullOrEmpty(Model.CourseDetails.Cost))
+            {
+                <tr class="govuk-table__row">
+                    <th class="govuk-table__header" scope="row">Cost</th>
+                    <td class="govuk-table__cell">
+                        <span id="cost-value">£@Model.CourseDetails.Cost.ToDecimalString("N2")</span>
+                    </td>
+                </tr>
+            }
             @if (!string.IsNullOrEmpty(Model.CourseDetails.CostDescription))
             {
                 <tr class="govuk-table__row">
