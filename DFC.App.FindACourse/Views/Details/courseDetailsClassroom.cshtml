@@ -36,12 +36,15 @@
                     <td class="govuk-table__cell"><span id="start-date">@Model.CourseDetails.StartDate.Value.ToFormattedString()</span></td>
                 </tr>
             }
-            <tr class="govuk-table__row">
-                <th class="govuk-table__header" scope="row">Cost</th>
-                <td class="govuk-table__cell">
-                    <span id="cost-value">£@Model.CourseDetails.Cost.ToDecimalString("N2")</span>
-                </td>
-            </tr>
+            @if (!string.IsNullOrEmpty(Model.CourseDetails.Cost))
+            {
+                <tr class="govuk-table__row">
+                    <th class="govuk-table__header" scope="row">Cost</th>
+                    <td class="govuk-table__cell">
+                        <span id="cost-value">£@Model.CourseDetails.Cost.ToDecimalString("N2")</span>
+                    </td>
+                </tr>
+            }
             @if (!string.IsNullOrEmpty(Model.CourseDetails.CostDescription))
             {
                 <tr class="govuk-table__row">
@@ -58,12 +61,12 @@
 
     <div class="govuk-accordion" data-module="govuk-accordion" id="accordion-default">
         @*<div class="govuk-accordion__controls"><button type="button" class="govuk-accordion__open-all" aria-expanded="false">Open all<span class="govuk-visually-hidden"> sections</span></button></div>*@
-        @(await Html.PartialAsync("AccordionSections/WhoTheCourseIsFor", new AccordionSetUpModel {DetailsViewModel = Model, Position = "1"}))
-        @(await Html.PartialAsync("AccordionSections/EntryRequirements", new AccordionSetUpModel {DetailsViewModel = Model, Position = "2"}))
-        @(await Html.PartialAsync("AccordionSections/WhatYouWillLearn", new AccordionSetUpModel {DetailsViewModel = Model, Position = "3"}))
-        @(await Html.PartialAsync("AccordionSections/HowYouWillLearn", new AccordionSetUpModel {DetailsViewModel = Model, Position = "4"}))
-        @(await Html.PartialAsync("AccordionSections/WhatYouWillNeedToBring", new AccordionSetUpModel {DetailsViewModel = Model, Position = "5"}))
-        @(await Html.PartialAsync("AccordionSections/HowYouWillBeAssessed", new AccordionSetUpModel {DetailsViewModel = Model, Position = "6"}))
+        @(await Html.PartialAsync("AccordionSections/WhoTheCourseIsFor", new AccordionSetUpModel {SectionText = Model.CourseDetails.Description, Position = "1"}))
+        @(await Html.PartialAsync("AccordionSections/EntryRequirements", new AccordionSetUpModel {SectionText = Model.CourseDetails.EntryRequirements, Position = "2"}))
+        @(await Html.PartialAsync("AccordionSections/WhatYouWillLearn", new AccordionSetUpModel {SectionText = Model.CourseDetails.WhatYoullLearn, Position = "3"}))
+        @(await Html.PartialAsync("AccordionSections/HowYouWillLearn", new AccordionSetUpModel {SectionText = Model.CourseDetails.HowYoullLearn, Position = "4"}))
+        @(await Html.PartialAsync("AccordionSections/WhatYouWillNeedToBring", new AccordionSetUpModel {SectionText = Model.CourseDetails.EquipmentRequired, Position = "5"}))
+        @(await Html.PartialAsync("AccordionSections/HowYouWillBeAssessed", new AccordionSetUpModel {SectionText = Model.CourseDetails.AssessmentMethod, Position = "6"}))
 
         @if (!string.IsNullOrWhiteSpace(Model.CourseDetails.NextSteps))
         {
@@ -79,7 +82,7 @@
         }
         <div class="govuk-accordion__section">
             <div class="govuk-accordion__section-header">
-                <h2 class="govuk-accordion__section-heading">  <button type="button" id="accordion-default-heading-8" aria-controls="accordion-default-content-8" class="govuk-accordion__section-button" aria-expanded="false">Venue<span class="govuk-accordion__icon" aria-hidden="true"></span></button></h2>
+                <h2 class="govuk-accordion__section-heading">  <button type="button" id="accordion-default-heading-8" aria-controls="accordion-default-content-8" class="govuk-accordion__section-button" aria-expanded="false">Venue for this course<span class="govuk-accordion__icon" aria-hidden="true"></span></button></h2>
             </div>
             <div id="accordion-default-content-8" class="govuk-accordion__section-content" aria-labelledby="accordion-default-heading-8">
 
