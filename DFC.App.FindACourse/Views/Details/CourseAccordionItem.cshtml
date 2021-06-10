@@ -6,6 +6,7 @@
                 <span id="accordion-default-heading-@Model.SectionName">@Model.Title</span><span class="govuk-accordion__icon" aria-hidden="true"></span>
             </button>
         </h2>
+        <div class="govuk-accordion__section-summary govuk-body" id="accordion-with-summary-@Model.SectionName">@Model.SubText</div>
     </div>
     <div id="accordion-default-content-@Model.SectionName" class="govuk-accordion__section-content" aria-labelledby="assessed-section-@Model.SectionName">
         <p id="Section-Description-@Model.SectionName">@Html.Raw(Model.Description)</p>
