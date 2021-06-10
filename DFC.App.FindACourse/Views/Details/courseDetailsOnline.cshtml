@@ -5,7 +5,7 @@
         <table class="govuk-table">
             <caption class="govuk-visually-hidden">Table with course details</caption>
             <tbody class="govuk-table__body">
-            <partial name="CourseQualificationDetails"/>
+                <partial name="CourseQualificationDetails" />
                 <tr class="govuk-table__row">
                     <th class="govuk-table__header" scope="row">Course type</th>
                     <td class="govuk-table__cell"><span id="attendance-mode">@Html.Raw(Model.CourseDetails.AttendanceMode)</span></td>
@@ -21,27 +21,30 @@
                         </td>
                     </tr>
                 }
-                <tr class="govuk-table__row">
-                    <th class="govuk-table__header" scope="row">Cost</th>
-                    <td class="govuk-table__cell">
-                        <span id="cost-value">£@Model.CourseDetails.Cost.ToDecimalString("N2")</span>
-                    </td>
-                </tr>
+                @if (!string.IsNullOrEmpty(Model.CourseDetails.Cost))
+                {
+                    <tr class="govuk-table__row">
+                        <th class="govuk-table__header" scope="row">Cost</th>
+                        <td class="govuk-table__cell">
+                            <span id="cost-value">£@Model.CourseDetails.Cost.ToDecimalString("N2")</span>
+                        </td>
+                    </tr>
+                }
                 @if (!string.IsNullOrEmpty(Model.CourseDetails.CostDescription))
                 {
                     <tr class="govuk-table__row">
                         <th class="govuk-table__header" scope="row">Cost description</th>
                         <td class="govuk-table__cell"><span id="additonal-price">@Html.Raw(Model.CourseDetails.CostDescription)</span></td>
                     </tr>
-                }
-            </tbody>
+                 }
+                </tbody>
         </table>
         <div class="govuk-accordion" data-module="govuk-accordion" id="accordion-default">
-            @(await Html.PartialAsync("AccordionSections/WhoTheCourseIsFor", new AccordionSetUpModel {DetailsViewModel = Model, Position = "1"}))
-            @(await Html.PartialAsync("AccordionSections/EntryRequirements", new AccordionSetUpModel {DetailsViewModel = Model, Position = "2"}))
-            @(await Html.PartialAsync("AccordionSections/WhatYouWillLearn", new AccordionSetUpModel {DetailsViewModel = Model, Position = "3"}))
-            @(await Html.PartialAsync("AccordionSections/HowYouWillBeAssessed", new AccordionSetUpModel {DetailsViewModel = Model, Position = "4"}))
-            @(await Html.PartialAsync("AccordionSections/WhatYouCanDoNext", new AccordionSetUpModel {DetailsViewModel = Model, Position = "5"}))
+            @(await Html.PartialAsync("AccordionSections/WhoTheCourseIsFor", new AccordionSetUpModel {SectionText = Model.CourseDetails.Description, Position = "1"}))
+            @(await Html.PartialAsync("AccordionSections/EntryRequirements", new AccordionSetUpModel {SectionText = Model.CourseDetails.EntryRequirements, Position = "2"}))
+            @(await Html.PartialAsync("AccordionSections/WhatYouWillLearn", new AccordionSetUpModel {SectionText = Model.CourseDetails.WhatYoullLearn, Position = "3"}))
+            @(await Html.PartialAsync("AccordionSections/HowYouWillBeAssessed", new AccordionSetUpModel {SectionText = Model.CourseDetails.AssessmentMethod, Position = "4"}))
+            @(await Html.PartialAsync("AccordionSections/WhatYouCanDoNext", new AccordionSetUpModel {SectionText = Model.CourseDetails.NextSteps, Position = "5"}))
         </div>
         <p><a href="/find-a-course/page?@Model.SearchTerm" class="govuk-back-link" id="back-to-results">Back to results</a></p>
 </div>
