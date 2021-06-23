@@ -298,7 +298,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
                 },
             };
 
-            A.CallTo(() => fakeLocationsService.GetSuggestedLocationsAsync(A<string>.Ignored)).Returns(GetTestSuggestedLocations());
+            A.CallTo(() => FakeLocationsService.GetSuggestedLocationsAsync(A<string>.Ignored)).Returns(GetTestSuggestedLocations());
             A.CallTo(() => FakeFindACoursesService.GetFilteredData(A<CourseSearchFilters>.Ignored, A<CourseSearchOrderBy>.Ignored, A<int>.Ignored)).Returns(returnedCourseData);
             A.CallTo(() => FakeViewHelper.RenderViewAsync(A<CourseController>.Ignored, A<string>.Ignored, A<BodyViewModel>.Ignored, A<bool>.Ignored)).Returns("<p>some markup</p>");
 
@@ -308,14 +308,14 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
             // assert
             if (expectAutoLocationSuggest)
             {
-                A.CallTo(() => fakeLocationsService.GetSuggestedLocationsAsync(A<string>.Ignored)).MustHaveHappenedOnceExactly();
+                A.CallTo(() => FakeLocationsService.GetSuggestedLocationsAsync(A<string>.Ignored)).MustHaveHappenedOnceExactly();
                 result.AutoSuggestedTown.Should().Be("LN1 (LAN1)");
                 result.UsingAutoSuggestedLocation.Should().BeTrue();
                 result.DidYouMeanLocations.Count.Should().Be(1);
             }
             else
             {
-                A.CallTo(() => fakeLocationsService.GetSuggestedLocationsAsync(A<string>.Ignored)).MustNotHaveHappened();
+                A.CallTo(() => FakeLocationsService.GetSuggestedLocationsAsync(A<string>.Ignored)).MustNotHaveHappened();
                 result.UsingAutoSuggestedLocation.Should().BeFalse();
             }
 
