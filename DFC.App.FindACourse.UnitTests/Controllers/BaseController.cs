@@ -53,7 +53,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
 
         protected IFindACourseService FakeFindACoursesService { get; }
 
-        protected ILocationService fakeLocationsService;
+        protected ILocationService fakeLocationsService { get; }
 
         protected IViewHelper FakeViewHelper { get; }
 

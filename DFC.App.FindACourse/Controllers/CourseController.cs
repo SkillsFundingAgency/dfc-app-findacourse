@@ -213,7 +213,8 @@ namespace DFC.App.FindACourse.Controllers
             }
 
             var viewAsString = await viewHelper.RenderViewAsync(this, "~/Views/Course/_results.cshtml", model, true).ConfigureAwait(false);
-            return new AjaxModel {
+            return new AjaxModel 
+            {
                 HTML = viewAsString,
                 Count = model.Results?.ResultProperties != null ? model.Results.ResultProperties.TotalResultCount : 0,
                 ShowDistanceSelector = newBodyViewModel.CourseSearchFilters.DistanceSpecified,
