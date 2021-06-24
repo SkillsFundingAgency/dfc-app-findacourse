@@ -36,5 +36,9 @@ namespace DFC.App.FindACourse.ViewModels
         public CourseSearchOrderBy CourseSearchOrderBy { get; set; }
 
         public bool IsResultBody { get; set; }
+
+        public List<LocationSuggestViewModel> DidYouMeanLocations { get; set; }
+
+        public bool UsingAutoSuggestedLocation { get; set; }
     }
 }

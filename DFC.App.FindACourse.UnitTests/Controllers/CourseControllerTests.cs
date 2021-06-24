@@ -270,6 +270,58 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
             controller.Dispose();
         }
 
+        [Theory]
+        [InlineData("CV1 2WT", null, false)]
+        [InlineData("TestTown", null, true)]
+        [InlineData("TownWithCords", "1.23|3.45", false)]
+        public async Task AjaxChangedReturnAutoLocationSuggestions(string townOrPostcode, string coordinates, bool expectAutoLocationSuggest)
+        {
+            // arrange
+            var controller = BuildCourseController(MediaTypeNames.Text.Html);
+            var paramValues = new ParamValues
+            {
+                Town = townOrPostcode,
+                Coordinates = coordinates,
+            };
+            var appdata = System.Text.Json.JsonSerializer.Serialize(paramValues);
+            var returnedCourseData = new CourseSearchResult
+            {
+                ResultProperties = new CourseSearchResultProperties
+                {
+                    Page = 1,
+                    TotalResultCount = 1,
+                    TotalPages = 1,
+                },
+                Courses = new List<Course>
+                {
+                    new Course { Title = "Maths", CourseId = "1", AttendancePattern = "Online", Description = "This is a test description - over 220 chars" + new string(' ', 220) },
+                },
+            };
+
+            A.CallTo(() => FakeLocationsService.GetSuggestedLocationsAsync(A<string>.Ignored)).Returns(GetTestSuggestedLocations());
+            A.CallTo(() => FakeFindACoursesService.GetFilteredData(A<CourseSearchFilters>.Ignored, A<CourseSearchOrderBy>.Ignored, A<int>.Ignored)).Returns(returnedCourseData);
+            A.CallTo(() => FakeViewHelper.RenderViewAsync(A<CourseController>.Ignored, A<string>.Ignored, A<BodyViewModel>.Ignored, A<bool>.Ignored)).Returns("<p>some markup</p>");
+
+            // act
+            var result = await controller.AjaxChanged(appdata).ConfigureAwait(false);
+
+            // assert
+            if (expectAutoLocationSuggest)
+            {
+                A.CallTo(() => FakeLocationsService.GetSuggestedLocationsAsync(A<string>.Ignored)).MustHaveHappenedOnceExactly();
+                result.AutoSuggestedTown.Should().Be("LN1 (LAN1)");
+                result.UsingAutoSuggestedLocation.Should().BeTrue();
+                result.DidYouMeanLocations.Count.Should().Be(1);
+            }
+            else
+            {
+                A.CallTo(() => FakeLocationsService.GetSuggestedLocationsAsync(A<string>.Ignored)).MustNotHaveHappened();
+                result.UsingAutoSuggestedLocation.Should().BeFalse();
+            }
+
+            controller.Dispose();
+        }
+
         [Fact]
         public async Task AjaxChangedCatchesException()
         {
@@ -388,6 +440,29 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
             act.Should().Throw<ArgumentNullException>();
 
             controller.Dispose();
+        }
+
+        private IEnumerable<SearchLocationIndex> GetTestSuggestedLocations()
+        {
+            yield return new SearchLocationIndex()
+            {
+                LocationId = "1",
+                LocationName = "LN1",
+                LocalAuthorityName = "LAN1",
+                LocationAuthorityDistrict = "LAD1",
+                Longitude = 1.23,
+                Latitude = 4.56,
+            };
+
+            yield return new SearchLocationIndex()
+            {
+                LocationId = "2",
+                LocationName = "LN2",
+                LocalAuthorityName = "LAN2",
+                LocationAuthorityDistrict = "LAD2",
+                Longitude = 21.23,
+                Latitude = 24.56,
+            };
         }
     }
 }
