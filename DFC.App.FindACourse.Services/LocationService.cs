@@ -48,7 +48,7 @@ namespace DFC.App.FindACourse.Services
         {
             this.suggestOptions = new SuggestOptions()
             {
-                Size = azureSearchIndexConfig.MaxNumberToSuggest,
+                Size = azureSearchIndexConfig.SearchMaxNumberToSuggest,
             };
 
             suggestOptions.Select.Add(nameof(SearchLocationIndex.LocationId));
