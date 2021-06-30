@@ -268,7 +268,7 @@ namespace DFC.App.FindACourse.Controllers
         [HttpGet]
         [Route("find-a-course/course/body/course/filterresults")]
         [Route("find-a-course/search/filterresults/body")]
-        public async Task<IActionResult> FilterResults(BodyViewModel model, string location)
+        public Task<IActionResult> FilterResults(BodyViewModel model, string location)
         {
             logService.LogInformation($"{nameof(this.FilterResults)} has been called");
 
@@ -290,22 +290,7 @@ namespace DFC.App.FindACourse.Controllers
                 model.SideBar.Coordinates = location.Substring(indexOfLocationSpliter + 1);
             }
 
-            var newBodyViewModel = await GenerateModelAsync(model).ConfigureAwait(false);
-
-            try
-            {
-                model.Results = await findACourseService.GetFilteredData(newBodyViewModel.CourseSearchFilters, newBodyViewModel.CourseSearchOrderBy, model.RequestPage).ConfigureAwait(false);
-                model.UsingAutoSuggestedLocation = newBodyViewModel.UsingAutoSuggestedLocation;
-                model.SideBar.DidYouMeanLocations = newBodyViewModel.SideBar.DidYouMeanLocations;
-            }
-            catch (Exception ex)
-            {
-                logService.LogError($"{nameof(this.FilterResults)} threw an exception" + ex.Message);
-            }
-
-            logService.LogInformation($"{nameof(this.FilterResults)} generated the model and ready to pass to the view");
-
-            return Results(model);
+            return FilterResultsInternal(model);
         }
 
         [HttpGet]
@@ -518,6 +503,26 @@ namespace DFC.App.FindACourse.Controllers
             postcode = postcode.Replace(" ", string.Empty);
 
             return postcode.Insert(postcode.Length - 3, " ");
+        }
+
+        private async Task<IActionResult> FilterResultsInternal(BodyViewModel model)
+        {
+            var newBodyViewModel = await GenerateModelAsync(model).ConfigureAwait(false);
+
+            try
+            {
+                model.Results = await findACourseService.GetFilteredData(newBodyViewModel.CourseSearchFilters, newBodyViewModel.CourseSearchOrderBy, model.RequestPage).ConfigureAwait(false);
+                model.UsingAutoSuggestedLocation = newBodyViewModel.UsingAutoSuggestedLocation;
+                model.SideBar.DidYouMeanLocations = newBodyViewModel.SideBar.DidYouMeanLocations;
+            }
+            catch (Exception ex)
+            {
+                logService.LogError($"{nameof(this.FilterResults)} threw an exception" + ex.Message);
+            }
+
+            logService.LogInformation($"{nameof(this.FilterResults)} generated the model and ready to pass to the view");
+
+            return Results(model);
         }
 
         private async Task<BodyViewModel> GenerateModelAsync(BodyViewModel model)

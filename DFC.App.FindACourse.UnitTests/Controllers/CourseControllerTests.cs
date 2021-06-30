@@ -415,7 +415,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
         }
 
         [Fact]
-        public async Task FilterResultsThrowsExceptionThrowsExceptionForNullModel()
+        public void FilterResultsThrowsExceptionThrowsExceptionForNullModel()
         {
             // arrange
             var controller = BuildCourseController("*/*");
@@ -428,8 +428,6 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
 
             controller.Dispose();
         }
-
-
 
         [Fact]
         public async Task CourseControllerSearchCourseThrowsException()
