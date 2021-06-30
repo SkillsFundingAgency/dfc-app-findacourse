@@ -221,7 +221,7 @@ namespace DFC.App.FindACourse.Controllers
                 UsingAutoSuggestedLocation = newBodyViewModel.UsingAutoSuggestedLocation,
                 AutoSuggestedTown = newBodyViewModel.SideBar.TownOrPostcode,
                 AutoSuggestedCoordinates = newBodyViewModel.SideBar.Coordinates,
-                DidYouMeanLocations = newBodyViewModel.DidYouMeanLocations,
+                DidYouMeanLocations = newBodyViewModel.SideBar.DidYouMeanLocations,
             };
         }
 
@@ -262,21 +262,41 @@ namespace DFC.App.FindACourse.Controllers
 
             model.FromPaging = true;
 
-            return await FilterResults(model).ConfigureAwait(false);
+            return await FilterResults(model, string.Empty).ConfigureAwait(false);
         }
 
         [HttpGet]
         [Route("find-a-course/course/body/course/filterresults")]
         [Route("find-a-course/search/filterresults/body")]
-        public async Task<IActionResult> FilterResults(BodyViewModel model)
+        public async Task<IActionResult> FilterResults(BodyViewModel model, string location)
         {
             logService.LogInformation($"{nameof(this.FilterResults)} has been called");
+
+            if (model == null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
+            if (model.SideBar.SuggestedLocation != model.SideBar.TownOrPostcode)
+            {
+                //if the user changed the text for the locaton invlidate the coordinates
+                model.SideBar.Coordinates = null;
+            }
+            else if (!string.IsNullOrEmpty(location))
+            {
+                //If the user clikced on one of the suggested locations
+                var indexOfLocationSpliter = location.IndexOf("|", StringComparison.Ordinal);
+                model.SideBar.TownOrPostcode = location.Substring(0, indexOfLocationSpliter);
+                model.SideBar.Coordinates = location.Substring(indexOfLocationSpliter + 1);
+            }
 
             var newBodyViewModel = await GenerateModelAsync(model).ConfigureAwait(false);
 
             try
             {
                 model.Results = await findACourseService.GetFilteredData(newBodyViewModel.CourseSearchFilters, newBodyViewModel.CourseSearchOrderBy, model.RequestPage).ConfigureAwait(false);
+                model.UsingAutoSuggestedLocation = newBodyViewModel.UsingAutoSuggestedLocation;
+                model.SideBar.DidYouMeanLocations = newBodyViewModel.SideBar.DidYouMeanLocations;
             }
             catch (Exception ex)
             {
@@ -364,6 +384,8 @@ namespace DFC.App.FindACourse.Controllers
             sideBarViewModel.SelectedOrderByValue = model.SideBar.SelectedOrderByValue;
             sideBarViewModel.Coordinates = model.SideBar.Coordinates;
             sideBarViewModel.D = model.SideBar.D;
+            sideBarViewModel.DidYouMeanLocations = model.SideBar.DidYouMeanLocations;
+            sideBarViewModel.SuggestedLocation = model.SideBar.SuggestedLocation;
 
             if (model.SideBar.CourseType != null && model.SideBar.CourseType.SelectedIds.Any())
             {
@@ -613,6 +635,8 @@ namespace DFC.App.FindACourse.Controllers
                 }
             }
 
+            model.SideBar.SuggestedLocation = model.SideBar.TownOrPostcode;
+
             return model;
         }
 
@@ -628,7 +652,7 @@ namespace DFC.App.FindACourse.Controllers
                 model.CourseSearchFilters.Distance = 10;
                 model.CourseSearchFilters.DistanceSpecified = true;
                 model.CourseSearchFilters.Town = null;
-                model.DidYouMeanLocations = suggestedLocations.Skip(1).Select(x => new LocationSuggestViewModel
+                model.SideBar.DidYouMeanLocations = suggestedLocations.Skip(1).Select(x => new LocationSuggestViewModel
                 {
                     Label = $"{x.LocationName} ({x.LocalAuthorityName})",
                     Value = $"{x.Longitude}|{x.Latitude}",

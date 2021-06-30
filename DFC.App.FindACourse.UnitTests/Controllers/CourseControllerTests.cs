@@ -179,7 +179,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
 
             A.CallTo(() => FakeFindACoursesService.GetFilteredData(A<CourseSearchFilters>.Ignored, CourseSearchOrderBy.Relevance, 1)).Returns(returnedCourseData);
 
-            var result = await controller.FilterResults(bodyViewModel).ConfigureAwait(false);
+            var result = await controller.FilterResults(bodyViewModel, string.Empty).ConfigureAwait(false);
 
             Assert.IsType<ViewResult>(result);
 
@@ -380,7 +380,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
             A.CallTo(() => FakeFindACoursesService.GetFilteredData(A<CourseSearchFilters>.Ignored, CourseSearchOrderBy.Relevance, 1)).Throws(new Exception());
 
             // act
-            var result = await controller.FilterResults(bodyViewModel).ConfigureAwait(false);
+            var result = await controller.FilterResults(bodyViewModel, string.Empty).ConfigureAwait(false);
 
             // assert
             var viewResult = Assert.IsType<ViewResult>(result);
@@ -389,6 +389,47 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
 
             controller.Dispose();
         }
+
+        [Fact]
+        public async Task FilterResultsSetsLocationFieldsWhenPassedIn()
+        {
+            // arrange
+            var controller = BuildCourseController("*/*");
+
+            var bodyViewModel = new BodyViewModel
+            {
+                CurrentSearchTerm = "Maths",
+                SideBar = new SideBarViewModel(),
+                IsTest = true,
+            };
+
+            // act
+            var result = await controller.FilterResults(bodyViewModel, "TestLocation (Test Area)|-123.45|67.89").ConfigureAwait(false);
+
+            // assert
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = Assert.IsAssignableFrom<BodyViewModel>(viewResult.ViewData.Model);
+            model.SideBar.TownOrPostcode.Should().Be("TestLocation (Test Area)");
+            model.SideBar.Coordinates.Should().Be("-123.45|67.89");
+            controller.Dispose();
+        }
+
+        [Fact]
+        public async Task FilterResultsThrowsExceptionThrowsExceptionForNullModel()
+        {
+            // arrange
+            var controller = BuildCourseController("*/*");
+
+            // act
+            Func<Task> act = async () => await controller.FilterResults(null, string.Empty).ConfigureAwait(false);
+
+            // assert
+            act.Should().Throw<ArgumentNullException>();
+
+            controller.Dispose();
+        }
+
+
 
         [Fact]
         public async Task CourseControllerSearchCourseThrowsException()

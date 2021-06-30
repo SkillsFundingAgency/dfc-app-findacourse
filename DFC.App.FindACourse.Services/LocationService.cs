@@ -33,7 +33,7 @@ namespace DFC.App.FindACourse.Services
             try
             {
                 var suggestResults = await this.searchClient.SuggestAsync<SearchLocationIndex>(term, suggestorName, this.suggestOptions).ConfigureAwait(false);
-                var documents = suggestResults.Value.Results.Select(i => i.Document);
+                var documents = suggestResults.Value.Results.Select(i => i.Document).OrderBy(l => l.LocationName).ThenBy(l => l.LocalAuthorityName);
                 logger.LogInformation($"Returning location results for term {term}");
                 return documents;
             }
