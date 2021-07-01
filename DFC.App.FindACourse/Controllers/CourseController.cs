@@ -607,10 +607,10 @@ namespace DFC.App.FindACourse.Controllers
             {
                 var resultString = Regex.Match(model.SelectedDistanceValue, @"\d+").Value;
                 _ = float.TryParse(resultString, out selectedDistanceValue);
-                model.CourseSearchFilters.DistanceSpecified = true;
             }
 
             model.CourseSearchFilters.Distance = selectedDistanceValue;
+            model.CourseSearchFilters.DistanceSpecified = true;
 
             if (!string.IsNullOrEmpty(model.SideBar.TownOrPostcode))
             {
