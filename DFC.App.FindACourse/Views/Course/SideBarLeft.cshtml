@@ -12,8 +12,8 @@
         </span>
         <input type="text" asp-for="TownOrPostcode" aria-label="TownOrPostcode" name="SideBar.TownOrPostcode" class="govuk-input govuk-input--width-10" id="location-input" />
         <span asp-validation-for="TownOrPostcode" class="text-danger" id="location-validator"></span>
-        <input type="hidden" asp-for="Coordinates" name="SideBar.Coordinates" id="Coordinates" />
-        <input type="hidden" asp-for="SuggestedLocation" name="SideBar.SuggestedLocation" id="SuggestedLocation-input" />
+        <input type="hidden" asp-for="Coordinates" name="SideBar.Coordinates" id="coordinates" />
+        <input type="hidden" asp-for="SuggestedLocation" name="SideBar.SuggestedLocation" id="suggestedLocation-input" />
         <div id="suggest-location" class="location-suggest@(Model.DidYouMeanLocations?.Count() > 0 ? "-show" : "")" role="group">
             <details id="suggest-location-details" class="govuk-details" open>
                 <summary class=govuk-details__summary aria-describedby="suggested-locations-aria" role="button" aria-expanded="false" aria-controls="suggested-locations-text">

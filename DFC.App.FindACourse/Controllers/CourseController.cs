@@ -607,6 +607,7 @@ namespace DFC.App.FindACourse.Controllers
             {
                 var resultString = Regex.Match(model.SelectedDistanceValue, @"\d+").Value;
                 _ = float.TryParse(resultString, out selectedDistanceValue);
+                model.CourseSearchFilters.DistanceSpecified = true;
             }
 
             model.CourseSearchFilters.Distance = selectedDistanceValue;
@@ -616,8 +617,6 @@ namespace DFC.App.FindACourse.Controllers
                 if (model.SideBar.TownOrPostcode.IsPostcode())
                 {
                     model.CourseSearchFilters.PostCode = NormalizePostcode(model.SideBar.TownOrPostcode);
-                    model.CourseSearchFilters.Distance = selectedDistanceValue;
-                    model.CourseSearchFilters.DistanceSpecified = true;
                 }
                 else
                 {
@@ -627,8 +626,6 @@ namespace DFC.App.FindACourse.Controllers
                         //using logitutde and latitude
                         model.CourseSearchFilters.Longitude = locationCoordinates.Longitude;
                         model.CourseSearchFilters.Latitude = locationCoordinates.Latitude;
-                        model.CourseSearchFilters.Distance = selectedDistanceValue;
-                        model.CourseSearchFilters.DistanceSpecified = true;
                     }
                     else
                     {
