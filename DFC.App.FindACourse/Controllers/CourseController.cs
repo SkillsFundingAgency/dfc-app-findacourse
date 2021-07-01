@@ -514,13 +514,12 @@ namespace DFC.App.FindACourse.Controllers
                 model.Results = await findACourseService.GetFilteredData(newBodyViewModel.CourseSearchFilters, newBodyViewModel.CourseSearchOrderBy, model.RequestPage).ConfigureAwait(false);
                 model.UsingAutoSuggestedLocation = newBodyViewModel.UsingAutoSuggestedLocation;
                 model.SideBar.DidYouMeanLocations = newBodyViewModel.SideBar.DidYouMeanLocations;
+                logService.LogInformation($"{nameof(this.FilterResults)} generated the model and ready to pass to the view");
             }
             catch (Exception ex)
             {
                 logService.LogError($"{nameof(this.FilterResults)} threw an exception" + ex.Message);
             }
-
-            logService.LogInformation($"{nameof(this.FilterResults)} generated the model and ready to pass to the view");
 
             return Results(model);
         }
