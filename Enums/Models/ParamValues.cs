@@ -30,5 +30,7 @@ namespace DFC.App.FindACourse.Data.Models
         public int D { get; set; }
 
         public string Coordinates { get; set; }
+
+        public string CampaignCode { get; set; }
     }
 }
