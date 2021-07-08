@@ -232,15 +232,13 @@ namespace DFC.App.FindACourse.Controllers
         {
             logService.LogInformation($"{nameof(this.Page)} has been called");
 
-            var isPostcode = !string.IsNullOrEmpty(paramValues.Town) ? (bool?)paramValues.Town.IsPostcode() : null;
-            paramValues.D = isPostcode.HasValue && isPostcode.Value ? 1 : 0;
-
             var model = new BodyViewModel
             {
                 CurrentSearchTerm = paramValues.SearchTerm,
                 SideBar = new SideBarViewModel
                 {
                     TownOrPostcode = paramValues.Town,
+                    SuggestedLocation = paramValues.Town,
                     DistanceValue = paramValues.Distance,
                     CourseType = ConvertStringToFiltersListViewModel(paramValues.CourseType),
                     CourseHours = ConvertStringToFiltersListViewModel(paramValues.CourseHours),

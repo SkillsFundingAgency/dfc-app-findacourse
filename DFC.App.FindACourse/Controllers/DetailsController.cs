@@ -115,9 +115,6 @@ namespace DFC.App.FindACourse.Controllers
                 paramValues.SearchTerm = currentSearchTerm;
             }
 
-            var isPostcode = !string.IsNullOrEmpty(paramValues.Town) ? (bool?)paramValues.Town.IsPostcode() : null;
-            paramValues.D = isPostcode.HasValue && isPostcode.Value ? 1 : 0;
-
             var searchTerm = $"{nameof(paramValues.SearchTerm)}={paramValues.SearchTerm}&" +
                              $"{nameof(paramValues.Town)}={paramValues.Town}&" +
                              $"{nameof(paramValues.CourseType)}={paramValues.CourseType}&" +
@@ -128,7 +125,8 @@ namespace DFC.App.FindACourse.Controllers
                              $"{nameof(paramValues.FilterA)}={paramValues.FilterA}&" +
                              $"{nameof(paramValues.Page)}={paramValues.Page}&" +
                              $"{nameof(paramValues.D)}={paramValues.D}&" +
-                             $"{nameof(paramValues.OrderByValue)}={paramValues.OrderByValue}";
+                             $"{nameof(paramValues.OrderByValue)}={paramValues.OrderByValue}&" +
+                             $"{nameof(paramValues.Coordinates)}={paramValues.Coordinates}";
 
             return searchTerm;
         }
