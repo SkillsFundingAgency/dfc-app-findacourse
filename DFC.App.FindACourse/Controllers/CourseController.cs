@@ -232,6 +232,11 @@ namespace DFC.App.FindACourse.Controllers
         {
             logService.LogInformation($"{nameof(this.Page)} has been called");
 
+            if (paramValues == null)
+            {
+                throw new ArgumentNullException(nameof(paramValues));
+            }
+
             var model = new BodyViewModel
             {
                 CurrentSearchTerm = paramValues.SearchTerm,
