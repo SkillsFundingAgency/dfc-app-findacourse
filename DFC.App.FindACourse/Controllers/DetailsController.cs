@@ -116,7 +116,7 @@ namespace DFC.App.FindACourse.Controllers
             }
 
             var searchTerm = $"{nameof(paramValues.SearchTerm)}={paramValues.SearchTerm}&" +
-                             $"{nameof(paramValues.Town)}={paramValues.Town}&" +
+                             $"{nameof(paramValues.Town)}={WebUtility.HtmlEncode(paramValues.Town)}&" +
                              $"{nameof(paramValues.CourseType)}={paramValues.CourseType}&" +
                              $"{nameof(paramValues.CourseHours)}={paramValues.CourseHours}&" +
                              $"{nameof(paramValues.CourseStudyTime)}={paramValues.CourseStudyTime}&" +
@@ -126,7 +126,7 @@ namespace DFC.App.FindACourse.Controllers
                              $"{nameof(paramValues.Page)}={paramValues.Page}&" +
                              $"{nameof(paramValues.D)}={paramValues.D}&" +
                              $"{nameof(paramValues.OrderByValue)}={paramValues.OrderByValue}&" +
-                             $"{nameof(paramValues.Coordinates)}={paramValues.Coordinates}";
+                             $"{nameof(paramValues.Coordinates)}={WebUtility.HtmlEncode(paramValues.Coordinates)}";
 
             return searchTerm;
         }

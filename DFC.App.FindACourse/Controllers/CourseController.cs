@@ -161,7 +161,7 @@ namespace DFC.App.FindACourse.Controllers
                 CurrentSearchTerm = paramValues.SearchTerm,
                 SideBar = new SideBarViewModel
                 {
-                    TownOrPostcode = paramValues.Town,
+                    TownOrPostcode = WebUtility.HtmlEncode(paramValues.Town),
                     DistanceValue = paramValues.Distance,
                     CourseType = ConvertStringToFiltersListViewModel(paramValues.CourseType),
                     CourseHours = ConvertStringToFiltersListViewModel(paramValues.CourseHours),
@@ -195,7 +195,7 @@ namespace DFC.App.FindACourse.Controllers
                 if (!model.IsTest)
                 {
                     TempData["params"] = $"{nameof(paramValues.SearchTerm)}={paramValues.SearchTerm}&" +
-                                         $"{nameof(paramValues.Town)}={paramValues.Town}&" +
+                                         $"{nameof(paramValues.Town)}={WebUtility.HtmlEncode(paramValues.Town)}&" +
                                          $"{nameof(paramValues.CourseType)}={paramValues.CourseType}&" +
                                          $"{nameof(paramValues.CourseHours)}={paramValues.CourseHours}&" +
                                          $"{nameof(paramValues.CourseStudyTime)}={paramValues.CourseStudyTime}&" +
@@ -391,7 +391,7 @@ namespace DFC.App.FindACourse.Controllers
             if (!model.IsTest)
             {
                 TempData["params"] = $"{nameof(searchTerm)}={searchTerm}&" +
-                                     $"{nameof(town)}={town}&" +
+                                     $"{nameof(town)}={WebUtility.HtmlEncode(town)}&" +
                                      $"{nameof(courseType)}={courseType}&" +
                                      $"{nameof(courseHours)}={courseHours}&" +
                                      $"{nameof(courseStudyTime)}={courseStudyTime}&" +
@@ -487,8 +487,8 @@ namespace DFC.App.FindACourse.Controllers
                 CurrentSearchTerm = paramValues.SearchTerm,
                 SideBar = new SideBarViewModel
                 {
-                    TownOrPostcode = paramValues.Town,
-                    SuggestedLocation = paramValues.Town,
+                    TownOrPostcode = WebUtility.HtmlEncode(paramValues.Town),
+                    SuggestedLocation = WebUtility.HtmlEncode(paramValues.Town),
                     DistanceValue = paramValues.Distance,
                     CourseType = ConvertStringToFiltersListViewModel(paramValues.CourseType),
                     CourseHours = ConvertStringToFiltersListViewModel(paramValues.CourseHours),
