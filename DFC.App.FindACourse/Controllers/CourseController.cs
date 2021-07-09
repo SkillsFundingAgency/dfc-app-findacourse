@@ -161,7 +161,7 @@ namespace DFC.App.FindACourse.Controllers
                 CurrentSearchTerm = paramValues.SearchTerm,
                 SideBar = new SideBarViewModel
                 {
-                    TownOrPostcode = paramValues.Town,
+                    TownOrPostcode = WebUtility.HtmlEncode(paramValues.Town),
                     DistanceValue = paramValues.Distance,
                     CourseType = ConvertStringToFiltersListViewModel(paramValues.CourseType),
                     CourseHours = ConvertStringToFiltersListViewModel(paramValues.CourseHours),
@@ -195,7 +195,7 @@ namespace DFC.App.FindACourse.Controllers
                 if (!model.IsTest)
                 {
                     TempData["params"] = $"{nameof(paramValues.SearchTerm)}={paramValues.SearchTerm}&" +
-                                         $"{nameof(paramValues.Town)}={paramValues.Town}&" +
+                                         $"{nameof(paramValues.Town)}={WebUtility.HtmlEncode(paramValues.Town)}&" +
                                          $"{nameof(paramValues.CourseType)}={paramValues.CourseType}&" +
                                          $"{nameof(paramValues.CourseHours)}={paramValues.CourseHours}&" +
                                          $"{nameof(paramValues.CourseStudyTime)}={paramValues.CourseStudyTime}&" +
@@ -228,41 +228,16 @@ namespace DFC.App.FindACourse.Controllers
         [HttpGet]
         [Route("find-a-course/course/body/course/page")]
         [Route("find-a-course/search/page/body")]
-        public async Task<IActionResult> Page(ParamValues paramValues, bool isTest)
+        public Task<IActionResult> Page(ParamValues paramValues, bool isTest)
         {
             logService.LogInformation($"{nameof(this.Page)} has been called");
 
-            var isPostcode = !string.IsNullOrEmpty(paramValues.Town) ? (bool?)paramValues.Town.IsPostcode() : null;
-            paramValues.D = isPostcode.HasValue && isPostcode.Value ? 1 : 0;
-
-            var model = new BodyViewModel
+            if (paramValues == null)
             {
-                CurrentSearchTerm = paramValues.SearchTerm,
-                SideBar = new SideBarViewModel
-                {
-                    TownOrPostcode = paramValues.Town,
-                    DistanceValue = paramValues.Distance,
-                    CourseType = ConvertStringToFiltersListViewModel(paramValues.CourseType),
-                    CourseHours = ConvertStringToFiltersListViewModel(paramValues.CourseHours),
-                    CourseStudyTime = ConvertStringToFiltersListViewModel(paramValues.CourseStudyTime),
-                    StartDateValue = paramValues.StartDate,
-                    CurrentSearchTerm = paramValues.SearchTerm,
-                    FiltersApplied = paramValues.FilterA,
-                    SelectedOrderByValue = paramValues.OrderByValue,
-                    D = paramValues.D,
-                    Coordinates = WebUtility.HtmlEncode(paramValues.Coordinates),
-                },
-                RequestPage = paramValues.Page,
-                SelectedDistanceValue = paramValues.Distance,
-                IsNewPage = true,
-                IsTest = isTest,
-            };
+                throw new ArgumentNullException(nameof(paramValues));
+            }
 
-            logService.LogInformation($"{nameof(this.Page)} generated the model and ready to pass to the view");
-
-            model.FromPaging = true;
-
-            return await FilterResults(model, string.Empty).ConfigureAwait(false);
+            return PageInternalAsync(paramValues, isTest);
         }
 
         [HttpGet]
@@ -416,7 +391,7 @@ namespace DFC.App.FindACourse.Controllers
             if (!model.IsTest)
             {
                 TempData["params"] = $"{nameof(searchTerm)}={searchTerm}&" +
-                                     $"{nameof(town)}={town}&" +
+                                     $"{nameof(town)}={WebUtility.HtmlEncode(town)}&" +
                                      $"{nameof(courseType)}={courseType}&" +
                                      $"{nameof(courseHours)}={courseHours}&" +
                                      $"{nameof(courseStudyTime)}={courseStudyTime}&" +
@@ -503,6 +478,39 @@ namespace DFC.App.FindACourse.Controllers
             postcode = postcode.Replace(" ", string.Empty);
 
             return postcode.Insert(postcode.Length - 3, " ");
+        }
+
+        private async Task<IActionResult> PageInternalAsync(ParamValues paramValues, bool isTest)
+        {
+            var model = new BodyViewModel
+            {
+                CurrentSearchTerm = paramValues.SearchTerm,
+                SideBar = new SideBarViewModel
+                {
+                    TownOrPostcode = WebUtility.HtmlEncode(paramValues.Town),
+                    SuggestedLocation = WebUtility.HtmlEncode(paramValues.Town),
+                    DistanceValue = paramValues.Distance,
+                    CourseType = ConvertStringToFiltersListViewModel(paramValues.CourseType),
+                    CourseHours = ConvertStringToFiltersListViewModel(paramValues.CourseHours),
+                    CourseStudyTime = ConvertStringToFiltersListViewModel(paramValues.CourseStudyTime),
+                    StartDateValue = paramValues.StartDate,
+                    CurrentSearchTerm = paramValues.SearchTerm,
+                    FiltersApplied = paramValues.FilterA,
+                    SelectedOrderByValue = paramValues.OrderByValue,
+                    D = paramValues.D,
+                    Coordinates = WebUtility.HtmlEncode(paramValues.Coordinates),
+                },
+                RequestPage = paramValues.Page,
+                SelectedDistanceValue = paramValues.Distance,
+                IsNewPage = true,
+                IsTest = isTest,
+            };
+
+            logService.LogInformation($"{nameof(this.Page)} generated the model and ready to pass to the view");
+
+            model.FromPaging = true;
+
+            return await FilterResults(model, string.Empty).ConfigureAwait(false);
         }
 
         private async Task<IActionResult> FilterResultsInternal(BodyViewModel model)
