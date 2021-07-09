@@ -228,7 +228,7 @@ namespace DFC.App.FindACourse.Controllers
         [HttpGet]
         [Route("find-a-course/course/body/course/page")]
         [Route("find-a-course/search/page/body")]
-        public async Task<IActionResult> Page(ParamValues paramValues, bool isTest)
+        public Task<IActionResult> Page(ParamValues paramValues, bool isTest)
         {
             logService.LogInformation($"{nameof(this.Page)} has been called");
 
@@ -237,7 +237,7 @@ namespace DFC.App.FindACourse.Controllers
                 throw new ArgumentNullException(nameof(paramValues));
             }
 
-            return await PageInternal(paramValues, isTest).ConfigureAwait(false);
+            return PageInternalAsync(paramValues, isTest);
         }
 
         [HttpGet]
@@ -411,39 +411,6 @@ namespace DFC.App.FindACourse.Controllers
             return View("Body", model);
         }
 
-        private async Task<IActionResult> PageInternal(ParamValues paramValues, bool isTest)
-        {
-            var model = new BodyViewModel
-            {
-                CurrentSearchTerm = paramValues.SearchTerm,
-                SideBar = new SideBarViewModel
-                {
-                    TownOrPostcode = paramValues.Town,
-                    SuggestedLocation = paramValues.Town,
-                    DistanceValue = paramValues.Distance,
-                    CourseType = ConvertStringToFiltersListViewModel(paramValues.CourseType),
-                    CourseHours = ConvertStringToFiltersListViewModel(paramValues.CourseHours),
-                    CourseStudyTime = ConvertStringToFiltersListViewModel(paramValues.CourseStudyTime),
-                    StartDateValue = paramValues.StartDate,
-                    CurrentSearchTerm = paramValues.SearchTerm,
-                    FiltersApplied = paramValues.FilterA,
-                    SelectedOrderByValue = paramValues.OrderByValue,
-                    D = paramValues.D,
-                    Coordinates = WebUtility.HtmlEncode(paramValues.Coordinates),
-                },
-                RequestPage = paramValues.Page,
-                SelectedDistanceValue = paramValues.Distance,
-                IsNewPage = true,
-                IsTest = isTest,
-            };
-
-            logService.LogInformation($"{nameof(this.Page)} generated the model and ready to pass to the view");
-
-            model.FromPaging = true;
-
-            return await FilterResults(model, string.Empty).ConfigureAwait(false);
-        }
-
         private static LocationCoordinates GetCoordinates(string coordinates)
         {
             var locationCoordinates = new LocationCoordinates() { AreValid = false };
@@ -511,6 +478,39 @@ namespace DFC.App.FindACourse.Controllers
             postcode = postcode.Replace(" ", string.Empty);
 
             return postcode.Insert(postcode.Length - 3, " ");
+        }
+
+        private async Task<IActionResult> PageInternalAsync(ParamValues paramValues, bool isTest)
+        {
+            var model = new BodyViewModel
+            {
+                CurrentSearchTerm = paramValues.SearchTerm,
+                SideBar = new SideBarViewModel
+                {
+                    TownOrPostcode = paramValues.Town,
+                    SuggestedLocation = paramValues.Town,
+                    DistanceValue = paramValues.Distance,
+                    CourseType = ConvertStringToFiltersListViewModel(paramValues.CourseType),
+                    CourseHours = ConvertStringToFiltersListViewModel(paramValues.CourseHours),
+                    CourseStudyTime = ConvertStringToFiltersListViewModel(paramValues.CourseStudyTime),
+                    StartDateValue = paramValues.StartDate,
+                    CurrentSearchTerm = paramValues.SearchTerm,
+                    FiltersApplied = paramValues.FilterA,
+                    SelectedOrderByValue = paramValues.OrderByValue,
+                    D = paramValues.D,
+                    Coordinates = WebUtility.HtmlEncode(paramValues.Coordinates),
+                },
+                RequestPage = paramValues.Page,
+                SelectedDistanceValue = paramValues.Distance,
+                IsNewPage = true,
+                IsTest = isTest,
+            };
+
+            logService.LogInformation($"{nameof(this.Page)} generated the model and ready to pass to the view");
+
+            model.FromPaging = true;
+
+            return await FilterResults(model, string.Empty).ConfigureAwait(false);
         }
 
         private async Task<IActionResult> FilterResultsInternal(BodyViewModel model)

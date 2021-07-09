@@ -223,7 +223,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
         }
 
         [Fact]
-        public async Task PageReturnsArgumentNullExceptionForMissingParameters()
+        public void PageReturnsArgumentNullExceptionForMissingParameters()
         {
             // arrange
             var controller = BuildCourseController(MediaTypeNames.Text.Html);
