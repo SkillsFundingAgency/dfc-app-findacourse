@@ -222,6 +222,20 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
             controller.Dispose();
         }
 
+        [Fact]
+        public void PageReturnsArgumentNullExceptionForMissingParameters()
+        {
+            // arrange
+            var controller = BuildCourseController(MediaTypeNames.Text.Html);
+
+            // act
+            Func<Task> act = async () => await controller.Page(null, false).ConfigureAwait(false);
+
+            // assert
+            act.Should().Throw<ArgumentNullException>();
+            controller.Dispose();
+        }
+
         [Theory]
         [InlineData("CV1 2WT", null)]
         [InlineData("TestTown", null)]
