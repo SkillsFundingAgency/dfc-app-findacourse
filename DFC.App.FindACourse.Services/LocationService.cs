@@ -33,7 +33,15 @@ namespace DFC.App.FindACourse.Services
             try
             {
                 var suggestResults = await this.searchClient.SuggestAsync<SearchLocationIndex>(term, suggestorName, this.suggestOptions).ConfigureAwait(false);
+
                 var documents = suggestResults.Value.Results.Select(i => i.Document).OrderBy(l => l.LocationName).ThenBy(l => l.LocalAuthorityName);
+
+                //Generate 2 lists with first list containing exact term and then the second list with rest of the results set
+                var fullList = documents.Where(i => i.StartsWith(term));
+                var remainingResultsList = documents.Except(fullList);
+                fullList.AddRange(remainingResultsList);
+                documents = fullList;
+
                 logger.LogInformation($"Returning location results for term {term}");
                 return documents;
             }
