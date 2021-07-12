@@ -36,14 +36,11 @@ namespace DFC.App.FindACourse.Services
 
                 var documents = suggestResults.Value.Results.Select(i => i.Document).OrderBy(l => l.LocationName).ThenBy(l => l.LocalAuthorityName);
 
-                //Generate 2 lists with first list containing exact term and then the second list with rest of the results set
-                var fullList = documents.Where(i => i.StartsWith(term));
-                var remainingResultsList = documents.Except(fullList);
-                fullList.AddRange(remainingResultsList);
-                documents = fullList;
-
+                var orderedList = documents.Where(i => i.LocationName.StartsWith(term, StringComparison.InvariantCultureIgnoreCase)).ToList();
+                var remainingResultsList = documents.Except(orderedList);
+                orderedList.AddRange(remainingResultsList);
                 logger.LogInformation($"Returning location results for term {term}");
-                return documents;
+                return orderedList;
             }
             catch (Exception ex)
             {
