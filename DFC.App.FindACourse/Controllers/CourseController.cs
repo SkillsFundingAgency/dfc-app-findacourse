@@ -26,12 +26,14 @@ namespace DFC.App.FindACourse.Controllers
         private readonly ILogService logService;
         private readonly IFindACourseService findACourseService;
         private readonly IViewHelper viewHelper;
+        private readonly ILocationService locationService;
 
-        public CourseController(ILogService logService, IFindACourseService findACourseService, IViewHelper viewHelper)
+        public CourseController(ILogService logService, IFindACourseService findACourseService, IViewHelper viewHelper, ILocationService locationService)
         {
             this.logService = logService;
             this.findACourseService = findACourseService;
             this.viewHelper = viewHelper;
+            this.locationService = locationService;
         }
 
         [HttpGet]
@@ -159,7 +161,7 @@ namespace DFC.App.FindACourse.Controllers
                 CurrentSearchTerm = paramValues.SearchTerm,
                 SideBar = new SideBarViewModel
                 {
-                    TownOrPostcode = paramValues.Town,
+                    TownOrPostcode = WebUtility.HtmlEncode(paramValues.Town),
                     DistanceValue = paramValues.Distance,
                     CourseType = ConvertStringToFiltersListViewModel(paramValues.CourseType),
                     CourseHours = ConvertStringToFiltersListViewModel(paramValues.CourseHours),
@@ -177,7 +179,7 @@ namespace DFC.App.FindACourse.Controllers
                 IsResultBody = true,
             };
 
-            var newBodyViewModel = GenerateModel(model);
+            var newBodyViewModel = await GenerateModelAsync(model).ConfigureAwait(false);
 
             try
             {
@@ -193,7 +195,7 @@ namespace DFC.App.FindACourse.Controllers
                 if (!model.IsTest)
                 {
                     TempData["params"] = $"{nameof(paramValues.SearchTerm)}={paramValues.SearchTerm}&" +
-                                         $"{nameof(paramValues.Town)}={paramValues.Town}&" +
+                                         $"{nameof(paramValues.Town)}={WebUtility.HtmlEncode(paramValues.Town)}&" +
                                          $"{nameof(paramValues.CourseType)}={paramValues.CourseType}&" +
                                          $"{nameof(paramValues.CourseHours)}={paramValues.CourseHours}&" +
                                          $"{nameof(paramValues.CourseStudyTime)}={paramValues.CourseStudyTime}&" +
@@ -211,70 +213,59 @@ namespace DFC.App.FindACourse.Controllers
             }
 
             var viewAsString = await viewHelper.RenderViewAsync(this, "~/Views/Course/_results.cshtml", model, true).ConfigureAwait(false);
-            return new AjaxModel { HTML = viewAsString, Count = model.Results?.ResultProperties != null ? model.Results.ResultProperties.TotalResultCount : 0, ShowDistanceSelector = newBodyViewModel.CourseSearchFilters.DistanceSpecified };
+            return new AjaxModel
+            {
+                HTML = viewAsString,
+                Count = model.Results?.ResultProperties != null ? model.Results.ResultProperties.TotalResultCount : 0,
+                ShowDistanceSelector = newBodyViewModel.CourseSearchFilters.DistanceSpecified,
+                UsingAutoSuggestedLocation = newBodyViewModel.UsingAutoSuggestedLocation,
+                AutoSuggestedTown = newBodyViewModel.SideBar.TownOrPostcode,
+                AutoSuggestedCoordinates = newBodyViewModel.SideBar.Coordinates,
+                DidYouMeanLocations = newBodyViewModel.SideBar.DidYouMeanLocations,
+            };
         }
 
         [HttpGet]
         [Route("find-a-course/course/body/course/page")]
         [Route("find-a-course/search/page/body")]
-        public async Task<IActionResult> Page(ParamValues paramValues, bool isTest)
+        public Task<IActionResult> Page(ParamValues paramValues, bool isTest)
         {
             logService.LogInformation($"{nameof(this.Page)} has been called");
 
-            var isPostcode = !string.IsNullOrEmpty(paramValues.Town) ? (bool?)paramValues.Town.IsPostcode() : null;
-            paramValues.D = isPostcode.HasValue && isPostcode.Value ? 1 : 0;
-
-            var model = new BodyViewModel
+            if (paramValues == null)
             {
-                CurrentSearchTerm = paramValues.SearchTerm,
-                SideBar = new SideBarViewModel
-                {
-                    TownOrPostcode = paramValues.Town,
-                    DistanceValue = paramValues.Distance,
-                    CourseType = ConvertStringToFiltersListViewModel(paramValues.CourseType),
-                    CourseHours = ConvertStringToFiltersListViewModel(paramValues.CourseHours),
-                    CourseStudyTime = ConvertStringToFiltersListViewModel(paramValues.CourseStudyTime),
-                    StartDateValue = paramValues.StartDate,
-                    CurrentSearchTerm = paramValues.SearchTerm,
-                    FiltersApplied = paramValues.FilterA,
-                    SelectedOrderByValue = paramValues.OrderByValue,
-                    D = paramValues.D,
-                    Coordinates = WebUtility.HtmlEncode(paramValues.Coordinates),
-                },
-                RequestPage = paramValues.Page,
-                SelectedDistanceValue = paramValues.Distance,
-                IsNewPage = true,
-                IsTest = isTest,
-            };
+                throw new ArgumentNullException(nameof(paramValues));
+            }
 
-            logService.LogInformation($"{nameof(this.Page)} generated the model and ready to pass to the view");
-
-            model.FromPaging = true;
-
-            return await FilterResults(model).ConfigureAwait(false);
+            return PageInternalAsync(paramValues, isTest);
         }
 
         [HttpGet]
         [Route("find-a-course/course/body/course/filterresults")]
         [Route("find-a-course/search/filterresults/body")]
-        public async Task<IActionResult> FilterResults(BodyViewModel model)
+        public Task<IActionResult> FilterResults(BodyViewModel model, string location)
         {
             logService.LogInformation($"{nameof(this.FilterResults)} has been called");
 
-            var newBodyViewModel = GenerateModel(model);
-
-            try
+            if (model == null)
             {
-                model.Results = await findACourseService.GetFilteredData(newBodyViewModel.CourseSearchFilters, newBodyViewModel.CourseSearchOrderBy, model.RequestPage).ConfigureAwait(false);
-            }
-            catch (Exception ex)
-            {
-                logService.LogError($"{nameof(this.FilterResults)} threw an exception" + ex.Message);
+                throw new ArgumentNullException(nameof(model));
             }
 
-            logService.LogInformation($"{nameof(this.FilterResults)} generated the model and ready to pass to the view");
+            if (model.SideBar.SuggestedLocation != model.SideBar.TownOrPostcode)
+            {
+                //if the user changed the text for the locaton invlidate the coordinates
+                model.SideBar.Coordinates = null;
+            }
+            else if (!string.IsNullOrEmpty(location))
+            {
+                //If the user clikced on one of the suggested locations
+                var indexOfLocationSpliter = location.IndexOf("|", StringComparison.Ordinal);
+                model.SideBar.TownOrPostcode = location.Substring(0, indexOfLocationSpliter);
+                model.SideBar.Coordinates = location.Substring(indexOfLocationSpliter + 1);
+            }
 
-            return Results(model);
+            return FilterResultsInternal(model);
         }
 
         [HttpGet]
@@ -353,6 +344,8 @@ namespace DFC.App.FindACourse.Controllers
             sideBarViewModel.SelectedOrderByValue = model.SideBar.SelectedOrderByValue;
             sideBarViewModel.Coordinates = model.SideBar.Coordinates;
             sideBarViewModel.D = model.SideBar.D;
+            sideBarViewModel.DidYouMeanLocations = model.SideBar.DidYouMeanLocations;
+            sideBarViewModel.SuggestedLocation = model.SideBar.SuggestedLocation;
 
             if (model.SideBar.CourseType != null && model.SideBar.CourseType.SelectedIds.Any())
             {
@@ -398,7 +391,7 @@ namespace DFC.App.FindACourse.Controllers
             if (!model.IsTest)
             {
                 TempData["params"] = $"{nameof(searchTerm)}={searchTerm}&" +
-                                     $"{nameof(town)}={town}&" +
+                                     $"{nameof(town)}={WebUtility.HtmlEncode(town)}&" +
                                      $"{nameof(courseType)}={courseType}&" +
                                      $"{nameof(courseHours)}={courseHours}&" +
                                      $"{nameof(courseStudyTime)}={courseStudyTime}&" +
@@ -416,120 +409,6 @@ namespace DFC.App.FindACourse.Controllers
             logService.LogInformation($"{nameof(this.Results)} generated the model and ready to pass to the view");
 
             return View("Body", model);
-        }
-
-        private static BodyViewModel GenerateModel(BodyViewModel model)
-        {
-            var courseTypeList = new List<CourseType>();
-            var courseHoursList = new List<CourseHours>();
-            var courseStudyTimeList = new List<Fac.AttendancePattern>();
-            var selectedStartDateValue = StartDate.Anytime;
-
-            if (model.SideBar.CourseType != null && model.SideBar.CourseType.SelectedIds.Any())
-            {
-                courseTypeList = ConvertToEnumList<CourseType>(model.SideBar.CourseType.SelectedIds);
-            }
-
-            if (model.SideBar.CourseHours != null && model.SideBar.CourseHours.SelectedIds.Any())
-            {
-                courseHoursList = ConvertToEnumList<CourseHours>(model.SideBar.CourseHours.SelectedIds);
-            }
-
-            if (model.SideBar.CourseStudyTime != null && model.SideBar.CourseStudyTime.SelectedIds.Any())
-            {
-                courseStudyTimeList = ConvertToEnumList<Fac.AttendancePattern>(model.SideBar.CourseStudyTime.SelectedIds);
-            }
-
-            if (model.SideBar.SelectedOrderByValue != null)
-            {
-                _ = Enum.TryParse(model.SideBar.SelectedOrderByValue.Replace(" ", string.Empty), true, out CourseSearchOrderBy sortedByCriteria);
-                model.CourseSearchOrderBy = sortedByCriteria;
-            }
-            else
-            {
-                var sortedByCriteria = CourseSearchOrderBy.Relevance;
-                model.CourseSearchOrderBy = sortedByCriteria;
-            }
-
-            var courseSearchFilters = new CourseSearchFilters
-            {
-                SearchTerm = model.CurrentSearchTerm,
-                CourseType = courseTypeList,
-                CourseHours = courseHoursList,
-                StartDate = selectedStartDateValue,
-                CourseStudyTime = courseStudyTimeList,
-            };
-
-            model.SideBar.FiltersApplied = model.FromPaging ? model.SideBar.FiltersApplied : true;
-
-            switch (model.SideBar.StartDateValue)
-            {
-                case "Next 3 months":
-                    courseSearchFilters.StartDateTo = DateTime.Today.AddMonths(3);
-                    courseSearchFilters.StartDateFrom = DateTime.Today;
-                    courseSearchFilters.StartDate = StartDate.SelectDateFrom;
-                    break;
-                case "In 3 to 6 months":
-                    courseSearchFilters.StartDateFrom = DateTime.Today.AddMonths(3);
-                    courseSearchFilters.StartDateTo = DateTime.Today.AddMonths(6);
-                    courseSearchFilters.StartDate = StartDate.SelectDateFrom;
-                    break;
-                case "More than 6 months":
-                    courseSearchFilters.StartDateFrom = DateTime.Today.AddMonths(6);
-                    courseSearchFilters.StartDate = StartDate.SelectDateFrom;
-                    break;
-                default:
-                    courseSearchFilters.StartDate = StartDate.Anytime;
-                    break;
-            }
-
-            // Added in location parameters
-            model.CourseSearchFilters = AddInLocationRequestParameters(model, courseSearchFilters);
-
-            // Enter filters criteria here
-            model.RequestPage = (model.RequestPage > 1) ? model.RequestPage : 1;
-            return model;
-        }
-
-        private static CourseSearchFilters AddInLocationRequestParameters(BodyViewModel model, CourseSearchFilters courseSearchFilters)
-        {
-            float selectedDistanceValue = 10;
-
-            if (model.SelectedDistanceValue != null)
-            {
-                var resultString = Regex.Match(model.SelectedDistanceValue, @"\d+").Value;
-                _ = float.TryParse(resultString, out selectedDistanceValue);
-            }
-
-            courseSearchFilters.Distance = selectedDistanceValue;
-
-            if (!string.IsNullOrEmpty(model.SideBar.TownOrPostcode))
-            {
-                if (model.SideBar.TownOrPostcode.IsPostcode())
-                {
-                    courseSearchFilters.PostCode = NormalizePostcode(model.SideBar.TownOrPostcode);
-                    courseSearchFilters.Distance = selectedDistanceValue;
-                    courseSearchFilters.DistanceSpecified = true;
-                }
-                else
-                {
-                    var locationCoordinates = GetCoordinates(model.SideBar.Coordinates);
-                    if (locationCoordinates.AreValid)
-                    {
-                        //using logitutde and latitude
-                        courseSearchFilters.Longitude = locationCoordinates.Longitude;
-                        courseSearchFilters.Latitude = locationCoordinates.Latitude;
-                        courseSearchFilters.Distance = selectedDistanceValue;
-                        courseSearchFilters.DistanceSpecified = true;
-                    }
-                    else
-                    {
-                        courseSearchFilters.Town = "\u0022" + model.SideBar.TownOrPostcode + "\u0022";
-                    }
-                }
-            }
-
-            return courseSearchFilters;
         }
 
         private static LocationCoordinates GetCoordinates(string coordinates)
@@ -599,6 +478,200 @@ namespace DFC.App.FindACourse.Controllers
             postcode = postcode.Replace(" ", string.Empty);
 
             return postcode.Insert(postcode.Length - 3, " ");
+        }
+
+        private async Task<IActionResult> PageInternalAsync(ParamValues paramValues, bool isTest)
+        {
+            var model = new BodyViewModel
+            {
+                CurrentSearchTerm = paramValues.SearchTerm,
+                SideBar = new SideBarViewModel
+                {
+                    TownOrPostcode = WebUtility.HtmlEncode(paramValues.Town),
+                    SuggestedLocation = WebUtility.HtmlEncode(paramValues.Town),
+                    DistanceValue = paramValues.Distance,
+                    CourseType = ConvertStringToFiltersListViewModel(paramValues.CourseType),
+                    CourseHours = ConvertStringToFiltersListViewModel(paramValues.CourseHours),
+                    CourseStudyTime = ConvertStringToFiltersListViewModel(paramValues.CourseStudyTime),
+                    StartDateValue = paramValues.StartDate,
+                    CurrentSearchTerm = paramValues.SearchTerm,
+                    FiltersApplied = paramValues.FilterA,
+                    SelectedOrderByValue = paramValues.OrderByValue,
+                    D = paramValues.D,
+                    Coordinates = WebUtility.HtmlEncode(paramValues.Coordinates),
+                },
+                RequestPage = paramValues.Page,
+                SelectedDistanceValue = paramValues.Distance,
+                IsNewPage = true,
+                IsTest = isTest,
+            };
+
+            logService.LogInformation($"{nameof(this.Page)} generated the model and ready to pass to the view");
+
+            model.FromPaging = true;
+
+            return await FilterResults(model, string.Empty).ConfigureAwait(false);
+        }
+
+        private async Task<IActionResult> FilterResultsInternal(BodyViewModel model)
+        {
+            var newBodyViewModel = await GenerateModelAsync(model).ConfigureAwait(false);
+
+            try
+            {
+                model.Results = await findACourseService.GetFilteredData(newBodyViewModel.CourseSearchFilters, newBodyViewModel.CourseSearchOrderBy, model.RequestPage).ConfigureAwait(false);
+                model.UsingAutoSuggestedLocation = newBodyViewModel.UsingAutoSuggestedLocation;
+                model.SideBar.DidYouMeanLocations = newBodyViewModel.SideBar.DidYouMeanLocations;
+                logService.LogInformation($"{nameof(this.FilterResults)} generated the model and ready to pass to the view");
+            }
+            catch (Exception ex)
+            {
+                logService.LogError($"{nameof(this.FilterResults)} threw an exception" + ex.Message);
+            }
+
+            return Results(model);
+        }
+
+        private async Task<BodyViewModel> GenerateModelAsync(BodyViewModel model)
+        {
+            var courseTypeList = new List<CourseType>();
+            var courseHoursList = new List<CourseHours>();
+            var courseStudyTimeList = new List<Fac.AttendancePattern>();
+            var selectedStartDateValue = StartDate.Anytime;
+
+            if (model.SideBar.CourseType != null && model.SideBar.CourseType.SelectedIds.Any())
+            {
+                courseTypeList = ConvertToEnumList<CourseType>(model.SideBar.CourseType.SelectedIds);
+            }
+
+            if (model.SideBar.CourseHours != null && model.SideBar.CourseHours.SelectedIds.Any())
+            {
+                courseHoursList = ConvertToEnumList<CourseHours>(model.SideBar.CourseHours.SelectedIds);
+            }
+
+            if (model.SideBar.CourseStudyTime != null && model.SideBar.CourseStudyTime.SelectedIds.Any())
+            {
+                courseStudyTimeList = ConvertToEnumList<Fac.AttendancePattern>(model.SideBar.CourseStudyTime.SelectedIds);
+            }
+
+            if (model.SideBar.SelectedOrderByValue != null)
+            {
+                _ = Enum.TryParse(model.SideBar.SelectedOrderByValue.Replace(" ", string.Empty), true, out CourseSearchOrderBy sortedByCriteria);
+                model.CourseSearchOrderBy = sortedByCriteria;
+            }
+            else
+            {
+                var sortedByCriteria = CourseSearchOrderBy.Relevance;
+                model.CourseSearchOrderBy = sortedByCriteria;
+            }
+
+            var courseSearchFilters = new CourseSearchFilters
+            {
+                SearchTerm = model.CurrentSearchTerm,
+                CourseType = courseTypeList,
+                CourseHours = courseHoursList,
+                StartDate = selectedStartDateValue,
+                CourseStudyTime = courseStudyTimeList,
+            };
+
+            model.SideBar.FiltersApplied = model.FromPaging ? model.SideBar.FiltersApplied : true;
+
+            switch (model.SideBar.StartDateValue)
+            {
+                case "Next 3 months":
+                    courseSearchFilters.StartDateTo = DateTime.Today.AddMonths(3);
+                    courseSearchFilters.StartDateFrom = DateTime.Today;
+                    courseSearchFilters.StartDate = StartDate.SelectDateFrom;
+                    break;
+                case "In 3 to 6 months":
+                    courseSearchFilters.StartDateFrom = DateTime.Today.AddMonths(3);
+                    courseSearchFilters.StartDateTo = DateTime.Today.AddMonths(6);
+                    courseSearchFilters.StartDate = StartDate.SelectDateFrom;
+                    break;
+                case "More than 6 months":
+                    courseSearchFilters.StartDateFrom = DateTime.Today.AddMonths(6);
+                    courseSearchFilters.StartDate = StartDate.SelectDateFrom;
+                    break;
+                default:
+                    courseSearchFilters.StartDate = StartDate.Anytime;
+                    break;
+            }
+
+            model.CourseSearchFilters = courseSearchFilters;
+
+            // Added in location parameters
+            model = await AddInLocationRequestParametersAsync(model).ConfigureAwait(false);
+
+            // Enter filters criteria here
+            model.RequestPage = (model.RequestPage > 1) ? model.RequestPage : 1;
+            return model;
+        }
+
+        private async Task<BodyViewModel> AddInLocationRequestParametersAsync(BodyViewModel model)
+        {
+            float selectedDistanceValue = 10;
+
+            if (model.SelectedDistanceValue != null)
+            {
+                var resultString = Regex.Match(model.SelectedDistanceValue, @"\d+").Value;
+                _ = float.TryParse(resultString, out selectedDistanceValue);
+            }
+
+            model.CourseSearchFilters.Distance = selectedDistanceValue;
+            model.CourseSearchFilters.DistanceSpecified = true;
+
+            if (!string.IsNullOrEmpty(model.SideBar.TownOrPostcode))
+            {
+                if (model.SideBar.TownOrPostcode.IsPostcode())
+                {
+                    model.CourseSearchFilters.PostCode = NormalizePostcode(model.SideBar.TownOrPostcode);
+                }
+                else
+                {
+                    var locationCoordinates = GetCoordinates(model.SideBar.Coordinates);
+                    if (locationCoordinates.AreValid)
+                    {
+                        //using logitutde and latitude
+                        model.CourseSearchFilters.Longitude = locationCoordinates.Longitude;
+                        model.CourseSearchFilters.Latitude = locationCoordinates.Latitude;
+                    }
+                    else
+                    {
+                        //The user has not entered a postcode or a selection from the dropdown.
+                        model.CourseSearchFilters.Town = model.SideBar.TownOrPostcode;
+                        model = await GetSuggestedLocationsAsync(model).ConfigureAwait(false);
+                    }
+                }
+            }
+
+            model.SideBar.SuggestedLocation = model.SideBar.TownOrPostcode;
+
+            return model;
+        }
+
+        private async Task<BodyViewModel> GetSuggestedLocationsAsync(BodyViewModel model)
+        {
+            var suggestedLocations = await locationService.GetSuggestedLocationsAsync(model.CourseSearchFilters.Town).ConfigureAwait(false);
+
+            if (suggestedLocations.Any())
+            {
+                var topSuggestion = suggestedLocations.FirstOrDefault();
+                model.CourseSearchFilters.Longitude = topSuggestion.Longitude;
+                model.CourseSearchFilters.Latitude = topSuggestion.Latitude;
+                model.CourseSearchFilters.Distance = 10;
+                model.CourseSearchFilters.DistanceSpecified = true;
+                model.CourseSearchFilters.Town = null;
+                model.SideBar.DidYouMeanLocations = suggestedLocations.Skip(1).Select(x => new LocationSuggestViewModel
+                {
+                    Label = $"{x.LocationName} ({x.LocalAuthorityName})",
+                    Value = $"{x.Longitude}|{x.Latitude}",
+                }).ToList();
+                model.SideBar.TownOrPostcode = $"{topSuggestion.LocationName} ({topSuggestion.LocalAuthorityName})";
+                model.SideBar.Coordinates = $"{topSuggestion.Longitude}|{topSuggestion.Latitude}";
+                model.UsingAutoSuggestedLocation = true;
+            }
+
+            return model;
         }
 
         private FiltersListViewModel MapFilter(string text, string title, List<Filter> lstFilter)

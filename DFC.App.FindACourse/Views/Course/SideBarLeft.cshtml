@@ -12,7 +12,27 @@
         </span>
         <input type="text" asp-for="TownOrPostcode" aria-label="TownOrPostcode" name="SideBar.TownOrPostcode" class="govuk-input govuk-input--width-10" id="location-input" />
         <span asp-validation-for="TownOrPostcode" class="text-danger" id="location-validator"></span>
-        @Html.Hidden("coordinates")
+        <input type="hidden" asp-for="Coordinates" name="SideBar.Coordinates" id="coordinates" />
+        <input type="hidden" asp-for="SuggestedLocation" name="SideBar.SuggestedLocation" id="suggestedLocation-input" />
+        <div id="suggest-location" class="location-suggest@(Model.DidYouMeanLocations?.Count() > 0 ? "-show" : "")" role="group">
+            <details id="suggest-location-details" class="govuk-details" open>
+                <summary class=govuk-details__summary aria-describedby="suggested-locations-aria" role="button" aria-expanded="false" aria-controls="suggested-locations-text">
+                    <span class="govuk-details__summary-text">Did you mean:</span>
+                </summary>
+                <p class="visuallyhidden" aria-live="polite" id="suggested-locations-aria">There are multiple locations with similar names, tab down to the suggestions, or collapse this panel</p>
+                <div class="govuk-details__summary suggest-locations-text" id="suggested-locations-text">
+                    <ul id="suggested-locations">
+                        @if (Model.DidYouMeanLocations?.Count() > 0)
+                        {
+                            @foreach (var location in Model.DidYouMeanLocations)
+                            {
+                                <li><button name="location" value="@location.Label|@location.Value">@location.Label</button></li>
+                            }
+                        }
+                    </ul>
+                </div>
+            </details>
+        </div>
     </div>
 
     <div id="distance-block" class="govuk-form-group">
