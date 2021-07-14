@@ -34,5 +34,9 @@ namespace DFC.App.FindACourse.ViewModels
         public int D { get; set; }
 
         public string Coordinates { get; set; }
+
+        public List<LocationSuggestViewModel> DidYouMeanLocations { get; set; }
+
+        public string SuggestedLocation { get; set; }
     }
 }

@@ -53,6 +53,8 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
 
         protected IFindACourseService FakeFindACoursesService { get; }
 
+        protected ILocationService FakeLocationsService { get; set; }
+
         protected IViewHelper FakeViewHelper { get; }
 
         protected IMapper FakeMapper { get; }
@@ -68,8 +70,9 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
 
             httpContext.Request.Headers[HeaderNames.Accept] = mediaTypeName;
             httpContext.RequestServices = A.Fake<IServiceProvider>();
+            FakeLocationsService = A.Fake<ILocationService>();
 
-            var controller = new CourseController(FakeLogService, FakeFindACoursesService, FakeViewHelper)
+            var controller = new CourseController(FakeLogService, FakeFindACoursesService, FakeViewHelper, FakeLocationsService)
             {
                 ControllerContext = new ControllerContext()
                 {

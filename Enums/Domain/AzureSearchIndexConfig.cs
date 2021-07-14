@@ -16,6 +16,6 @@ namespace DFC.App.FindACourse.Data.Domain
 
         public string SearchServiceAdminAPIKey { get; set; }
 
-        public int MaxNumberToSuggest { get; set; } = 10;
+        public int SearchMaxNumberToSuggest { get; set; } = 100;
     }
 }
