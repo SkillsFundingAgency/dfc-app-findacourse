@@ -6,7 +6,7 @@
             <div class="govuk-width-container">
                 <div class="govuk-grid-row">
                     <div class="govuk-grid-column-two-thirds">
-                        <h1 class="govuk-heading-xl">Find a course</h1>
+                        <h1 class="govuk-heading-xl">@Model.BannerTitle</h1>
                         <p class="govuk-body-lead">Use our course search to look for different types of learning opportunities.</p>
                         <label class="input-label" id="enter-keyword-label" for="search-input">Enter a keyword</label>
                         <div class="input-wrapper">
@@ -31,6 +31,8 @@
             <form action="/find-a-course/filterresults" method="get" class="find-a-course-page" id="fac-filter-form">
                 @Html.HiddenFor(m => m.CurrentSearchTerm)
                 @Html.HiddenFor(m => m.RequestPage)
+                @Html.HiddenFor(m => m.FreeCourseSearch)
+                @Html.HiddenFor(m => m.CourseSearchFilters.CampaignCode)
 
                 <div class="govuk-grid-row">
 
@@ -40,8 +42,6 @@
 
                     <div class="govuk-grid-column-two-thirds">
                         <partial name="_resultsTop" model="Model" />
-
-                        <hr class="govuk-section-break govuk-section-break--visible">
 
                         <partial name="_results" model="Model" />
                     </div>

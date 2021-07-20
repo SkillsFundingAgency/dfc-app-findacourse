@@ -305,7 +305,7 @@ namespace DFC.App.FindACourse.Controllers
         }
 
         [HttpGet]
-        [Route("find-a-course/course/body/course/searchFreeCourse")]
+        [Route("find-a-course/search/searchFreeCourse/body")]
         public async Task<IActionResult> SearchFreeCourse(string searchTerm)
         {
             logService.LogInformation($"{nameof(this.SearchFreeCourse)} has been called");
@@ -320,6 +320,7 @@ namespace DFC.App.FindACourse.Controllers
                 SearchTerm = string.IsNullOrEmpty(searchTerm) ? string.Empty : searchTerm,
                 CampaignCode = CampaignCode,
             };
+            model.FreeCourseSearch = true;
 
             return await SearchCourses(model, courseSearchFilters).ConfigureAwait(false);
         }
@@ -599,6 +600,7 @@ namespace DFC.App.FindACourse.Controllers
                 CourseHours = courseHoursList,
                 StartDate = selectedStartDateValue,
                 CourseStudyTime = courseStudyTimeList,
+                CampaignCode = model.FreeCourseSearch ? CampaignCode : string.Empty,
             };
 
             model.SideBar.FiltersApplied = model.FromPaging ? model.SideBar.FiltersApplied : true;
