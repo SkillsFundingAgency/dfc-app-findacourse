@@ -23,6 +23,7 @@ namespace DFC.App.FindACourse.Controllers
 {
     public class CourseController : Controller
     {
+        public const string CampaignCode = "LEVEL3_FREE";
         private readonly ILogService logService;
         private readonly IFindACourseService findACourseService;
         private readonly IViewHelper viewHelper;
@@ -300,24 +301,28 @@ namespace DFC.App.FindACourse.Controllers
                 SearchTerm = string.IsNullOrEmpty(searchTerm) ? string.Empty : searchTerm,
             };
 
-            model.SideBar = GetSideBarViewModel();
-            model.SideBar.OrderByOptions = ListFilters.GetOrderByOptions();
-            model.CurrentSearchTerm = searchTerm;
-            model.SideBar.CurrentSearchTerm = searchTerm;
-            model.RequestPage = 1;
+            return await SearchCourses(model, courseSearchFilters).ConfigureAwait(false);
+        }
 
-            try
+        [HttpGet]
+        [Route("find-a-course/search/searchFreeCourse/body")]
+        public async Task<IActionResult> SearchFreeCourse(string searchTerm)
+        {
+            logService.LogInformation($"{nameof(this.SearchFreeCourse)} has been called");
+
+            var model = new BodyViewModel();
+            var courseSearchFilters = new CourseSearchFilters
             {
-                model.Results = await findACourseService.GetFilteredData(courseSearchFilters, CourseSearchOrderBy.StartDate, 1).ConfigureAwait(true);
-            }
-            catch (Exception ex)
-            {
-                logService.LogError($"{nameof(this.SearchCourse)} threw an exception" + ex.Message);
-            }
+                CourseType = new List<CourseType> { CourseType.All },
+                CourseHours = new List<CourseHours> { CourseHours.All },
+                StartDate = StartDate.Anytime,
+                CourseStudyTime = new List<Fac.AttendancePattern> { Fac.AttendancePattern.Undefined },
+                SearchTerm = string.IsNullOrEmpty(searchTerm) ? string.Empty : searchTerm,
+                CampaignCode = CampaignCode,
+            };
+            model.FreeCourseSearch = true;
 
-            logService.LogInformation($"{nameof(this.SearchCourse)} generated the model and ready to pass to the view");
-
-            return Results(model);
+            return await SearchCourses(model, courseSearchFilters).ConfigureAwait(false);
         }
 
         [HttpGet]
@@ -513,6 +518,29 @@ namespace DFC.App.FindACourse.Controllers
             return await FilterResults(model, string.Empty).ConfigureAwait(false);
         }
 
+        private async Task<IActionResult> SearchCourses(BodyViewModel model, CourseSearchFilters filters)
+        {
+            model.SideBar = GetSideBarViewModel();
+            model.SideBar.OrderByOptions = ListFilters.GetOrderByOptions();
+            model.CurrentSearchTerm = filters?.SearchTerm;
+            model.SideBar.CurrentSearchTerm = filters?.SearchTerm;
+            model.RequestPage = 1;
+
+            try
+            {
+                model.Results = await findACourseService.GetFilteredData(filters, CourseSearchOrderBy.StartDate, 1)
+                    .ConfigureAwait(true);
+            }
+            catch (Exception ex)
+            {
+                logService.LogError($"{nameof(this.SearchCourse)} threw an exception" + ex.Message);
+            }
+
+            logService.LogInformation($"{nameof(this.SearchCourse)} generated the model and ready to pass to the view");
+
+            return Results(model);
+        }
+
         private async Task<IActionResult> FilterResultsInternal(BodyViewModel model)
         {
             var newBodyViewModel = await GenerateModelAsync(model).ConfigureAwait(false);
@@ -572,6 +600,7 @@ namespace DFC.App.FindACourse.Controllers
                 CourseHours = courseHoursList,
                 StartDate = selectedStartDateValue,
                 CourseStudyTime = courseStudyTimeList,
+                CampaignCode = model.FreeCourseSearch ? CampaignCode : string.Empty,
             };
 
             model.SideBar.FiltersApplied = model.FromPaging ? model.SideBar.FiltersApplied : true;
