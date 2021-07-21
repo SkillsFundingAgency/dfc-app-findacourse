@@ -8,6 +8,7 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net.Mime;
 using System.Threading.Tasks;
@@ -15,6 +16,7 @@ using Xunit;
 
 namespace DFC.App.FindACourse.UnitTests.Controllers
 {
+    [ExcludeFromCodeCoverage]
     public class CourseControllerTests : BaseController
     {
         private readonly IFindACourseService fakefindACourseService = A.Fake<IFindACourseService>();
@@ -123,6 +125,31 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
             // assert
             var viewResult = Assert.IsType<ViewResult>(result);
             var model = Assert.IsAssignableFrom<BodyViewModel>(viewResult.ViewData.Model);
+
+            Assert.NotNull(model.Results);
+
+            controller.Dispose();
+        }
+
+        [Fact]
+        public async Task CourseControllerSearchFreeCourseReturnsNoContent()
+        {
+            // arrange
+            var controller = BuildCourseController(MediaTypeNames.Text.Html);
+            var dummyCourseSearchResult = A.Dummy<CourseSearchResult>();
+
+            A.CallTo(() => FakeFindACoursesService.GetFilteredData(A<CourseSearchFilters>._, A<CourseSearchOrderBy>._, A<int>._)).Returns(dummyCourseSearchResult);
+
+            // act
+            var result = await controller.SearchFreeCourse("course").ConfigureAwait(false);
+
+            // assert
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = Assert.IsAssignableFrom<BodyViewModel>(viewResult.ViewData.Model);
+
+            A.CallTo(() =>
+                    FakeFindACoursesService.GetFilteredData(A<CourseSearchFilters>.That.Matches(x => x.CampaignCode == CourseController.CampaignCode), A<CourseSearchOrderBy>._, A<int>._))
+                .MustHaveHappenedOnceExactly();
 
             Assert.NotNull(model.Results);
 
@@ -445,6 +472,26 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
 
         [Fact]
         public async Task CourseControllerSearchCourseThrowsException()
+        {
+            // arrange
+            var controller = BuildCourseController(MediaTypeNames.Text.Html);
+
+            A.CallTo(() => FakeFindACoursesService.GetFilteredData(A<CourseSearchFilters>.Ignored, A<CourseSearchOrderBy>.Ignored, A<int>.Ignored)).Throws(new Exception());
+
+            // act
+            var result = await controller.SearchCourse("search term").ConfigureAwait(false);
+
+            // assert
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = Assert.IsAssignableFrom<BodyViewModel>(viewResult.ViewData.Model);
+
+            Assert.Null(model.Results);
+
+            controller.Dispose();
+        }
+
+        [Fact]
+        public async Task CourseControllerSearchFreeCourseThrowsException()
         {
             // arrange
             var controller = BuildCourseController(MediaTypeNames.Text.Html);
