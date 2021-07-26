@@ -72,10 +72,7 @@ namespace DFC.App.FindACourse.Controllers
             catch (Exception ex)
             {
                 logService.LogError($"Get course details caused an error: {ex}. The values passed were: course id: {courseId} and run id: {runId}");
-
-                //Return an error code to cause the problem page to be displayed, previously this was returning OK with an empty model,
-                //this causes errors in the view and then goes to the problem page
-                return StatusCode((int)HttpStatusCode.FailedDependency);
+                return DetaislErrorReturnStatus(ex);
             }
 
             return View(model);
@@ -100,12 +97,34 @@ namespace DFC.App.FindACourse.Controllers
                 paramValues.SearchTerm = currentSearchTerm;
             }
 
-            model.SearchTerm = FormatSearchParameters(paramValues, currentSearchTerm);
-            model.TlevelDetails = await findACourseService.GetTLevelDetails(tlevelId, tlevelLocationId).ConfigureAwait(false);
-            model.DetailsRightBarViewModel.Provider = mapper.Map<ProviderViewModel>(model.TlevelDetails.ProviderDetails);
-            model.DetailsRightBarViewModel.SpeakToAnAdviser = await staticContentDocumentService.GetByIdAsync(new Guid(cmsApiClientOptions.ContentIds)).ConfigureAwait(false);
+            try
+            {
+                model.SearchTerm = FormatSearchParameters(paramValues, currentSearchTerm);
+                model.TlevelDetails = await findACourseService.GetTLevelDetails(tlevelId, tlevelLocationId).ConfigureAwait(false);
+                model.DetailsRightBarViewModel.Provider = mapper.Map<ProviderViewModel>(model.TlevelDetails.ProviderDetails);
+                model.DetailsRightBarViewModel.SpeakToAnAdviser = await staticContentDocumentService.GetByIdAsync(new Guid(cmsApiClientOptions.ContentIds)).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                logService.LogError($"Get TLevel details caused an error: {ex}. The values passed were: tlevel id: {tlevelId} and location id: {tlevelLocationId}");
+                return DetaislErrorReturnStatus(ex);
+            }
 
             return View("tlevelDetails", model);
+        }
+
+        private StatusCodeResult DetaislErrorReturnStatus(Exception ex)
+        {
+            //Return an error code to cause the problem page to be displayed, previously this was returning OK with an empty model,
+            //this causes errors in the view and then goes to the problem page
+            if (ex.Message.Contains("404"))
+            {
+                return StatusCode((int)HttpStatusCode.NotFound);
+            }
+            else
+            {
+                return StatusCode((int)HttpStatusCode.FailedDependency);
+            }
         }
 
         private static string FormatSearchParameters(ParamValues paramValues, string currentSearchTerm)
