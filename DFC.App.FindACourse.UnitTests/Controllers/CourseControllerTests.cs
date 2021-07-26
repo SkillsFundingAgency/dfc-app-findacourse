@@ -455,6 +455,38 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
             controller.Dispose();
         }
 
+        [Theory]
+        [InlineData("Next 3 months", 0, 3, StartDate.SelectDateFrom)]
+        [InlineData("In 3 to 6 months", 3, 6, StartDate.SelectDateFrom)]
+        [InlineData("More than 6 months", 6, -1, StartDate.SelectDateFrom)]
+        public async Task FilterResultsSetsStartDateValuesWhenPassedIn(string StartDateValue, int from, int to, StartDate start)
+        {
+            // arrange
+            var controller = BuildCourseController("*/*");
+
+            var bodyViewModel = new BodyViewModel
+            {
+                CurrentSearchTerm = "Maths",
+                SideBar = new SideBarViewModel()
+                {
+                    StartDateValue = StartDateValue,
+                },
+                IsTest = true,
+
+            };
+
+            // act
+            var result = await controller.FilterResults(bodyViewModel, "TestLocation (Test Area)|-123.45|67.89").ConfigureAwait(false);
+
+            // assert
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = Assert.IsAssignableFrom<BodyViewModel>(viewResult.ViewData.Model);
+            Assert.Equal(model.CourseSearchFilters.StartDate, start);
+            Assert.Equal(model.CourseSearchFilters.StartDateFrom, DateTime.Today.AddMonths(from));
+            Assert.Equal(model.CourseSearchFilters.StartDateTo, to == -1 ? DateTime.MinValue : DateTime.Today.AddMonths(to));
+            controller.Dispose();
+        }
+
         [Fact]
         public void FilterResultsThrowsExceptionThrowsExceptionForNullModel()
         {
