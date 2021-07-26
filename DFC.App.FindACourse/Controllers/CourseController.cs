@@ -178,6 +178,10 @@ namespace DFC.App.FindACourse.Controllers
                 IsTest = paramValues.IsTest,
                 SelectedDistanceValue = paramValues.Distance,
                 IsResultBody = true,
+                CourseSearchFilters = new CourseSearchFilters
+                {
+                    CampaignCode = CampaignCode,
+                },
             };
 
             var newBodyViewModel = await GenerateModelAsync(model).ConfigureAwait(false);
@@ -593,40 +597,36 @@ namespace DFC.App.FindACourse.Controllers
                 model.CourseSearchOrderBy = sortedByCriteria;
             }
 
-            var courseSearchFilters = new CourseSearchFilters
-            {
-                SearchTerm = model.CurrentSearchTerm,
-                CourseType = courseTypeList,
-                CourseHours = courseHoursList,
-                StartDate = selectedStartDateValue,
-                CourseStudyTime = courseStudyTimeList,
-                CampaignCode = model.FreeCourseSearch ? CampaignCode : string.Empty,
-            };
+            model.CourseSearchFilters ??= new CourseSearchFilters();
+
+            model.CourseSearchFilters.SearchTerm = model.CurrentSearchTerm;
+            model.CourseSearchFilters.CourseType = courseTypeList;
+            model.CourseSearchFilters.CourseHours = courseHoursList;
+            model.CourseSearchFilters.StartDate = selectedStartDateValue;
+            model.CourseSearchFilters.CourseStudyTime = courseStudyTimeList;
 
             model.SideBar.FiltersApplied = model.FromPaging ? model.SideBar.FiltersApplied : true;
 
             switch (model.SideBar.StartDateValue)
             {
                 case "Next 3 months":
-                    courseSearchFilters.StartDateTo = DateTime.Today.AddMonths(3);
-                    courseSearchFilters.StartDateFrom = DateTime.Today;
-                    courseSearchFilters.StartDate = StartDate.SelectDateFrom;
+                    model.CourseSearchFilters.StartDateTo = DateTime.Today.AddMonths(3);
+                    model.CourseSearchFilters.StartDateFrom = DateTime.Today;
+                    model.CourseSearchFilters.StartDate = StartDate.SelectDateFrom;
                     break;
                 case "In 3 to 6 months":
-                    courseSearchFilters.StartDateFrom = DateTime.Today.AddMonths(3);
-                    courseSearchFilters.StartDateTo = DateTime.Today.AddMonths(6);
-                    courseSearchFilters.StartDate = StartDate.SelectDateFrom;
+                    model.CourseSearchFilters.StartDateFrom = DateTime.Today.AddMonths(3);
+                    model.CourseSearchFilters.StartDateTo = DateTime.Today.AddMonths(6);
+                    model.CourseSearchFilters.StartDate = StartDate.SelectDateFrom;
                     break;
                 case "More than 6 months":
-                    courseSearchFilters.StartDateFrom = DateTime.Today.AddMonths(6);
-                    courseSearchFilters.StartDate = StartDate.SelectDateFrom;
+                    model.CourseSearchFilters.StartDateFrom = DateTime.Today.AddMonths(6);
+                    model.CourseSearchFilters.StartDate = StartDate.SelectDateFrom;
                     break;
                 default:
-                    courseSearchFilters.StartDate = StartDate.Anytime;
+                    model.CourseSearchFilters.StartDate = StartDate.Anytime;
                     break;
             }
-
-            model.CourseSearchFilters = courseSearchFilters;
 
             // Added in location parameters
             model = await AddInLocationRequestParametersAsync(model).ConfigureAwait(false);
