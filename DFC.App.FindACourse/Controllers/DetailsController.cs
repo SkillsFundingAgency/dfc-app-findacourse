@@ -113,20 +113,6 @@ namespace DFC.App.FindACourse.Controllers
             return View("tlevelDetails", model);
         }
 
-        private StatusCodeResult DetaislErrorReturnStatus(Exception ex)
-        {
-            //Return an error code to cause the problem page to be displayed, previously this was returning OK with an empty model,
-            //this causes errors in the view and then goes to the problem page
-            if (ex.Message.Contains("404"))
-            {
-                return StatusCode((int)HttpStatusCode.NotFound);
-            }
-            else
-            {
-                return StatusCode((int)HttpStatusCode.FailedDependency);
-            }
-        }
-
         private static string FormatSearchParameters(ParamValues paramValues, string currentSearchTerm)
         {
             if (paramValues.SearchTerm == null && currentSearchTerm != null)
@@ -162,6 +148,20 @@ namespace DFC.App.FindACourse.Controllers
                           .ToList();
 
             return result;
+        }
+
+        private StatusCodeResult DetaislErrorReturnStatus(Exception ex)
+        {
+            //Return an error code to cause the problem page to be displayed, previously this was returning OK with an empty model,
+            //this causes errors in the view and then goes to the problem page
+            if (ex.Message.Contains("404"))
+            {
+                return StatusCode((int)HttpStatusCode.NotFound);
+            }
+            else
+            {
+                return StatusCode((int)HttpStatusCode.FailedDependency);
+            }
         }
     }
 }
