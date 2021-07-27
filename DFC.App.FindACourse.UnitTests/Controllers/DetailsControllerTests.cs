@@ -101,7 +101,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
         }
 
         [Theory]
-        [InlineData("", HttpStatusCode.FailedDependency)]
+        [InlineData("", HttpStatusCode.ServiceUnavailable)]
         [InlineData("Not Found 404", HttpStatusCode.NotFound)]
         public async Task GetCourseDetailsReturnsFailedOnServiceErrors(string errorMesage, HttpStatusCode expectedHttpStatusCode)
         {
@@ -223,7 +223,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
         }
 
         [Theory]
-        [InlineData("", HttpStatusCode.FailedDependency)]
+        [InlineData("", HttpStatusCode.ServiceUnavailable)]
         [InlineData("Not Found 404", HttpStatusCode.NotFound)]
         public async Task GetTLevelDetailsReturnsFailedOnServiceErrors(string errorMesage, HttpStatusCode expectedHttpStatusCode)
         {

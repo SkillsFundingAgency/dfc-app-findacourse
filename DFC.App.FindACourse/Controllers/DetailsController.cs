@@ -160,7 +160,7 @@ namespace DFC.App.FindACourse.Controllers
             }
             else
             {
-                return StatusCode((int)HttpStatusCode.FailedDependency);
+                return StatusCode((int)HttpStatusCode.ServiceUnavailable);
             }
         }
     }
