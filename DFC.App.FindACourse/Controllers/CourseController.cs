@@ -23,7 +23,7 @@ namespace DFC.App.FindACourse.Controllers
 {
     public class CourseController : Controller
     {
-        public const string CampaignCode = "LEVEL3_FREE";
+        public const string FreeSearchCampaignCode = "LEVEL3_FREE";
         private readonly ILogService logService;
         private readonly IFindACourseService findACourseService;
         private readonly IViewHelper viewHelper;
@@ -180,7 +180,7 @@ namespace DFC.App.FindACourse.Controllers
                 IsResultBody = true,
                 CourseSearchFilters = new CourseSearchFilters
                 {
-                    CampaignCode = CampaignCode,
+                    CampaignCode = FreeSearchCampaignCode,
                 },
             };
 
@@ -322,7 +322,7 @@ namespace DFC.App.FindACourse.Controllers
                 StartDate = StartDate.Anytime,
                 CourseStudyTime = new List<Fac.AttendancePattern> { Fac.AttendancePattern.Undefined },
                 SearchTerm = string.IsNullOrEmpty(searchTerm) ? string.Empty : searchTerm,
-                CampaignCode = CampaignCode,
+                CampaignCode = FreeSearchCampaignCode,
             };
             model.FreeCourseSearch = true;
 
@@ -513,6 +513,11 @@ namespace DFC.App.FindACourse.Controllers
                 SelectedDistanceValue = paramValues.Distance,
                 IsNewPage = true,
                 IsTest = isTest,
+                FreeCourseSearch = paramValues.CampaignCode == FreeSearchCampaignCode,
+                CourseSearchFilters = new CourseSearchFilters
+                {
+                    CampaignCode = paramValues.CampaignCode,
+                },
             };
 
             logService.LogInformation($"{nameof(this.Page)} generated the model and ready to pass to the view");
