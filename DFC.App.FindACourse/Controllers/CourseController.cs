@@ -180,7 +180,7 @@ namespace DFC.App.FindACourse.Controllers
                 IsResultBody = true,
                 CourseSearchFilters = new CourseSearchFilters
                 {
-                    CampaignCode = FreeSearchCampaignCode,
+                    CampaignCode = paramValues.CampaignCode,
                 },
             };
 
