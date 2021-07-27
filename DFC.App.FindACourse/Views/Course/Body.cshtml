@@ -41,7 +41,7 @@
                 @Html.HiddenFor(m => m.CurrentSearchTerm)
                 @Html.HiddenFor(m => m.RequestPage)
                 @Html.HiddenFor(m => m.FreeCourseSearch)
-                <input id="facCampaignCode" name="CourseSearchFilters.CampaignCode" type="hidden" value="@(Model.FreeCourseSearch ? CourseController.CampaignCode : String.Empty)">
+                <input id="facCampaignCode" name="CourseSearchFilters.FreeSearchCampaignCode" type="hidden" value="@(Model.FreeCourseSearch ? CourseController.FreeSearchCampaignCode : String.Empty)">
 
                 <div class="govuk-grid-row">
 
