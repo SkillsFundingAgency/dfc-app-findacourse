@@ -2,7 +2,7 @@
 @model BodyViewModel
 
 <section aria-label="Search">
-    <form action="/find-a-course/searchcourse" method="get" id="fac-search-course-form" class="find-a-course-page">
+    <form action="@(Model.FreeCourseSearch ? "/find-a-course/searchFreeCourse" : "/find-a-course/searchcourse")" method="get" id="fac-search-course-form" class="find-a-course-page">
         <section id="fac-search-banner" class="primary-hero">
             <div class="govuk-width-container">
                 <div class="govuk-grid-row">
@@ -46,7 +46,7 @@
                 <div class="govuk-grid-row">
 
                     <div class="govuk-grid-column-one-third">
-                        <partial name="sideBarLeft" model="Model.SideBar" />
+                        <partial name="sideBarLeft" model="Model" />
                     </div>
 
                     <div class="govuk-grid-column-two-thirds">

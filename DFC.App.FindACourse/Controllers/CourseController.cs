@@ -609,6 +609,10 @@ namespace DFC.App.FindACourse.Controllers
             model.CourseSearchFilters.CourseHours = courseHoursList;
             model.CourseSearchFilters.StartDate = selectedStartDateValue;
             model.CourseSearchFilters.CourseStudyTime = courseStudyTimeList;
+            if (model.FreeCourseSearch && string.IsNullOrEmpty(model.CourseSearchFilters.CampaignCode))
+            {
+                model.CourseSearchFilters.CampaignCode = FreeSearchCampaignCode;
+            }
 
             model.SideBar.FiltersApplied = model.FromPaging ? model.SideBar.FiltersApplied : true;
 
