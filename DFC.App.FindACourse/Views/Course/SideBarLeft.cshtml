@@ -1,4 +1,4 @@
-﻿@model DFC.App.FindACourse.ViewModels.SideBarViewModel
+﻿@model DFC.App.FindACourse.ViewModels.BodyViewModel
 
 
 <div class="filters filters" id="filters-block">
@@ -10,11 +10,11 @@
         <span id="location-hint" class="govuk-hint">
             <label aria-label="TownOrPostCodeLabel">Enter a town or postcode</label>
         </span>
-        <input type="text" asp-for="TownOrPostcode" aria-label="TownOrPostcode" name="SideBar.TownOrPostcode" class="govuk-input govuk-input--width-10" id="location-input" />
-        <span asp-validation-for="TownOrPostcode" class="text-danger" id="location-validator"></span>
-        <input type="hidden" asp-for="Coordinates" name="SideBar.Coordinates" id="coordinates" />
-        <input type="hidden" asp-for="SuggestedLocation" name="SideBar.SuggestedLocation" id="suggestedLocation-input" />
-        <div id="suggest-location" class="location-suggest@(Model.DidYouMeanLocations?.Count() > 0 ? "-show" : "")" role="group">
+        <input type="text" asp-for="SideBar.TownOrPostcode" aria-label="TownOrPostcode" name="SideBar.TownOrPostcode" class="govuk-input govuk-input--width-10" id="location-input" />
+        <span asp-validation-for="SideBar.TownOrPostcode" class="text-danger" id="location-validator"></span>
+        <input type="hidden" asp-for="SideBar.Coordinates" name="SideBar.Coordinates" id="coordinates" />
+        <input type="hidden" asp-for="SideBar.SuggestedLocation" name="SideBar.SuggestedLocation" id="suggestedLocation-input" />
+        <div id="suggest-location" class="location-suggest@(Model.SideBar.DidYouMeanLocations?.Count() > 0 ? "-show" : "")" role="group">
             <details id="suggest-location-details" class="govuk-details" open>
                 <summary class=govuk-details__summary aria-describedby="suggested-locations-aria" role="button" aria-expanded="false" aria-controls="suggested-locations-text">
                     <span class="govuk-details__summary-text">Did you mean:</span>
@@ -22,9 +22,9 @@
                 <p class="visuallyhidden" aria-live="polite" id="suggested-locations-aria">There are multiple locations with similar names, tab down to the suggestions, or collapse this panel</p>
                 <div class="govuk-details__summary suggest-locations-text" id="suggested-locations-text">
                     <ul id="suggested-locations">
-                        @if (Model.DidYouMeanLocations?.Count() > 0)
+                        @if (Model.SideBar.DidYouMeanLocations?.Count() > 0)
                         {
-                            @foreach (var location in Model.DidYouMeanLocations)
+                            @foreach (var location in Model.SideBar.DidYouMeanLocations)
                             {
                                 <li><button name="location" value="@location.Label|@location.Value">@location.Label</button></li>
                             }
@@ -38,45 +38,45 @@
     <div id="distance-block" class="govuk-form-group">
         <div id="distance">
             <label class="govuk-label govuk-!-font-weight-bold" for="location-distance" id="distance-label">Distance</label>
-            <select asp-for="DistanceValue" aria-label="DistanceValue" asp-items="Model.DistanceOptions" class="govuk-select" name="SelectedDistanceValue" id="distance-select"></select>
+            <select asp-for="SideBar.DistanceValue" aria-label="DistanceValue" asp-items="Model.SideBar.DistanceOptions" class="govuk-select" name="SelectedDistanceValue" id="distance-select"></select>
         </div>
     </div>
 
     <div id="startdate-block" class="govuk-form-group">
         <div id="startdate-block-div">
             <label class="govuk-label govuk-!-font-weight-bold" for="orderByInput" id="startdate-label">Start date</label>
-            <select asp-for="StartDateValue" asp-items="Model.StartDateOptions" class="govuk-select" name="SideBar.StartDateValue" id="startdate-select" aria-label="StartDate"></select>
+            <select asp-for="SideBar.StartDateValue" asp-items="Model.SideBar.StartDateOptions" class="govuk-select" name="SideBar.StartDateValue" id="startdate-select" aria-label="StartDate"></select>
         </div>
     </div>
 
     <div class="govuk-form-group" id="coursetype-block">
-        <div id="@Model.CourseType.FilterText" class="govuk-checkboxes">
+        <div id="@Model.SideBar.CourseType.FilterText" class="govuk-checkboxes">
             <fieldset class="govuk-fieldset">
-                <legend class="govuk-label govuk-!-font-weight-bold" id="coursetype-label">@Model.CourseType.FilterTitle</legend>
+                <legend class="govuk-label govuk-!-font-weight-bold" id="coursetype-label">@Model.SideBar.CourseType.FilterTitle</legend>
                 <div class="govuk-checkboxes govuk-checkboxes--small">
-                    <check-box-list name="SideBar.CourseType.SelectedIds" aria-label="CourseType" items="Model.CourseType.LstChkFilter" template="GDS"></check-box-list>
+                    <check-box-list name="SideBar.CourseType.SelectedIds" aria-label="CourseType" items="Model.SideBar.CourseType.LstChkFilter" template="GDS"></check-box-list>
                 </div>
             </fieldset>
         </div>
     </div>
 
     <div class="govuk-form-group" id="coursehours-block">
-        <div id="@Model.CourseHours.FilterText">
+        <div id="@Model.SideBar.CourseHours.FilterText">
             <fieldset class="govuk-fieldset">
-                <legend class="govuk-label govuk-!-font-weight-bold" id="coursehours-label">@Model.CourseHours.FilterTitle</legend>
+                <legend class="govuk-label govuk-!-font-weight-bold" id="coursehours-label">@Model.SideBar.CourseHours.FilterTitle</legend>
                 <div class="govuk-checkboxes govuk-checkboxes--small">
-                    <check-box-list name="SideBar.CourseHours.SelectedIds" aria-label="CourseHours" items="Model.CourseHours.LstChkFilter" template="GDS"></check-box-list>
+                    <check-box-list name="SideBar.CourseHours.SelectedIds" aria-label="CourseHours" items="Model.SideBar.CourseHours.LstChkFilter" template="GDS"></check-box-list>
                 </div>
             </fieldset>
         </div>
     </div>
 
     <div class="govuk-form-group">
-        <div id="@Model.CourseStudyTime.FilterText" id="coursestudytime-block">
+        <div id="@Model.SideBar.CourseStudyTime.FilterText" id="coursestudytime-block">
             <fieldset class="govuk-fieldset">
-                <legend class="govuk-label govuk-!-font-weight-bold" id="coursestudytime-label">@Model.CourseStudyTime.FilterTitle</legend>
+                <legend class="govuk-label govuk-!-font-weight-bold" id="coursestudytime-label">@Model.SideBar.CourseStudyTime.FilterTitle</legend>
                 <div class="govuk-checkboxes govuk-checkboxes--small">
-                    <check-box-list name="SideBar.CourseStudyTime.SelectedIds" items="Model.CourseStudyTime.LstChkFilter" template="GDS"></check-box-list>
+                    <check-box-list name="SideBar.CourseStudyTime.SelectedIds" items="Model.SideBar.CourseStudyTime.LstChkFilter" template="GDS"></check-box-list>
                 </div>
             </fieldset>
         </div>
@@ -87,9 +87,9 @@
     <div class="fac-filters-block"></div>
 
     <noscript>
-        @if (Model.FiltersApplied)
+        @if (Model.SideBar.FiltersApplied)
         {
-            <p id="fac-clear-filters"><a href="/find-a-course/searchcourse?searchTerm=@Model.CurrentSearchTerm" aria-label="ClearFilters">Clear filters</a></p>
+            <p id="fac-clear-filters"><a href="@(Model.FreeCourseSearch ? $"/find-a-course/searchFreeCourse?searchTerm={@Model.SideBar.CurrentSearchTerm}" : $"/find-a-course/searchcourse?searchTerm={@Model.SideBar.CurrentSearchTerm}")" aria-label="ClearFilters">Clear filters</a></p>
         }
     </noscript>
 </div>

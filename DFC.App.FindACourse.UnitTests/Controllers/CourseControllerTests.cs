@@ -524,6 +524,60 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
         }
 
         [Fact]
+        public async Task FilterResultsSetsCampaignCode()
+        {
+            // arrange
+            var controller = BuildCourseController("*/*");
+
+            var bodyViewModel = new BodyViewModel
+            {
+                CurrentSearchTerm = "Maths",
+                FreeCourseSearch = true,
+                SideBar = new SideBarViewModel(),
+                IsTest = true,
+
+            };
+
+            // act
+            var result = await controller.FilterResults(bodyViewModel, "TestLocation (Test Area)|-123.45|67.89").ConfigureAwait(false);
+
+            // assert
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = Assert.IsAssignableFrom<BodyViewModel>(viewResult.ViewData.Model);
+            Assert.Equal(model.CourseSearchFilters.CampaignCode, CourseController.FreeSearchCampaignCode);
+            controller.Dispose();
+        }
+
+        [Fact]
+        public async Task FilterResultsIgnoreCampaignCodeWhenAlreadySet()
+        {
+            // arrange
+            var controller = BuildCourseController("*/*");
+
+            var bodyViewModel = new BodyViewModel
+            {
+                CurrentSearchTerm = "Maths",
+                FreeCourseSearch = true,
+                SideBar = new SideBarViewModel(),
+                CourseSearchFilters = new CourseSearchFilters()
+                {
+                    CampaignCode = "test",
+                },
+                IsTest = true,
+
+            };
+
+            // act
+            var result = await controller.FilterResults(bodyViewModel, "TestLocation (Test Area)|-123.45|67.89").ConfigureAwait(false);
+
+            // assert
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = Assert.IsAssignableFrom<BodyViewModel>(viewResult.ViewData.Model);
+            Assert.NotEqual(model.CourseSearchFilters.CampaignCode, CourseController.FreeSearchCampaignCode);
+            controller.Dispose();
+        }
+
+        [Fact]
         public void FilterResultsThrowsExceptionThrowsExceptionForNullModel()
         {
             // arrange
