@@ -209,7 +209,8 @@ namespace DFC.App.FindACourse.Controllers
                                          $"{nameof(paramValues.FilterA)}={paramValues.FilterA}&" +
                                          $"{nameof(paramValues.Page)}={paramValues.Page}&" +
                                          $"{nameof(paramValues.OrderByValue)}={paramValues.OrderByValue}&" +
-                                         $"{nameof(paramValues.Coordinates)}={WebUtility.HtmlEncode(paramValues.Coordinates)}";
+                                         $"{nameof(paramValues.Coordinates)}={WebUtility.HtmlEncode(paramValues.Coordinates)}&" +
+                                         $"{nameof(paramValues.CampaignCode)}={paramValues.CampaignCode}";
                 }
             }
             catch (Exception ex)
@@ -396,6 +397,7 @@ namespace DFC.App.FindACourse.Controllers
             var filtera = model.SideBar.FiltersApplied;
             var orderByValue = model.SideBar.SelectedOrderByValue;
             var coordinates = model.SideBar.Coordinates;
+            var campaignCode = model.CourseSearchFilters?.CampaignCode;
 
             if (!model.IsTest)
             {
@@ -409,7 +411,9 @@ namespace DFC.App.FindACourse.Controllers
                                      $"{nameof(filtera)}={filtera}&" +
                                      $"{nameof(page)}={page}&" +
                                      $"{nameof(orderByValue)}={orderByValue}&" +
-                                     $"{nameof(coordinates)}={WebUtility.HtmlEncode(coordinates)}";
+                                     $"{nameof(coordinates)}={WebUtility.HtmlEncode(coordinates)}&" +
+                                     $"{nameof(campaignCode)}={campaignCode}";
+                ;
             }
 
             model.SideBar = sideBarViewModel;
@@ -534,6 +538,7 @@ namespace DFC.App.FindACourse.Controllers
             model.CurrentSearchTerm = filters?.SearchTerm;
             model.SideBar.CurrentSearchTerm = filters?.SearchTerm;
             model.RequestPage = 1;
+            model.CourseSearchFilters = filters;
 
             try
             {
