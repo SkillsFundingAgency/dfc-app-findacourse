@@ -40,7 +40,7 @@
             <form action="/find-a-course/filterresults" method="get" class="find-a-course-page" id="fac-filter-form">
                 @Html.HiddenFor(m => m.CurrentSearchTerm)
                 @Html.HiddenFor(m => m.RequestPage)
-                @Html.HiddenFor(m => m.FreeCourseSearch)
+                @Html.HiddenFor(m => m.FreeCourseSearch, new {id="facFreeCourseSearch"})
                 <input id="facCampaignCode" name="CourseSearchFilters.FreeSearchCampaignCode" type="hidden" value="@(Model.FreeCourseSearch ? CourseController.FreeSearchCampaignCode : String.Empty)">
 
                 <div class="govuk-grid-row">
