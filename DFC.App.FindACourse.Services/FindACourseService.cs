@@ -35,8 +35,6 @@ namespace DFC.App.FindACourse.Services
                 Page = pageSize,
             };
 
-            var x = JsonConvert.SerializeObject(criteriaProperties);
-
             return await repository.RetrieveData(criteriaProperties).ConfigureAwait(false);
         }
 
