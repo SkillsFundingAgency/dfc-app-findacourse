@@ -8,6 +8,7 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net.Mime;
 using System.Threading.Tasks;
@@ -15,6 +16,7 @@ using Xunit;
 
 namespace DFC.App.FindACourse.UnitTests.Controllers
 {
+    [ExcludeFromCodeCoverage]
     public class CourseControllerTests : BaseController
     {
         private readonly IFindACourseService fakefindACourseService = A.Fake<IFindACourseService>();
@@ -129,6 +131,31 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
             controller.Dispose();
         }
 
+        [Fact]
+        public async Task CourseControllerSearchFreeCourseReturnsNoContent()
+        {
+            // arrange
+            var controller = BuildCourseController(MediaTypeNames.Text.Html);
+            var dummyCourseSearchResult = A.Dummy<CourseSearchResult>();
+
+            A.CallTo(() => FakeFindACoursesService.GetFilteredData(A<CourseSearchFilters>._, A<CourseSearchOrderBy>._, A<int>._)).Returns(dummyCourseSearchResult);
+
+            // act
+            var result = await controller.SearchFreeCourse("course").ConfigureAwait(false);
+
+            // assert
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = Assert.IsAssignableFrom<BodyViewModel>(viewResult.ViewData.Model);
+
+            A.CallTo(() =>
+                    FakeFindACoursesService.GetFilteredData(A<CourseSearchFilters>.That.Matches(x => x.CampaignCode == CourseController.FreeSearchCampaignCode), A<CourseSearchOrderBy>._, A<int>._))
+                .MustHaveHappenedOnceExactly();
+
+            Assert.NotNull(model.Results);
+
+            controller.Dispose();
+        }
+
         [Theory]
         [MemberData(nameof(HtmlMediaTypes))]
         public void CourseControllerBodyFooterReturnsNoContent(string mediaTypeName)
@@ -217,6 +244,42 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
             // assert
             var viewResult = Assert.IsType<ViewResult>(result);
             var model = Assert.IsAssignableFrom<BodyViewModel>(viewResult.ViewData.Model);
+            Assert.NotNull(model.Results);
+
+            controller.Dispose();
+        }
+
+        [Fact]
+        public async Task PageSetsFreeCourseSearchWhenParameterPassedIn()
+        {
+            // arrange
+            var controller = BuildCourseController(MediaTypeNames.Text.Html);
+            var paramValues = new ParamValues
+            {
+                Town = "town",
+                CourseType = "Online",
+                CourseHours = "Full time",
+                CourseStudyTime = "Daytime",
+                CampaignCode = CourseController.FreeSearchCampaignCode,
+            };
+            var returnedCourseData = new CourseSearchResult
+            {
+                Courses = new List<Course>
+                {
+                    new Course { Title = "Maths", CourseId = "1", AttendancePattern = "Online", Description = "This is a test description - over 220 chars" + new string(' ', 220) },
+                },
+            };
+
+            A.CallTo(() => FakeFindACoursesService.GetFilteredData(A<CourseSearchFilters>.Ignored, CourseSearchOrderBy.Relevance, 1)).Returns(returnedCourseData);
+
+            // act
+            var result = await controller.Page(paramValues, true).ConfigureAwait(false);
+
+            // assert
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = Assert.IsAssignableFrom<BodyViewModel>(viewResult.ViewData.Model);
+            Assert.True(model.FreeCourseSearch);
+            Assert.Equal(model.CourseSearchFilters.CampaignCode, CourseController.FreeSearchCampaignCode);
             Assert.NotNull(model.Results);
 
             controller.Dispose();
@@ -428,6 +491,92 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
             controller.Dispose();
         }
 
+        [Theory]
+        [InlineData("Next 3 months", 0, 3, StartDate.SelectDateFrom)]
+        [InlineData("In 3 to 6 months", 3, 6, StartDate.SelectDateFrom)]
+        [InlineData("More than 6 months", 6, -1, StartDate.SelectDateFrom)]
+        public async Task FilterResultsSetsStartDateValuesWhenPassedIn(string StartDateValue, int from, int to, StartDate start)
+        {
+            // arrange
+            var controller = BuildCourseController("*/*");
+
+            var bodyViewModel = new BodyViewModel
+            {
+                CurrentSearchTerm = "Maths",
+                SideBar = new SideBarViewModel()
+                {
+                    StartDateValue = StartDateValue,
+                },
+                IsTest = true,
+
+            };
+
+            // act
+            var result = await controller.FilterResults(bodyViewModel, "TestLocation (Test Area)|-123.45|67.89").ConfigureAwait(false);
+
+            // assert
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = Assert.IsAssignableFrom<BodyViewModel>(viewResult.ViewData.Model);
+            Assert.Equal(model.CourseSearchFilters.StartDate, start);
+            Assert.Equal(model.CourseSearchFilters.StartDateFrom, DateTime.Today.AddMonths(from));
+            Assert.Equal(model.CourseSearchFilters.StartDateTo, to == -1 ? DateTime.MinValue : DateTime.Today.AddMonths(to));
+            controller.Dispose();
+        }
+
+        [Fact]
+        public async Task FilterResultsSetsCampaignCode()
+        {
+            // arrange
+            var controller = BuildCourseController("*/*");
+
+            var bodyViewModel = new BodyViewModel
+            {
+                CurrentSearchTerm = "Maths",
+                FreeCourseSearch = true,
+                SideBar = new SideBarViewModel(),
+                IsTest = true,
+
+            };
+
+            // act
+            var result = await controller.FilterResults(bodyViewModel, "TestLocation (Test Area)|-123.45|67.89").ConfigureAwait(false);
+
+            // assert
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = Assert.IsAssignableFrom<BodyViewModel>(viewResult.ViewData.Model);
+            Assert.Equal(model.CourseSearchFilters.CampaignCode, CourseController.FreeSearchCampaignCode);
+            controller.Dispose();
+        }
+
+        [Fact]
+        public async Task FilterResultsIgnoreCampaignCodeWhenAlreadySet()
+        {
+            // arrange
+            var controller = BuildCourseController("*/*");
+
+            var bodyViewModel = new BodyViewModel
+            {
+                CurrentSearchTerm = "Maths",
+                FreeCourseSearch = true,
+                SideBar = new SideBarViewModel(),
+                CourseSearchFilters = new CourseSearchFilters()
+                {
+                    CampaignCode = "test",
+                },
+                IsTest = true,
+
+            };
+
+            // act
+            var result = await controller.FilterResults(bodyViewModel, "TestLocation (Test Area)|-123.45|67.89").ConfigureAwait(false);
+
+            // assert
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = Assert.IsAssignableFrom<BodyViewModel>(viewResult.ViewData.Model);
+            Assert.NotEqual(model.CourseSearchFilters.CampaignCode, CourseController.FreeSearchCampaignCode);
+            controller.Dispose();
+        }
+
         [Fact]
         public void FilterResultsThrowsExceptionThrowsExceptionForNullModel()
         {
@@ -445,6 +594,26 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
 
         [Fact]
         public async Task CourseControllerSearchCourseThrowsException()
+        {
+            // arrange
+            var controller = BuildCourseController(MediaTypeNames.Text.Html);
+
+            A.CallTo(() => FakeFindACoursesService.GetFilteredData(A<CourseSearchFilters>.Ignored, A<CourseSearchOrderBy>.Ignored, A<int>.Ignored)).Throws(new Exception());
+
+            // act
+            var result = await controller.SearchCourse("search term").ConfigureAwait(false);
+
+            // assert
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = Assert.IsAssignableFrom<BodyViewModel>(viewResult.ViewData.Model);
+
+            Assert.Null(model.Results);
+
+            controller.Dispose();
+        }
+
+        [Fact]
+        public async Task CourseControllerSearchFreeCourseThrowsException()
         {
             // arrange
             var controller = BuildCourseController(MediaTypeNames.Text.Html);

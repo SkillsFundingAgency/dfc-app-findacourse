@@ -23,6 +23,7 @@ namespace DFC.App.FindACourse.Controllers
 {
     public class CourseController : Controller
     {
+        public const string FreeSearchCampaignCode = "LEVEL3_FREE";
         private readonly ILogService logService;
         private readonly IFindACourseService findACourseService;
         private readonly IViewHelper viewHelper;
@@ -177,6 +178,10 @@ namespace DFC.App.FindACourse.Controllers
                 IsTest = paramValues.IsTest,
                 SelectedDistanceValue = paramValues.Distance,
                 IsResultBody = true,
+                CourseSearchFilters = new CourseSearchFilters
+                {
+                    CampaignCode = paramValues.CampaignCode,
+                },
             };
 
             var newBodyViewModel = await GenerateModelAsync(model).ConfigureAwait(false);
@@ -204,7 +209,8 @@ namespace DFC.App.FindACourse.Controllers
                                          $"{nameof(paramValues.FilterA)}={paramValues.FilterA}&" +
                                          $"{nameof(paramValues.Page)}={paramValues.Page}&" +
                                          $"{nameof(paramValues.OrderByValue)}={paramValues.OrderByValue}&" +
-                                         $"{nameof(paramValues.Coordinates)}={WebUtility.HtmlEncode(paramValues.Coordinates)}";
+                                         $"{nameof(paramValues.Coordinates)}={WebUtility.HtmlEncode(paramValues.Coordinates)}&" +
+                                         $"{nameof(paramValues.CampaignCode)}={paramValues.CampaignCode}";
                 }
             }
             catch (Exception ex)
@@ -300,24 +306,28 @@ namespace DFC.App.FindACourse.Controllers
                 SearchTerm = string.IsNullOrEmpty(searchTerm) ? string.Empty : searchTerm,
             };
 
-            model.SideBar = GetSideBarViewModel();
-            model.SideBar.OrderByOptions = ListFilters.GetOrderByOptions();
-            model.CurrentSearchTerm = searchTerm;
-            model.SideBar.CurrentSearchTerm = searchTerm;
-            model.RequestPage = 1;
+            return await SearchCourses(model, courseSearchFilters).ConfigureAwait(false);
+        }
 
-            try
+        [HttpGet]
+        [Route("find-a-course/search/searchFreeCourse/body")]
+        public async Task<IActionResult> SearchFreeCourse(string searchTerm)
+        {
+            logService.LogInformation($"{nameof(this.SearchFreeCourse)} has been called");
+
+            var model = new BodyViewModel();
+            var courseSearchFilters = new CourseSearchFilters
             {
-                model.Results = await findACourseService.GetFilteredData(courseSearchFilters, CourseSearchOrderBy.StartDate, 1).ConfigureAwait(true);
-            }
-            catch (Exception ex)
-            {
-                logService.LogError($"{nameof(this.SearchCourse)} threw an exception" + ex.Message);
-            }
+                CourseType = new List<CourseType> { CourseType.All },
+                CourseHours = new List<CourseHours> { CourseHours.All },
+                StartDate = StartDate.Anytime,
+                CourseStudyTime = new List<Fac.AttendancePattern> { Fac.AttendancePattern.Undefined },
+                SearchTerm = string.IsNullOrEmpty(searchTerm) ? string.Empty : searchTerm,
+                CampaignCode = FreeSearchCampaignCode,
+            };
+            model.FreeCourseSearch = true;
 
-            logService.LogInformation($"{nameof(this.SearchCourse)} generated the model and ready to pass to the view");
-
-            return Results(model);
+            return await SearchCourses(model, courseSearchFilters).ConfigureAwait(false);
         }
 
         [HttpGet]
@@ -387,6 +397,7 @@ namespace DFC.App.FindACourse.Controllers
             var filtera = model.SideBar.FiltersApplied;
             var orderByValue = model.SideBar.SelectedOrderByValue;
             var coordinates = model.SideBar.Coordinates;
+            var campaignCode = model.CourseSearchFilters?.CampaignCode;
 
             if (!model.IsTest)
             {
@@ -400,7 +411,9 @@ namespace DFC.App.FindACourse.Controllers
                                      $"{nameof(filtera)}={filtera}&" +
                                      $"{nameof(page)}={page}&" +
                                      $"{nameof(orderByValue)}={orderByValue}&" +
-                                     $"{nameof(coordinates)}={WebUtility.HtmlEncode(coordinates)}";
+                                     $"{nameof(coordinates)}={WebUtility.HtmlEncode(coordinates)}&" +
+                                     $"{nameof(campaignCode)}={campaignCode}";
+                ;
             }
 
             model.SideBar = sideBarViewModel;
@@ -504,6 +517,11 @@ namespace DFC.App.FindACourse.Controllers
                 SelectedDistanceValue = paramValues.Distance,
                 IsNewPage = true,
                 IsTest = isTest,
+                FreeCourseSearch = paramValues.CampaignCode == FreeSearchCampaignCode,
+                CourseSearchFilters = new CourseSearchFilters
+                {
+                    CampaignCode = paramValues.CampaignCode,
+                },
             };
 
             logService.LogInformation($"{nameof(this.Page)} generated the model and ready to pass to the view");
@@ -511,6 +529,30 @@ namespace DFC.App.FindACourse.Controllers
             model.FromPaging = true;
 
             return await FilterResults(model, string.Empty).ConfigureAwait(false);
+        }
+
+        private async Task<IActionResult> SearchCourses(BodyViewModel model, CourseSearchFilters filters)
+        {
+            model.SideBar = GetSideBarViewModel();
+            model.SideBar.OrderByOptions = ListFilters.GetOrderByOptions();
+            model.CurrentSearchTerm = filters?.SearchTerm;
+            model.SideBar.CurrentSearchTerm = filters?.SearchTerm;
+            model.RequestPage = 1;
+            model.CourseSearchFilters = filters;
+
+            try
+            {
+                model.Results = await findACourseService.GetFilteredData(filters, CourseSearchOrderBy.StartDate, 1)
+                    .ConfigureAwait(true);
+            }
+            catch (Exception ex)
+            {
+                logService.LogError($"{nameof(this.SearchCourse)} threw an exception" + ex.Message);
+            }
+
+            logService.LogInformation($"{nameof(this.SearchCourse)} generated the model and ready to pass to the view");
+
+            return Results(model);
         }
 
         private async Task<IActionResult> FilterResultsInternal(BodyViewModel model)
@@ -565,39 +607,40 @@ namespace DFC.App.FindACourse.Controllers
                 model.CourseSearchOrderBy = sortedByCriteria;
             }
 
-            var courseSearchFilters = new CourseSearchFilters
+            model.CourseSearchFilters ??= new CourseSearchFilters();
+
+            model.CourseSearchFilters.SearchTerm = model.CurrentSearchTerm;
+            model.CourseSearchFilters.CourseType = courseTypeList;
+            model.CourseSearchFilters.CourseHours = courseHoursList;
+            model.CourseSearchFilters.StartDate = selectedStartDateValue;
+            model.CourseSearchFilters.CourseStudyTime = courseStudyTimeList;
+            if (model.FreeCourseSearch && string.IsNullOrEmpty(model.CourseSearchFilters.CampaignCode))
             {
-                SearchTerm = model.CurrentSearchTerm,
-                CourseType = courseTypeList,
-                CourseHours = courseHoursList,
-                StartDate = selectedStartDateValue,
-                CourseStudyTime = courseStudyTimeList,
-            };
+                model.CourseSearchFilters.CampaignCode = FreeSearchCampaignCode;
+            }
 
             model.SideBar.FiltersApplied = model.FromPaging ? model.SideBar.FiltersApplied : true;
 
             switch (model.SideBar.StartDateValue)
             {
                 case "Next 3 months":
-                    courseSearchFilters.StartDateTo = DateTime.Today.AddMonths(3);
-                    courseSearchFilters.StartDateFrom = DateTime.Today;
-                    courseSearchFilters.StartDate = StartDate.SelectDateFrom;
+                    model.CourseSearchFilters.StartDateTo = DateTime.Today.AddMonths(3);
+                    model.CourseSearchFilters.StartDateFrom = DateTime.Today;
+                    model.CourseSearchFilters.StartDate = StartDate.SelectDateFrom;
                     break;
                 case "In 3 to 6 months":
-                    courseSearchFilters.StartDateFrom = DateTime.Today.AddMonths(3);
-                    courseSearchFilters.StartDateTo = DateTime.Today.AddMonths(6);
-                    courseSearchFilters.StartDate = StartDate.SelectDateFrom;
+                    model.CourseSearchFilters.StartDateFrom = DateTime.Today.AddMonths(3);
+                    model.CourseSearchFilters.StartDateTo = DateTime.Today.AddMonths(6);
+                    model.CourseSearchFilters.StartDate = StartDate.SelectDateFrom;
                     break;
                 case "More than 6 months":
-                    courseSearchFilters.StartDateFrom = DateTime.Today.AddMonths(6);
-                    courseSearchFilters.StartDate = StartDate.SelectDateFrom;
+                    model.CourseSearchFilters.StartDateFrom = DateTime.Today.AddMonths(6);
+                    model.CourseSearchFilters.StartDate = StartDate.SelectDateFrom;
                     break;
                 default:
-                    courseSearchFilters.StartDate = StartDate.Anytime;
+                    model.CourseSearchFilters.StartDate = StartDate.Anytime;
                     break;
             }
-
-            model.CourseSearchFilters = courseSearchFilters;
 
             // Added in location parameters
             model = await AddInLocationRequestParametersAsync(model).ConfigureAwait(false);
