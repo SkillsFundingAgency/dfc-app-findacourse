@@ -21,3 +21,8 @@
 {
     <meta name="keywords" content="@Model.Keywords">
 }
+
+@if (Model.IsHidden)
+{
+    <meta name="robots" content="noindex">
+}

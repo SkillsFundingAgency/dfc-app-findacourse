@@ -92,7 +92,7 @@ namespace DFC.App.FindACourse.Controllers
                     break;
             }
 
-            var model = new HeadViewModel { Title = $"{title} | Find a course | National Careers Service", Description = "FAC", Keywords = "fac", CanonicalUrl = "find-a-course" };
+            var model = new HeadViewModel { Title = $"{title} | Find a course | National Careers Service", Description = "FAC", Keywords = "fac", CanonicalUrl = "find-a-course", IsHidden = string.Compare(articleName ,"searchFreeCourse", StringComparison.CurrentCultureIgnoreCase) == 0 };
 
             logService.LogInformation($"{nameof(this.Head)} generated the model and ready to pass to the view");
 
