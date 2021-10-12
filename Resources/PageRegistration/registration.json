@@ -5,7 +5,7 @@
     "TopNavigationOrder": 600,
     "Layout": 4,
     "IsOnline": true,
-    "OfflineHtml": "<div class=\"govuk-width-container\"><H2>Help Service Unavailable</H2></div>",
+    "OfflineHtml": "<div class=\"govuk-width-container\"><H2>Service Unavailable</H2></div>",
 	"PhaseBannerHtml":"<div  class=\"govuk-phase-banner\"><p class=\"govuk-phase-banner__content\"><strong class=\"govuk-tag govuk-phase-bannertag \">beta</strong> <span class=\"govuk-phase-banner__text\">Complete <a target=\"_blank\" class=\"govuk-link\" href=\"https://surveys.ipsosinteractive.com/mrIWeb/mrIWeb.dll?I.Project=S1039833&amp;id=&amp;cf=ovl \">Ipsos MORI survey</a> to give us your feedback about the service.</span> </p></div>",
     "SitemapUrl": null,
     "RobotsUrl": "https://__AppServiceName__.__appServiceDomain__/Robots.txt",

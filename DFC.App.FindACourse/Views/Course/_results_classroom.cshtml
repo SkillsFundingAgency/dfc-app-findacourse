@@ -16,18 +16,10 @@
             <ul class="govuk-list">
 
                 <li>
-                    <span class="govuk-secondary-colour">Start date:</span>
-                    @if (Model.StartDate != null)
-                    {
-                        @Model.StartDate.Value.ToFormattedString()
-                    }
-                    else
-                    {
-                        <span>Not known</span>
-                    }
+                    <partial name="_StartDate" model="Model" />
                 </li>
                 <li>
-                    <partial name="_cost" model="Model" />
+                    <partial name="_Cost" model="Model" />
                 </li>
                 <li>
                     <span class="govuk-secondary-colour">Provider:</span> @Html.Raw(Model.ProviderName)
