@@ -1,0 +1,14 @@
+﻿@model Course
+<span class="govuk-secondary-colour">Start date:</span>
+@if (Model.StartDate == null && Model.FlexibleStartDate)
+{
+    <span>Flexible</span>
+}
+else if (Model.StartDate != null)
+{
+    <span>@Model.StartDate.Value.ToFormattedString()</span>
+}
+else
+{
+    <span>Not known</span>
+}
