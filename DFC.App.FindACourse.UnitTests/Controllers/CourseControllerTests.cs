@@ -300,13 +300,13 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
         }
 
         [Theory]
-        [InlineData("CV1 2WT", null)]
-        [InlineData("TestTown", null)]
-        [InlineData("TownWithCords", "1.23|3.45")]
-        [InlineData("TownWithInvalidCords", "invalid|3.45")]
-        [InlineData("TownWithInvalidCords", "1.23|invalid")]
-        [InlineData("TownWithInvalidCords", "invalid")]
-        public async Task AjaxChangedReturnsSuccessWithCorrectStates(string townOrPostcode, string coordinates)
+        [InlineData("CV1 2WT", null, true)]
+        [InlineData("TestTown", null, false)]
+        [InlineData("TownWithCords", "1.23|3.45", true)]
+        [InlineData("TownWithInvalidCords", "invalid|3.45", false)]
+        [InlineData("TownWithInvalidCords", "1.23|invalid", false)]
+        [InlineData("TownWithInvalidCords", "invalid", false)]
+        public async Task AjaxChangedReturnsSuccessWithCorrectStates(string townOrPostcode, string coordinates, bool expectedShowDistance)
         {
             // arrange
             var controller = BuildCourseController(MediaTypeNames.Text.Html);
@@ -342,7 +342,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
             // assert
             Assert.False(string.IsNullOrWhiteSpace(result.HTML));
             Assert.Equal(returnedCourseData.Courses.ToList().Count, result.Count);
-            result.ShowDistanceSelector.Should().Be(true);
+            result.ShowDistanceSelector.Should().Be(expectedShowDistance);
 
             controller.Dispose();
         }
