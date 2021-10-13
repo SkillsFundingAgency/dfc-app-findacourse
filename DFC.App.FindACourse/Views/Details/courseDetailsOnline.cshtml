@@ -10,17 +10,7 @@
                     <th class="govuk-table__header" scope="row">Course type</th>
                     <td class="govuk-table__cell"><span id="attendance-mode">@Html.Raw(Model.CourseDetails.AttendanceMode)</span></td>
                 </tr>
-                @if (Model.CourseDetails.StartDate != null)
-                {
-                    <tr>
-                        <th class="govuk-table__header" scope="row">Course start date</th>
-                        <td class="govuk-table__cell">
-
-                            <span id="start-date">@Model.CourseDetails.StartDate.Value.ToFormattedString()</span>
-
-                        </td>
-                    </tr>
-                }
+                <partial name="_StartDate" model="Model.CourseDetails" />
                 @if (!string.IsNullOrEmpty(Model.CourseDetails.Cost))
                 {
                     <tr class="govuk-table__row">
@@ -36,8 +26,8 @@
                         <th class="govuk-table__header" scope="row">Cost description</th>
                         <td class="govuk-table__cell"><span id="additonal-price">@Html.Raw(Model.CourseDetails.CostDescription)</span></td>
                     </tr>
-                 }
-                </tbody>
+                }
+            </tbody>
         </table>
         <div class="govuk-accordion" data-module="govuk-accordion" id="accordion-default">
             @(await Html.PartialAsync("AccordionSections/WhoTheCourseIsFor", new AccordionSetUpModel {SectionText = Model.CourseDetails.Description, Position = "1"}))

@@ -1,0 +1,18 @@
+﻿@model CourseDetails
+<tr class="govuk-table__row">
+    <th class="govuk-table__header" scope="row">Course start date</th>
+    <td class="govuk-table__cell">
+        @if (Model.StartDate == null && Model.FlexibleStartDate)
+        {
+            <span id="start-date">Flexible</span>
+        }
+        else if (Model.StartDate != null)
+        {
+            <span id="start-date">@Model.StartDate.Value.ToFormattedString()</span>
+        }
+        else
+        {
+            <span id="start-date">Not known</span>
+        }
+    </td>
+</tr>
