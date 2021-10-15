@@ -22,3 +22,15 @@
         <td class="govuk-table__cell"><span id="awarding-organisation">@Html.Raw(Model.CourseDetails.AwardingOrganisation)</span></td>
     </tr>
 }
+
+@if (!string.IsNullOrWhiteSpace(Model.CourseDetails.CourseWebpageLink))
+{
+    <tr class="govuk-table__row">
+        <th class="govuk-table__header" scope="row">Course webpage</th>
+        <td class="govuk-table__cell">
+            <a href="@Model.CourseDetails.CourseWebpageLink" target="_blank">
+                @Model.CourseDetails.CourseWebpageLink
+            </a>
+        </td>
+    </tr>
+}
