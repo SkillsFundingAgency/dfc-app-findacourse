@@ -36,12 +36,5 @@
             @(await Html.PartialAsync("AccordionSections/HowYouWillBeAssessed", new AccordionSetUpModel {SectionText = Model.CourseDetails.AssessmentMethod, Position = "4"}))
             @(await Html.PartialAsync("AccordionSections/WhatYouCanDoNext", new AccordionSetUpModel {SectionText = Model.CourseDetails.NextSteps, Position = "5"}))
         </div>
-        @if (string.IsNullOrEmpty(Model.BackLinkUrl))
-        {
-            <p><a href="/find-a-course/page?@Model.SearchTerm" class="govuk-back-link" id="back-to-results">Back to results</a></p>
-        }
-        else
-        {
-            <p><a href="@Model.BackLinkUrl" class="govuk-back-link" id="back-to-results">Back</a></p>
-        }
+        <p><a href="/find-a-course/page?@Model.SearchTerm" class="govuk-back-link" id="back-to-results">Back to results</a></p>
 </div>
