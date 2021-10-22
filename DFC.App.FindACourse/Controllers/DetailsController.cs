@@ -68,7 +68,7 @@ namespace DFC.App.FindACourse.Controllers
                 model.CourseRegions = model.CourseDetails.SubRegions != null ? TransformSubRegionsToRegions(model.CourseDetails.SubRegions) : null;
                 model.DetailsRightBarViewModel.Provider = mapper.Map<ProviderViewModel>(model.CourseDetails.ProviderDetails);
                 model.DetailsRightBarViewModel.SpeakToAnAdviser = await staticContentDocumentService.GetByIdAsync(new Guid(cmsApiClientOptions.ContentIds)).ConfigureAwait(false);
-                model.CourseDetails.CourseWebpageLink = CompareProviderLinkWithCourseLink(model.CourseDetails.CourseWebpageLink, model.CourseDetails.ProviderDetails.Website);
+                model.CourseDetails.CourseWebpageLink = CompareProviderLinkWithCourseLink(model?.CourseDetails?.CourseWebpageLink, model.CourseDetails?.ProviderDetails?.Website);
             }
             catch (Exception ex)
             {
@@ -104,7 +104,7 @@ namespace DFC.App.FindACourse.Controllers
                 model.TlevelDetails = await findACourseService.GetTLevelDetails(tlevelId, tlevelLocationId).ConfigureAwait(false);
                 model.DetailsRightBarViewModel.Provider = mapper.Map<ProviderViewModel>(model.TlevelDetails.ProviderDetails);
                 model.DetailsRightBarViewModel.SpeakToAnAdviser = await staticContentDocumentService.GetByIdAsync(new Guid(cmsApiClientOptions.ContentIds)).ConfigureAwait(false);
-                model.TlevelDetails.Website = CompareProviderLinkWithCourseLink(model.TlevelDetails.Website, model.TlevelDetails.ProviderDetails.Website);
+                model.TlevelDetails.Website = CompareProviderLinkWithCourseLink(model?.TlevelDetails?.Website, model?.TlevelDetails?.ProviderDetails?.Website);
             }
             catch (Exception ex)
             {
