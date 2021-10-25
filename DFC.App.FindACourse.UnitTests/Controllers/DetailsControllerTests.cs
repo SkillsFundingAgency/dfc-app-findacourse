@@ -141,7 +141,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
         public async Task GetCourseDetailsThrowsExceptionForNullCourseId()
         {
             // arrange
-            var controller = BuildDetailsController("*/*");
+            using var controller = BuildDetailsController("*/*");
             var paramValues = new ParamValues
             {
                 Page = 1,
@@ -150,19 +150,17 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
             };
 
             // act
-            Func<Task> act = async () => await controller.Details(null, RunId, null, "testSearchTerm", paramValues).ConfigureAwait(false);
+            var actual = await controller.Details(null, RunId, null, "testSearchTerm", paramValues);
 
             // assert
-            act.Should().Throw<ArgumentNullException>();
-
-            controller.Dispose();
+            actual.Should().BeEquivalentTo(new StatusCodeResult(400));
         }
 
         [Fact]
         public async Task GetCourseDetailsThrowsExceptionForNullRunId()
         {
             // arrange
-            var controller = BuildDetailsController("*/*");
+            using var controller = BuildDetailsController("*/*");
             var paramValues = new ParamValues
             {
                 Page = 1,
@@ -171,12 +169,10 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
             };
 
             // act
-            Func<Task> act = async () => await controller.Details(CourseId, null, null, "testSearchTerm", paramValues).ConfigureAwait(false);
+            var actual = await controller.Details(CourseId, null, null, "testSearchTerm", paramValues);
 
             // assert
-            act.Should().Throw<ArgumentNullException>();
-
-            controller.Dispose();
+            actual.Should().BeEquivalentTo(new StatusCodeResult(400));
         }
 
         [Theory]
