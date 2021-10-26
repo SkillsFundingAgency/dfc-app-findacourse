@@ -48,7 +48,8 @@ namespace DFC.App.FindACourse.Controllers
 
             if (paramValues == null)
             {
-                throw new ArgumentNullException(nameof(paramValues));
+                logService.LogInformation($"paramValues is null for method: {nameof(Details)} on controller {nameof(DetailsController)}");
+                return StatusCode((int)HttpStatusCode.BadRequest);
             }
 
             var model = new DetailsViewModel();
@@ -89,7 +90,8 @@ namespace DFC.App.FindACourse.Controllers
 
             if (paramValues == null)
             {
-                throw new ArgumentNullException(nameof(paramValues));
+                logService.LogInformation($"paramValues is null for method: {nameof(TLevelDetails)} on controller {nameof(DetailsController)}");
+                return StatusCode((int)HttpStatusCode.BadRequest);
             }
 
             var model = new TLevelDetailsViewModel();
