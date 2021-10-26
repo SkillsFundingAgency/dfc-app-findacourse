@@ -129,10 +129,10 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
             var controller = BuildDetailsController("*/*");
 
             // act
-            Func<Task> act = async () => await controller.Details(CourseId, RunId, null, "testSearchTerm", null).ConfigureAwait(false);
+            var actual =  await controller.Details(CourseId, RunId, null, "testSearchTerm", null);
 
             // assert
-            act.Should().Throw<ArgumentNullException>();
+            actual.Should().BeEquivalentTo(new StatusCodeResult(400));
 
             controller.Dispose();
         }
@@ -214,10 +214,10 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
             var controller = BuildDetailsController("*/*");
 
             // act
-            Func<Task> act = async () => await controller.TLevelDetails(TLevelId, TLevelLocationId, "testSearchTerm", null).ConfigureAwait(false);
+            var actual = await controller.TLevelDetails(TLevelId, TLevelLocationId, "testSearchTerm", null);
 
             // assert
-            act.Should().Throw<ArgumentNullException>();
+            actual.Should().BeEquivalentTo(new StatusCodeResult(400));
 
             controller.Dispose();
         }
