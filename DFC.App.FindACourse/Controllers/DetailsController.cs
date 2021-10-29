@@ -60,7 +60,8 @@ namespace DFC.App.FindACourse.Controllers
 
             if (string.IsNullOrEmpty(courseId) || string.IsNullOrEmpty(runId))
             {
-                throw new ArgumentNullException("Course Id and/or runId does not have a value");
+                logService.LogInformation($"Course Id ({courseId}) and/or runId ({runId}) does not have a value - returning BadRequest");
+                return StatusCode((int)HttpStatusCode.BadRequest);
             }
 
             try
@@ -106,7 +107,6 @@ namespace DFC.App.FindACourse.Controllers
                 model.TlevelDetails = await findACourseService.GetTLevelDetails(tlevelId, tlevelLocationId).ConfigureAwait(false);
                 model.DetailsRightBarViewModel.Provider = mapper.Map<ProviderViewModel>(model.TlevelDetails.ProviderDetails);
                 model.DetailsRightBarViewModel.SpeakToAnAdviser = await staticContentDocumentService.GetByIdAsync(new Guid(cmsApiClientOptions.ContentIds)).ConfigureAwait(false);
-                model.TlevelDetails.Website = CompareProviderLinkWithCourseLink(model?.TlevelDetails?.Website, model?.TlevelDetails?.ProviderDetails?.Website);
             }
             catch (Exception ex)
             {
