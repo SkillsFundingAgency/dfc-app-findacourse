@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using NHibernate.Util;
 
 namespace DFC.App.FindACourse.Controllers
 {
@@ -56,9 +57,9 @@ namespace DFC.App.FindACourse.Controllers
             runId ??= r;
 
             model.SearchTerm = FormatSearchParameters(paramValues, currentSearchTerm);
-            if (Request.Headers["Referer"].Contains("job-profiles"))
+            if (Request.Headers.TryGetValue("Referer", out var refererValues))
             {
-                model.BackLinkUrl = Request.Headers["Referer"];
+                model.BackLinkUrl = refererValues.FirstOrDefault(x => x.Contains("job-profiles"));
             }
 
             if (string.IsNullOrEmpty(courseId) || string.IsNullOrEmpty(runId))
