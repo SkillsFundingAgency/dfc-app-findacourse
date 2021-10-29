@@ -240,7 +240,8 @@ namespace DFC.App.FindACourse.Controllers
 
             if (paramValues == null)
             {
-                throw new ArgumentNullException(nameof(paramValues));
+                logService.LogInformation($"paramValues is null for method: {nameof(Page)} on controller {nameof(CourseController)}");
+                return Task.FromResult<IActionResult>(StatusCode((int)HttpStatusCode.BadRequest));
             }
 
             return PageInternalAsync(paramValues, isTest);
@@ -255,7 +256,8 @@ namespace DFC.App.FindACourse.Controllers
 
             if (model == null)
             {
-                throw new ArgumentNullException(nameof(model));
+                logService.LogInformation($"model is null for method: {nameof(FilterResults)} on controller {nameof(CourseController)}");
+                return Task.FromResult<IActionResult>(StatusCode((int)HttpStatusCode.BadRequest));
             }
 
             if (model.SideBar.SuggestedLocation != model.SideBar.TownOrPostcode)
@@ -413,7 +415,6 @@ namespace DFC.App.FindACourse.Controllers
                                      $"{nameof(orderByValue)}={orderByValue}&" +
                                      $"{nameof(coordinates)}={WebUtility.HtmlEncode(coordinates)}&" +
                                      $"{nameof(campaignCode)}={campaignCode}";
-                ;
             }
 
             model.SideBar = sideBarViewModel;
