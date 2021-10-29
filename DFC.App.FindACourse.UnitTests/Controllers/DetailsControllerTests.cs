@@ -129,7 +129,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
             var controller = BuildDetailsController("*/*");
 
             // act
-            var actual =  await controller.Details(CourseId, RunId, null, "testSearchTerm", null);
+            var actual = await controller.Details(CourseId, RunId, null, "testSearchTerm", null);
 
             // assert
             actual.Should().BeEquivalentTo(new StatusCodeResult(400));
@@ -214,28 +214,6 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
 
             // assert
             actual.Should().BeEquivalentTo(new StatusCodeResult(400));
-
-            controller.Dispose();
-        }
-
-        [Theory]
-        [InlineData("", HttpStatusCode.ServiceUnavailable)]
-        [InlineData("Not Found 404", HttpStatusCode.NotFound)]
-        public async Task GetTLevelDetailsReturnsFailedOnServiceErrors(string errorMesage, HttpStatusCode expectedHttpStatusCode)
-        {
-            //Set Up
-            A.CallTo(() => FakeFindACoursesService.GetTLevelDetails(A<string>.Ignored, A<string>.Ignored)).Throws(new SystemException(errorMesage));
-
-            var controller = BuildDetailsController("*/*");
-            var paramValues = new ParamValues();
-
-            //Act
-            var result = await controller.TLevelDetails(CourseId, TLevelLocationId, "testSearchTerm", paramValues).ConfigureAwait(false);
-
-            //Asserts
-            var resultStatus = result as StatusCodeResult;
-            resultStatus.StatusCode.Should().Be((int)expectedHttpStatusCode);
-            A.CallTo(() => FakeLogService.LogError(A<string>.Ignored)).MustHaveHappenedOnceExactly();
 
             controller.Dispose();
         }
