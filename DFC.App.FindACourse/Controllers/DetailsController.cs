@@ -48,8 +48,7 @@ namespace DFC.App.FindACourse.Controllers
 
             if (paramValues == null)
             {
-                logService.LogInformation($"paramValues is null for method: {nameof(Details)} on controller {nameof(DetailsController)}");
-                return StatusCode((int)HttpStatusCode.BadRequest);
+                throw new ArgumentNullException(nameof(paramValues));
             }
 
             var model = new DetailsViewModel();
@@ -60,8 +59,7 @@ namespace DFC.App.FindACourse.Controllers
 
             if (string.IsNullOrEmpty(courseId) || string.IsNullOrEmpty(runId))
             {
-                logService.LogInformation($"Course Id ({courseId}) and/or runId ({runId}) does not have a value - returning BadRequest");
-                return StatusCode((int)HttpStatusCode.BadRequest);
+                throw new ArgumentNullException("Course Id and/or runId does not have a value");
             }
 
             try
@@ -70,7 +68,6 @@ namespace DFC.App.FindACourse.Controllers
                 model.CourseRegions = model.CourseDetails.SubRegions != null ? TransformSubRegionsToRegions(model.CourseDetails.SubRegions) : null;
                 model.DetailsRightBarViewModel.Provider = mapper.Map<ProviderViewModel>(model.CourseDetails.ProviderDetails);
                 model.DetailsRightBarViewModel.SpeakToAnAdviser = await staticContentDocumentService.GetByIdAsync(new Guid(cmsApiClientOptions.ContentIds)).ConfigureAwait(false);
-                model.CourseDetails.CourseWebpageLink = CompareProviderLinkWithCourseLink(model?.CourseDetails?.CourseWebpageLink, model.CourseDetails?.ProviderDetails?.Website);
             }
             catch (Exception ex)
             {
@@ -90,8 +87,7 @@ namespace DFC.App.FindACourse.Controllers
 
             if (paramValues == null)
             {
-                logService.LogInformation($"paramValues is null for method: {nameof(TLevelDetails)} on controller {nameof(DetailsController)}");
-                return StatusCode((int)HttpStatusCode.BadRequest);
+                throw new ArgumentNullException(nameof(paramValues));
             }
 
             var model = new TLevelDetailsViewModel();
@@ -153,11 +149,6 @@ namespace DFC.App.FindACourse.Controllers
                           .ToList();
 
             return result;
-        }
-
-        private static string CompareProviderLinkWithCourseLink(string courseLink, string providerLink)
-        {
-            return string.IsNullOrEmpty(courseLink) ? null : courseLink.Equals(providerLink) ? null : courseLink;
         }
 
         private StatusCodeResult DetaislErrorReturnStatus(Exception ex)
