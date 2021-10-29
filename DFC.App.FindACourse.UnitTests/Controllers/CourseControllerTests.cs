@@ -12,6 +12,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net.Mime;
 using System.Threading.Tasks;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Xunit;
 
 namespace DFC.App.FindACourse.UnitTests.Controllers
@@ -286,16 +287,16 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
         }
 
         [Fact]
-        public void PageReturnsArgumentNullExceptionForMissingParameters()
+        public async Task PageReturnsArgumentNullExceptionForMissingParameters()
         {
             // arrange
             var controller = BuildCourseController(MediaTypeNames.Text.Html);
 
             // act
-            Func<Task> act = async () => await controller.Page(null, false).ConfigureAwait(false);
+            var actual = await controller.Page(null, false);
 
             // assert
-            act.Should().Throw<ArgumentNullException>();
+            actual.Should().BeEquivalentTo(new StatusCodeResult(400));
             controller.Dispose();
         }
 
@@ -578,16 +579,16 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
         }
 
         [Fact]
-        public void FilterResultsThrowsExceptionThrowsExceptionForNullModel()
+        public async Task FilterResultsThrowsExceptionThrowsExceptionForNullModel()
         {
             // arrange
             var controller = BuildCourseController("*/*");
 
             // act
-            Func<Task> act = async () => await controller.FilterResults(null, string.Empty).ConfigureAwait(false);
+            var actual = await controller.FilterResults(null, string.Empty);
 
             // assert
-            act.Should().Throw<ArgumentNullException>();
+            actual.Should().BeEquivalentTo(new StatusCodeResult(400));
 
             controller.Dispose();
         }

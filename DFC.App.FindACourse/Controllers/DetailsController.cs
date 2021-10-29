@@ -48,7 +48,8 @@ namespace DFC.App.FindACourse.Controllers
 
             if (paramValues == null)
             {
-                throw new ArgumentNullException(nameof(paramValues));
+                logService.LogInformation($"paramValues is null for method: {nameof(Details)} on controller {nameof(DetailsController)}");
+                return StatusCode((int)HttpStatusCode.BadRequest);
             }
 
             var model = new DetailsViewModel();
@@ -68,6 +69,7 @@ namespace DFC.App.FindACourse.Controllers
                 model.CourseRegions = model.CourseDetails.SubRegions != null ? TransformSubRegionsToRegions(model.CourseDetails.SubRegions) : null;
                 model.DetailsRightBarViewModel.Provider = mapper.Map<ProviderViewModel>(model.CourseDetails.ProviderDetails);
                 model.DetailsRightBarViewModel.SpeakToAnAdviser = await staticContentDocumentService.GetByIdAsync(new Guid(cmsApiClientOptions.ContentIds)).ConfigureAwait(false);
+                model.CourseDetails.CourseWebpageLink = CompareProviderLinkWithCourseLink(model?.CourseDetails?.CourseWebpageLink, model.CourseDetails?.ProviderDetails?.Website);
             }
             catch (Exception ex)
             {
@@ -87,7 +89,8 @@ namespace DFC.App.FindACourse.Controllers
 
             if (paramValues == null)
             {
-                throw new ArgumentNullException(nameof(paramValues));
+                logService.LogInformation($"paramValues is null for method: {nameof(TLevelDetails)} on controller {nameof(DetailsController)}");
+                return StatusCode((int)HttpStatusCode.BadRequest);
             }
 
             var model = new TLevelDetailsViewModel();
@@ -149,6 +152,11 @@ namespace DFC.App.FindACourse.Controllers
                           .ToList();
 
             return result;
+        }
+
+        private static string CompareProviderLinkWithCourseLink(string courseLink, string providerLink)
+        {
+            return string.IsNullOrEmpty(courseLink) ? null : courseLink.Equals(providerLink) ? null : courseLink;
         }
 
         private StatusCodeResult DetaislErrorReturnStatus(Exception ex)
