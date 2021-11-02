@@ -20,5 +20,7 @@ namespace DFC.App.FindACourse.ViewModels
         public IList<CourseRegion> CourseRegions { get; set; }
 
         public DetailsRightBarViewModel DetailsRightBarViewModel { get; set; }
+
+        public string BackLinkUrl { get; set; }
     }
 }

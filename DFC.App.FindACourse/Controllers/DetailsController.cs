@@ -57,6 +57,10 @@ namespace DFC.App.FindACourse.Controllers
             runId ??= r;
 
             model.SearchTerm = FormatSearchParameters(paramValues, currentSearchTerm);
+            if (Request.Headers.TryGetValue("Referer", out var refererValues))
+            {
+                model.BackLinkUrl = refererValues.FirstOrDefault(x => x.Contains("job-profiles"));
+            }
 
             if (string.IsNullOrEmpty(courseId) || string.IsNullOrEmpty(runId))
             {
