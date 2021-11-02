@@ -78,5 +78,12 @@
             </svg>
         </a>
     }
-    <p><a href="/find-a-course/page?@Model.SearchTerm" class="govuk-back-link" id="back-to-results">Back to results</a></p>
+    @if (string.IsNullOrEmpty(Model.BackLinkUrl))
+    {
+        <p><a href="/find-a-course/page?@Model.SearchTerm" class="govuk-back-link" id="back-to-results">Back to results</a></p>
+    }
+    else
+    {
+        <p><a href="@Model.BackLinkUrl" class="govuk-back-link" id="back-to-results">Back</a></p>
+    }
 </div>
