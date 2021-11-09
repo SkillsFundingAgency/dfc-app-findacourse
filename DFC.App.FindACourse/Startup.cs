@@ -2,7 +2,6 @@
 using DFC.App.FindACourse.Data.Contracts;
 using DFC.App.FindACourse.Data.Domain;
 using DFC.App.FindACourse.Data.Models;
-using DFC.App.FindACourse.Extensions;
 using DFC.App.FindACourse.Framework;
 using DFC.App.FindACourse.Helpers;
 using DFC.App.FindACourse.HostedServices;
@@ -25,14 +24,11 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Azure.Documents.Client;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Polly;
-using Polly.Extensions.Http;
-using Polly.Registry;
-using System;
 using System.Diagnostics.CodeAnalysis;
 
 namespace DFC.App.FindACourse
@@ -89,7 +85,8 @@ namespace DFC.App.FindACourse
 
             services.AddSingleton(Configuration.GetSection(nameof(CmsApiClientOptions)).Get<CmsApiClientOptions>() ?? new CmsApiClientOptions());
             var staticContentDbConnection = Configuration.GetSection(StaticCosmosDbConfigAppSettings).Get<CosmosDbConnection>();
-            services.AddDocumentServices<StaticContentItemModel>(staticContentDbConnection, env.IsDevelopment());
+            var cosmosRetryOptions = new RetryOptions { MaxRetryAttemptsOnThrottledRequests = 20, MaxRetryWaitTimeInSeconds = 60 };
+            services.AddDocumentServices<StaticContentItemModel>(staticContentDbConnection, env.IsDevelopment(), cosmosRetryOptions);
             services.AddTransient<IStaticContentReloadService, StaticContentReloadService>();
             services.AddTransient<IApiService, ApiService>();
             services.AddTransient<ICmsApiService, CmsApiService>();
