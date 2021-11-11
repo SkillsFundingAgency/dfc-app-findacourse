@@ -57,10 +57,15 @@ namespace DFC.App.FindACourse.Controllers
             runId ??= r;
 
             model.SearchTerm = FormatSearchParameters(paramValues, currentSearchTerm);
+            if (Request.Headers.TryGetValue("Referer", out var refererValues))
+            {
+                model.BackLinkUrl = refererValues.FirstOrDefault(x => x.Contains("job-profiles"));
+            }
 
             if (string.IsNullOrEmpty(courseId) || string.IsNullOrEmpty(runId))
             {
-                throw new ArgumentNullException("Course Id and/or runId does not have a value");
+                logService.LogInformation($"Course Id ({courseId}) and/or runId ({runId}) does not have a value - returning BadRequest");
+                return StatusCode((int)HttpStatusCode.BadRequest);
             }
 
             try
