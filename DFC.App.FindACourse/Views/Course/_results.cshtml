@@ -43,6 +43,7 @@
         {
             @foreach (var result in Model.Results.Courses)
             {
+                result.AdvancedLearnerLoansOffered = Model.FreeCourseSearch;
                 switch (result.AttendanceMode)
                 {
                     case "Classroom based":
