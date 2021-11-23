@@ -47,7 +47,14 @@
                 <tr class="govuk-table__row">
                     <th class="govuk-table__header" scope="row">Cost</th>
                     <td class="govuk-table__cell">
-                        <span id="cost-value">£@Model.CourseDetails.Cost.ToDecimalString("N2")</span>
+                        @if (Model.CourseDetails.AdvancedLearnerLoansOffered)
+                        {
+                            <span>Contact course provider</span>
+                        }
+                        else
+                        {
+                            <span id="cost-value">£@Model.CourseDetails.Cost.ToDecimalString("N2")</span>
+                        }
                     </td>
                 </tr>
             }
