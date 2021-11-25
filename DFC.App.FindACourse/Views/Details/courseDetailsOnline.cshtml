@@ -15,18 +15,10 @@
             {
 
 
-<tr class="govuk-table__row">
-                    <th class="govuk-table__header" scope="row">Cost</th>
+                <tr class="govuk-table__row">
+                    <th class="govuk-table__header" scope="row"></th>
                     <td class="govuk-table__cell">
-                        @if (Model.CourseDetails.AdvancedLearnerLoansOffered)
-                        {
-                        <span>Contact course provider</span>
-                        }
-                        else
-                        {
-                            <span id="cost-value">£@Model.CourseDetails.Cost.ToDecimalString("N2")</span>
-                        }
-
+                        <span id="cost-value">@(Model.CourseDetails.AdvancedLearnerLoansOffered == true ? "Contact course provider": $"£{Model.CourseDetails.Cost.ToDecimalString("N2")}") </span>
                     </td>
                 </tr>
             }
