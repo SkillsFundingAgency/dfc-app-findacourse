@@ -61,6 +61,8 @@ namespace DFC.App.FindACourse.Services
 
         public async Task ReloadSharedContent(CancellationToken stoppingToken)
         {
+            await staticContentDocumentService.PurgeAsync().ConfigureAwait(false);
+
             var contentIds = cmsApiClientOptions.ContentIds.Split(",", StringSplitOptions.RemoveEmptyEntries);
 
             foreach (var contentId in contentIds)

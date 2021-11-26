@@ -12,7 +12,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net.Mime;
 using System.Threading.Tasks;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Xunit;
 
 namespace DFC.App.FindACourse.UnitTests.Controllers
@@ -24,7 +23,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
 
         [Theory]
         [MemberData(nameof(HtmlMediaTypes))]
-        public async Task CourseControllerIndexReturnsSuccess(string mediaTypeName)
+        public void CourseControllerIndexReturnsSuccess(string mediaTypeName)
         {
             var controller = BuildCourseController(mediaTypeName);
 
@@ -82,7 +81,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
 
         [Theory]
         [MemberData(nameof(HtmlMediaTypes))]
-        public async Task CourseControllerBreadcrumbHtmlReturnsSuccess(string mediaTypeName)
+        public void CourseControllerBreadcrumbHtmlReturnsSuccess(string mediaTypeName)
         {
             var controller = BuildCourseController(mediaTypeName);
 
@@ -438,7 +437,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
             Func<Task> act = async () => await controller.AjaxChanged(null).ConfigureAwait(false);
 
             // assert
-            act.Should().Throw<ArgumentNullException>();
+            await act.Should().ThrowAsync<ArgumentNullException>();
             controller.Dispose();
         }
 
@@ -496,7 +495,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
         [InlineData("Next 3 months", 0, 3, StartDate.SelectDateFrom)]
         [InlineData("In 3 to 6 months", 3, 6, StartDate.SelectDateFrom)]
         [InlineData("More than 6 months", 6, -1, StartDate.SelectDateFrom)]
-        public async Task FilterResultsSetsStartDateValuesWhenPassedIn(string StartDateValue, int from, int to, StartDate start)
+        public async Task FilterResultsSetsStartDateValuesWhenPassedIn(string startDateValue, int from, int to, StartDate start)
         {
             // arrange
             var controller = BuildCourseController("*/*");
@@ -506,10 +505,9 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
                 CurrentSearchTerm = "Maths",
                 SideBar = new SideBarViewModel()
                 {
-                    StartDateValue = StartDateValue,
+                    StartDateValue = startDateValue,
                 },
                 IsTest = true,
-
             };
 
             // act
@@ -536,7 +534,6 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
                 FreeCourseSearch = true,
                 SideBar = new SideBarViewModel(),
                 IsTest = true,
-
             };
 
             // act
@@ -565,7 +562,6 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
                     CampaignCode = "test",
                 },
                 IsTest = true,
-
             };
 
             // act
@@ -660,7 +656,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
             Func<Task> act = async () => await controller.IsValidPostcode("\"\"").ConfigureAwait(false);
 
             // assert
-            act.Should().Throw<ArgumentNullException>();
+            await act.Should().ThrowAsync<ArgumentNullException>();
 
             controller.Dispose();
         }
