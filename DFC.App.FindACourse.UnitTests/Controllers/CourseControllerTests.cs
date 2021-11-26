@@ -12,7 +12,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net.Mime;
 using System.Threading.Tasks;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Xunit;
 
 namespace DFC.App.FindACourse.UnitTests.Controllers
@@ -438,7 +437,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
             Func<Task> act = async () => await controller.AjaxChanged(null).ConfigureAwait(false);
 
             // assert
-            act.Should().Throw<ArgumentNullException>();
+            await act.Should().ThrowAsync<ArgumentNullException>();
             controller.Dispose();
         }
 
@@ -660,7 +659,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
             Func<Task> act = async () => await controller.IsValidPostcode("\"\"").ConfigureAwait(false);
 
             // assert
-            act.Should().Throw<ArgumentNullException>();
+            await act.Should().ThrowAsync<ArgumentNullException>();
 
             controller.Dispose();
         }
