@@ -1,4 +1,4 @@
-﻿// <copyright file="FindACourseLandingPage.cs" company="National Careers Service">
+﻿// <copyright file="CourseDetailsPage.cs" company="National Careers Service">
 // Copyright (c) National Careers Service. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // </copyright>
@@ -16,9 +16,9 @@ namespace DFC.App.FindACourse.UI.FunctionalTests.Pages
     {
         public CourseDetailsPage(ScenarioContext context)
         {
-            this.Context = context;
+            Context = context;
 
-            if (this.Context == null)
+            if (Context == null)
             {
                 throw new NullReferenceException("The scenario context is null. The course details cannot be initialised.");
             }
@@ -29,7 +29,7 @@ namespace DFC.App.FindACourse.UI.FunctionalTests.Pages
         public CourseDetailsPage CourseDetailsPageDisplayed()
         {
             var pageHeadingLocator = By.ClassName("govuk-heading-l");
-            this.Context.GetHelperLibrary<AppSettings>().WebDriverWaitHelper.WaitForElementToContainText(pageHeadingLocator, this.Context.Get<IObjectContext>().GetObject("FirstResult"));
+            Context.GetHelperLibrary<AppSettings>().WebDriverWaitHelper.WaitForElementToContainText(pageHeadingLocator, Context.Get<IObjectContext>().GetObject("FirstResult"));
             System.Threading.Thread.Sleep(5000);
             return this;
         }

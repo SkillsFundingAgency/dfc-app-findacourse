@@ -12,6 +12,7 @@ namespace DFC.App.FindACourse.ViewModels
         public string Description { get; set; }
 
         public string Keywords { get; set; }
+
         public bool IsHidden { get; set; }
     }
 }
