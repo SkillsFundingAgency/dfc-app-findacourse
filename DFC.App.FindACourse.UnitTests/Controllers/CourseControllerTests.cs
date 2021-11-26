@@ -438,7 +438,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
             Func<Task> act = async () => await controller.AjaxChanged(null).ConfigureAwait(false);
 
             // assert
-            act.Should().ThrowAsync<ArgumentNullException>();
+            act.Should().Throw<ArgumentNullException>();
             controller.Dispose();
         }
 
@@ -660,7 +660,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
             Func<Task> act = async () => await controller.IsValidPostcode("\"\"").ConfigureAwait(false);
 
             // assert
-            act.Should().ThrowAsync<ArgumentNullException>();
+            act.Should().Throw<ArgumentNullException>();
 
             controller.Dispose();
         }
