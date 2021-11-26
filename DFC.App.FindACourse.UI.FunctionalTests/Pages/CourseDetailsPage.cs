@@ -16,9 +16,9 @@ namespace DFC.App.FindACourse.UI.FunctionalTests.Pages
     {
         public CourseDetailsPage(ScenarioContext context)
         {
-            Context = context;
+            this.Context = context;
 
-            if (Context == null)
+            if (this.Context == null)
             {
                 throw new NullReferenceException("The scenario context is null. The course details cannot be initialised.");
             }
@@ -29,7 +29,7 @@ namespace DFC.App.FindACourse.UI.FunctionalTests.Pages
         public CourseDetailsPage CourseDetailsPageDisplayed()
         {
             var pageHeadingLocator = By.ClassName("govuk-heading-l");
-            Context.GetHelperLibrary<AppSettings>().WebDriverWaitHelper.WaitForElementToContainText(pageHeadingLocator, Context.Get<IObjectContext>().GetObject("FirstResult"));
+            this.Context.GetHelperLibrary<AppSettings>().WebDriverWaitHelper.WaitForElementToContainText(pageHeadingLocator, this.Context.Get<IObjectContext>().GetObject("FirstResult"));
             System.Threading.Thread.Sleep(5000);
             return this;
         }

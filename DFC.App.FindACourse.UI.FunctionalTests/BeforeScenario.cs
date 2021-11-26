@@ -19,11 +19,11 @@ namespace DFC.App.FindACourse.UI.FunctionalTests
     {
         public BeforeScenario(ScenarioContext context)
         {
-            Context = context;
+            this.Context = context;
 
-            if (Context == null)
+            if (this.Context == null)
             {
-                throw new NullReferenceException($"The scenario context is null. The {GetType().Name} class cannot be initialised.");
+                throw new NullReferenceException($"The scenario context is null. The {this.GetType().Name} class cannot be initialised.");
             }
         }
 
@@ -32,45 +32,45 @@ namespace DFC.App.FindACourse.UI.FunctionalTests
         [BeforeScenario(Order = 0)]
         public void SetObjectContext()
         {
-            Context.SetObjectContext(new ObjectContext());
+            this.Context.SetObjectContext(new ObjectContext());
         }
 
         [BeforeScenario(Order = 1)]
         public void SetSettingsLibrary()
         {
-            Context.SetSettingsLibrary(new SettingsLibrary<AppSettings>());
+            this.Context.SetSettingsLibrary(new SettingsLibrary<AppSettings>());
         }
 
         [BeforeScenario(Order = 2)]
         public void SetApplicationUrl()
         {
-            string appBaseUrl = Context.GetSettingsLibrary<AppSettings>().AppSettings.AppBaseUrl.ToString();
-            Context.GetSettingsLibrary<AppSettings>().AppSettings.AppBaseUrl = new Uri($"{appBaseUrl}find-a-course");
+            string appBaseUrl = this.Context.GetSettingsLibrary<AppSettings>().AppSettings.AppBaseUrl.ToString();
+            this.Context.GetSettingsLibrary<AppSettings>().AppSettings.AppBaseUrl = new Uri($"{appBaseUrl}find-a-course");
         }
 
         [BeforeScenario(Order = 3)]
         public void ConfigureBrowserStack()
         {
-            Context.GetSettingsLibrary<AppSettings>().BrowserStackSettings.Name = Context.ScenarioInfo.Title;
-            Context.GetSettingsLibrary<AppSettings>().BrowserStackSettings.Build = "Find a course";
+            this.Context.GetSettingsLibrary<AppSettings>().BrowserStackSettings.Name = this.Context.ScenarioInfo.Title;
+            this.Context.GetSettingsLibrary<AppSettings>().BrowserStackSettings.Build = "Find a course";
         }
 
         [BeforeScenario(Order = 4)]
         public void SetupWebDriver()
         {
-            var settingsLibrary = Context.GetSettingsLibrary<AppSettings>();
+            var settingsLibrary = this.Context.GetSettingsLibrary<AppSettings>();
             var webDriver = new WebDriverSupport<AppSettings>(settingsLibrary).Create();
             webDriver.Manage().Window.Maximize();
             webDriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(settingsLibrary.TestExecutionSettings.TimeoutSettings.PageNavigation);
             //webDriver.SwitchTo().Window(webDriver.CurrentWindowHandle);
-            Context.SetWebDriver(webDriver);
+            this.Context.SetWebDriver(webDriver);
         }
 
         [BeforeScenario(Order = 5)]
         public void SetUpHelpers()
         {
-            var helperLibrary = new HelperLibrary<AppSettings>(Context.GetWebDriver(), Context.GetSettingsLibrary<AppSettings>());
-            Context.SetHelperLibrary(helperLibrary);
+            var helperLibrary = new HelperLibrary<AppSettings>(this.Context.GetWebDriver(), this.Context.GetSettingsLibrary<AppSettings>());
+            this.Context.SetHelperLibrary(helperLibrary);
         }
     }
 }
