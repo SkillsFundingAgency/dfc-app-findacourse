@@ -103,10 +103,13 @@ namespace DFC.App.FindACourse.Services.UnitTests
             var cancellationToken = new CancellationToken(true);
             var service = new StaticContentReloadService(fakeLogger, fakeMapper, fakeStaticContentDocumentService, fakeCmsApiService, fakeCmsApiClientOptions);
 
+            A.CallTo(() => fakeStaticContentDocumentService.PurgeAsync()).Returns(true);
+
             //Act
             await service.ReloadSharedContent(cancellationToken).ConfigureAwait(false);
 
             //Assert
+            A.CallTo(() => fakeStaticContentDocumentService.PurgeAsync()).MustHaveHappenedOnceExactly();
             A.CallTo(() => fakeCmsApiService.GetItemAsync<StaticContentItemApiDataModel>(A<string>.Ignored, A<Guid>.Ignored)).MustNotHaveHappened();
             A.CallTo(() => fakeMapper.Map<StaticContentItemModel>(A<StaticContentItemApiDataModel>.Ignored)).MustNotHaveHappened();
             A.CallTo(() => fakeStaticContentDocumentService.UpsertAsync(A<StaticContentItemModel>.Ignored)).MustNotHaveHappened();
@@ -123,6 +126,7 @@ namespace DFC.App.FindACourse.Services.UnitTests
             StaticContentItemApiDataModel staticContentItemApiDataModel = null;
             var dummyStaticContentItemModel = A.Dummy<StaticContentItemModel>();
 
+            A.CallTo(() => fakeStaticContentDocumentService.PurgeAsync()).Returns(true);
             A.CallTo(() => fakeCmsApiService.GetItemAsync<StaticContentItemApiDataModel>(A<string>.Ignored, A<Guid>.Ignored)).Returns(staticContentItemApiDataModel);
             A.CallTo(() => fakeMapper.Map<StaticContentItemModel>(A<StaticContentItemApiDataModel>.Ignored)).Returns(dummyStaticContentItemModel);
 
@@ -130,6 +134,7 @@ namespace DFC.App.FindACourse.Services.UnitTests
             await service.ReloadSharedContent(cancellationToken).ConfigureAwait(false);
 
             //Assert
+            A.CallTo(() => fakeStaticContentDocumentService.PurgeAsync()).MustHaveHappenedOnceExactly();
             A.CallTo(() => fakeCmsApiService.GetItemAsync<StaticContentItemApiDataModel>(A<string>.Ignored, A<Guid>.Ignored)).MustHaveHappenedOnceOrMore();
             A.CallTo(() => fakeMapper.Map<StaticContentItemModel>(A<StaticContentItemApiDataModel>.Ignored)).MustHaveHappenedOnceOrMore();
             A.CallTo(() => fakeStaticContentDocumentService.UpsertAsync(A<StaticContentItemModel>.Ignored)).MustNotHaveHappened();
@@ -146,6 +151,7 @@ namespace DFC.App.FindACourse.Services.UnitTests
             var dummyStaticContentItemApiDataModel = A.Dummy<StaticContentItemApiDataModel>();
             var staticContentItemModel = BuildValidStaticContentItemModel();
 
+            A.CallTo(() => fakeStaticContentDocumentService.PurgeAsync()).Returns(true);
             A.CallTo(() => fakeCmsApiService.GetItemAsync<StaticContentItemApiDataModel>(A<string>.Ignored, A<Guid>.Ignored)).Returns(dummyStaticContentItemApiDataModel);
             A.CallTo(() => fakeMapper.Map<StaticContentItemModel>(A<StaticContentItemApiDataModel>.Ignored)).Returns(staticContentItemModel);
             A.CallTo(() => fakeStaticContentDocumentService.UpsertAsync(A<StaticContentItemModel>.Ignored)).Returns(HttpStatusCode.OK);
@@ -154,6 +160,7 @@ namespace DFC.App.FindACourse.Services.UnitTests
             await service.ReloadSharedContent(cancellationToken).ConfigureAwait(false);
 
             //Assert
+            A.CallTo(() => fakeStaticContentDocumentService.PurgeAsync()).MustHaveHappenedOnceExactly();
             A.CallTo(() => fakeCmsApiService.GetItemAsync<StaticContentItemApiDataModel>(A<string>.Ignored, A<Guid>.Ignored)).MustHaveHappenedOnceOrMore();
             A.CallTo(() => fakeMapper.Map<StaticContentItemModel>(A<StaticContentItemApiDataModel>.Ignored)).MustHaveHappenedOnceOrMore();
             A.CallTo(() => fakeStaticContentDocumentService.UpsertAsync(A<StaticContentItemModel>.Ignored)).MustHaveHappenedOnceOrMore();
