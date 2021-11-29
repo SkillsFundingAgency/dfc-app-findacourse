@@ -6,6 +6,7 @@
 using DFC.App.FindACourse.UI.FunctionalTests.Model;
 using DFC.TestAutomation.UI;
 using DFC.TestAutomation.UI.Extension;
+using DFC.TestAutomation.UI.Helper;
 using OpenQA.Selenium;
 using System;
 using TechTalk.SpecFlow;
