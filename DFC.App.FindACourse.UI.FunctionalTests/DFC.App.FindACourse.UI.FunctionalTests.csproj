@@ -21,13 +21,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="DFC.TestAutomation.UI" Version="1.0.141" />
+    <PackageReference Include="DFC.TestAutomation.UI" Version="1.0.143" />
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.3.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.8.3" />
-    <PackageReference Include="SpecFlow.xUnit" Version="3.4.31" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
+    <PackageReference Include="SpecFlow.xUnit" Version="3.9.40" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

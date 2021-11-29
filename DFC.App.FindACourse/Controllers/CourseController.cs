@@ -92,7 +92,7 @@ namespace DFC.App.FindACourse.Controllers
                     break;
             }
 
-            var model = new HeadViewModel { Title = $"{title} | Find a course | National Careers Service", Description = "FAC", Keywords = "fac", CanonicalUrl = "find-a-course", IsHidden = string.Compare(articleName ,"searchFreeCourse", StringComparison.CurrentCultureIgnoreCase) == 0 };
+            var model = new HeadViewModel { Title = $"{title} | Find a course | National Careers Service", Description = "FAC", Keywords = "fac", CanonicalUrl = "find-a-course", IsHidden = string.Compare(articleName, "searchFreeCourse", StringComparison.CurrentCultureIgnoreCase) == 0 };
 
             logService.LogInformation($"{nameof(this.Head)} generated the model and ready to pass to the view");
 
@@ -433,8 +433,7 @@ namespace DFC.App.FindACourse.Controllers
                 var coordinate = coordinates.Split('|');
                 if (coordinate.Length == 2)
                 {
-                    double convertedDouble;
-                    if (!double.TryParse(coordinate[0], out convertedDouble))
+                    if (!double.TryParse(coordinate[0], out double convertedDouble))
                     {
                         return locationCoordinates;
                     }
