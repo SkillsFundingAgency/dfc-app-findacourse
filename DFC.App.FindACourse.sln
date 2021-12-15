@@ -55,6 +55,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DFC.App.FindACourse.Reposit
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gds.CheckboxList", "Gds.CheckboxList\Gds.CheckboxList.csproj", "{6358EDF3-2F0D-4E25-A505-A6923AD48F81}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImportExportTool", "Tools\ImportExportTool\ImportExportTool.csproj", "{E3AEF9EA-4545-43DE-BC3F-F10E41281DEE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{8630A69E-FCEC-4A47-8CCC-E6BF58234098}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -97,6 +101,10 @@ Global
 		{6358EDF3-2F0D-4E25-A505-A6923AD48F81}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6358EDF3-2F0D-4E25-A505-A6923AD48F81}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6358EDF3-2F0D-4E25-A505-A6923AD48F81}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E3AEF9EA-4545-43DE-BC3F-F10E41281DEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E3AEF9EA-4545-43DE-BC3F-F10E41281DEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E3AEF9EA-4545-43DE-BC3F-F10E41281DEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E3AEF9EA-4545-43DE-BC3F-F10E41281DEE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -116,6 +124,7 @@ Global
 		{F70B2B8B-55E5-49F8-8C6C-76BB71B144F0} = {059D9703-4368-40BC-B887-83B4748582E9}
 		{BF7A3791-533F-48AB-9B22-E642A34257FC} = {F70B2B8B-55E5-49F8-8C6C-76BB71B144F0}
 		{6358EDF3-2F0D-4E25-A505-A6923AD48F81} = {DA4F53B1-11E7-4073-B615-95946485C92C}
+		{E3AEF9EA-4545-43DE-BC3F-F10E41281DEE} = {8630A69E-FCEC-4A47-8CCC-E6BF58234098}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D6DBD643-48A4-42B8-AEFC-D7C10F4907F7}
