@@ -20,15 +20,14 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
     public class BaseController
     {
         protected const string DefaultHelpArticleName = "help";
-        protected const string testContentId = "87dfb08e-13ec-42ff-9405-5bbde048827a";
-
+        protected const string TestContentId = "87dfb08e-13ec-42ff-9405-5bbde048827a";
 
         public BaseController()
         {
             FakeLogService = A.Fake<ILogService>();
             FakeFindACoursesService = A.Fake<IFindACourseService>();
             FakeStaticContentDocumentService = A.Fake<IDocumentService<StaticContentItemModel>>();
-            CmsApiClientOptions = new CmsApiClientOptions() { ContentIds = testContentId };
+            CmsApiClientOptions = new CmsApiClientOptions() { ContentIds = TestContentId };
             FakeMapper = A.Fake<IMapper>();
             FakeViewHelper = A.Fake<IViewHelper>();
         }

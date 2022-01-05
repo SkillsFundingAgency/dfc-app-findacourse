@@ -129,7 +129,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
             var controller = BuildDetailsController("*/*");
 
             // act
-            var actual =  await controller.Details(CourseId, RunId, null, "testSearchTerm", null);
+            var actual = await controller.Details(CourseId, RunId, null, "testSearchTerm", null);
 
             // assert
             actual.Should().BeEquivalentTo(new StatusCodeResult(400));
