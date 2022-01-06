@@ -2,15 +2,19 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Azure.Search.Documents" Version="11.3.0" />
+    <PackageReference Include="CsvHelper" Version="27.2.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Data\england_towns.json">
+    <None Update="Data\2021-11-01-ProposedNewDataFromONS.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\2022-01-06-CurrentLiveData.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

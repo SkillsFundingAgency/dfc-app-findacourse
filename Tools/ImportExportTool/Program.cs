@@ -3,9 +3,11 @@ using Azure.Search.Documents;
 using ConsoleApp3.Model;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
+using CsvHelper;
 
 namespace ConsoleApp3
 {
@@ -30,10 +32,19 @@ namespace ConsoleApp3
             Console.WriteLine(string.Empty);
 
             var searchClient = new SearchClient(new Uri(searchServiceEndPoint), indexName, new AzureKeyCredential(apiKey));
-
+            string fileType;
+            
             switch (action)
             {
                 case "import":
+                    Console.Write("File name (must be accessible in the Data folder): ");
+                    var fileName = Console.ReadLine();
+                    Console.WriteLine(string.Empty);
+
+                    Console.Write("File type (onsjson or csv): ");
+                    fileType = Console.ReadLine();
+                    Console.WriteLine(string.Empty);
+                    
                     Console.Write("Are you sure? This will add to the index - even if it has data in it. Type 'yes' if you wish to continue: ");
                     var sure = Console.ReadLine().ToLower();
 
@@ -43,18 +54,22 @@ namespace ConsoleApp3
                         break;
                     }
 
-                    Import(searchClient);
+                    Import(searchClient, fileName, fileType);
                     break;
                 case "export":
-                    Export(searchClient);
+                    Console.Write("File type (json or csv): ");
+                    fileType = Console.ReadLine();
+                    Console.WriteLine(string.Empty);
+                    
+                    Export(searchClient, fileType);
                     break;
                 default:
-                    Console.WriteLine($"'{action}' is not a recoginised action");
+                    Console.WriteLine($"'{action}' is not a recognised action");
                     break;
             }
         }
 
-        static void Export(SearchClient searchClient)
+        static void Export(SearchClient searchClient, string fileType)
         {
             var response = searchClient.Search<ImportLocation>("*", new SearchOptions { Size = 50000 });
             var results = response.Value.GetResults();
@@ -65,15 +80,49 @@ namespace ConsoleApp3
                 output.Add(result.Document);
             }
 
-            var outputText = JsonSerializer.Serialize(output, new JsonSerializerOptions { WriteIndented = true });
-            System.IO.File.WriteAllText($"ExportedData-{DateTime.Now.ToString("yyyyMMdd-hhmmss")}", outputText);
+            if (fileType.Equals("json", StringComparison.InvariantCultureIgnoreCase))
+            {
+                var outputText = JsonSerializer.Serialize(output, new JsonSerializerOptions { WriteIndented = true });
+                File.WriteAllText($"{DateTime.Now.ToString("yyyy-MM-dd-hhmmss")}-ExportedData.json", outputText);                
+            }
+            else
+            {
+                using var stream = new MemoryStream();
+                using var reader = new StreamReader( stream );
+                using var writer = new StreamWriter( stream );
+                using var csv = new CsvWriter(writer, CultureInfo.CurrentCulture);
+
+                csv.WriteRecords(output);
+                writer.Flush();
+                stream.Position = 0;
+
+                var text = reader.ReadToEnd();
+                File.WriteAllText($"{DateTime.Now.ToString("yyyy-MM-dd-hhmmss")}-ExportedData.csv", text);
+            }
         }
 
-        static void Import(SearchClient searchClient)
+        static void Import(SearchClient searchClient, string dataFile, string fileType)
         {
-            using var streamReader = new StreamReader("Data/england_towns.json");
-            var jsonDataString = streamReader.ReadToEnd();
-            var inputItems = JsonSerializer.Deserialize<List<InputLocation>>(jsonDataString).Where(x => x.type != "Hamlet").ToList();
+            using var streamReader = new StreamReader($"Data/{dataFile}");
+            List<InputLocation> inputItems;
+            
+            switch (fileType.ToLower())
+            {
+                case "onsjson":
+                    var jsonDataString = streamReader.ReadToEnd();
+
+                    inputItems = JsonSerializer.Deserialize<List<InputLocation>>(jsonDataString)
+                        .Where(x => x.type != "Hamlet")
+                        .ToList();
+                    break;
+                case "csv":
+                    inputItems = ReadCsv(streamReader)
+                        .ToList();
+                    break;
+                default:
+                    throw new Exception($"File type {fileType} not known");
+            }
+
             var outputItems = new List<ImportLocation>();
 
             foreach (var inputItem in inputItems)
@@ -99,7 +148,23 @@ namespace ConsoleApp3
             }
         }
 
-        public static IEnumerable<IEnumerable<TValue>> Chunk<TValue>(IEnumerable<TValue> values, int chunkSize)
+        static IEnumerable<InputLocation> ReadCsv(StreamReader reader)
+        {
+            using var csv = new CsvReader(reader, CultureInfo.CurrentCulture, true);
+            var records = csv.GetRecords<ImportLocation>();
+            return records.Select(record => new InputLocation
+            {  
+                county = record.LocalAuthorityName,
+                id = long.Parse(record.LocationId),
+                latitude = record.Latitude,
+                local_government_area = record.LocationAuthorityDistrict,
+                longitude = record.Longitude,
+                name = record.LocationName,
+                type = "Unknown"
+            }).ToList();
+        }
+
+        static IEnumerable<IEnumerable<TValue>> Chunk<TValue>(IEnumerable<TValue> values, int chunkSize)
         {
             return values
                 .Select((v, i) => new { v, groupIndex = i / chunkSize })
