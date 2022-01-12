@@ -267,10 +267,10 @@ namespace DFC.App.FindACourse.Controllers
             }
             else if (!string.IsNullOrEmpty(location))
             {
-                //If the user clikced on one of the suggested locations
+                //If the user clicked on one of the suggested locations
                 var indexOfLocationSpliter = location.IndexOf("|", StringComparison.Ordinal);
                 model.SideBar.TownOrPostcode = location.Substring(0, indexOfLocationSpliter);
-                model.SideBar.Coordinates = location.Substring(indexOfLocationSpliter + 1);
+                model.SideBar.Coordinates = location[(indexOfLocationSpliter + 1) ..];
             }
 
             return FilterResultsInternal(model);
@@ -619,7 +619,7 @@ namespace DFC.App.FindACourse.Controllers
                 model.CourseSearchFilters.CampaignCode = FreeSearchCampaignCode;
             }
 
-            model.SideBar.FiltersApplied = model.FromPaging ? model.SideBar.FiltersApplied : true;
+            model.SideBar.FiltersApplied = !model.FromPaging || model.SideBar.FiltersApplied;
 
             switch (model.SideBar.StartDateValue)
             {
