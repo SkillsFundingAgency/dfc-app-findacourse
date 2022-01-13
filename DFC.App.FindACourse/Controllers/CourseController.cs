@@ -189,7 +189,7 @@ namespace DFC.App.FindACourse.Controllers
             try
             {
                 model.Results = await findACourseService.GetFilteredData(newBodyViewModel.CourseSearchFilters, newBodyViewModel.CourseSearchOrderBy, model.RequestPage).ConfigureAwait(false);
-                foreach (var item in model.Results.Courses)
+                foreach (var item in model.Results?.Courses)
                 {
                     if (item.Description.Length > 220)
                     {
@@ -240,8 +240,8 @@ namespace DFC.App.FindACourse.Controllers
 
             if (paramValues == null)
             {
-                logService.LogInformation($"paramValues is null for method: {nameof(Page)} on controller {nameof(CourseController)}");
-                return Task.FromResult<IActionResult>(StatusCode((int)HttpStatusCode.BadRequest));
+                logService.LogError($"paramValues is null for method: {nameof(Page)} on controller {nameof(CourseController)}");
+                return Task.FromResult<IActionResult>(StatusCode((int)HttpStatusCode.NotFound));
             }
 
             return PageInternalAsync(paramValues, isTest);
@@ -256,13 +256,13 @@ namespace DFC.App.FindACourse.Controllers
 
             if (model == null)
             {
-                logService.LogInformation($"model is null for method: {nameof(FilterResults)} on controller {nameof(CourseController)}");
-                return Task.FromResult<IActionResult>(StatusCode((int)HttpStatusCode.BadRequest));
+                logService.LogError($"model is null for method: {nameof(FilterResults)} on controller {nameof(CourseController)}");
+                return Task.FromResult<IActionResult>(StatusCode((int)HttpStatusCode.NotFound));
             }
 
             if (model.SideBar.SuggestedLocation != model.SideBar.TownOrPostcode)
             {
-                //if the user changed the text for the locaton invlidate the coordinates
+                //if the user changed the text for the location invalidate the coordinates
                 model.SideBar.Coordinates = null;
             }
             else if (!string.IsNullOrEmpty(location))

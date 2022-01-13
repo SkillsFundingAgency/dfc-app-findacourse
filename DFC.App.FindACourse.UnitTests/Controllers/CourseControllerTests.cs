@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Net;
 using System.Net.Mime;
 using System.Threading.Tasks;
 using Xunit;
@@ -286,7 +287,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
         }
 
         [Fact]
-        public async Task PageReturnsArgumentNullExceptionForMissingParameters()
+        public async Task PageReturnsNotFoundForMissingParameters()
         {
             // arrange
             var controller = BuildCourseController(MediaTypeNames.Text.Html);
@@ -295,7 +296,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
             var actual = await controller.Page(null, false);
 
             // assert
-            actual.Should().BeEquivalentTo(new StatusCodeResult(400));
+            actual.Should().BeEquivalentTo(new StatusCodeResult((int)HttpStatusCode.NotFound));
             controller.Dispose();
         }
 
@@ -575,7 +576,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
         }
 
         [Fact]
-        public async Task FilterResultsThrowsExceptionThrowsExceptionForNullModel()
+        public async Task FilterResultsReturnsNotFoundForNullModel()
         {
             // arrange
             var controller = BuildCourseController("*/*");
@@ -584,7 +585,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
             var actual = await controller.FilterResults(null, string.Empty);
 
             // assert
-            actual.Should().BeEquivalentTo(new StatusCodeResult(400));
+            actual.Should().BeEquivalentTo(new StatusCodeResult((int)HttpStatusCode.NotFound));
 
             controller.Dispose();
         }
