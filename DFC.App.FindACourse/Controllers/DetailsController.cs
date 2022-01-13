@@ -6,6 +6,7 @@ using DFC.Compui.Cosmos.Contracts;
 using DFC.Content.Pkg.Netcore.Data.Models.ClientOptions;
 using DFC.Logger.AppInsights.Contracts;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Net.Http.Headers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -56,7 +57,7 @@ namespace DFC.App.FindACourse.Controllers
             runId ??= r;
 
             model.SearchTerm = FormatSearchParameters(paramValues, currentSearchTerm);
-            if (Request.Headers.TryGetValue("Referer", out var refererValues))
+            if (Request.Headers.TryGetValue(HeaderNames.Referer, out var refererValues))
             {
                 model.BackLinkUrl = refererValues.FirstOrDefault(x => x.Contains("job-profiles"));
             }
