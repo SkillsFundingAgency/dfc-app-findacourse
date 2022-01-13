@@ -1,18 +1,18 @@
 ﻿using AutoMapper;
 using DFC.App.FindACourse.Data.Models;
-using DFC.App.FindACourse.Extensions;
 using DFC.App.FindACourse.Services;
 using DFC.App.FindACourse.ViewModels;
-using DFC.CompositeInterfaceModels.FindACourseClient;
 using DFC.Compui.Cosmos.Contracts;
 using DFC.Content.Pkg.Netcore.Data.Models.ClientOptions;
 using DFC.Logger.AppInsights.Contracts;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Net.Http.Headers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using SubRegion = DFC.CompositeInterfaceModels.FindACourseClient.SubRegion;
 
 namespace DFC.App.FindACourse.Controllers
 {
@@ -48,8 +48,8 @@ namespace DFC.App.FindACourse.Controllers
 
             if (paramValues == null)
             {
-                logService.LogInformation($"paramValues is null for method: {nameof(Details)} on controller {nameof(DetailsController)}");
-                return StatusCode((int)HttpStatusCode.BadRequest);
+                logService.LogError($"paramValues is null for method: {nameof(Details)} on controller {nameof(DetailsController)}");
+                return BadRequest();
             }
 
             var model = new DetailsViewModel();
@@ -57,20 +57,26 @@ namespace DFC.App.FindACourse.Controllers
             runId ??= r;
 
             model.SearchTerm = FormatSearchParameters(paramValues, currentSearchTerm);
-            if (Request.Headers.TryGetValue("Referer", out var refererValues))
+            if (Request.Headers.TryGetValue(HeaderNames.Referer, out var refererValues))
             {
                 model.BackLinkUrl = refererValues.FirstOrDefault(x => x.Contains("job-profiles"));
             }
 
             if (string.IsNullOrEmpty(courseId) || string.IsNullOrEmpty(runId))
             {
-                logService.LogInformation($"Course Id ({courseId}) and/or runId ({runId}) does not have a value - returning BadRequest");
-                return StatusCode((int)HttpStatusCode.BadRequest);
+                logService.LogError($"Course Id ({courseId}) and/or runId ({runId}) does not have a value - returning NotFound");
+                return NotFound();
             }
 
             try
             {
                 model.CourseDetails = await findACourseService.GetCourseDetails(courseId, runId).ConfigureAwait(false);
+                if (model.CourseDetails == null)
+                {
+                    logService.LogWarning($"Get course details retrieved no data. The values passed were: course id: {courseId} and run id: {runId}");
+                    return NotFound();
+                }
+
                 model.CourseRegions = model.CourseDetails.SubRegions != null ? TransformSubRegionsToRegions(model.CourseDetails.SubRegions) : null;
                 model.DetailsRightBarViewModel.Provider = mapper.Map<ProviderViewModel>(model.CourseDetails.ProviderDetails);
                 model.DetailsRightBarViewModel.SpeakToAnAdviser = await staticContentDocumentService.GetByIdAsync(new Guid(cmsApiClientOptions.ContentIds)).ConfigureAwait(false);
@@ -80,7 +86,7 @@ namespace DFC.App.FindACourse.Controllers
             catch (Exception ex)
             {
                 logService.LogError($"Get course details caused an error: {ex}. The values passed were: course id: {courseId} and run id: {runId}");
-                return DetaislErrorReturnStatus(ex);
+                return DetailsErrorReturnStatus(ex);
             }
 
             return View(model);
@@ -95,8 +101,8 @@ namespace DFC.App.FindACourse.Controllers
 
             if (paramValues == null)
             {
-                logService.LogInformation($"paramValues is null for method: {nameof(TLevelDetails)} on controller {nameof(DetailsController)}");
-                return StatusCode((int)HttpStatusCode.BadRequest);
+                logService.LogError($"paramValues is null for method: {nameof(TLevelDetails)} on controller {nameof(DetailsController)}");
+                return BadRequest();
             }
 
             var model = new TLevelDetailsViewModel();
@@ -110,13 +116,19 @@ namespace DFC.App.FindACourse.Controllers
             {
                 model.SearchTerm = FormatSearchParameters(paramValues, currentSearchTerm);
                 model.TlevelDetails = await findACourseService.GetTLevelDetails(tlevelId, tlevelLocationId).ConfigureAwait(false);
+                if (model.TlevelDetails == null)
+                {
+                    logService.LogWarning($"Get TLevel details retrieved no data. The values passed were: tlevel id: {tlevelId} and run id: {tlevelLocationId}");
+                    return NotFound();
+                }
+
                 model.DetailsRightBarViewModel.Provider = mapper.Map<ProviderViewModel>(model.TlevelDetails.ProviderDetails);
                 model.DetailsRightBarViewModel.SpeakToAnAdviser = await staticContentDocumentService.GetByIdAsync(new Guid(cmsApiClientOptions.ContentIds)).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
                 logService.LogError($"Get TLevel details caused an error: {ex}. The values passed were: tlevel id: {tlevelId} and location id: {tlevelLocationId}");
-                return DetaislErrorReturnStatus(ex);
+                return DetailsErrorReturnStatus(ex);
             }
 
             return View("tlevelDetails", model);
@@ -165,7 +177,7 @@ namespace DFC.App.FindACourse.Controllers
             return string.IsNullOrEmpty(courseLink) ? null : courseLink.Equals(providerLink) ? null : courseLink;
         }
 
-        private StatusCodeResult DetaislErrorReturnStatus(Exception ex)
+        private StatusCodeResult DetailsErrorReturnStatus(Exception ex)
         {
             //Return an error code to cause the problem page to be displayed, previously this was returning OK with an empty model,
             //this causes errors in the view and then goes to the problem page

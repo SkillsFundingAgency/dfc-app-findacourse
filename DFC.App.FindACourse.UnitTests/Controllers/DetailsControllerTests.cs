@@ -24,7 +24,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
         [MemberData(nameof(HtmlMediaTypes))]
         public async Task FilterResultReturnsSuccessWithPostcodeAndRegions(string mediaTypeName)
         {
-            var controller = BuildDetailsController(mediaTypeName);
+            using var controller = BuildDetailsController(mediaTypeName);
 
             var returnedCourseData = new CourseDetails
             {
@@ -68,15 +68,13 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
             var result = await controller.Details(CourseId, null, RunId, "Maths", paramValues).ConfigureAwait(false);
 
             Assert.IsType<ViewResult>(result);
-
-            controller.Dispose();
         }
 
         [Theory]
         [MemberData(nameof(HtmlMediaTypes))]
         public async Task FilterResultReturnsSuccessWithoutPostcodeOrRegions(string mediaTypeName)
         {
-            var controller = BuildDetailsController(mediaTypeName);
+            using var controller = BuildDetailsController(mediaTypeName);
 
             var returnedCourseData = new CourseDetails
             {
@@ -96,8 +94,6 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
             var result = await controller.Details(CourseId, null, RunId, "Maths", paramValues).ConfigureAwait(false);
 
             Assert.IsType<ViewResult>(result);
-
-            controller.Dispose();
         }
 
         [Theory]
@@ -108,7 +104,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
             //Set Up
             A.CallTo(() => FakeFindACoursesService.GetCourseDetails(A<string>.Ignored, A<string>.Ignored)).Throws(new SystemException(errorMesage));
 
-            var controller = BuildDetailsController("*/*");
+            using var controller = BuildDetailsController("*/*");
             var paramValues = new ParamValues();
 
             //Act
@@ -118,27 +114,43 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
             var resultStatus = result as StatusCodeResult;
             resultStatus.StatusCode.Should().Be((int)expectedHttpStatusCode);
             A.CallTo(() => FakeLogService.LogError(A<string>.Ignored)).MustHaveHappenedOnceExactly();
-
-            controller.Dispose();
         }
 
         [Fact]
-        public async Task GetCourseDetailsThrowsExceptionForNullParamValues()
+        public async Task GetCourseDetailsReturnsNotFound()
+        {
+            //Set Up
+            const HttpStatusCode expectedHttpStatusCode = HttpStatusCode.NotFound;
+            const CourseDetails nullCourseSearchResult = null;
+            A.CallTo(() => FakeFindACoursesService.GetCourseDetails(A<string>.Ignored, A<string>.Ignored)).Returns(nullCourseSearchResult);
+
+            using var controller = BuildDetailsController("*/*");
+            var paramValues = new ParamValues();
+
+            //Act
+            var result = await controller.Details(CourseId, RunId, null, "testSearchTerm", paramValues).ConfigureAwait(false);
+
+            //Asserts
+            var resultStatus = result as StatusCodeResult;
+            resultStatus.StatusCode.Should().Be((int)expectedHttpStatusCode);
+            A.CallTo(() => FakeLogService.LogWarning(A<string>.Ignored)).MustHaveHappenedOnceExactly();
+        }
+
+        [Fact]
+        public async Task GetCourseDetailsReturnsBadRequestorNullParamValues()
         {
             // arrange
-            var controller = BuildDetailsController("*/*");
+            using var controller = BuildDetailsController("*/*");
 
             // act
             var actual = await controller.Details(CourseId, RunId, null, "testSearchTerm", null);
 
             // assert
-            actual.Should().BeEquivalentTo(new StatusCodeResult(400));
-
-            controller.Dispose();
+            actual.Should().BeEquivalentTo(new StatusCodeResult((int)HttpStatusCode.BadRequest));
         }
 
         [Fact]
-        public async Task GetCourseDetailsThrowsExceptionForNullCourseId()
+        public async Task GetCourseDetailsReturnsNotFoundForNullCourseId()
         {
             // arrange
             using var controller = BuildDetailsController("*/*");
@@ -153,11 +165,11 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
             var actual = await controller.Details(null, RunId, null, "testSearchTerm", paramValues);
 
             // assert
-            actual.Should().BeEquivalentTo(new StatusCodeResult(400));
+            actual.Should().BeEquivalentTo(new StatusCodeResult((int)HttpStatusCode.NotFound));
         }
 
         [Fact]
-        public async Task GetCourseDetailsThrowsExceptionForNullRunId()
+        public async Task GetCourseDetailsReturnsNotFoundForNullRunId()
         {
             // arrange
             using var controller = BuildDetailsController("*/*");
@@ -172,7 +184,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
             var actual = await controller.Details(CourseId, null, null, "testSearchTerm", paramValues);
 
             // assert
-            actual.Should().BeEquivalentTo(new StatusCodeResult(400));
+            actual.Should().BeEquivalentTo(new StatusCodeResult((int)HttpStatusCode.NotFound));
         }
 
         [Theory]
@@ -182,7 +194,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
             //Set Up
             A.CallTo(() => FakeFindACoursesService.GetTLevelDetails(A<string>.Ignored, A<string>.Ignored)).Returns(GetTestTLevel());
 
-            var controller = BuildDetailsController(mediaTypeName);
+            using var controller = BuildDetailsController(mediaTypeName);
 
             var paramValues = new ParamValues
             {
@@ -199,23 +211,39 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
 
             var model = Assert.IsAssignableFrom<TLevelDetailsViewModel>(viewResult.ViewData.Model);
             model.TlevelDetails.TLevelId.Should().Be(Guid.Parse(TLevelId));
-
-            controller.Dispose();
         }
 
         [Fact]
-        public async Task GetTLevelThrowsExceptionForNullParamValues()
+        public async Task GetTlevelReturnsNotFound()
+        {
+            //Set Up
+            const HttpStatusCode expectedHttpStatusCode = HttpStatusCode.NotFound;
+            const TLevelDetails nullTLevelDetails = null;
+            A.CallTo(() => FakeFindACoursesService.GetTLevelDetails(A<string>.Ignored, A<string>.Ignored)).Returns(nullTLevelDetails);
+
+            using var controller = BuildDetailsController("*/*");
+            var paramValues = new ParamValues();
+
+            //Act
+            var result = await controller.TLevelDetails(CourseId, TLevelLocationId, "testSearchTerm", paramValues).ConfigureAwait(false);
+
+            //Asserts
+            var resultStatus = result as StatusCodeResult;
+            resultStatus.StatusCode.Should().Be((int)expectedHttpStatusCode);
+            A.CallTo(() => FakeLogService.LogWarning(A<string>.Ignored)).MustHaveHappenedOnceExactly();
+        }
+
+        [Fact]
+        public async Task GetTLevelReturnsBadRequestForNullParamValues()
         {
             // arrange
-            var controller = BuildDetailsController("*/*");
+            using var controller = BuildDetailsController("*/*");
 
             // act
             var actual = await controller.TLevelDetails(TLevelId, TLevelLocationId, "testSearchTerm", null);
 
             // assert
-            actual.Should().BeEquivalentTo(new StatusCodeResult(400));
-
-            controller.Dispose();
+            actual.Should().BeEquivalentTo(new StatusCodeResult((int)HttpStatusCode.BadRequest));
         }
 
         [Theory]
@@ -226,7 +254,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
             //Set Up
             A.CallTo(() => FakeFindACoursesService.GetTLevelDetails(A<string>.Ignored, A<string>.Ignored)).Throws(new SystemException(errorMesage));
 
-            var controller = BuildDetailsController("*/*");
+            using var controller = BuildDetailsController("*/*");
             var paramValues = new ParamValues();
 
             //Act
@@ -236,8 +264,6 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
             var resultStatus = result as StatusCodeResult;
             resultStatus.StatusCode.Should().Be((int)expectedHttpStatusCode);
             A.CallTo(() => FakeLogService.LogError(A<string>.Ignored)).MustHaveHappenedOnceExactly();
-
-            controller.Dispose();
         }
 
         private static TLevelDetails GetTestTLevel()
