@@ -81,7 +81,7 @@ namespace DFC.App.FindACourse.Controllers
                 model.DetailsRightBarViewModel.Provider = mapper.Map<ProviderViewModel>(model.CourseDetails.ProviderDetails);
                 model.DetailsRightBarViewModel.SpeakToAnAdviser = await staticContentDocumentService.GetByIdAsync(new Guid(cmsApiClientOptions.ContentIds)).ConfigureAwait(false);
                 model.CourseDetails.CourseWebpageLink = CompareProviderLinkWithCourseLink(model?.CourseDetails?.CourseWebpageLink, model.CourseDetails?.ProviderDetails?.Website);
-                model.CourseDetails.AdvancedLearnerLoansOffered = paramValues.CampaignCode == "LEVEL3_FREE";
+                model.CourseDetails.HasCampaignCode = paramValues.CampaignCode == "LEVEL3_FREE";
             }
             catch (Exception ex)
             {
