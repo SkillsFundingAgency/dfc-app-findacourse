@@ -1,7 +1,4 @@
 ﻿@model DetailsViewModel
-@{
-
-}
 <div id="work-details-block">
     <h2 class="govuk-heading-m" id="courseDetails">Course details</h2>
     <table class="govuk-table">
@@ -42,36 +39,7 @@
                 <td class="govuk-table__cell"><span id="attendance-mode">@Html.Raw(Model.CourseDetails.AttendanceMode)</span></td>
             </tr>
             <partial name="_StartDate" model="Model.CourseDetails" />
-            @if (Model.CourseDetails.HasCampaignCode)
-            {
-                <tr class="govuk-table__row">
-                    <th class="govuk-table__header" scope="row">Cost description</th>
-                    <td class="govuk-table__cell">
-                        <span id="additonal-price">
-                            This course is part of the Free Courses for Jobs offer and may be funded by the government for eligible adults. Check for eligibility at <a href="https://www.gov.uk/guidance/free-courses-for-jobs">Free courses for jobs - GOV.UK (www.gov.uk)</a>
-                        </span>
-                    </td>
-                </tr>
-            }
-            else
-            {
-                @if (!string.IsNullOrEmpty(Model.CourseDetails.Cost))
-                {
-                    <tr class="govuk-table__row">
-                        <th class="govuk-table__header" scope="row">Cost</th>
-                        <td class="govuk-table__cell">
-                            <span id="cost-value">£@Model.CourseDetails.Cost.ToDecimalString("N2")</span>
-                        </td>
-                    </tr>
-                }
-                @if (!string.IsNullOrEmpty(Model.CourseDetails.CostDescription))
-                {
-                    <tr class="govuk-table__row">
-                        <th class="govuk-table__header" scope="row">Cost description</th>
-                        <td class="govuk-table__cell"><span id="additonal-price">@Html.Raw(Model.CourseDetails.CostDescription)</span></td>
-                    </tr>
-                }
-            }
+            <partial name="_CourseDesc" model="Model.CourseDetails" />
         </tbody>
     </table>
     <div class="govuk-accordion" data-module="govuk-accordion" id="accordion-default">
