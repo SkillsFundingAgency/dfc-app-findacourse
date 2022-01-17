@@ -184,6 +184,11 @@ namespace DFC.App.FindACourse.Controllers
                 },
             };
 
+            if (paramValues.CampaignCode == "LEVEL3_FREE")
+            {
+                model.FreeCourseSearch = true;
+            }
+
             var newBodyViewModel = await GenerateModelAsync(model).ConfigureAwait(false);
 
             try
