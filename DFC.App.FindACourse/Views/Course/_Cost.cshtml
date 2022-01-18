@@ -1,21 +1,40 @@
 ﻿@model Course
 <span class="govuk-secondary-colour">Cost:</span>
-@if (Model.Cost == null)
+
+@if (Model.HasCampaignCode)
 {
-    <span>Contact course provider</span>
-    if (!string.IsNullOrWhiteSpace(Model.CostDescription))
-    {
+    <span>£0.00</span>
         <details data-module="govuk-details" class="course-cost-desc">
             <summary class="govuk-details__summary">
                 <span class="govuk-details__summary-text">
                     View cost description
                 </span>
             </summary>
-            <div class="govuk-details__text">@Html.Raw(Model.CostDescription)</div>
+            <div class="govuk-details__text">
+                This course is part of the Free Courses for Jobs offer and may be funded by the government for eligible adults. Check for eligibility at <a href="https://www.gov.uk/guidance/free-courses-for-jobs#free-qualifications-for-adults">Free courses for jobs - GOV.UK (www.gov.uk)</a>
+            </div>
         </details>
-    }
+
 }
 else
 {
-    <span>£@Model.Cost.ToDecimalString("N2")</span>
+    if (Model.Cost == null)
+    {
+        <span>Contact course provider</span>
+        if (!string.IsNullOrWhiteSpace(Model.CostDescription))
+        {
+            <details data-module="govuk-details" class="course-cost-desc">
+                <summary class="govuk-details__summary">
+                    <span class="govuk-details__summary-text">
+                        View cost description
+                    </span>
+                </summary>
+                <div class="govuk-details__text">@Html.Raw(Model.CostDescription)</div>
+            </details>
+        }
+    }
+    else
+    {
+        <span>£@Model.Cost.ToDecimalString("N2")</span>
+    }
 }

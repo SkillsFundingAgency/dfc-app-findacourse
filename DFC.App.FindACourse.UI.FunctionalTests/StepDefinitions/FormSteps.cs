@@ -5,6 +5,7 @@
 
 using DFC.App.FindACourse.UI.FunctionalTests.Model;
 using DFC.TestAutomation.UI.Extension;
+using DFC.TestAutomation.UI.Helper;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 using System;
@@ -19,7 +20,10 @@ namespace DFC.App.FindACourse.UI.FunctionalTests.StepDefinitions
         public FormSteps(ScenarioContext context)
         {
             this.Context = context;
+            this.formHelper = this.Context.GetHelperLibrary<AppSettings>().FormHelper;
         }
+
+        private IFormHelper formHelper;
 
         private ScenarioContext Context { get; set; }
 
@@ -64,6 +68,12 @@ namespace DFC.App.FindACourse.UI.FunctionalTests.StepDefinitions
             locationFilters.SendKeys(location);
             locationFilters.SendKeys(Keys.Tab);
             Thread.Sleep(5000);
+        }
+
+        [When(@"I filter by (.*) miles")]
+        public void WhenIFilterByMiles(string miles)
+        {
+            this.formHelper.SelectByText(By.Id("distance-select"), $"{miles} miles");
         }
 
         [When(@"I select (.*) in the start date filter")]
