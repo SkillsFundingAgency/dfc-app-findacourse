@@ -7,9 +7,12 @@ using DFC.App.FindACourse.UI.FunctionalTests.Model;
 using DFC.App.FindACourse.UI.FunctionalTests.Support;
 using DFC.TestAutomation.UI;
 using DFC.TestAutomation.UI.Extension;
+using DFC.TestAutomation.UI.Helper;
 using OpenQA.Selenium;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading;
 using TechTalk.SpecFlow;
 using Xunit;
@@ -22,7 +25,12 @@ namespace DFC.App.FindACourse.UI.FunctionalTests.StepDefinitions
         public CourseResultsSteps(ScenarioContext context)
         {
             this.Context = context;
+            this.commonHelper = this.Context.GetHelperLibrary<AppSettings>().CommonActionHelper;
+            this.formHelper = this.Context.GetHelperLibrary<AppSettings>().FormHelper;
         }
+
+        private ICommonActionHelper commonHelper;
+        private IFormHelper formHelper;
 
         private ScenarioContext Context { get; set; }
 
@@ -95,6 +103,40 @@ namespace DFC.App.FindACourse.UI.FunctionalTests.StepDefinitions
             if (!(this.Context.Get<IObjectContext>().GetObject("FirstResult").ToString() == this.Context.Get<IObjectContext>().GetObject("BackToFirstResult").ToString()))
             {
                 throw new OperationCanceledException($"Unable to perform the step: {this.Context.StepContext.StepInfo.Text}. Unexpected results displayed on going back from course details page.");
+            }
+        }
+
+        [Then(@"all results are under (.*) miles")]
+        public void ThenAllResultsAreUnderMiles(int selectedMiles)
+        {
+            while (this.commonHelper.IsElementDisplayed(By.CssSelector("li[class=next]")))
+            {
+                this.Context.GetWebDriver().FindElement(By.CssSelector("span[class=pagination-label]")).Click();
+            }
+
+            var results = this.Context.GetWebDriver().FindElements(By.CssSelector(".govuk-\\!-margin-top-6"));
+            var searchResults = new List<SearchResult>();
+
+            foreach (var resultContainer in results)
+            {
+                var searchResult = new SearchResultSupport(this.Context, resultContainer).GetResult();
+                searchResults.Add(searchResult);
+            }
+
+
+            foreach (var result in searchResults)
+            {
+                var miles = result.Location.Split('(', ')')[1];
+                double milesNo;
+                double.TryParse(miles, out milesNo);
+                if (milesNo > selectedMiles)
+                {
+                    throw new Exception($"Check course results. Result contains course(s) outside of the distance selected");
+                }
+                else if (string.IsNullOrEmpty(result.Location))
+                {
+                    throw new Exception($"Check course results. Location is not displayed however should be shown");
+                }
             }
         }
     }
