@@ -10,9 +10,9 @@
         <span id="location-hint" class="govuk-hint">
             <label aria-label="TownOrPostCodeLabel">Enter a town or postcode</label>
         </span>
-        <input type="text" asp-for="SideBar.TownOrPostcode" aria-label="TownOrPostcode" name="SideBar.TownOrPostcode" class="govuk-input govuk-input--width-10" id="location-input" value="@Model.SideBar.TownOrPostcode"/>
+        <input type="text" asp-for="SideBar.TownOrPostcode" aria-label="TownOrPostcode" name="SideBar.TownOrPostcode" class="govuk-input govuk-input--width-10" id="location-input" value="@Model.SideBar.TownOrPostcode" />
         <span asp-validation-for="SideBar.TownOrPostcode" class="text-danger" id="location-validator"></span>
-        <input type="hidden" asp-for="SideBar.Coordinates" name="SideBar.Coordinates" id="coordinates" value="@Model.SideBar.Coordinates"/>
+        <input type="hidden" asp-for="SideBar.Coordinates" name="SideBar.Coordinates" id="coordinates" value="@Model.SideBar.Coordinates" />
         <input type="hidden" asp-for="SideBar.SuggestedLocation" name="SideBar.SuggestedLocation" id="suggestedLocation-input" value="@Model.SideBar.SuggestedLocation" />
         <div id="suggest-location" class="location-suggest@(Model.SideBar.DidYouMeanLocations?.Count() > 0 ? "-show" : "")" role="group">
             <details id="suggest-location-details" class="govuk-details" open>
@@ -81,6 +81,20 @@
             </fieldset>
         </div>
     </div>
+
+
+    @if(!Model.FreeCourseSearch ){
+        <div class="govuk-form-group">
+            <div id="@Model.SideBar.QualificationLevels.FilterText">
+                <fieldset class="govuk-fieldset">
+                    <legend class="govuk-label govuk-!-font-weight-bold" id="coursestudytime-label">@Model.SideBar.QualificationLevels.FilterTitle</legend>
+                    <div class="govuk-checkboxes govuk-checkboxes--small">
+                        <check-box-list name="SideBar.QualificationLevels.SelectedIds" items="Model.SideBar.QualificationLevels.LstChkFilter" template="GDS"></check-box-list>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+    }
 
     <button data-module="govuk-button" class="govuk-button" type="submit" id="applyfilters-button">Apply filters</button>
 

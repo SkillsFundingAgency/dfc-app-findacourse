@@ -25,6 +25,8 @@ namespace DFC.App.FindACourse.ViewModels
 
         public FiltersListViewModel CourseStudyTime { get; set; }
 
+        public FiltersListViewModel QualificationLevels { get; set; }
+
         public FiltersListViewModel CourseHours { get; set; }
 
         public FiltersListViewModel CourseType { get; set; }
