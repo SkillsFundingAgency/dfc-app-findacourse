@@ -626,8 +626,11 @@ namespace DFC.App.FindACourse.Controllers
             model.CourseSearchFilters.CourseHours = courseHoursList;
             model.CourseSearchFilters.StartDate = selectedStartDateValue;
             model.CourseSearchFilters.CourseStudyTime = courseStudyTimeList;
-            model.CourseSearchFilters.QualificationLevels =
-                GenerateCourseLevels(model.SideBar.QualificationLevels.SelectedIds);
+            if (model.SideBar.QualificationLevels != null && model.SideBar.QualificationLevels.SelectedIds.Any())
+            {
+                model.CourseSearchFilters.QualificationLevels = GenerateCourseLevels(model.SideBar.QualificationLevels.SelectedIds);
+            }
+
             if (model.FreeCourseSearch && string.IsNullOrEmpty(model.CourseSearchFilters.CampaignCode))
             {
                 model.CourseSearchFilters.CampaignCode = FreeSearchCampaignCode;
