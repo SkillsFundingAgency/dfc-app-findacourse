@@ -61,6 +61,21 @@ namespace DFC.App.FindACourse.Data.Helpers
             return lstCourseStudyTime;
         }
 
+        public static List<Filter> GetLevelList()
+        {
+            return new List<Filter>()
+            {
+                new Filter { Id = "E", Text = "Entry Level" },
+                new Filter { Id = "1", Text = "Level 1" },
+                new Filter { Id = "2", Text = "Level 2" },
+                new Filter { Id = "3", Text = "Level 3" },
+                new Filter { Id = "4", Text = "Level 4" },
+                new Filter { Id = "5", Text = "Level 5" },
+                new Filter { Id = "6", Text = "Level 6" },
+                new Filter { Id = "7", Text = "Level 7" },
+            };
+        }
+
         public static List<SelectListItem> GetStartDateList()
         {
             var lstStartDate = new List<SelectListItem>

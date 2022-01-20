@@ -193,6 +193,10 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
                     {
                         SelectedIds = new List<string> { "Daytime" },
                     },
+                    QualificationLevels = new FiltersListViewModel
+                    {
+                        SelectedIds = new List<string> { "1" },
+                    },
                 },
                 IsTest = true,
             };

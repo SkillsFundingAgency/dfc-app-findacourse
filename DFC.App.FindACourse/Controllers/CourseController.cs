@@ -167,6 +167,7 @@ namespace DFC.App.FindACourse.Controllers
                     CourseType = ConvertStringToFiltersListViewModel(paramValues.CourseType),
                     CourseHours = ConvertStringToFiltersListViewModel(paramValues.CourseHours),
                     CourseStudyTime = ConvertStringToFiltersListViewModel(paramValues.CourseStudyTime),
+                    QualificationLevels = ConvertStringToFiltersListViewModel(paramValues.QualificationLevels),
                     StartDateValue = paramValues.StartDate,
                     CurrentSearchTerm = paramValues.SearchTerm,
                     FiltersApplied = paramValues.FilterA,
@@ -363,6 +364,12 @@ namespace DFC.App.FindACourse.Controllers
             sideBarViewModel.D = model.SideBar.D;
             sideBarViewModel.DidYouMeanLocations = model.SideBar.DidYouMeanLocations;
             sideBarViewModel.SuggestedLocation = model.SideBar.SuggestedLocation;
+
+            if (model.SideBar.QualificationLevels != null && model.SideBar.QualificationLevels.SelectedIds.Any())
+            {
+                model.SideBar.CourseType = CheckCheckboxState(model.SideBar.QualificationLevels, sideBarViewModel.QualificationLevels);
+                sideBarViewModel.QualificationLevels.SelectedIds = model.SideBar.QualificationLevels.SelectedIds;
+            }
 
             if (model.SideBar.CourseType != null && model.SideBar.CourseType.SelectedIds.Any())
             {
@@ -619,6 +626,11 @@ namespace DFC.App.FindACourse.Controllers
             model.CourseSearchFilters.CourseHours = courseHoursList;
             model.CourseSearchFilters.StartDate = selectedStartDateValue;
             model.CourseSearchFilters.CourseStudyTime = courseStudyTimeList;
+            if (model.SideBar.QualificationLevels != null && model.SideBar.QualificationLevels.SelectedIds.Any())
+            {
+                model.CourseSearchFilters.QualificationLevels = GenerateCourseLevels(model.SideBar.QualificationLevels.SelectedIds);
+            }
+
             if (model.FreeCourseSearch && string.IsNullOrEmpty(model.CourseSearchFilters.CampaignCode))
             {
                 model.CourseSearchFilters.CampaignCode = FreeSearchCampaignCode;
@@ -653,6 +665,25 @@ namespace DFC.App.FindACourse.Controllers
             // Enter filters criteria here
             model.RequestPage = (model.RequestPage > 1) ? model.RequestPage : 1;
             return model;
+        }
+
+        private List<int> GenerateCourseLevels(List<string> levels)
+        {
+            var list = new List<int>();
+
+            foreach (var level in levels)
+            {
+                if (string.Equals(level, "E", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    list.AddRange(new List<int> { 1, 2, 3 });
+                }
+
+                if (int.TryParse(level, out var levelValue))
+                {
+                    list.Add(levelValue);
+                }
+            }
+            return list.Distinct().ToList();
         }
 
         private async Task<BodyViewModel> AddInLocationRequestParametersAsync(BodyViewModel model)
@@ -769,6 +800,7 @@ namespace DFC.App.FindACourse.Controllers
                 CourseType = MapFilter("courseType", "Course type", ListFilters.GetCourseTypeList()),
                 CourseHours = MapFilter("courseHours", "Course hours", ListFilters.GetHoursList()),
                 CourseStudyTime = MapFilter("courseStudyTime", "Course study time", ListFilters.GetStudyTimeList()),
+                QualificationLevels = MapFilter("qualificationLevels", "Course Qualification level", ListFilters.GetLevelList()),
                 StartDateOptions = ListFilters.GetStartDateList(),
                 DistanceOptions = ListFilters.GetDistanceList(),
             };
