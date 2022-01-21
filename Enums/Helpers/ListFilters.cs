@@ -65,7 +65,7 @@ namespace DFC.App.FindACourse.Data.Helpers
         {
             return new List<Filter>()
             {
-                new Filter { Id = "E", Text = "Entry Level" },
+                new Filter { Id = "E", Text = "Entry level" },
                 new Filter { Id = "1", Text = "Level 1" },
                 new Filter { Id = "2", Text = "Level 2" },
                 new Filter { Id = "3", Text = "Level 3" },

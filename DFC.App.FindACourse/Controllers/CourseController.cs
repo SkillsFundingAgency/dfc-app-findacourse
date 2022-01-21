@@ -216,7 +216,8 @@ namespace DFC.App.FindACourse.Controllers
                                          $"{nameof(paramValues.Page)}={paramValues.Page}&" +
                                          $"{nameof(paramValues.OrderByValue)}={paramValues.OrderByValue}&" +
                                          $"{nameof(paramValues.Coordinates)}={WebUtility.HtmlEncode(paramValues.Coordinates)}&" +
-                                         $"{nameof(paramValues.CampaignCode)}={paramValues.CampaignCode}";
+                                         $"{nameof(paramValues.CampaignCode)}={paramValues.CampaignCode}&" +
+                                         $"{nameof(paramValues.QualificationLevels)}={paramValues.QualificationLevels}";
                 }
             }
             catch (Exception ex)
@@ -412,6 +413,7 @@ namespace DFC.App.FindACourse.Controllers
             var orderByValue = model.SideBar.SelectedOrderByValue;
             var coordinates = model.SideBar.Coordinates;
             var campaignCode = model.CourseSearchFilters?.CampaignCode;
+            var qualificationLevels = model.SideBar.QualificationLevels != null && model.SideBar.QualificationLevels?.SelectedIds.Count > 0 ? JsonConvert.SerializeObject(model.SideBar.QualificationLevels.SelectedIds) : null;
 
             if (!model.IsTest)
             {
@@ -426,7 +428,8 @@ namespace DFC.App.FindACourse.Controllers
                                      $"{nameof(page)}={page}&" +
                                      $"{nameof(orderByValue)}={orderByValue}&" +
                                      $"{nameof(coordinates)}={WebUtility.HtmlEncode(coordinates)}&" +
-                                     $"{nameof(campaignCode)}={campaignCode}";
+                                     $"{nameof(campaignCode)}={campaignCode}&" +
+                                     $"{nameof(qualificationLevels)}={qualificationLevels}"; ;
             }
 
             model.SideBar = sideBarViewModel;
@@ -524,6 +527,7 @@ namespace DFC.App.FindACourse.Controllers
                     SelectedOrderByValue = paramValues.OrderByValue,
                     D = paramValues.D,
                     Coordinates = WebUtility.HtmlEncode(paramValues.Coordinates),
+                    QualificationLevels = ConvertStringToFiltersListViewModel(paramValues.QualificationLevels),
                 },
                 RequestPage = paramValues.Page,
                 SelectedDistanceValue = paramValues.Distance,
@@ -800,7 +804,7 @@ namespace DFC.App.FindACourse.Controllers
                 CourseType = MapFilter("courseType", "Course type", ListFilters.GetCourseTypeList()),
                 CourseHours = MapFilter("courseHours", "Course hours", ListFilters.GetHoursList()),
                 CourseStudyTime = MapFilter("courseStudyTime", "Course study time", ListFilters.GetStudyTimeList()),
-                QualificationLevels = MapFilter("qualificationLevels", "Course Qualification level", ListFilters.GetLevelList()),
+                QualificationLevels = MapFilter("qualificationLevels", "Course qualification level", ListFilters.GetLevelList()),
                 StartDateOptions = ListFilters.GetStartDateList(),
                 DistanceOptions = ListFilters.GetDistanceList(),
             };

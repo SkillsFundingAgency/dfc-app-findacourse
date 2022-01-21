@@ -153,7 +153,8 @@ namespace DFC.App.FindACourse.Controllers
                              $"{nameof(paramValues.D)}={paramValues.D}&" +
                              $"{nameof(paramValues.OrderByValue)}={paramValues.OrderByValue}&" +
                              $"{nameof(paramValues.Coordinates)}={WebUtility.HtmlEncode(paramValues.Coordinates)}&" +
-                             $"{nameof(paramValues.CampaignCode)}={paramValues.CampaignCode}";
+                             $"{nameof(paramValues.CampaignCode)}={paramValues.CampaignCode}&" +
+                             $"{nameof(paramValues.QualificationLevels)}={paramValues.QualificationLevels}";
 
             return searchTerm;
         }
