@@ -167,6 +167,7 @@ namespace DFC.App.FindACourse.Controllers
                     CourseType = ConvertStringToFiltersListViewModel(paramValues.CourseType),
                     CourseHours = ConvertStringToFiltersListViewModel(paramValues.CourseHours),
                     CourseStudyTime = ConvertStringToFiltersListViewModel(paramValues.CourseStudyTime),
+                    QualificationLevels = string.IsNullOrEmpty(paramValues.QualificationLevels) ? new FiltersListViewModel() : ConvertStringToFiltersListViewModel(paramValues.QualificationLevels),
                     StartDateValue = paramValues.StartDate,
                     CurrentSearchTerm = paramValues.SearchTerm,
                     FiltersApplied = paramValues.FilterA,
@@ -215,7 +216,8 @@ namespace DFC.App.FindACourse.Controllers
                                          $"{nameof(paramValues.Page)}={paramValues.Page}&" +
                                          $"{nameof(paramValues.OrderByValue)}={paramValues.OrderByValue}&" +
                                          $"{nameof(paramValues.Coordinates)}={WebUtility.HtmlEncode(paramValues.Coordinates)}&" +
-                                         $"{nameof(paramValues.CampaignCode)}={paramValues.CampaignCode}";
+                                         $"{nameof(paramValues.CampaignCode)}={paramValues.CampaignCode}&" +
+                                         $"{nameof(paramValues.QualificationLevels)}={paramValues.QualificationLevels}";
                 }
             }
             catch (Exception ex)
@@ -364,6 +366,12 @@ namespace DFC.App.FindACourse.Controllers
             sideBarViewModel.DidYouMeanLocations = model.SideBar.DidYouMeanLocations;
             sideBarViewModel.SuggestedLocation = model.SideBar.SuggestedLocation;
 
+            if (model.SideBar.QualificationLevels != null && model.SideBar.QualificationLevels.SelectedIds.Any())
+            {
+                model.SideBar.CourseType = CheckCheckboxState(model.SideBar.QualificationLevels, sideBarViewModel.QualificationLevels);
+                sideBarViewModel.QualificationLevels.SelectedIds = model.SideBar.QualificationLevels.SelectedIds;
+            }
+
             if (model.SideBar.CourseType != null && model.SideBar.CourseType.SelectedIds.Any())
             {
                 model.SideBar.CourseType = CheckCheckboxState(model.SideBar.CourseType, sideBarViewModel.CourseType);
@@ -405,6 +413,7 @@ namespace DFC.App.FindACourse.Controllers
             var orderByValue = model.SideBar.SelectedOrderByValue;
             var coordinates = model.SideBar.Coordinates;
             var campaignCode = model.CourseSearchFilters?.CampaignCode;
+            var qualificationLevels = model.SideBar.QualificationLevels != null && model.SideBar.QualificationLevels?.SelectedIds.Count > 0 ? JsonConvert.SerializeObject(model.SideBar.QualificationLevels.SelectedIds) : null;
 
             if (!model.IsTest)
             {
@@ -419,7 +428,8 @@ namespace DFC.App.FindACourse.Controllers
                                      $"{nameof(page)}={page}&" +
                                      $"{nameof(orderByValue)}={orderByValue}&" +
                                      $"{nameof(coordinates)}={WebUtility.HtmlEncode(coordinates)}&" +
-                                     $"{nameof(campaignCode)}={campaignCode}";
+                                     $"{nameof(campaignCode)}={campaignCode}&" +
+                                     $"{nameof(qualificationLevels)}={qualificationLevels}"; ;
             }
 
             model.SideBar = sideBarViewModel;
@@ -517,6 +527,7 @@ namespace DFC.App.FindACourse.Controllers
                     SelectedOrderByValue = paramValues.OrderByValue,
                     D = paramValues.D,
                     Coordinates = WebUtility.HtmlEncode(paramValues.Coordinates),
+                    QualificationLevels = ConvertStringToFiltersListViewModel(paramValues.QualificationLevels),
                 },
                 RequestPage = paramValues.Page,
                 SelectedDistanceValue = paramValues.Distance,
@@ -619,6 +630,11 @@ namespace DFC.App.FindACourse.Controllers
             model.CourseSearchFilters.CourseHours = courseHoursList;
             model.CourseSearchFilters.StartDate = selectedStartDateValue;
             model.CourseSearchFilters.CourseStudyTime = courseStudyTimeList;
+            if (model.SideBar.QualificationLevels != null && model.SideBar.QualificationLevels.SelectedIds.Any())
+            {
+                model.CourseSearchFilters.QualificationLevels = model.SideBar.QualificationLevels.SelectedIds;
+            }
+
             if (model.FreeCourseSearch && string.IsNullOrEmpty(model.CourseSearchFilters.CampaignCode))
             {
                 model.CourseSearchFilters.CampaignCode = FreeSearchCampaignCode;
@@ -654,7 +670,7 @@ namespace DFC.App.FindACourse.Controllers
             model.RequestPage = (model.RequestPage > 1) ? model.RequestPage : 1;
             return model;
         }
-
+        
         private async Task<BodyViewModel> AddInLocationRequestParametersAsync(BodyViewModel model)
         {
             float selectedDistanceValue = 10;
@@ -769,6 +785,7 @@ namespace DFC.App.FindACourse.Controllers
                 CourseType = MapFilter("courseType", "Course type", ListFilters.GetCourseTypeList()),
                 CourseHours = MapFilter("courseHours", "Course hours", ListFilters.GetHoursList()),
                 CourseStudyTime = MapFilter("courseStudyTime", "Course study time", ListFilters.GetStudyTimeList()),
+                QualificationLevels = MapFilter("qualificationLevels", "Course qualification level", ListFilters.GetLevelList()),
                 StartDateOptions = ListFilters.GetStartDateList(),
                 DistanceOptions = ListFilters.GetDistanceList(),
             };
