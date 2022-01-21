@@ -18,6 +18,7 @@
     var orderByValue = Model.SideBar.SelectedOrderByValue;
     var coordinates = Model.SideBar.Coordinates;
     var campaignCode = Model.CourseSearchFilters.CampaignCode;
+    var qualificationLevels = Html.Raw(Json.Serialize(Model.SideBar.QualificationLevels.SelectedIds));
 
 
     var parameters = $"{nameof(searchTerm)}={searchTerm}&" +
@@ -30,7 +31,8 @@
                      $"{nameof(filterA)}={filterA}&" +
                      $"{nameof(orderByValue)}={orderByValue}&" +
                      $"{nameof(coordinates)}={coordinates}&" +
-                     $"{nameof(campaignCode)}={campaignCode}";
+                     $"{nameof(campaignCode)}={campaignCode}"+
+                     $"{nameof(qualificationLevels)}={qualificationLevels}";
     var nextLinkParams = $"{parameters}&page={nextPage}";
     var previousLinkParams = $"{parameters}&page={previousPage}";
     var id = Model.IsResultBody ? "fac-result-list-Result" : "fac-result-list";
