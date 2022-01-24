@@ -368,7 +368,7 @@ namespace DFC.App.FindACourse.Controllers
 
             if (model.SideBar.QualificationLevels != null && model.SideBar.QualificationLevels.SelectedIds.Any())
             {
-                model.SideBar.CourseType = CheckCheckboxState(model.SideBar.QualificationLevels, sideBarViewModel.QualificationLevels);
+                model.SideBar.QualificationLevels = CheckCheckboxState(model.SideBar.QualificationLevels, sideBarViewModel.QualificationLevels);
                 sideBarViewModel.QualificationLevels.SelectedIds = model.SideBar.QualificationLevels.SelectedIds;
             }
 
