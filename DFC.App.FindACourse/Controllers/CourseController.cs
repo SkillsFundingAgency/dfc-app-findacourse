@@ -485,6 +485,22 @@ namespace DFC.App.FindACourse.Controllers
             return model;
         }
 
+        private static FiltersListViewModel ConvertStringArrayToFiltersListViewModel(string listView)
+        {
+            var model = new FiltersListViewModel();
+
+            if (listView != null && listView != "[]")
+            {
+                listView = listView.Replace('"', ' ').Replace('[', ' ').Replace(']', ' ').Trim();
+
+                var list = listView.Split(",").Select(x => x.Trim()).ToList();
+
+                model.SelectedIds = list;
+            }
+
+            return model;
+        }
+
         private static List<T> ConvertToEnumList<T>(List<string> listToConvert)
            where T : struct
         {
@@ -527,7 +543,7 @@ namespace DFC.App.FindACourse.Controllers
                     SelectedOrderByValue = paramValues.OrderByValue,
                     D = paramValues.D,
                     Coordinates = WebUtility.HtmlEncode(paramValues.Coordinates),
-                    QualificationLevels = ConvertStringToFiltersListViewModel(paramValues.QualificationLevels),
+                    QualificationLevels = ConvertStringArrayToFiltersListViewModel(paramValues.QualificationLevels),
                 },
                 RequestPage = paramValues.Page,
                 SelectedDistanceValue = paramValues.Distance,
