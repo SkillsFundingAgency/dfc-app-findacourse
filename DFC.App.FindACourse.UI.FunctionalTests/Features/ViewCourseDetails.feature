@@ -7,7 +7,7 @@
 @Smoke @FindACourse
 Scenario: View course details for search result
 	Given I am on the find a course landing page
-	When I enter the search term computer in the search box
+	When I enter the search term computing in the search box
 	And I click the search button
 	Then search results are displayed
 	When I click on the first search result
