@@ -1,11 +1,13 @@
-﻿using DFC.App.FindACourse.Data.Domain;
-using DFC.CompositeInterfaceModels.FindACourseClient;
+﻿using DFC.CompositeInterfaceModels.FindACourseClient;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 namespace DFC.App.FindACourse.ViewModels
 {
+    [ExcludeFromCodeCoverage]
     public class BodyViewModel
     {
         public string CurrentSearchTerm { get; set; }
@@ -35,5 +37,9 @@ namespace DFC.App.FindACourse.ViewModels
         public CourseSearchOrderBy CourseSearchOrderBy { get; set; }
 
         public bool IsResultBody { get; set; }
+
+        public bool UsingAutoSuggestedLocation { get; set; }
+
+        public bool FreeCourseSearch { get; set; }
     }
 }

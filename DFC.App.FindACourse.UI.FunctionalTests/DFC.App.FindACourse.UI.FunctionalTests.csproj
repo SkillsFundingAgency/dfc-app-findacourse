@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <ProjectGuid>{1FF680BC-6E33-4B40-92AE-D5D4131AD1A5}</ProjectGuid>
+    <ProjectGuid>{1ff680bc-6e33-4b40-92ae-d5d4131ad1a5}</ProjectGuid>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
@@ -21,13 +21,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="DFC.TestAutomation.UI" Version="1.0.141" />
+    <PackageReference Include="DFC.TestAutomation.UI" Version="1.0.143" />
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.3.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.8.3" />
-    <PackageReference Include="SpecFlow.xUnit" Version="3.4.31" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
+    <PackageReference Include="SpecFlow.xUnit" Version="3.9.40" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

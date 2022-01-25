@@ -1,0 +1,25 @@
+﻿@model BodyViewModel
+
+@if (Model.Results != null)
+{
+<div class="no-count-block">
+    @if (Model.Results.Courses.Count() > 0)
+    {
+        if (Model.FreeCourseSearch)
+        {
+            <p class="govuk-body">Showing <span class="fac-result-count">@String.Format("{0:n0}", Model.Results.ResultProperties.TotalResultCount)</span> courses</p>
+        }
+        else
+        {
+            <p class="govuk-body">Showing all <span class="fac-result-count">@String.Format("{0:n0}", Model.Results.ResultProperties.TotalResultCount)</span> courses</p>
+        }
+        
+    <div id="orderby-block" class="govuk-form-group">
+        <div id="orderBy">
+            <label class="result-region-header__sort-label govuk-label" aria-label="SelectedOrderValue" for="orderByInput" id="orderby-label">Sort by</label>
+            <select asp-for="SideBar.SelectedOrderByValue" aria-label="SelectedOrderByValue" asp-items="Model.SideBar.OrderByOptions" class="govuk-select" name="SideBar.SelectedOrderByValue" id="orderBy-Input"></select>
+        </div>
+    </div>
+    }
+</div>
+}

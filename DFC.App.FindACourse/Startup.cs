@@ -3,6 +3,7 @@ using DFC.App.FindACourse.Data.Contracts;
 using DFC.App.FindACourse.Data.Domain;
 using DFC.App.FindACourse.Data.Models;
 using DFC.App.FindACourse.Framework;
+using DFC.App.FindACourse.Helpers;
 using DFC.App.FindACourse.HostedServices;
 using DFC.App.FindACourse.Repository;
 using DFC.App.FindACourse.Services;
@@ -23,18 +24,16 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Azure.Documents.Client;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Polly;
-using Polly.Extensions.Http;
-using Polly.Registry;
-using System;
-using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace DFC.App.FindACourse
 {
+    [ExcludeFromCodeCoverage]
     public class Startup
     {
         public const string CourseSearchAppSettings = "Configuration:CourseSearch";
@@ -42,6 +41,7 @@ namespace DFC.App.FindACourse
         public const string CourseSearchClientAuditSettings = "Configuration:CourseSearchClient:CosmosAuditConnection";
         public const string CourseSearchClientPolicySettings = "Configuration:CourseSearchClient:Policies";
         public const string StaticCosmosDbConfigAppSettings = "Configuration:CosmosDbConnections:StaticContent";
+        private const string AzureSearchAppSettings = "AzureSearch";
 
         private readonly IWebHostEnvironment env;
 
@@ -85,17 +85,18 @@ namespace DFC.App.FindACourse
 
             services.AddSingleton(Configuration.GetSection(nameof(CmsApiClientOptions)).Get<CmsApiClientOptions>() ?? new CmsApiClientOptions());
             var staticContentDbConnection = Configuration.GetSection(StaticCosmosDbConfigAppSettings).Get<CosmosDbConnection>();
-            services.AddDocumentServices<StaticContentItemModel>(staticContentDbConnection, env.IsDevelopment());
+            var cosmosRetryOptions = new RetryOptions { MaxRetryAttemptsOnThrottledRequests = 20, MaxRetryWaitTimeInSeconds = 60 };
+            services.AddDocumentServices<StaticContentItemModel>(staticContentDbConnection, env.IsDevelopment(), cosmosRetryOptions);
             services.AddTransient<IStaticContentReloadService, StaticContentReloadService>();
             services.AddTransient<IApiService, ApiService>();
             services.AddTransient<ICmsApiService, CmsApiService>();
             services.AddTransient<IApiDataProcessorService, ApiDataProcessorService>();
             services.AddTransient<IApiCacheService, ApiCacheService>();
             services.AddTransient<IWebhooksService, WebhooksService>();
+            services.AddTransient<IViewHelper, ViewHelper>();
             services.AddTransient<MemoryCache>();
 
             var policyRegistry = services.AddPolicyRegistry();
-            var policyOptions = Configuration.GetSection(CourseSearchClientPolicySettings).Get<PolicyOptions>() ?? new PolicyOptions();
             services.AddFindACourseTransientFaultHandlingPolicies(courseSearchClientSettings, policyRegistry);
 
             services.AddHostedServiceTelemetryWrapper();
@@ -104,18 +105,15 @@ namespace DFC.App.FindACourse
 
             services.AddApiServices(Configuration, policyRegistry);
 
+            var azureSearchOptions = Configuration.GetSection(AzureSearchAppSettings).Get<AzureSearchIndexConfig>() ?? new AzureSearchIndexConfig();
+            services.AddSingleton(azureSearchOptions);
+            services.AddSingleton<ILocationService, LocationService>();
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Latest);
         }
 
-        private static void AddPolicies(IPolicyRegistry<string> policyRegistry)
-        {
-            var policyOptions = new PolicyOptions() { HttpRetry = new RetryPolicyOptions(), HttpCircuitBreaker = new CircuitBreakerPolicyOptions() };
-            policyRegistry.Add(nameof(PolicyOptions.HttpRetry), HttpPolicyExtensions.HandleTransientHttpError().WaitAndRetryAsync(policyOptions.HttpRetry.Count, retryAttempt => TimeSpan.FromSeconds(Math.Pow(policyOptions.HttpRetry.BackoffPower, retryAttempt))));
-            policyRegistry.Add(nameof(PolicyOptions.HttpCircuitBreaker), HttpPolicyExtensions.HandleTransientHttpError().CircuitBreakerAsync(policyOptions.HttpCircuitBreaker.ExceptionsAllowedBeforeBreaking, policyOptions.HttpCircuitBreaker.DurationOfBreak));
-        }
-
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IMapper mapper)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {

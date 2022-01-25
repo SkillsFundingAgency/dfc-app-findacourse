@@ -91,6 +91,18 @@
         },
         "ConfigurationApplicationName": {
             "value": "__ConfigurationApplicationName__"
+        },
+        "AzureSearchEndpointUri": {
+            "value": "__AzureSearchServiceUri__"
+        },
+        "AzureSearchSearchServiceName": {
+            "value": "__AzureSearchServiceName__"
+        },
+        "AzureSearchSearchServiceAdminAPIKey": {
+            "value": "__LocationAPISearchKey__"
+        },
+        "AzureSearchMaxNumberToSuggest": {
+            "value": "__LocationMaxNumberToSuggest__"
         }
     }
 }

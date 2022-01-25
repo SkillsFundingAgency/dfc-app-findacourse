@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System.Diagnostics.CodeAnalysis;
 
 namespace DFC.App.FindACourse.Data.Models
 {
+    [ExcludeFromCodeCoverage]
     public class ParamValues
     {
         public string SearchTerm { get; set; }
@@ -25,5 +26,13 @@ namespace DFC.App.FindACourse.Data.Models
         public bool IsTest { get; set; }
 
         public string OrderByValue { get; set; }
+
+        public int D { get; set; }
+
+        public string Coordinates { get; set; }
+
+        public string CampaignCode { get; set; }
+
+        public string QualificationLevels { get; set; }
     }
 }

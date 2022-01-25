@@ -59,8 +59,10 @@ namespace DFC.App.FindACourse.Services
             }
         }
 
-        private async Task ReloadSharedContent(CancellationToken stoppingToken)
+        public async Task ReloadSharedContent(CancellationToken stoppingToken)
         {
+            await staticContentDocumentService.PurgeAsync().ConfigureAwait(false);
+
             var contentIds = cmsApiClientOptions.ContentIds.Split(",", StringSplitOptions.RemoveEmptyEntries);
 
             foreach (var contentId in contentIds)
@@ -92,7 +94,7 @@ namespace DFC.App.FindACourse.Services
             }
         }
 
-        private bool TryValidateModel<TModel>(TModel model)
+        public bool TryValidateModel<TModel>(TModel model)
             where TModel : class, ICachedModel
         {
             _ = model ?? throw new ArgumentNullException(nameof(model));

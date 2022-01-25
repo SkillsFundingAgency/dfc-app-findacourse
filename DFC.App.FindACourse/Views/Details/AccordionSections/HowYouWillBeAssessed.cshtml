@@ -1,0 +1,11 @@
+﻿@model AccordionSetUpModel
+@if (!string.IsNullOrWhiteSpace(Model.SectionText))
+{
+    @await Html.PartialAsync("CourseAccordionItem", new AccordionViewModel
+{
+    Description = Model.SectionText,
+    Title = "How you'll be assessed ",
+    SubText = "Find out more about exams, assignments and assessments.",
+    SectionName = Model.Position,
+})
+}

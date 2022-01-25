@@ -1,7 +1,9 @@
 ﻿using Newtonsoft.Json;
+using System.Diagnostics.CodeAnalysis;
 
 namespace DFC.App.FindACourse.ViewModels
 {
+    [ExcludeFromCodeCoverage]
     public class BreadcrumbPathViewModel
     {
         public string Route { get; set; }

@@ -1,13 +1,22 @@
-﻿@model BodyViewModel
+﻿@using DFC.App.FindACourse.Controllers
+@model BodyViewModel
 
 <section aria-label="Search">
-    <form action="/find-a-course/searchcourse" method="get" id="fac-search-course-form" class="find-a-course-page">
+    <form action="@(Model.FreeCourseSearch ? "/find-a-course/searchFreeCourse" : "/find-a-course/searchcourse")" method="get" id="fac-search-course-form" class="find-a-course-page">
         <section id="fac-search-banner" class="primary-hero">
             <div class="govuk-width-container">
                 <div class="govuk-grid-row">
                     <div class="govuk-grid-column-two-thirds">
-                        <h1 class="govuk-heading-xl">Find a course</h1>
-                        <p class="govuk-body-lead">Use our course search to look for different types of learning opportunities.</p>
+                        @if (Model.FreeCourseSearch)
+                        {
+                        <h1 class="govuk-heading-xl">Free courses for jobs</h1>
+                        <p class="govuk-body-lead">Search for free courses for jobs to get skills employers need, focusing on qualifications with good job opportunities and pay.</p>
+                        }
+                        else
+                        {
+                    <h1 class="govuk-heading-xl">Find a course</h1>
+                            <p class="govuk-body-lead">Use our course search to look for different types of learning opportunities.</p>
+                        }
                         <label class="input-label" id="enter-keyword-label" for="search-input">Enter a keyword</label>
                         <div class="input-wrapper">
                             <input type="search" id="search-input" name="searchTerm" value="@Model.CurrentSearchTerm" aria-label="Enter a keyword" title="Enter a keyword" class="govuk-input input-search-item input-search js-search-focus">
@@ -30,14 +39,18 @@
             <button class="govuk-button filters-button" id="show-filters-button">Show filters</button>
             <form action="/find-a-course/filterresults" method="get" class="find-a-course-page" id="fac-filter-form">
                 @Html.HiddenFor(m => m.CurrentSearchTerm)
+                @Html.HiddenFor(m => m.RequestPage)
+                @Html.HiddenFor(m => m.FreeCourseSearch, new {id="facFreeCourseSearch"})
+                <input id="facCampaignCode" name="CourseSearchFilters.FreeSearchCampaignCode" type="hidden" value="@(Model.FreeCourseSearch ? CourseController.FreeSearchCampaignCode : String.Empty)">
+
                 <div class="govuk-grid-row">
 
                     <div class="govuk-grid-column-one-third">
-                        <partial name="sideBarLeft" model="Model.SideBar" />
+                        <partial name="sideBarLeft" model="Model" />
                     </div>
 
                     <div class="govuk-grid-column-two-thirds">
-                        <partial name="_counter" model="Model" />
+                        <partial name="_resultsTop" model="Model" />
 
                         <hr class="govuk-section-break govuk-section-break--visible">
 

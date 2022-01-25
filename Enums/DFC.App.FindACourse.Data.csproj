@@ -3,14 +3,14 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
 	  <CodeAnalysisRuleSet>../DFC.Digital.CodeAnalysis.ruleset</CodeAnalysisRuleSet>
-	  <ProjectGuid>{E5AE69A6-0F13-4FE7-872F-370211ADF0EB}</ProjectGuid>
+	  <ProjectGuid>{e5ae69a6-0f13-4fe7-872f-370211adf0eb}</ProjectGuid>
   </PropertyGroup>
 	<ItemGroup>
 		<AdditionalFiles Include="..\stylecop.json" Link="../stylecop.json" />
 	</ItemGroup>
 
 	<ItemGroup>
-    <PackageReference Include="DFC.Compui.Cosmos" Version="1.0.61" />
+    <PackageReference Include="DFC.Compui.Cosmos" Version="1.0.67" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.ViewFeatures" Version="2.2.0" />
 	  <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.3.2">
 		  <PrivateAssets>all</PrivateAssets>
@@ -20,7 +20,7 @@
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 	  </PackageReference>
-		<PackageReference Include="DFC.Content.Pkg.Netcore" Version="1.0.85" />
+		<PackageReference Include="DFC.Content.Pkg.Netcore" Version="1.0.87" />
 	</ItemGroup>
 
 </Project>

@@ -114,8 +114,7 @@ namespace DFC.App.FindACourse.Controllers
                     break;
 
                 default:
-                    logger.LogWarning($"Event Id: {eventId}, Content Page Id: {contentPageId}: Content Page not Posted: Status: {result}");
-                    break;
+                    throw new InvalidDataException($"Event Id: {eventId}, Content Page Id: {contentPageId}: Content Page not updated: Status: {result}");
             }
         }
     }

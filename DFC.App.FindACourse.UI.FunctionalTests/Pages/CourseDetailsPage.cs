@@ -1,4 +1,4 @@
-﻿// <copyright file="FindACourseLandingPage.cs" company="National Careers Service">
+﻿// <copyright file="CourseDetailsPage.cs" company="National Careers Service">
 // Copyright (c) National Careers Service. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // </copyright>
@@ -6,6 +6,7 @@
 using DFC.App.FindACourse.UI.FunctionalTests.Model;
 using DFC.TestAutomation.UI;
 using DFC.TestAutomation.UI.Extension;
+using DFC.TestAutomation.UI.Helper;
 using OpenQA.Selenium;
 using System;
 using TechTalk.SpecFlow;

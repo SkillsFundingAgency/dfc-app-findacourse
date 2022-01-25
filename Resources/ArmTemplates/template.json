@@ -86,22 +86,34 @@
       "type": "string"
     },
     "ApimResourceGroup": {
-        "type": "string"
+      "type": "string"
     },
     "ApimLoggerName": {
-        "type": "string"
+      "type": "string"
     },
     "ApimProductInstanceName": {
-        "type": "string"
+      "type": "string"
     },
     "ApimServiceName": {
-        "type": "string"
+      "type": "string"
     },
     "ApiName": {
-        "type": "string"
+      "type": "string"
     },
     "ConfigurationApplicationName": {
-        "type": "string"
+      "type": "string"
+    },
+    "AzureSearchEndpointUri": {
+      "type": "string"
+    },
+    "AzureSearchSearchServiceName": {
+      "type": "string"
+    },
+    "AzureSearchSearchServiceAdminAPIKey": {
+      "type": "securestring"
+    },
+    "AzureSearchMaxNumberToSuggest": {
+      "type": "string"
     }
   },
   "variables": {
@@ -195,7 +207,7 @@
             "value": "app"
           },
           "deployStagingSlot": {
-            "value": false
+            "value": true
           },
           "appServiceAppSettings": {
             "value": [
@@ -382,12 +394,40 @@
               {
                 "name": "Configuration__CosmosDbConnections__StaticContent__PartitionKey",
                 "value": "[variables('facCosmosAuditCollectionPartitionKey')]"
+              },
+              {
+                "name": "AzureSearch__EndpointUri",
+                "value": "[parameters('AzureSearchEndpointUri')]"
+              },
+              {
+                "name": "AzureSearch__LocationSearchIndex",
+                "value": "dfc-digital-locations"
+              },
+              {
+                "name": "AzureSearch__SearchServiceName",
+                "value": "[parameters('AzureSearchSearchServiceName')]"
+              },
+              {
+                "name": "AzureSearch__SearchServiceAdminAPIKey",
+                "value": "[parameters('AzureSearchSearchServiceAdminAPIKey')]"
+              },
+              {
+                "name": "AzureSearch__SearchMaxNumberToSuggest",
+                "value": "[parameters('AzureSearchMaxNumberToSuggest')]"
+              },
+              {
+                "name": "WEBSITE_RUN_FROM_PACKAGE",
+                "value": "1"
+              },
+              {
+                "name": "WEBSITE_ADD_SITENAME_BINDINGS_IN_APPHOST_CONFIG",
+                "value": "1"
               }
             ]
           }
         }
       },
-      "dependsOn": ["[variables('AppServiceAppInsightsName')]"]
+      "dependsOn": [ "[variables('AppServiceAppInsightsName')]" ]
     },
     {
       "name": "[variables('CosmosDbDatabaseName')]",
@@ -448,7 +488,7 @@
           }
         }
       },
-      "dependsOn": ["[variables('CosmosDbDatabaseName')]"]
+      "dependsOn": [ "[variables('CosmosDbDatabaseName')]" ]
     },
     {
       "apiVersion": "2017-05-10",
@@ -479,7 +519,7 @@
           }
         }
       },
-      "dependsOn": ["[variables('CosmosDbDatabaseName')]"]
+      "dependsOn": [ "[variables('CosmosDbDatabaseName')]" ]
     },
     {
       "name": "[variables('ApiName')]",
@@ -513,7 +553,7 @@
       "apiVersion": "2019-05-01",
       "name": "[concat(variables('appServiceAppInsightsName'), '-metric-exceptions')]",
       "type": "Microsoft.Resources/deployments",
-      "dependsOn": ["[variables('appServiceAppInsightsName')]"],
+      "dependsOn": [ "[variables('appServiceAppInsightsName')]" ],
       "properties": {
         "mode": "Incremental",
         "templateLink": {
@@ -564,7 +604,7 @@
       "apiVersion": "2019-05-01",
       "name": "[concat(variables('appServiceAppInsightsName'), '-failure-anomaly-v2')]",
       "type": "Microsoft.Resources/deployments",
-      "dependsOn": ["[variables('appServiceAppInsightsName')]"],
+      "dependsOn": [ "[variables('appServiceAppInsightsName')]" ],
       "properties": {
         "mode": "Incremental",
         "templateLink": {

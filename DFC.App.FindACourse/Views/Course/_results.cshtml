@@ -11,21 +11,28 @@
     var distance = Model.SideBar.DistanceValue;
     var courseType = Html.Raw(Json.Serialize(Model.SideBar.CourseType.SelectedIds));
     var courseHours = Html.Raw(Json.Serialize(Model.SideBar.CourseHours.SelectedIds));
-    var studyTime = Html.Raw(Json.Serialize(Model.SideBar.CourseStudyTime.SelectedIds));
+    var courseStudyTime = Html.Raw(Json.Serialize(Model.SideBar.CourseStudyTime.SelectedIds));
     var startDate = Model.SideBar.StartDateValue;
     var searchTerm = Model.SideBar.CurrentSearchTerm;
     var filterA = Model.SideBar.FiltersApplied;
     var orderByValue = Model.SideBar.SelectedOrderByValue;
+    var coordinates = Model.SideBar.Coordinates;
+    var campaignCode = Model.CourseSearchFilters.CampaignCode;
+    var qualificationLevels = Html.Raw(Json.Serialize(Model.SideBar.QualificationLevels.SelectedIds));
+
 
     var parameters = $"{nameof(searchTerm)}={searchTerm}&" +
                      $"{nameof(town)}={town}&" +
                      $"{nameof(courseType)}={courseType}&" +
                      $"{nameof(courseHours)}={courseHours}&" +
-                     $"{nameof(studyTime)}={studyTime}&" +
+                     $"{nameof(courseStudyTime)}={courseStudyTime}&" +
                      $"{nameof(startDate)}={startDate}&" +
                      $"{nameof(distance)}={distance}&" +
                      $"{nameof(filterA)}={filterA}&" +
-                     $"{nameof(orderByValue)}={orderByValue}";
+                     $"{nameof(orderByValue)}={orderByValue}&" +
+                     $"{nameof(coordinates)}={coordinates}&" +
+                     $"{nameof(campaignCode)}={campaignCode}&"+
+                     $"{nameof(qualificationLevels)}={qualificationLevels}";
     var nextLinkParams = $"{parameters}&page={nextPage}";
     var previousLinkParams = $"{parameters}&page={previousPage}";
     var id = Model.IsResultBody ? "fac-result-list-Result" : "fac-result-list";
@@ -38,6 +45,7 @@
         {
             @foreach (var result in Model.Results.Courses)
             {
+                result.HasCampaignCode = Model.FreeCourseSearch;
                 switch (result.AttendanceMode)
                 {
                     case "Classroom based":
@@ -88,7 +96,7 @@
         {
             <div id="no-results-block">
                 <h3 class="govuk-body-s govuk-!-margin-bottom-1">
-                    <p class="govuk-body">We didn't find any results for <span id="search-term-no-results">'@Model.CurrentSearchTerm'</span> with the active filters you've applied. Try searching again.</p>
+                    <p class="govuk-body">We didn't find any results for <span id="search-term-no-results">'@Html.Raw(Model.CurrentSearchTerm)'</span> with the active filters you've applied. Try searching again.</p>
                     <p class="govuk-body">You could:</p>
                     <ul class="list list-bullet govuk-body">
                         <li>check your spelling</li>
