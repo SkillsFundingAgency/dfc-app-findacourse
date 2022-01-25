@@ -43,8 +43,11 @@
     <Compile Update="Features\GoBackToSearchResultsFromCourseDetails.feature.cs">
       <DependentUpon>GoBackToSearchResultsFromCourseDetails.feature</DependentUpon>
     </Compile>
-    <Compile Update="Features\ViewCourseDetails.feature.cs">
-      <DependentUpon>ViewCourseDetails.feature</DependentUpon>
+    <Compile Update="Features\ViewCourseDetails - Copy.feature.cs">
+      <DependentUpon>%(Filename)</DependentUpon>
+    </Compile>
+    <Compile Update="Features\Pagination.feature.cs">
+      <DependentUpon>Pagination.feature</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
@@ -86,11 +89,17 @@
       <LastGenOutput>ViewCourseDetails.feature.cs</LastGenOutput>
       <Generator>SpecFlowSingleFileGenerator</Generator>
     </SpecFlowFeatureFiles>
-    <SpecFlowFeatureFiles Update="Features\ViewCourseDetails.feature">
+    <SpecFlowFeatureFiles Update="Features\ViewCourseDetails - Copy.feature">
+      <Visible>$(UsingMicrosoftNETSdk)</Visible>
+      <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
+      <LastGenOutput>ViewCourseDetails.feature.cs</LastGenOutput>
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+    </SpecFlowFeatureFiles>
+    <SpecFlowFeatureFiles Update="Features\Pagination.feature">
       <Visible>$(UsingMicrosoftNETSdk)</Visible>
       <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>ViewCourseDetails.feature.cs</LastGenOutput>
+      <LastGenOutput>Pagination.feature.cs</LastGenOutput>
     </SpecFlowFeatureFiles>
     <SpecFlowFeatureFiles Update="Features\SearchForACourseSortResults.feature">
       <Visible>$(UsingMicrosoftNETSdk)</Visible>
