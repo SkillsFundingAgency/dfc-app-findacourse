@@ -43,8 +43,8 @@
     <Compile Update="Features\GoBackToSearchResultsFromCourseDetails.feature.cs">
       <DependentUpon>GoBackToSearchResultsFromCourseDetails.feature</DependentUpon>
     </Compile>
-    <Compile Update="Features\ViewCourseDetails - Copy.feature.cs">
-      <DependentUpon>%(Filename)</DependentUpon>
+    <Compile Update="Features\ViewCourseDetails.feature.cs">
+      <DependentUpon>ViewCourseDetails.feature</DependentUpon>
     </Compile>
     <Compile Update="Features\Pagination.feature.cs">
       <DependentUpon>Pagination.feature</DependentUpon>
@@ -89,7 +89,7 @@
       <LastGenOutput>ViewCourseDetails.feature.cs</LastGenOutput>
       <Generator>SpecFlowSingleFileGenerator</Generator>
     </SpecFlowFeatureFiles>
-    <SpecFlowFeatureFiles Update="Features\ViewCourseDetails - Copy.feature">
+    <SpecFlowFeatureFiles Update="Features\ViewCourseDetails.feature">
       <Visible>$(UsingMicrosoftNETSdk)</Visible>
       <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
       <LastGenOutput>ViewCourseDetails.feature.cs</LastGenOutput>
