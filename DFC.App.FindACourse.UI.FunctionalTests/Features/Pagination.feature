@@ -7,7 +7,7 @@
 @Smoke @FindACourse
 Scenario: Search a course and click on next and previous page links
 	Given I am on the find a course landing page
-	When I enter the search term computing in the search box
+	When I enter the search term maths in the search box
 	And I click the search button
 	Then search results are displayed
 	When i click on the next page link
