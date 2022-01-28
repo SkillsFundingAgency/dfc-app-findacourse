@@ -28,7 +28,7 @@ namespace DFC.App.FindACourse.UI.FunctionalTests.Features
         
         private Xunit.Abstractions.ITestOutputHelper _testOutputHelper;
         
-#line 1 "ViewCourseDetails - Copy.feature"
+#line 1 "ViewCourseDetails.feature"
 #line hidden
         
         public ViewCourseDetailsFeature(ViewCourseDetailsFeature.FixtureData fixtureData, DFC_App_FindACourse_UI_FunctionalTests_XUnitAssemblyFixture assemblyFixture, Xunit.Abstractions.ITestOutputHelper testOutputHelper)
