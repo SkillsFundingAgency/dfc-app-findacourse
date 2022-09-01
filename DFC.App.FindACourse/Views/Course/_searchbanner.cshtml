@@ -1,0 +1,65 @@
+﻿@model BodyViewModel
+
+<form action="@(Model.FreeCourseSearch ? "/find-a-course/searchFreeCourse" : "/find-a-course/searchcourse")" method="get" id="fac-search-course-form" class="find-a-course-page">
+    <section id="fac-search-banner" class="primary-hero">
+        <div class="govuk-width-container">
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-two-thirds">
+                    @if (Model.FreeCourseSearch)
+                    {
+                        <h1 class="govuk-heading-l">Free courses for jobs</h1>
+                        <p class="govuk-body-l">Search for free courses for jobs to get skills employers need, focusing on qualifications with good job opportunities and pay.</p>
+                    }
+                    else
+                    {
+                        <h1 class="govuk-heading-l">Find a course</h1>
+                        <p class="govuk-body-l">Search for online and classroom courses near you, to help you get a job or develop your skills.</p>
+                    }
+                </div>
+            </div>
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-one-third">
+                    <div class="govuk-form-group">
+                        <label class="govuk-label" for="location-input">Postcode, town or city</label>
+                        <div class="input-wrapper">
+                            <input type="text" asp-for="SideBar.TownOrPostcode" aria-label="TownOrPostcode" name="TownOrPostcode" class="govuk-input govuk-!-width-full" id="location-input" value="@Model.SideBar.TownOrPostcode" />
+                        </div>
+                        <span asp-validation-for="SideBar.TownOrPostcode" class="text-danger" id="location-validator"></span>
+                        <input type="hidden" asp-for="SideBar.Coordinates" name="SideBar.Coordinates" id="coordinates" value="@Model.SideBar.Coordinates" />
+                        <input type="hidden" asp-for="SideBar.SuggestedLocation" name="SideBar.SuggestedLocation" id="suggestedLocation-input" value="@Model.SideBar.SuggestedLocation" />
+                        <div id="suggest-location" class="location-suggest@(Model.SideBar.DidYouMeanLocations?.Count() > 0 ? "-show" : "")" role="group">
+                            <details id="suggest-location-details" class="govuk-details" open>
+                                <summary class=govuk-details__summary aria-describedby="suggested-locations-aria" role="button" aria-expanded="false" aria-controls="suggested-locations-text">
+                                    <span class="govuk-details__summary-text">Did you mean:</span>
+                                </summary>
+                                <p class="visuallyhidden" aria-live="polite" id="suggested-locations-aria">There are multiple locations with similar names, tab down to the suggestions, or collapse this panel</p>
+                                <div class="govuk-details__summary suggest-locations-text" id="suggested-locations-text">
+                                    <ul id="suggested-locations">
+                                        @if (Model.SideBar.DidYouMeanLocations?.Count() > 0)
+                                        {
+                                            @foreach (var location in Model.SideBar.DidYouMeanLocations)
+                                            {
+                                                <li><button name="location" value="@location.Label|@location.Value">@location.Label</button></li>
+                                            }
+                                        }
+                                    </ul>
+                                </div>
+                            </details>
+                        </div>
+                    </div>
+                </div>
+                <div class="govuk-grid-column-two-thirds">
+                    <div class="govuk-form-group">
+                        <label class="govuk-label" id="enter-keyword-label" for="search-input">Course or keyword</label>
+                        <div class="input-wrapper">
+                            <input type="search" id="search-input" name="searchTerm" value="@Model.CurrentSearchTerm" aria-label="Enter a keyword" title="Enter a keyword" class="govuk-input govuk-!-width-full">
+                            <div class="input-search-item input-submit-wrapper">
+                                <button data-module="govuk-button" type="submit" class="input-search-submit" id="search-button">Search</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>
