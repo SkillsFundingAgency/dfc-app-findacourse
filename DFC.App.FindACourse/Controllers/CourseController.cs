@@ -301,7 +301,6 @@ namespace DFC.App.FindACourse.Controllers
         [Route("find-a-course/course/body/course/searchcourse")]
         [Route("find-a-course/course/body")]
         [Route("find-a-course/search/searchCourse/body")]
-        [Route("find-a-course/searchCourse")]
         public async Task<IActionResult> SearchCourse(string searchTerm)
         {
             logService.LogInformation($"{nameof(this.SearchCourse)} has been called");
