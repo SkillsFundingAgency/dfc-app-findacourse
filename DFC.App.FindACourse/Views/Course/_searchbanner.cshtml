@@ -22,7 +22,7 @@
                     <div class="govuk-form-group">
                         <label class="govuk-label" for="location-input">Postcode, town or city</label>
                         <div class="input-wrapper">
-                            <input type="text" asp-for="SideBar.TownOrPostcode" aria-label="TownOrPostcode" name="TownOrPostcode" class="govuk-input govuk-!-width-full" id="location-input" value="@Model.SideBar.TownOrPostcode" />
+                            <input type="search" asp-for="SideBar.TownOrPostcode" aria-label="TownOrPostcode" name="TownOrPostcode" class="govuk-input govuk-!-width-full" id="location-input" value="@Model.SideBar.TownOrPostcode" />
                         </div>
                         <span asp-validation-for="SideBar.TownOrPostcode" class="text-danger" id="location-validator"></span>
                         <input type="hidden" asp-for="SideBar.Coordinates" name="SideBar.Coordinates" id="coordinates" value="@Model.SideBar.Coordinates" />
