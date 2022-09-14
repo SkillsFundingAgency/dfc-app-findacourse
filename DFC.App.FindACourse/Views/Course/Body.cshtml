@@ -4,25 +4,45 @@
 <section aria-label="Search">
     <partial name="_searchbanner.cshtml" model="Model" />
 </section>
-<main class="govuk-main-wrapper govuk-main-wrapper--auto-spacing" id="main-content" role="main">
-    <div class="govuk-width-container">
-        @if (Model.Results != null)
-        {
-            <button class="govuk-button filters-button" id="show-filters-button">Show filters</button>
-            <form action="/find-a-course/filterresults" method="get" class="find-a-course-page" id="fac-filter-form">
-                @Html.HiddenFor(m => m.CurrentSearchTerm)
-                @Html.HiddenFor(m => m.RequestPage)
-                @Html.HiddenFor(m => m.FreeCourseSearch, new {id="facFreeCourseSearch"})
-                <input id="facCampaignCode" name="CourseSearchFilters.FreeSearchCampaignCode" type="hidden" value="@(Model.FreeCourseSearch ? CourseController.FreeSearchCampaignCode : String.Empty)">
-                
-              <div id="home-block" style="display:@(string.IsNullOrWhiteSpace(Model.CurrentSearchTerm) || string.IsNullOrWhiteSpace(Model.SideBar.TownOrPostcode)? "block" : "none")">
-                    <partial name="_home" />
-               </div>
+<div class="govuk-width-container">
+    <main class="govuk-main-wrapper govuk-main-wrapper--auto-spacing govuk-body govuk-!-padding-top-0" id="main-content" role="main">
+        <div class="govuk-width-container">
+            <main class="govuk-main-wrapper">
+                @if (Model.Results != null)
+                {
+                    <button class="govuk-button filters-button" id="show-filters-button">Show filters</button>
+                    <form action="/find-a-course/filterresults" method="get" class="find-a-course-page" id="fac-filter-form">
+                        @Html.HiddenFor(m => m.CurrentSearchTerm)
+                        @Html.HiddenFor(m => m.RequestPage)
+                        @Html.HiddenFor(m => m.FreeCourseSearch, new {id="facFreeCourseSearch"})
+                        <input id="facCampaignCode" name="CourseSearchFilters.FreeSearchCampaignCode" type="hidden" value="@(Model.FreeCourseSearch ? CourseController.FreeSearchCampaignCode : String.Empty)">
+                        @if (!Model.FreeCourseSearch)
+                        {
+                            <div id="home-block" class="govuk-grid-row" style="display:@(string.IsNullOrWhiteSpace(Model.CurrentSearchTerm) || string.IsNullOrWhiteSpace(Model.SideBar.TownOrPostcode)? "block" : "none")">
 
-                <div class="govuk-grid-row" id="search-result-block" style="display:@(string.IsNullOrWhiteSpace(Model.CurrentSearchTerm) || string.IsNullOrWhiteSpace(Model.SideBar.TownOrPostcode)? "none" : "block")">
-                   <partial name="_search_result" model="Model" />
-                </div>
-            </form>
-        }
-    </div>
-</main>
+                                @if (!string.IsNullOrWhiteSpace(Model.View))
+                                {
+                                    <partial name=@Model.View />
+                                }
+                                else
+                                {
+                                    <partial name="Home" />
+                                }
+                                <partial name="_course_cost_funding" />
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="govuk-grid-row">
+                                <partial name="_search_result" model="Model" />
+                            </div>
+                        }
+                        <div class="govuk-grid-row" id="search-result-block" style="display:@(string.IsNullOrWhiteSpace(Model.CurrentSearchTerm) || string.IsNullOrWhiteSpace(Model.SideBar.TownOrPostcode)? "none" : "block")">
+                            <partial name="_search_result" model="Model" />
+                        </div>
+                    </form>
+                }
+            </main>
+        </div>
+    </main>
+</div>

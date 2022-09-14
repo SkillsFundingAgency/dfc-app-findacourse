@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 
 namespace DFC.App.FindACourse.ViewModels
 {
@@ -41,5 +40,7 @@ namespace DFC.App.FindACourse.ViewModels
         public bool UsingAutoSuggestedLocation { get; set; }
 
         public bool FreeCourseSearch { get; set; }
+
+        public string View { get; set; }
     }
 }

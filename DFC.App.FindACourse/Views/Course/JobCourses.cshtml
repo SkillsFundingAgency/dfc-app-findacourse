@@ -1,4 +1,8 @@
-﻿<div class="govuk-grid-row">
+﻿@{
+    var cdnLocation = "https://dev-cdn.nationalcareersservice.org.uk/nationalcareers_toolkit";
+}
+
+<div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
         <h2 class="govuk-heading-l govuk-heading-l govuk-!-margin-bottom-3">
             Find courses to get a job
@@ -10,14 +14,14 @@
     <div class="govuk-grid-column-one-half">
         <div class="fac-feature-box  fac-feature-box__image fac-feature-box__card">
             <div class="fac-feature-box__content">
-                <img src="/public/images/skills-bootcamp-header-image-construction.jpg" alt="people using laptop computers - bootcamps">
+                <img src="@cdnLocation/images/skills-bootcamp-header-image-construction.jpg" alt="people using laptop computers - bootcamps">
                 <h3 class="govuk-heading-m govuk-!-margin-top-3">
                     Skills Bootcamps
                 </h3>
                 <p class="govuk-body">
                     Gain in-demand skills and fast-track to a job interview, with free training in 16 weeks or less.
                 </p>
-                <a href="endscreen-skills-bootcamps.html" class="govuk-button govuk-heading-m govuk-!-margin-bottom-1">Find skills bootcamps</a>
+                <a href="https://www.gov.uk/government/publications/find-a-skills-bootcamp/list-of-skills-bootcamps" class="govuk-button govuk-heading-m govuk-!-margin-bottom-1">Find skills bootcamps</a>
             </div>
         </div>
     </div>
@@ -26,7 +30,7 @@
         <div class="fac-feature-box  fac-feature-box__image fac-feature-box__card">
 
             <div class="fac-feature-box__content">
-                <img src="/public/images/free-level-3-header-image-academic.jpg" alt="two people studying - Free level 3 courses">
+                <img src="@cdnLocation/images/free-level-3-header-image-academic.jpg" alt="two people studying - Free level 3 courses">
 
                 <h3 class="govuk-heading-m govuk-!-margin-top-3">
                     Level 3 qualifications
@@ -34,7 +38,7 @@
                 <p class="govuk-body">
                     You may be able to do a free course (equal to A levels) with good job opportunities and pay.
                 </p>
-                <a href="search-free-l3s-hospitality-v1.html" class="govuk-button govuk-heading-m govuk-!-margin-bottom-1">Find free Level 3 courses</a>
+                <a href="/find-a-course/searchFreeCourse" class="govuk-button govuk-heading-m govuk-!-margin-bottom-1">Find free Level 3 courses</a>
 
             </div>
         </div>
