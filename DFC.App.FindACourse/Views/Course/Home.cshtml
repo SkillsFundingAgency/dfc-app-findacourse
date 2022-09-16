@@ -1,5 +1,5 @@
 ﻿@{
-    var cdnLocation = "https://dev-cdn.nationalcareersservice.org.uk/nationalcareers_toolkit";
+    var cdnLocation = "https://localhost/nationalcareers_toolkit";
 }
 
 <div class="govuk-grid-column-full"></div>
@@ -41,7 +41,7 @@
             <p class="govuk-body">
                 Options and advice if you’re not sure of the right course for you.
             </p>
-            <a href="/find-a-course/find-a-course-help" class="govuk-button govuk-heading-m govuk-!-margin-bottom-1">Get help with choices</a>
+            @Html.ActionLink("Get help with choices","", new{searchTerm = "search", view = "help"}, new {@class= "govuk-button govuk-heading-m govuk-!-margin-bottom-1"})
         </div>
     </div>
 </div>
