@@ -30,6 +30,11 @@
                                 }
                                 <partial name="_course_cost_funding" />
                             </div>
+
+                            <div class="govuk-grid-row" id="search-result-block" style="display:@(string.IsNullOrWhiteSpace(Model.CurrentSearchTerm) || string.IsNullOrWhiteSpace(Model.SideBar.TownOrPostcode)? "none" : "block")">
+                                <div>search result</div>
+                                <partial name="_search_result" model="Model" />
+                            </div>
                         }
                         else
                         {
@@ -37,9 +42,6 @@
                                 <partial name="_search_result" model="Model" />
                             </div>
                         }
-                        <div class="govuk-grid-row" id="search-result-block" style="display:@(string.IsNullOrWhiteSpace(Model.CurrentSearchTerm) || string.IsNullOrWhiteSpace(Model.SideBar.TownOrPostcode)? "none" : "block")">
-                            <partial name="_search_result" model="Model" />
-                        </div>
                     </form>
                 }
             </main>
