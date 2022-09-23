@@ -91,8 +91,8 @@
                 }
                 else
                 {
-                    startPage = currentPage;
-                    endPage = currentPage + showMaxPages - 1;
+                    startPage = (Model.RequestPage > showMaxPages && Model.RequestPage == Model.Results.ResultProperties.TotalPages) ? currentPage - 1 : currentPage;
+                    endPage = Model.RequestPage < Model.Results.ResultProperties.TotalPages ? currentPage + showMaxPages - 1 : Model.Results.ResultProperties.TotalPages;
                 }
 
                 <nav class="hods-pagination__navigation"
@@ -119,11 +119,11 @@
                             <li class="hods-pagination__navigation__item">
                                 @if (i == Model.RequestPage)
                                 {
-                                <a aria-current="true"
+                                <div aria-current="true"
                                 aria-label="Current page, page @i"
                                 class="govuk-link hods-pagination__navigation__link hods-pagination__navigation__link--current">
                                     @i
-                                </a>
+                                </div>
                                 }
                                 else
                                 {
@@ -150,30 +150,6 @@
                         }
                     </ul>
                 </nav>
-
-                <ul class="previous-next-navigation govuk-!-margin-top-3" id="page-identifiers">
-                    @if (Model.Results.ResultProperties.Page < Model.Results.ResultProperties.TotalPages)
-                    {
-                        <li class="next">
-                            <a href="/find-a-course/page?@nextLinkParams">
-                                <span class="pagination-label">Next</span>
-                                <span class="govuk-visually-hidden">page</span>
-                                <span class="page-numbers">@nextPage of @Model.Results.ResultProperties.TotalPages</span>
-                            </a>
-                        </li>
-                    }
-
-                    @if (Model.Results.ResultProperties.Page > 1)
-                    {
-                        <li class="previous">
-                            <a href="/find-a-course/page?@previousLinkParams">
-                                <span class="pagination-label">Previous</span>
-                                <span class="govuk-visually-hidden">page</span>
-                                <span class="page-numbers">@previousPage of @Model.Results.ResultProperties.TotalPages</span>
-                            </a>
-                        </li>
-                    }
-                </ul>
             }
         }
         else
