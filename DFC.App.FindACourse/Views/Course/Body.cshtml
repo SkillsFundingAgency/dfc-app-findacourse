@@ -16,9 +16,9 @@
                         @Html.HiddenFor(m => m.RequestPage)
                         @Html.HiddenFor(m => m.FreeCourseSearch, new {id="facFreeCourseSearch"})
                         <input id="facCampaignCode" name="CourseSearchFilters.FreeSearchCampaignCode" type="hidden" value="@(Model.FreeCourseSearch ? CourseController.FreeSearchCampaignCode : String.Empty)">
-                        @if (!Model.FreeCourseSearch)
+                        @if (Model.FreeCourseSearch == false)
                         {
-                            <div id="home-block" class="govuk-grid-row" style="display:@(string.IsNullOrWhiteSpace(Model.CurrentSearchTerm) || string.IsNullOrWhiteSpace(Model.SideBar.TownOrPostcode)? "block" : "none")">
+                            <div id="home-block" class="govuk-grid-row" style="display:@((string.IsNullOrWhiteSpace(Model.CurrentSearchTerm) || string.IsNullOrWhiteSpace(Model.SideBar.TownOrPostcode)) && (!Model.FromPaging) ? "block" : "none")">
 
                                 @if (!string.IsNullOrWhiteSpace(Model.View))
                                 {
@@ -31,7 +31,7 @@
                                 <partial name="_course_cost_funding" />
                             </div>
 
-                            <div class="govuk-grid-row" id="search-result-block" style="display:@(string.IsNullOrWhiteSpace(Model.CurrentSearchTerm) || string.IsNullOrWhiteSpace(Model.SideBar.TownOrPostcode)? "none" : "block")">
+                            <div class="govuk-grid-row" id="search-result-block" style="display:@((string.IsNullOrWhiteSpace(Model.CurrentSearchTerm) || string.IsNullOrWhiteSpace(Model.SideBar.TownOrPostcode)) && (!Model.FromPaging)? "none" : "block")">
                                 <div>search result</div>
                                 <partial name="_search_result" model="Model" />
                             </div>
