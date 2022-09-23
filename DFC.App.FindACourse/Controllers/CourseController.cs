@@ -28,13 +28,15 @@ namespace DFC.App.FindACourse.Controllers
         private readonly IFindACourseService findACourseService;
         private readonly IViewHelper viewHelper;
         private readonly ILocationService locationService;
+        private readonly Fac.CourseSearchClientSettings courseSearchClientSettings;
 
-        public CourseController(ILogService logService, IFindACourseService findACourseService, IViewHelper viewHelper, ILocationService locationService)
+        public CourseController(ILogService logService, IFindACourseService findACourseService, IViewHelper viewHelper, ILocationService locationService, Fac.CourseSearchClientSettings courseSearchClientSettings)
         {
             this.logService = logService;
             this.findACourseService = findACourseService;
             this.viewHelper = viewHelper;
             this.locationService = locationService;
+            this.courseSearchClientSettings = courseSearchClientSettings;
         }
 
         [HttpGet]
@@ -195,6 +197,8 @@ namespace DFC.App.FindACourse.Controllers
             try
             {
                 model.Results = await findACourseService.GetFilteredData(newBodyViewModel.CourseSearchFilters, newBodyViewModel.CourseSearchOrderBy, model.RequestPage).ConfigureAwait(false);
+                model.PageSize = int.TryParse(courseSearchClientSettings.CourseSearchSvcSettings.SearchPageSize, out int pageSize) ? pageSize : 20;
+
                 foreach (var item in model.Results?.Courses)
                 {
                     if (item.Description.Length > 220)
@@ -280,6 +284,8 @@ namespace DFC.App.FindACourse.Controllers
                 model.SideBar.Coordinates = location[(indexOfLocationSpliter + 1) ..];
             }
 
+            model.PageSize = int.TryParse(courseSearchClientSettings.CourseSearchSvcSettings.SearchPageSize, out int pageSize) ? pageSize : 20;
+            
             return FilterResultsInternal(model);
         }
 
@@ -571,6 +577,7 @@ namespace DFC.App.FindACourse.Controllers
             model.SideBar.CurrentSearchTerm = filters?.SearchTerm;
             model.RequestPage = 1;
             model.CourseSearchFilters = filters;
+            model.PageSize = int.TryParse(courseSearchClientSettings.CourseSearchSvcSettings.SearchPageSize, out int pageSize) ? pageSize : 20;
 
             try
             {

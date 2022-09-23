@@ -42,5 +42,7 @@ namespace DFC.App.FindACourse.ViewModels
         public bool FreeCourseSearch { get; set; }
 
         public string View { get; set; }
+
+        public int PageSize { get; set; }
     }
 }

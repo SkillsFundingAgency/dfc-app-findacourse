@@ -28,7 +28,7 @@
                      $"{nameof(filterA)}={filterA}&" +
                      $"{nameof(orderByValue)}={orderByValue}&" +
                      $"{nameof(coordinates)}={coordinates}&" +
-                     $"{nameof(campaignCode)}={campaignCode}&"+
+                     $"{nameof(campaignCode)}={campaignCode}&" +
                      $"{nameof(qualificationLevels)}={qualificationLevels}";
     var nextLinkParams = $"{parameters}&page={nextPage}";
     var previousLinkParams = $"{parameters}&page={previousPage}";
@@ -64,6 +64,93 @@
 
             @if (Model.Results.ResultProperties.TotalPages > 1)
             {
+                int showRecordsFrom;
+                int showRecordsTo;
+                int showMaxPages = 3;
+                int startPage;
+                int endPage;
+                int currentPage;
+
+                if (Model.RequestPage == 1)
+                {
+                    showRecordsFrom = 1;
+                    showRecordsTo = Model.PageSize;
+                    currentPage = 1;
+                }
+                else
+                {
+                    showRecordsFrom = ((Model.Results.ResultProperties.Page - 1) * Model.PageSize) + 1;
+                    showRecordsTo = Model.Results.ResultProperties.TotalPages == Model.RequestPage ? Model.Results.ResultProperties.TotalResultCount : Model.PageSize * (Model.RequestPage);
+                    currentPage = Model.RequestPage - 1;
+                }
+
+                if (Model.Results.ResultProperties.TotalPages <= showMaxPages)
+                {
+                    startPage = 1;
+                    endPage = Model.Results.ResultProperties.TotalPages;
+                }
+                else
+                {
+                    startPage = currentPage;
+                    endPage = currentPage + showMaxPages - 1;
+                }
+
+                <nav class="hods-pagination__navigation"
+         role="navigation"
+         aria-label="Pagination Navigation">
+                    <div class="hods-pagination__navigation__summary">
+                        Showing @showRecordsFrom - @showRecordsTo results
+                    </div>
+                    <ul class="hods-pagination__navigation__list-items">
+
+                        @if (Model.Results.ResultProperties.Page > 1)
+                        {
+                            <li class="hods-pagination__navigation__item">
+                                <a class="govuk-link hods-pagination__navigation__link"
+                   aria-label="Next page" href="/find-a-course/page?@previousLinkParams">
+                                <span aria-hidden="true" role="presentation">«</span>
+                                    Previous
+                                </a>
+                            </li>
+                        }
+
+                        @for (int i = startPage; i <= endPage; i++)
+                        {
+                            <li class="hods-pagination__navigation__item">
+                                @if (i == Model.RequestPage)
+                                {
+                                <a aria-current="true"
+                                aria-label="Current page, page @i"
+                                class="govuk-link hods-pagination__navigation__link hods-pagination__navigation__link--current">
+                                    @i
+                                </a>
+                                }
+                                else
+                                {
+                                <a class="govuk-link hods-pagination__navigation__link"
+                                aria-label="Go to page @(i == endPage ? endPage : i)" href="/find-a-course/page?@parameters&page=@i">@i</a>
+                                }
+
+                            </li>
+                        }
+
+                        @if (Model.Results.ResultProperties.Page < Model.Results.ResultProperties.TotalPages)
+                        {
+                            <li class="hods-pagination__navigation__item">
+                                <a class="govuk-link hods-pagination__navigation__link"
+                                aria-label="Next page"
+                                href="/find-a-course/page?@nextLinkParams">
+                                    Next
+                                    <span aria-hidden="true"
+                          role="presentation">
+                                        »
+                                    </span>
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </nav>
+
                 <ul class="previous-next-navigation govuk-!-margin-top-3" id="page-identifiers">
                     @if (Model.Results.ResultProperties.Page < Model.Results.ResultProperties.TotalPages)
                     {
