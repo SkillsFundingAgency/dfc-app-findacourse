@@ -32,7 +32,6 @@
                             </div>
 
                             <div class="govuk-grid-row" id="search-result-block" style="display:@((string.IsNullOrWhiteSpace(Model.CurrentSearchTerm) || string.IsNullOrWhiteSpace(Model.SideBar.TownOrPostcode)) && (!Model.FromPaging)? "none" : "block")">
-                                <div>search result</div>
                                 <partial name="_search_result" model="Model" />
                             </div>
                         }
