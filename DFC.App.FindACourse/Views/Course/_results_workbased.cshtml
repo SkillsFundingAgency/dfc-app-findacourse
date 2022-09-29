@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     Layout = null;
 }
 @using System.Text.RegularExpressions;
@@ -8,61 +7,39 @@
     var resultString = Regex.Match(Model.Duration, @"\d+").Value;
     int.TryParse(resultString, out int durationInt);
 }
-<div class="govuk-!-margin-top-6">
+<div class="course-item govuk-!-margin-top-6">
     <partial name="_result_heading" model="Model" />
-    <p>@Html.Raw(Model.Description)</p>
-    <div class="govuk-grid-row">
+    <p class="course-description govuk-body-s">@Html.Raw(Model.Description)</p>
+    <div class="govuk-grid-row govuk-!-padding-bottom-3">
         <div class="govuk-grid-column-one-half">
-            <ul class="govuk-list">
+            <ul class="course-details govuk-list">
                 <li>
                     <partial name="_StartDate" model="Model" />
                 </li>
                 <li>
                     <partial name="_Cost" model="Model" />
                 </li>
-                <li>
-                    <span class="govuk-secondary-colour">Provider:</span> @Html.Raw(Model.ProviderName)
-                </li>
-
             </ul>
         </div>
         <div class="govuk-grid-column-one-half">
-            <ul class="govuk-list">
+            <ul class="course-details govuk-list">
                 <li>
-                    <span class="govuk-secondary-colour">Course type:</span> @Html.Raw(Model.AttendanceMode)
+                    <span class="learning-format govuk-secondary-colour">Course type:</span> @Html.Raw(Model.AttendanceMode)
                 </li>
-                @if (durationInt > 1)
-                {
-                    <li>
-                        <span class="govuk-secondary-colour">Duration:</span>
-                        @if (durationInt == 1)
-                        {
-                            <span>1 Year</span>
-                        }
-                        else if (durationInt > 1)
-                        {
-                            @Html.Raw(Model.Duration)
-                        }
-                    </li>
-                }
                 <li>
-                    <span class="govuk-secondary-colour">Location:</span> @Html.Raw(Model.Location)
-                    @if (Model.AttendanceMode == "Work based" && Model.National == true)
-                    {
-                        <span>National</span>
-                    }
-                    else
-                    {
-                        <span>@Html.Raw(Model.Region)</span>
-                    }
-                    @if (Model.LocationDetails.Distance > 0)
-                    {
-                        <span>(@Html.Raw(Model.LocationDetails.Distance))</span>;
-                    }
-                </li>
+                    <span class="learning-format govuk-secondary-colour">Duration:</span>
 
+                    @if (durationInt == 1)
+                    {
+                        @Html.Raw($"1 Year")
+                    }
+                    else if (durationInt > 1)
+                    {
+                        @Html.Raw(Model.Duration)
+                    }
+
+                </li>
             </ul>
         </div>
-
     </div>
 </div>

@@ -1,5 +1,11 @@
-﻿@model Course
-<h2 class="govuk-heading-m">
+﻿@using System.Text.RegularExpressions;
+@model Course
+@{
+    var resultString = Regex.Match(Model.Duration, @"\d+").Value;
+    int.TryParse(resultString, out int durationInt);
+}
+
+<h3 class="govuk-heading-m govuk-!-margin-bottom-1">
     @if (Model.OfferingType == OfferingType.TLevel)
     {
         <a class="govuk-link" href="/find-a-course/tdetails?tlevelId=@Model.TLevelId&tlevelLocationId=@Model.TLevelLocationId&@TempData["params"]">@Html.Raw(Model.Title)</a>
@@ -8,4 +14,25 @@
     {
         <a class="govuk-link" href="/find-a-course/details?courseId=@Model.CourseId&runId=@Model.RunId&@TempData["params"]">@Html.Raw(Model.Title)</a>
     }
-</h2>
+</h3>
+
+<p class="course-provider-location">
+    <span class="course-location">
+        @if (Model.AttendanceMode == "Work based" || Model.AttendanceMode == "Classroom based")
+        {
+            @if (Model.LocationDetails.Distance > 0)
+            {
+                <strong>@Html.Raw(@Model.LocationDetails.Distance) miles  | </strong>
+            }
+            @if (Model.National == true)
+            {
+                <strong>National</strong>
+            }
+            else
+            {
+                <strong>@Html.Raw(Model.Location ?? Model.Region)</strong>
+            }
+        }
+    </span>
+    <span class="course-provider"> @Html.Raw(Model.ProviderName)</span>
+</p>
