@@ -197,7 +197,7 @@ namespace DFC.App.FindACourse.Controllers
             try
             {
                 model.Results = await findACourseService.GetFilteredData(newBodyViewModel.CourseSearchFilters, newBodyViewModel.CourseSearchOrderBy, model.RequestPage).ConfigureAwait(false);
-                model.PageSize = int.TryParse(courseSearchClientSettings.CourseSearchSvcSettings.SearchPageSize, out int pageSize) ? pageSize : 20;
+                model.PageSize = int.TryParse(courseSearchClientSettings.CourseSearchSvcSettings?.SearchPageSize, out int pageSize) ? pageSize : 20;
 
                 foreach (var item in model.Results?.Courses)
                 {
@@ -284,7 +284,7 @@ namespace DFC.App.FindACourse.Controllers
                 model.SideBar.Coordinates = location[(indexOfLocationSpliter + 1) ..];
             }
 
-            model.PageSize = int.TryParse(courseSearchClientSettings.CourseSearchSvcSettings.SearchPageSize, out int pageSize) ? pageSize : 20;
+            model.PageSize = int.TryParse(courseSearchClientSettings.CourseSearchSvcSettings?.SearchPageSize, out int pageSize) ? pageSize : 20;
             
             return FilterResultsInternal(model);
         }
@@ -577,7 +577,7 @@ namespace DFC.App.FindACourse.Controllers
             model.SideBar.CurrentSearchTerm = filters?.SearchTerm;
             model.RequestPage = 1;
             model.CourseSearchFilters = filters;
-            model.PageSize = int.TryParse(courseSearchClientSettings.CourseSearchSvcSettings.SearchPageSize, out int pageSize) ? pageSize : 20;
+            model.PageSize = int.TryParse(courseSearchClientSettings.CourseSearchSvcSettings?.SearchPageSize, out int pageSize) ? pageSize : 20;
 
             try
             {
