@@ -2,24 +2,32 @@
 
 @if (Model.Results != null)
 {
-<div class="no-count-block">
     @if (Model.Results.Courses.Count() > 0)
     {
-        if (Model.FreeCourseSearch)
+        int showRecordsFrom;
+        int showRecordsTo;
+
+        if (Model.RequestPage == 1)
         {
-            <p class="govuk-body">Showing <span class="fac-result-count">@String.Format("{0:n0}", Model.Results.ResultProperties.TotalResultCount)</span> courses</p>
+            showRecordsFrom = 1;
+            showRecordsTo = Model.PageSize;
         }
         else
         {
-            <p class="govuk-body">Showing all <span class="fac-result-count">@String.Format("{0:n0}", Model.Results.ResultProperties.TotalResultCount)</span> courses</p>
+            showRecordsFrom = ((Model.Results.ResultProperties.Page - 1) * Model.PageSize) + 1;
+            showRecordsTo = Model.Results.ResultProperties.TotalPages == Model.RequestPage ? Model.Results.ResultProperties.TotalResultCount : Model.PageSize * (Model.RequestPage);
         }
-        
-    <div id="orderby-block" class="govuk-form-group">
-        <div id="orderBy">
-            <label class="result-region-header__sort-label govuk-label" aria-label="SelectedOrderValue" for="orderByInput" id="orderby-label">Sort by</label>
-            <select asp-for="SideBar.SelectedOrderByValue" aria-label="SelectedOrderByValue" asp-items="Model.SideBar.OrderByOptions" class="govuk-select" name="SideBar.SelectedOrderByValue" id="orderBy-Input"></select>
+
+        <h2 class="govuk-heading-l govuk-!-margin-bottom-2">Results for: @Model.CurrentSearchTerm</h2>
+        <div class="govuk-heading-s fac-show-courses-count">Showing @showRecordsFrom to @showRecordsTo of  @Model.Results.ResultProperties.TotalResultCount courses</div>
+       
+        <div class="fac-search-sort">
+            <div class="govuk-form-group">
+                <label class="govuk-label" for="sort">
+                    Sort by
+                </label>
+                <select asp-for="SideBar.SelectedOrderByValue" aria-label="SelectedOrderByValue" asp-items="Model.SideBar.OrderByOptions" class="govuk-select" name="SideBar.SelectedOrderByValue" id="orderBy-Input"></select>
+            </div>
         </div>
-    </div>
     }
-</div>
 }
