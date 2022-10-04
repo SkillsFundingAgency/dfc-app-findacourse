@@ -175,6 +175,7 @@ namespace DFC.App.FindACourse.Controllers
                     FiltersApplied = paramValues.FilterA,
                     SelectedOrderByValue = paramValues.OrderByValue,
                     Coordinates = WebUtility.HtmlEncode(paramValues.Coordinates),
+                    OrderByOptions = ListFilters.GetOrderByOptions(),
                 },
                 RequestPage = paramValues.Page,
                 IsNewPage = true,
@@ -281,11 +282,11 @@ namespace DFC.App.FindACourse.Controllers
                 //If the user clicked on one of the suggested locations
                 var indexOfLocationSpliter = location.IndexOf("|", StringComparison.Ordinal);
                 model.SideBar.TownOrPostcode = location.Substring(0, indexOfLocationSpliter);
-                model.SideBar.Coordinates = location[(indexOfLocationSpliter + 1) ..];
+                model.SideBar.Coordinates = location[(indexOfLocationSpliter + 1)..];
             }
 
             model.PageSize = int.TryParse(courseSearchClientSettings.CourseSearchSvcSettings?.SearchPageSize, out int pageSize) ? pageSize : 20;
-            
+
             return FilterResultsInternal(model);
         }
 
