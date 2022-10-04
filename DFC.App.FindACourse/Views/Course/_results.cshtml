@@ -58,7 +58,12 @@
                 showRecordsTo = Model.Results.ResultProperties.TotalPages == Model.RequestPage ? Model.Results.ResultProperties.TotalResultCount : Model.PageSize * (Model.RequestPage);
                 currentPage = Model.RequestPage;
             }
-            <h2 class="govuk-heading-l govuk-!-margin-bottom-2">Results for: @Model.CurrentSearchTerm</h2>
+
+            if (!string.IsNullOrWhiteSpace(@Model.CurrentSearchTerm))
+            {
+                <h2 class="govuk-heading-l govuk-!-margin-bottom-2">Results for: @Model.CurrentSearchTerm</h2>
+            }
+
             <div class="govuk-heading-s fac-show-courses-count">Showing @showRecordsFrom to @showRecordsTo of  @Model.Results.ResultProperties.TotalResultCount courses</div>
             <div class="fac-search-sort">
                 <div class="govuk-form-group">
