@@ -40,128 +40,139 @@
     {
         if (Model.Results.Courses.Count() > 0)
         {
-            @foreach (var result in Model.Results.Courses)
+            int showRecordsFrom;
+            int showRecordsTo;
+            int showMaxPages = 10;
+            int startPage;
+            int endPage;
+            int currentPage;
+            if (Model.RequestPage == 1)
             {
-                result.HasCampaignCode = Model.FreeCourseSearch;
-                switch (result.AttendanceMode)
-                {
-                    case "Classroom based":
-                        <partial name="_results_classroom" model="result" />
-                        <hr class="govuk-section-break govuk-section-break--visible">
-                        break;
-                    case "Work based":
-                        <partial name="_results_workbased" model="result" />
-                        <hr class="govuk-section-break govuk-section-break--visible">
-                        break;
-                    case "Online":
-                        <partial name="_results_online" model="result" />
-                        <hr class="govuk-section-break govuk-section-break--visible">
-                        break;
-                    default:
-                        break;
-                }
+                showRecordsFrom = 1;
+                showRecordsTo = Model.PageSize > @Model.Results.ResultProperties.TotalResultCount ? @Model.Results.ResultProperties.TotalResultCount : Model.PageSize;
+                currentPage = 1;
             }
-
-            @if (Model.Results.ResultProperties.TotalPages > 1)
+            else
             {
-                int showRecordsFrom;
-                int showRecordsTo;
-                int showMaxPages = 10;
-                int startPage;
-                int endPage;
-                int currentPage;
+                showRecordsFrom = ((Model.Results.ResultProperties.Page - 1) * Model.PageSize) + 1;
+                showRecordsTo = Model.Results.ResultProperties.TotalPages == Model.RequestPage ? Model.Results.ResultProperties.TotalResultCount : Model.PageSize * (Model.RequestPage);
+                currentPage = Model.RequestPage;
+            }
+            <h2 class="govuk-heading-l govuk-!-margin-bottom-2">Results for: @Model.CurrentSearchTerm</h2>
+            <div class="govuk-heading-s fac-show-courses-count">Showing @showRecordsFrom to @showRecordsTo of  @Model.Results.ResultProperties.TotalResultCount courses</div>
+            <div class="fac-search-sort">
+                <div class="govuk-form-group">
+                    <label class="govuk-label" for="sort">
+                        Sort by
+                    </label>
+                    <select asp-for="SideBar.SelectedOrderByValue" aria-label="SelectedOrderByValue" asp-items="Model.SideBar.OrderByOptions" class="govuk-select" name="SideBar.SelectedOrderByValue" id="orderBy-Input"></select>
+                </div>
+            </div>
+            <div class="fac-search-results-list govuk-list">
+                <hr class="govuk-section-break govuk-section-break--visible">
 
-                if (Model.RequestPage == 1)
+                @foreach (var result in Model.Results.Courses)
                 {
-                    showRecordsFrom = 1;
-                    showRecordsTo = Model.PageSize;
-                    currentPage = 1;
-                }
-                else
-                {
-                    showRecordsFrom = ((Model.Results.ResultProperties.Page - 1) * Model.PageSize) + 1;
-                    showRecordsTo = Model.Results.ResultProperties.TotalPages == Model.RequestPage ? Model.Results.ResultProperties.TotalResultCount : Model.PageSize * (Model.RequestPage);
-                    currentPage = Model.RequestPage;
+                    result.HasCampaignCode = Model.FreeCourseSearch;
+                    switch (result.AttendanceMode)
+                    {
+                        case "Classroom based":
+                            <partial name="_results_classroom" model="result" />
+                            <hr class="govuk-section-break govuk-section-break--visible">
+                            break;
+                        case "Work based":
+                            <partial name="_results_workbased" model="result" />
+                            <hr class="govuk-section-break govuk-section-break--visible">
+                            break;
+                        case "Online":
+                            <partial name="_results_online" model="result" />
+                            <hr class="govuk-section-break govuk-section-break--visible">
+                            break;
+                        default:
+                            break;
+                    }
                 }
 
-                if (Model.Results.ResultProperties.TotalPages <= showMaxPages)
+                @if (Model.Results.ResultProperties.TotalPages > 1)
                 {
-                    startPage = 1;
-                    endPage = Model.Results.ResultProperties.TotalPages;
-                }
-                else
-                {
-                    var maxPagesBeforeCurrentPage = (int)Math.Floor((decimal)showMaxPages / (decimal)2);
-                    var maxPagesAfterCurrentPage = (int)Math.Ceiling((decimal)showMaxPages / (decimal)2) - 1;
-                    if (currentPage <= maxPagesBeforeCurrentPage)
+                    if (Model.Results.ResultProperties.TotalPages <= showMaxPages)
                     {
                         startPage = 1;
-                        endPage = showMaxPages;
-                    }
-                    else if (currentPage + maxPagesAfterCurrentPage >= Model.Results.ResultProperties.TotalPages)
-                    {
-                        startPage = Model.Results.ResultProperties.TotalPages - showMaxPages + 1;
                         endPage = Model.Results.ResultProperties.TotalPages;
                     }
                     else
                     {
-                        startPage = currentPage - maxPagesBeforeCurrentPage;
-                        endPage = currentPage + maxPagesAfterCurrentPage;
-                    }
-                }
-
-                <nav class="govuk-pagination" role="navigation" aria-label="results">
-
-                    @if (Model.Results.ResultProperties.Page > 1)
-                    {
-                        <div class="govuk-pagination__prev">
-                            <a class="govuk-link govuk-pagination__link" href="/find-a-course/page?@previousLinkParams" rel="prev">
-                                <svg class="govuk-pagination__icon govuk-pagination__icon--prev" xmlns="http://www.w3.org/2000/svg" height="13" width="15" aria-hidden="true" focusable="false" viewBox="0 0 15 13">
-                                    <path d="m6.5938-0.0078125-6.7266 6.7266 6.7441 6.4062 1.377-1.449-4.1856-3.9768h12.896v-2h-12.984l4.2931-4.293-1.414-1.414z"></path>
-                                </svg>
-                                <span class="govuk-pagination__link-title">Previous</span>
-                            </a>
-                        </div>
-                    }
-
-                    <ul class="govuk-pagination__list">
-                        @for (int i = startPage; i <= endPage; i++)
+                        var maxPagesBeforeCurrentPage = (int)Math.Floor((decimal)showMaxPages / (decimal)2);
+                        var maxPagesAfterCurrentPage = (int)Math.Ceiling((decimal)showMaxPages / (decimal)2) - 1;
+                        if (currentPage <= maxPagesBeforeCurrentPage)
                         {
-                            @if (i == Model.RequestPage)
-                            {
-                                <li class="govuk-pagination__item govuk-pagination__item--current">
-                                    <a class="govuk-link govuk-pagination__link" href="/find-a-course/page?@parameters&page=@i" aria-label="Page @i">
-                                        @i
-                                    </a>
-                                </li>
-                            }
-                            else
-                            {
-                                <li class="govuk-pagination__item">
-                                    <a class="govuk-link govuk-pagination__link" aria-label="Page @(i == endPage ? endPage : i)" href="/find-a-course/page?@parameters&page=@i" aria-current="page">
-                                        @i
-                                    </a>
-                                </li>
-                            }
+                            startPage = 1;
+                            endPage = showMaxPages;
                         }
-                    </ul>
-
-                    @if (Model.Results.ResultProperties.Page < Model.Results.ResultProperties.TotalPages)
-                    {
-                        <div class="govuk-pagination__next">
-                            <a class="govuk-link govuk-pagination__link" href="/find-a-course/page?@nextLinkParams" rel="next">
-                                <span class="govuk-pagination__link-title">Next</span>
-                                <svg class="govuk-pagination__icon govuk-pagination__icon--next" xmlns="http://www.w3.org/2000/svg" height="13" width="15" aria-hidden="true" focusable="false" viewBox="0 0 15 13">
-                                    <path d="m8.107-0.0078125-1.4136 1.414 4.2926 4.293h-12.986v2h12.896l-4.1855 3.9766 1.377 1.4492 6.7441-6.4062-6.7246-6.7266z"></path>
-                                </svg>
-                            </a>
-                        </div>
+                        else if (currentPage + maxPagesAfterCurrentPage >= Model.Results.ResultProperties.TotalPages)
+                        {
+                            startPage = Model.Results.ResultProperties.TotalPages - showMaxPages + 1;
+                            endPage = Model.Results.ResultProperties.TotalPages;
+                        }
+                        else
+                        {
+                            startPage = currentPage - maxPagesBeforeCurrentPage;
+                            endPage = currentPage + maxPagesAfterCurrentPage;
+                        }
                     }
-                </nav>
-                <div class="hods-pagination__navigation__summary">
-                    Showing @showRecordsFrom - @showRecordsTo of @Model.Results.ResultProperties.TotalResultCount results
-                </div>
-            }
+                    <nav class="govuk-pagination" role="navigation" aria-label="results">
+
+                        @if (Model.Results.ResultProperties.Page > 1)
+                        {
+                            <div class="govuk-pagination__prev">
+                                <a class="govuk-link govuk-pagination__link" href="/find-a-course/page?@previousLinkParams" rel="prev">
+                                    <svg class="govuk-pagination__icon govuk-pagination__icon--prev" xmlns="http://www.w3.org/2000/svg" height="13" width="15" aria-hidden="true" focusable="false" viewBox="0 0 15 13">
+                                        <path d="m6.5938-0.0078125-6.7266 6.7266 6.7441 6.4062 1.377-1.449-4.1856-3.9768h12.896v-2h-12.984l4.2931-4.293-1.414-1.414z"></path>
+                                    </svg>
+                                    <span class="govuk-pagination__link-title">Previous</span>
+                                </a>
+                            </div>
+                        }
+
+                        <ul class="govuk-pagination__list">
+                            @for (int i = startPage; i <= endPage; i++)
+                            {
+                                @if (i == Model.RequestPage)
+                                {
+                                    <li class="govuk-pagination__item govuk-pagination__item--current">
+                                        <a class="govuk-link govuk-pagination__link" href="/find-a-course/page?@parameters&page=@i" aria-label="Page @i">
+                                            @i
+                                        </a>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li class="govuk-pagination__item">
+                                        <a class="govuk-link govuk-pagination__link" aria-label="Page @(i == endPage ? endPage : i)" href="/find-a-course/page?@parameters&page=@i" aria-current="page">
+                                            @i
+                                        </a>
+                                    </li>
+                                }
+                            }
+                        </ul>
+
+                        @if (Model.Results.ResultProperties.Page < Model.Results.ResultProperties.TotalPages)
+                        {
+                            <div class="govuk-pagination__next">
+                                <a class="govuk-link govuk-pagination__link" href="/find-a-course/page?@nextLinkParams" rel="next">
+                                    <span class="govuk-pagination__link-title">Next</span>
+                                    <svg class="govuk-pagination__icon govuk-pagination__icon--next" xmlns="http://www.w3.org/2000/svg" height="13" width="15" aria-hidden="true" focusable="false" viewBox="0 0 15 13">
+                                        <path d="m8.107-0.0078125-1.4136 1.414 4.2926 4.293h-12.986v2h12.896l-4.1855 3.9766 1.377 1.4492 6.7441-6.4062-6.7246-6.7266z"></path>
+                                    </svg>
+                                </a>
+                            </div>
+                        }
+                    </nav>
+                    <div class="hods-pagination__navigation__summary">
+                        Showing @showRecordsFrom - @showRecordsTo of @Model.Results.ResultProperties.TotalResultCount results
+                    </div>
+                }
+            </div>
         }
         else
         {
