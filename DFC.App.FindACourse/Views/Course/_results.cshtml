@@ -65,14 +65,6 @@
             }
 
             <div class="govuk-heading-s fac-show-courses-count">Showing @showRecordsFrom to @showRecordsTo of  @Model.Results.ResultProperties.TotalResultCount courses</div>
-            <div class="fac-search-sort">
-                <div class="govuk-form-group">
-                    <label class="govuk-label" for="sort">
-                        Sort by
-                    </label>
-                    <select asp-for="SideBar.SelectedOrderByValue" aria-label="SelectedOrderByValue" asp-items="Model.SideBar.OrderByOptions" class="govuk-select" name="SideBar.SelectedOrderByValue" id="orderBy-Input"></select>
-                </div>
-            </div>
             <div class="fac-search-results-list govuk-list">
                 <hr class="govuk-section-break govuk-section-break--visible">
 
