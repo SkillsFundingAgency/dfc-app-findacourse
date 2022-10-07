@@ -1,0 +1,47 @@
+﻿@{
+    var cdnLocation = "https://dev-cdn.nationalcareersservice.org.uk/nationalcareers_toolkit";
+}
+
+<div class="govuk-grid-column-full"></div>
+<div class="govuk-grid-column-one-third">
+    <div class="fac-feature-box fac-feature-box__image fac-feature-box__card">
+        <div class="fac-feature-box__content">
+            <img src="@cdnLocation/images/annika-gordon-cZISY8ai2iA-unsplash.jpg" alt="back of hand says focus">
+            <h2 class="govuk-heading-m govuk-!-margin-top-3">
+                Courses to get a job
+            </h2>
+            <p class="govuk-body">
+                Find courses leading to jobs in demand.
+            </p>
+            @Html.ActionLink("Find a course for a job","", new{searchTerm = "search", view = "jobcourses"}, new {@class= "govuk-button govuk-heading-m govuk-!-margin-bottom-1"})
+        </div>
+    </div>
+</div>
+<div class="govuk-grid-column-one-third">
+    <div class="fac-feature-box fac-feature-box__image fac-feature-box__card">
+        <div class="fac-feature-box__content">
+            <img src="@cdnLocation/images/skills-toolkit-lifestyle.jpg" alt="paper and pens - the skills toolkit">
+            <h2 class="govuk-heading-m govuk-!-margin-top-3">
+                Develop skills online
+            </h2>
+            <p class="govuk-body">
+                Learn new skills for free at your own pace.
+            </p>
+            <a href="https://nationalcareers.service.gov.uk/find-a-course/the-skills-toolkit" class="govuk-button govuk-heading-m govuk-!-margin-bottom-1">Go to The Skills Toolkit</a>
+        </div>
+    </div>
+</div>
+<div class="govuk-grid-column-one-third">
+    <div class="fac-feature-box fac-feature-box__image fac-feature-box__card">
+        <div class="fac-feature-box__content">
+            <img src="@cdnLocation/images/christina-wocintechchat-com-FPQlXQtjkqU-unsplash.jpg" alt="paper and pens - the skills toolkit">
+            <h2 class="govuk-heading-m govuk-!-margin-top-3">
+                Help with choices
+            </h2>
+            <p class="govuk-body">
+                Options and advice if you’re not sure of the right course for you.
+            </p>
+            @Html.ActionLink("Get help with choices","", new{searchTerm = "search", view = "help"}, new {@class= "govuk-button govuk-heading-m govuk-!-margin-bottom-1"})
+        </div>
+    </div>
+</div>

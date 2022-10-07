@@ -122,7 +122,7 @@ namespace DFC.App.FindACourse.Controllers
         [Route("find-a-course/search/{articleName}/body")]
         [Route("find-a-course/search/body")]
         [ResponseCache(Duration = 43200)]
-        public async Task<IActionResult> Body(string articleName)
+        public async Task<IActionResult> Body(string articleName, string view = "home")
         {
             logService.LogInformation($"{nameof(this.Body)} has been called");
 
@@ -132,7 +132,7 @@ namespace DFC.App.FindACourse.Controllers
 
             logService.LogInformation($"{nameof(this.Body)} generated the model and ready to pass to the view");
 
-            return await SearchCourse(string.Empty).ConfigureAwait(true);
+            return await SearchCourse(string.Empty, view).ConfigureAwait(true);
         }
 
         [HttpGet]
@@ -301,11 +301,11 @@ namespace DFC.App.FindACourse.Controllers
         [Route("find-a-course/course/body/course/searchcourse")]
         [Route("find-a-course/course/body")]
         [Route("find-a-course/search/searchCourse/body")]
-        public async Task<IActionResult> SearchCourse(string searchTerm)
+        public async Task<IActionResult> SearchCourse(string searchTerm, string view = "home")
         {
             logService.LogInformation($"{nameof(this.SearchCourse)} has been called");
 
-            var model = new BodyViewModel();
+            var model = new BodyViewModel { View = view };
             var courseSearchFilters = new CourseSearchFilters
             {
                 CourseType = new List<CourseType> { CourseType.All },
@@ -686,7 +686,7 @@ namespace DFC.App.FindACourse.Controllers
             model.RequestPage = (model.RequestPage > 1) ? model.RequestPage : 1;
             return model;
         }
-        
+
         private async Task<BodyViewModel> AddInLocationRequestParametersAsync(BodyViewModel model)
         {
             float selectedDistanceValue = 10;
