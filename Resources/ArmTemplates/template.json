@@ -427,7 +427,7 @@
                 "value": "1"
               },             
               {
-                "name": "BrandingAssetsCdn",
+                "name": "Configuration__CourseSearch__BrandingAssetsCdn",
                 "value": "[parameters('BrandingAssetsCdn')]"
               }
             ]
