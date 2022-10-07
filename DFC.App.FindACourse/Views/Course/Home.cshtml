@@ -1,9 +1,8 @@
-﻿@using Microsoft.Extensions.Configuration
-@inject IConfiguration Configuration
+﻿@model BodyViewModel
 
 
 @{
-    var brandingAssetsCdn = @Configuration.GetSection("Configuration")["BrandingAssetsCdn"];
+    var brandingAssetsCdn = Model.CourseSearchSettings.BrandingAssetsCdn;
     var cdnLocation = brandingAssetsCdn+"/nationalcareers_toolkit";
 }
 

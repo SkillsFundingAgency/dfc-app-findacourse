@@ -29,14 +29,16 @@ namespace DFC.App.FindACourse.Controllers
         private readonly IViewHelper viewHelper;
         private readonly ILocationService locationService;
         private readonly Fac.CourseSearchClientSettings courseSearchClientSettings;
+        private readonly CourseSearchSettings courseSearchSettings;
 
-        public CourseController(ILogService logService, IFindACourseService findACourseService, IViewHelper viewHelper, ILocationService locationService, Fac.CourseSearchClientSettings courseSearchClientSettings)
+        public CourseController(ILogService logService, IFindACourseService findACourseService, IViewHelper viewHelper, ILocationService locationService, Fac.CourseSearchClientSettings courseSearchClientSettings, CourseSearchSettings courseSearchSettings)
         {
             this.logService = logService;
             this.findACourseService = findACourseService;
             this.viewHelper = viewHelper;
             this.locationService = locationService;
             this.courseSearchClientSettings = courseSearchClientSettings;
+            this.courseSearchSettings = courseSearchSettings;
         }
 
         [HttpGet]
@@ -441,7 +443,7 @@ namespace DFC.App.FindACourse.Controllers
 
             model.SideBar = sideBarViewModel;
             model.SideBar.OrderByOptions = ListFilters.GetOrderByOptions();
-
+            model.CourseSearchSettings = courseSearchSettings;
             logService.LogInformation($"{nameof(this.Results)} generated the model and ready to pass to the view");
 
             return View("Body", model);

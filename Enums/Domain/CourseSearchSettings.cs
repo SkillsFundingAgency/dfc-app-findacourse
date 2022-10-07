@@ -9,5 +9,7 @@ namespace DFC.App.FindACourse.Data.Domain
         public Uri CourseSearchUrl { get; set; }
 
         public string HealthCheckKeyWords { get; set; }
+
+        public string BrandingAssetsCdn { get; set; }
     }
 }
