@@ -42,7 +42,7 @@
         {
             int showRecordsFrom;
             int showRecordsTo;
-            int showMaxPages = 10;
+            int showMaxPages = 5;
             int startPage;
             int endPage;
             int currentPage;
@@ -113,57 +113,53 @@
                             endPage = currentPage + maxPagesAfterCurrentPage;
                         }
                     }
-                    <nav class="govuk-pagination" role="navigation" aria-label="results">
 
-                        @if (Model.Results.ResultProperties.Page > 1)
-                        {
-                            <div class="govuk-pagination__prev">
-                                <a class="govuk-link govuk-pagination__link" href="/find-a-course/page?@previousLinkParams" rel="prev">
-                                    <svg class="govuk-pagination__icon govuk-pagination__icon--prev" xmlns="http://www.w3.org/2000/svg" height="13" width="15" aria-hidden="true" focusable="false" viewBox="0 0 15 13">
-                                        <path d="m6.5938-0.0078125-6.7266 6.7266 6.7441 6.4062 1.377-1.449-4.1856-3.9768h12.896v-2h-12.984l4.2931-4.293-1.414-1.414z"></path>
-                                    </svg>
-                                    <span class="govuk-pagination__link-title">Previous</span>
-                                </a>
-                            </div>
-                        }
+                    <nav class="hods-pagination__navigation" role="navigation" aria-label="Pagination Navigation">
+                        <div class="hods-pagination__navigation__summary">
+                            Showing @showRecordsFrom - @showRecordsTo of @Model.Results.ResultProperties.TotalResultCount results
+                        </div>
+                        <ul class="hods-pagination__navigation__list-items">
 
-                        <ul class="govuk-pagination__list">
+                            @if (Model.Results.ResultProperties.Page > 1)
+                            {
+                                <li class="hods-pagination__navigation__item">
+                                    <a class="govuk-link hods-pagination__navigation__link" aria-label="Previous page" href="/find-a-course/page?@previousLinkParams">
+                                        <span aria-hidden="true" role="presentation">«</span>
+                                        <!-- -->Previous
+                                    </a>
+                                </li>
+                            }
+
                             @for (int i = startPage; i <= endPage; i++)
                             {
                                 @if (i == Model.RequestPage)
                                 {
-                                    <li class="govuk-pagination__item govuk-pagination__item--current">
-                                        <a class="govuk-link govuk-pagination__link" href="/find-a-course/page?@parameters&page=@i" aria-label="Page @i">
-                                            @i
-                                        </a>
+                                    <li class="hods-pagination__navigation__item">
+                                        <a aria-current="true" aria-label="Current page, page @i"
+                                        class="govuk-link hods-pagination__navigation__link hods-pagination__navigation__link--current">@i</a>
                                     </li>
                                 }
                                 else
                                 {
-                                    <li class="govuk-pagination__item">
-                                        <a class="govuk-link govuk-pagination__link" aria-label="Page @(i == endPage ? endPage : i)" href="/find-a-course/page?@parameters&page=@i" aria-current="page">
+                                    <li class="hods-pagination__navigation__item">
+                                        <a class="govuk-link hods-pagination__navigation__link" aria-label="Page @(i == endPage ? endPage : i)" href="/find-a-course/page?@parameters&page=@i" aria-current="page">
                                             @i
                                         </a>
                                     </li>
                                 }
                             }
-                        </ul>
 
-                        @if (Model.Results.ResultProperties.Page < Model.Results.ResultProperties.TotalPages)
-                        {
-                            <div class="govuk-pagination__next">
-                                <a class="govuk-link govuk-pagination__link" href="/find-a-course/page?@nextLinkParams" rel="next">
-                                    <span class="govuk-pagination__link-title">Next</span>
-                                    <svg class="govuk-pagination__icon govuk-pagination__icon--next" xmlns="http://www.w3.org/2000/svg" height="13" width="15" aria-hidden="true" focusable="false" viewBox="0 0 15 13">
-                                        <path d="m8.107-0.0078125-1.4136 1.414 4.2926 4.293h-12.986v2h12.896l-4.1855 3.9766 1.377 1.4492 6.7441-6.4062-6.7246-6.7266z"></path>
-                                    </svg>
-                                </a>
-                            </div>
-                        }
+                            @if (Model.Results.ResultProperties.Page < Model.Results.ResultProperties.TotalPages)
+                            {
+                                <li class="hods-pagination__navigation__item">
+                                    <a class="govuk-link hods-pagination__navigation__link" aria-label="Next page" href="/find-a-course/page?@nextLinkParams">
+                                        Next
+                                        <!-- --> <span aria-hidden="true" role="presentation">»</span>
+                                    </a>
+                                </li>
+                            }
+                        </ul>
                     </nav>
-                    <div class="hods-pagination__navigation__summary">
-                        Showing @showRecordsFrom - @showRecordsTo of @Model.Results.ResultProperties.TotalResultCount results
-                    </div>
                 }
             </div>
         }
