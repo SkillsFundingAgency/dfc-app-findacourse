@@ -1,4 +1,5 @@
-﻿@model BodyViewModel
+﻿@using DFC.App.FindACourse.Controllers
+@model BodyViewModel
 
 <form action="@(Model.FreeCourseSearch ? "/find-a-course/searchFreeCourse" : "/find-a-course/searchcourse")" method="get" id="fac-search-course-form" class="find-a-course-page">
     <section id="fac-search-banner" class="primary-hero">
