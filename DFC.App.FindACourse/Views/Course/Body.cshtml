@@ -2,7 +2,50 @@
 @model BodyViewModel
 
 <section aria-label="Search">
-    <partial name="_searchbanner.cshtml" model="Model" />
+    <form action="@(Model.FreeCourseSearch ? "/find-a-course/searchFreeCourse" : "/find-a-course/searchcourse")" method="get" id="fac-search-course-form" class="find-a-course-page">
+        <section id="fac-search-banner" class="primary-hero">
+            <div class="govuk-width-container">
+                <div class="govuk-grid-row">
+                    <div class="govuk-grid-column-full">
+                        @if (Model.FreeCourseSearch)
+                        {
+                            <h1 class="govuk-!-margin-bottom-2 govuk-heading-l">Free courses for jobs</h1>
+                            <p class="govuk-body-l">Search for free courses to help you get skills employers need.</p>
+                        }
+                        else
+                        {
+                            <h1 class="govuk-!-margin-bottom-2 govuk-heading-l">Find a course</h1>
+                            <p class="govuk-body-l">Search for online and classroom courses near you, to help you get a job or develop your skills.</p>
+                        }
+                    </div>
+                </div>
+                <div class="govuk-grid-row">
+                    <div class="govuk-grid-column-one-third">
+                        <div class="govuk-form-group">
+                            <label class="govuk-label" for="location-input">Postcode, town or city</label>
+                            <div class="input-wrapper">
+                                <input type="search" asp-for="SideBar.TownOrPostcode" aria-label="TownOrPostcode" name="TownOrPostcode" class="govuk-input govuk-!-width-full" id="location-input" value="@Model.SideBar.TownOrPostcode" />
+                            </div>
+                            <span asp-validation-for="SideBar.TownOrPostcode" class="text-danger" id="location-validator"></span>
+                            <input type="hidden" asp-for="SideBar.Coordinates" name="SideBar.Coordinates" id="coordinates" value="@Model.SideBar.Coordinates" />
+                            <input type="hidden" asp-for="SideBar.SuggestedLocation" name="SideBar.SuggestedLocation" id="suggestedLocation-input" value="@Model.SideBar.SuggestedLocation" />
+                        </div>
+                    </div>
+                    <div class="govuk-grid-column-two-thirds">
+                        <div class="govuk-form-group">
+                            <label class="govuk-label" id="enter-keyword-label" for="search-input">Course or keyword</label>
+                            <div class="input-wrapper">
+                                <input type="search" id="search-input" name="searchTerm" value="@Model.CurrentSearchTerm" aria-label="Enter a keyword" title="Enter a keyword" class="govuk-input govuk-!-width-full" autocomplete="off">
+                                <div class="input-search-item input-submit-wrapper">
+                                    <button data-module="govuk-button" type="submit" class="input-search-submit" id="search-button">Search</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </form>
 </section>
 <div class="govuk-width-container margin-fix">
     <main class="govuk-main-wrapper govuk-main-wrapper--auto-spacing govuk-body govuk-!-padding-top-0" id="main-content" role="main">
