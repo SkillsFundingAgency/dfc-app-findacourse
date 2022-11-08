@@ -310,6 +310,7 @@ namespace DFC.App.FindACourse.Controllers
         [Route("find-a-course/course/body/course/searchcourse")]
         [Route("find-a-course/course/body")]
         [Route("find-a-course/search/searchCourse/body")]
+        [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
         public async Task<IActionResult> SearchCourse(string searchTerm, string view = "home")
         {
             logService.LogInformation($"{nameof(this.SearchCourse)} has been called");
@@ -329,6 +330,7 @@ namespace DFC.App.FindACourse.Controllers
 
         [HttpGet]
         [Route("find-a-course/search/searchFreeCourse/body")]
+        [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
         public async Task<IActionResult> SearchFreeCourse(string searchTerm)
         {
             logService.LogInformation($"{nameof(this.SearchFreeCourse)} has been called");
