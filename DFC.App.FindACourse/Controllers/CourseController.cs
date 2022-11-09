@@ -133,10 +133,11 @@ namespace DFC.App.FindACourse.Controllers
             var model = new BodyViewModel { Content = new HtmlString("Find a course: Body element") };
             model.SideBar = GetSideBarViewModel();
             model.SideBar.OrderByOptions = ListFilters.GetOrderByOptions();
+            model.CourseSearchSettings = courseSearchSettings;
 
             logService.LogInformation($"{nameof(this.Body)} generated the model and ready to pass to the view");
 
-            return await SearchCourse(string.Empty, view).ConfigureAwait(true);
+            return view == "home" ? View("FindACourse", model) : await SearchCourse(string.Empty, view).ConfigureAwait(true);
         }
 
         [HttpGet]
@@ -148,6 +149,13 @@ namespace DFC.App.FindACourse.Controllers
             logService.LogInformation($"{nameof(this.BodyFooter)} has been called");
 
             return NoContent();
+        }
+
+        [HttpGet]
+        [Route("find-a-course/find-courses-to-get-a-job")]
+        public IActionResult FindCoursedToGetAJob()
+        {
+            return View("FindACourse", new BodyViewModel());
         }
 
         [HttpGet]
