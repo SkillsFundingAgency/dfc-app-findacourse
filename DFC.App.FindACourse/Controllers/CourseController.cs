@@ -124,11 +124,12 @@ namespace DFC.App.FindACourse.Controllers
 
         [HttpGet]
         [Route("find-a-course/find-courses-to-get-a-job")]
+        [Route("find-a-course/search/course/find-courses-to-get-a-job")]
         [Route("find-a-course/course/find-courses-to-get-a-job")]
         [Route("course/find-courses-to-get-a-job")]
         public IActionResult FindCoursedToGetAJob()
         {
-            return View("FindACourse", new BodyViewModel());
+            return View("courses-to-get-a-job", new BodyViewModel());
         }
 
         [HttpGet]
@@ -146,7 +147,7 @@ namespace DFC.App.FindACourse.Controllers
 
             logService.LogInformation($"{nameof(this.Body)} generated the model and ready to pass to the view");
 
-            return view == "home" ? View("FindACourse", model) : await SearchCourse(string.Empty, view).ConfigureAwait(true);
+            return view == "home" ? View("Home", model) : await SearchCourse(string.Empty, view).ConfigureAwait(true);
         }
 
         [HttpGet]

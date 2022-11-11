@@ -151,10 +151,10 @@ namespace DFC.App.FindACourse
                     pattern: "find-a-course/search/{controller=Course}/{action=Index}");
                 endpoints.MapRazorPages();
 
-                endpoints.MapControllerRoute(
-                    name: "findacourse",
-                    pattern: "find-a-course/{controller=Course}/{action=Index}");
-                endpoints.MapRazorPages();
+                //endpoints.MapControllerRoute(
+                //    name: "findacourse",
+                //    pattern: "find-a-course/{controller=Course}/{action=Index}");
+                //endpoints.MapRazorPages();
             });
         }
     }

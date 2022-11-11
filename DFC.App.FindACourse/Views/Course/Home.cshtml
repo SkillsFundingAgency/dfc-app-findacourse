@@ -1,51 +1,63 @@
 ﻿@model BodyViewModel
-
-
 @{
     var brandingAssetsCdn = Model.CourseSearchSettings.BrandingAssetsCdn;
-    var cdnLocation = brandingAssetsCdn+"/nationalcareers_toolkit";
+    var cdnLocation = brandingAssetsCdn + "/nationalcareers_toolkit";
 }
 
-<div class="govuk-grid-column-full"></div>
-<div class="govuk-grid-column-one-third">
-    <div class="fac-feature-box fac-feature-box__image fac-feature-box__card">
-        <div class="fac-feature-box__content">
-            <img src="@cdnLocation/images/courses-to-get-a-job.jpg" alt="courses to get a job">
-            <h2 class="govuk-heading-m govuk-!-margin-top-3">
-                Courses to get a job
-            </h2>
-            <p class="govuk-body">
-                Find a course to get skills employers need.
-            </p>
-            @Html.ActionLink("Search for courses","", new{searchTerm = "search", view = "jobcourses"}, new {@class= "govuk-button govuk-heading-m govuk-!-margin-bottom-1"})
+<section aria-label="Search">
+    <partial name="_searchbanner.cshtml" model="Model" />
+</section>
+
+<div class="govuk-width-container margin-fix">
+    <main class="govuk-main-wrapper govuk-main-wrapper--auto-spacing govuk-body govuk-!-padding-top-0" id="main-content" role="main">
+        <div class="govuk-width-container">
+            <div class="govuk-main-wrapper">
+                <div id="home-block" class="govuk-grid-row">
+                    <div class="govuk-grid-column-full"></div>
+                    <div class="govuk-grid-column-one-third">
+                        <div class="fac-feature-box fac-feature-box__image fac-feature-box__card">
+                            <div class="fac-feature-box__content">
+                                <img src="@cdnLocation/images/courses-to-get-a-job.jpg" alt="courses to get a job">
+                                <h2 class="govuk-heading-m govuk-!-margin-top-3">
+                                    Courses to get a job
+                                </h2>
+                                <p class="govuk-body">
+                                    Find a course to get skills employers need.
+                                </p>
+                                @Html.ActionLink("Search for courses","find-courses-to-get-a-job","","", new {@class= "govuk-button govuk-heading-m govuk-!-margin-bottom-1"})
+                            </div>
+                        </div>
+                    </div>
+                    <div class="govuk-grid-column-one-third">
+                        <div class="fac-feature-box fac-feature-box__image fac-feature-box__card">
+                            <div class="fac-feature-box__content">
+                                <img src="@cdnLocation/images/skills-toolkit-lifestyle.jpg" alt="improve your skills">
+                                <h2 class="govuk-heading-m govuk-!-margin-top-3">
+                                    Improve your skills
+                                </h2>
+                                <p class="govuk-body">
+                                    Learn new skills for free at your own pace.
+                                </p>
+                                <a href="https://nationalcareers.service.gov.uk/find-a-course/the-skills-toolkit" class="govuk-button govuk-heading-m govuk-!-margin-bottom-1">Go to the Skills Toolkit</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="govuk-grid-column-one-third">
+                        <div class="fac-feature-box fac-feature-box__image fac-feature-box__card">
+                            <div class="fac-feature-box__content">
+                                <img src="@cdnLocation/images/help-with-choices-fac-homepage.jpg" alt="help with choices">
+                                <h2 class="govuk-heading-m govuk-!-margin-top-3">
+                                    Help with choices
+                                </h2>
+                                <p class="govuk-body">
+                                    Options and advice if you’re not sure of the right course for you.
+                                </p>
+                                @Html.ActionLink("Get help with choices","", new{searchTerm = "search", view = "help"}, new {@class= "govuk-button govuk-heading-m govuk-!-margin-bottom-1"})
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
-</div>
-<div class="govuk-grid-column-one-third">
-    <div class="fac-feature-box fac-feature-box__image fac-feature-box__card">
-        <div class="fac-feature-box__content">
-            <img src="@cdnLocation/images/skills-toolkit-lifestyle.jpg" alt="improve your skills">
-            <h2 class="govuk-heading-m govuk-!-margin-top-3">
-                Improve your skills
-            </h2>
-            <p class="govuk-body">
-                Learn new skills for free at your own pace.
-            </p>
-            <a href="https://nationalcareers.service.gov.uk/find-a-course/the-skills-toolkit" class="govuk-button govuk-heading-m govuk-!-margin-bottom-1">Go to the Skills Toolkit</a>
-        </div>
-    </div>
-</div>
-<div class="govuk-grid-column-one-third">
-    <div class="fac-feature-box fac-feature-box__image fac-feature-box__card">
-        <div class="fac-feature-box__content">
-            <img src="@cdnLocation/images/help-with-choices-fac-homepage.jpg" alt="help with choices">
-            <h2 class="govuk-heading-m govuk-!-margin-top-3">
-                Help with choices
-            </h2>
-            <p class="govuk-body">
-                Find out what a job involves and if it’s right for you.
-            </p>
-            @Html.ActionLink("Search our job profiles","", new{searchTerm = "search", view = "help"}, new {@class= "govuk-button govuk-heading-m govuk-!-margin-bottom-1"})
-        </div>
-    </div>
+    </main>
 </div>
