@@ -123,6 +123,15 @@ namespace DFC.App.FindACourse.Controllers
         }
 
         [HttpGet]
+        [Route("find-a-course/find-courses-to-get-a-job")]
+        [Route("find-a-course/course/find-courses-to-get-a-job")]
+        [Route("course/find-courses-to-get-a-job")]
+        public IActionResult FindCoursedToGetAJob()
+        {
+            return View("FindACourse", new BodyViewModel());
+        }
+
+        [HttpGet]
         [Route("find-a-course/search/{articleName}/body")]
         [Route("find-a-course/search/body")]
         [ResponseCache(Duration = 43200)]
@@ -149,13 +158,6 @@ namespace DFC.App.FindACourse.Controllers
             logService.LogInformation($"{nameof(this.BodyFooter)} has been called");
 
             return NoContent();
-        }
-
-        [HttpGet]
-        [Route("find-a-course/find-courses-to-get-a-job")]
-        public IActionResult FindCoursedToGetAJob()
-        {
-            return View("FindACourse", new BodyViewModel());
         }
 
         [HttpGet]
