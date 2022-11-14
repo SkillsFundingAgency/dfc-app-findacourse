@@ -12,7 +12,7 @@
     <main class="govuk-main-wrapper govuk-main-wrapper--auto-spacing govuk-body govuk-!-padding-top-0" id="main-content" role="main">
         <div class="govuk-width-container">
             <div class="govuk-main-wrapper">
-                <div id="home-block" class="govuk-grid-row">
+                <div id="home-block" class="govuk-grid-row" style="display:block">
                     <div class="govuk-grid-column-full"></div>
                     <div class="govuk-grid-column-one-third">
                         <div class="fac-feature-box fac-feature-box__image fac-feature-box__card">
@@ -24,7 +24,7 @@
                                 <p class="govuk-body">
                                     Find a course to get skills employers need.
                                 </p>
-                                @Html.ActionLink("Search for courses","find-courses-to-get-a-job","","", new {@class= "govuk-button govuk-heading-m govuk-!-margin-bottom-1"})
+                                <a href="/find-a-course/find-courses-to-get-a-job" class="govuk-button govuk-heading-m govuk-!-margin-bottom-1">Search for courses</a>
                             </div>
                         </div>
                     </div>
@@ -50,9 +50,9 @@
                                     Help with choices
                                 </h2>
                                 <p class="govuk-body">
-                                    Options and advice if you’re not sure of the right course for you.
+                                    Find out what a job involves and if it’s right for you.
                                 </p>
-                                @Html.ActionLink("Get help with choices","", new{searchTerm = "search", view = "help"}, new {@class= "govuk-button govuk-heading-m govuk-!-margin-bottom-1"})
+                                <a href="/find-a-course/help-with-choices" class="govuk-button govuk-heading-m govuk-!-margin-bottom-1">Search our job profiles</a>
                             </div>
                         </div>
                     </div>

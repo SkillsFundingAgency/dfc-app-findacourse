@@ -123,13 +123,25 @@ namespace DFC.App.FindACourse.Controllers
         }
 
         [HttpGet]
-        [Route("find-a-course/find-courses-to-get-a-job")]
-        [Route("find-a-course/search/course/find-courses-to-get-a-job")]
-        [Route("find-a-course/course/find-courses-to-get-a-job")]
-        [Route("course/find-courses-to-get-a-job")]
+        [Route("find-a-course/search/find-courses-to-get-a-job/body")]
+        [Route("find-a-course/search/find-courses-to-get-a-job")]
         public IActionResult FindCoursedToGetAJob()
         {
-            return View("courses-to-get-a-job", new BodyViewModel());
+            var model = new BodyViewModel { Content = new HtmlString("Find a course: Body element") };
+            model.CourseSearchSettings = courseSearchSettings;
+            model.SideBar = GetSideBarViewModel();
+            return View("find-courses-to-get-a-job", model);
+        }
+
+        [HttpGet]
+        [Route("find-a-course/search/help-with-choices/body")]
+        [Route("find-a-course/search/help-with-choices")]
+        public IActionResult HelpWithChoices()
+        {
+            var model = new BodyViewModel { Content = new HtmlString("Find a course: Body element") };
+            model.CourseSearchSettings = courseSearchSettings;
+            model.SideBar = GetSideBarViewModel();
+            return View("help-with-choices", model);
         }
 
         [HttpGet]
