@@ -15,30 +15,10 @@
                         @Html.HiddenFor(m => m.RequestPage)
                         @Html.HiddenFor(m => m.FreeCourseSearch, new {id="facFreeCourseSearch"})
                         <input id="facCampaignCode" name="CourseSearchFilters.FreeSearchCampaignCode" type="hidden" value="@(Model.FreeCourseSearch ? CourseController.FreeSearchCampaignCode : String.Empty)">
-                        @if (Model.FreeCourseSearch == false)
-                        {
-                            <div id="home-block" class="govuk-grid-row" style="display:@((string.IsNullOrWhiteSpace(Model.CurrentSearchTerm) || string.IsNullOrWhiteSpace(Model.SideBar.TownOrPostcode)) && (!Model.FromPaging) ? "block" : "none")">
-
-                                @if (!string.IsNullOrWhiteSpace(Model.View))
-                                {
-                                    <partial name=@Model.View />
-                                }
-                                else
-                                {
-                                    <partial name="Home" />
-                                }
-                            </div>
-
-                            <div class="govuk-grid-row" id="search-result-block" style="display:@((string.IsNullOrWhiteSpace(Model.CurrentSearchTerm) || string.IsNullOrWhiteSpace(Model.SideBar.TownOrPostcode)) && (!Model.FromPaging)? "none" : "block")">
-                                <partial name="_search_result" model="Model" />
-                            </div>
-                        }
-                        else
-                        {
+                        
                             <div class="govuk-grid-row">
                                 <partial name="_search_result" model="Model" />
                             </div>
-                        }
                     </form>
                 }
             </div>
