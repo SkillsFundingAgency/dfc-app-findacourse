@@ -11,11 +11,13 @@
                 @if (Model.Results != null)
                 {
                     <form action="/find-a-course/filterresults" method="get" class="find-a-course-page" id="fac-filter-form">
+                        <span class="fac-visually-hidden" aria-hidden="true">
                         @Html.HiddenFor(m => m.CurrentSearchTerm)
+                        @Html.HiddenFor(m => m.SideBar.TownOrPostcode)
                         @Html.HiddenFor(m => m.RequestPage)
                         @Html.HiddenFor(m => m.FreeCourseSearch, new {id="facFreeCourseSearch"})
                         <input id="facCampaignCode" name="CourseSearchFilters.FreeSearchCampaignCode" type="hidden" value="@(Model.FreeCourseSearch ? CourseController.FreeSearchCampaignCode : String.Empty)">
-                        
+                        </span>
                             <div class="govuk-grid-row">
                                 <partial name="_search_result" model="Model" />
                             </div>

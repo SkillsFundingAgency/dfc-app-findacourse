@@ -159,7 +159,7 @@ namespace DFC.App.FindACourse.Controllers
 
             logService.LogInformation($"{nameof(this.Body)} generated the model and ready to pass to the view");
 
-            return view == "home" ? View("Home", model) : await SearchCourse(string.Empty, view).ConfigureAwait(true);
+            return view == "home" ? View("Home", model) : await SearchCourse(string.Empty, string.Empty).ConfigureAwait(true);
         }
 
         [HttpGet]
@@ -334,18 +334,19 @@ namespace DFC.App.FindACourse.Controllers
         [Route("find-a-course/course/body")]
         [Route("find-a-course/search/searchCourse/body")]
         [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
-        public async Task<IActionResult> SearchCourse(string searchTerm, string view = "home")
+        public async Task<IActionResult> SearchCourse(string searchTerm, string townOrPostcode)
         {
             logService.LogInformation($"{nameof(this.SearchCourse)} has been called");
 
-            var model = new BodyViewModel { View = view };
+            var model = new BodyViewModel();
             var courseSearchFilters = new CourseSearchFilters
             {
                 CourseType = new List<CourseType> { CourseType.All },
                 CourseHours = new List<CourseHours> { CourseHours.All },
                 StartDate = StartDate.Anytime,
                 CourseStudyTime = new List<Fac.AttendancePattern> { Fac.AttendancePattern.Undefined },
-                SearchTerm = string.IsNullOrEmpty(searchTerm) ? string.Empty : searchTerm,
+                SearchTerm = string.IsNullOrWhiteSpace(searchTerm) ? string.Empty : searchTerm,
+                Town = string.IsNullOrWhiteSpace(townOrPostcode) ? string.Empty : townOrPostcode,
             };
 
             return await SearchCourses(model, courseSearchFilters).ConfigureAwait(false);
@@ -603,6 +604,7 @@ namespace DFC.App.FindACourse.Controllers
             model.SideBar.OrderByOptions = ListFilters.GetOrderByOptions();
             model.CurrentSearchTerm = filters?.SearchTerm;
             model.SideBar.CurrentSearchTerm = filters?.SearchTerm;
+            model.SideBar.TownOrPostcode = filters?.Town;
             model.RequestPage = 1;
             model.CourseSearchFilters = filters;
             model.PageSize = int.TryParse(courseSearchClientSettings.CourseSearchSvcSettings?.SearchPageSize, out int pageSize) ? pageSize : 20;

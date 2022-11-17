@@ -21,13 +21,14 @@
             <div class="govuk-grid-row">
                 <div class="govuk-grid-column-one-third">
                     <div class="govuk-form-group">
-                        <label class="govuk-label" for="location-input">Postcode, town or city</label>
+                        <label class="govuk-label" for="location-input">Town, City or Postcode</label>
                         <div class="input-wrapper">
-                            <input type="search" asp-for="SideBar.TownOrPostcode" aria-label="TownOrPostcode" name="TownOrPostcode" class="govuk-input govuk-!-width-full" id="location-input" value="@Model.SideBar.TownOrPostcode" />
+                            <input type="search" aria-label="Enter Town, City or Postcode" name="townOrPostcode" class="govuk-input govuk-!-width-full" id="location-input" value="@Model.SideBar.TownOrPostcode" autocomplete="off" />
                         </div>
-                        <span asp-validation-for="SideBar.TownOrPostcode" class="text-danger" id="location-validator"></span>
-                        <input type="hidden" asp-for="SideBar.Coordinates" name="SideBar.Coordinates" id="coordinates" value="@Model.SideBar.Coordinates" />
-                        <input type="hidden" asp-for="SideBar.SuggestedLocation" name="SideBar.SuggestedLocation" id="suggestedLocation-input" value="@Model.SideBar.SuggestedLocation" />
+                        <span class="fac-visually-hidden" aria-hidden="true">
+                            <input type="hidden" asp-for="SideBar.Coordinates" name="SideBar.Coordinates" id="coordinates" value="@Model.SideBar.Coordinates" />
+                            <input type="hidden" asp-for="SideBar.SuggestedLocation" name="SideBar.SuggestedLocation" id="suggestedLocation-input" value="@Model.SideBar.SuggestedLocation" />
+                        </span>
                     </div>
                 </div>
                 <div class="govuk-grid-column-two-thirds">
