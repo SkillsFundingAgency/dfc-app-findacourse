@@ -145,10 +145,9 @@ namespace DFC.App.FindACourse.Controllers
         }
 
         [HttpGet]
-        [Route("find-a-course/search/{articleName}/body")]
         [Route("find-a-course/search/body")]
         [ResponseCache(Duration = 43200)]
-        public async Task<IActionResult> Body(string articleName, string view = "home")
+        public IActionResult Body()
         {
             logService.LogInformation($"{nameof(this.Body)} has been called");
 
@@ -159,7 +158,7 @@ namespace DFC.App.FindACourse.Controllers
 
             logService.LogInformation($"{nameof(this.Body)} generated the model and ready to pass to the view");
 
-            return view == "home" ? View("Home", model) : await SearchCourse(string.Empty, string.Empty).ConfigureAwait(true);
+            return View("Home", model);
         }
 
         [HttpGet]
