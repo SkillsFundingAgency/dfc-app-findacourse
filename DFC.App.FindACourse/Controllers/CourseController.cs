@@ -354,7 +354,7 @@ namespace DFC.App.FindACourse.Controllers
         [HttpGet]
         [Route("find-a-course/search/searchFreeCourse/body")]
         [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
-        public async Task<IActionResult> SearchFreeCourse(string searchTerm)
+        public async Task<IActionResult> SearchFreeCourse(string searchTerm, string townOrPostcode)
         {
             logService.LogInformation($"{nameof(this.SearchFreeCourse)} has been called");
 
@@ -366,6 +366,7 @@ namespace DFC.App.FindACourse.Controllers
                 StartDate = StartDate.Anytime,
                 CourseStudyTime = new List<Fac.AttendancePattern> { Fac.AttendancePattern.Undefined },
                 SearchTerm = string.IsNullOrEmpty(searchTerm) ? string.Empty : searchTerm,
+                Town = string.IsNullOrWhiteSpace(townOrPostcode) ? string.Empty : townOrPostcode,
                 CampaignCode = FreeSearchCampaignCode,
             };
             model.FreeCourseSearch = true;
@@ -468,6 +469,12 @@ namespace DFC.App.FindACourse.Controllers
 
             model.SideBar = sideBarViewModel;
             model.SideBar.OrderByOptions = ListFilters.GetOrderByOptions();
+            if (!string.IsNullOrWhiteSpace(model.SideBar.SelectedOrderByValue))
+            {
+                model.SideBar.OrderByOptions.ForEach(o => o.Selected = false);
+                model.SideBar.OrderByOptions.First(x => x.Value == model.SideBar.SelectedOrderByValue).Selected = true;
+            }
+
             model.CourseSearchSettings = courseSearchSettings;
             logService.LogInformation($"{nameof(this.Results)} generated the model and ready to pass to the view");
 
@@ -607,6 +614,7 @@ namespace DFC.App.FindACourse.Controllers
             model.RequestPage = 1;
             model.CourseSearchFilters = filters;
             model.PageSize = int.TryParse(courseSearchClientSettings.CourseSearchSvcSettings?.SearchPageSize, out int pageSize) ? pageSize : 20;
+            model.SideBar.SelectedOrderByValue = !string.IsNullOrWhiteSpace(model.SideBar.TownOrPostcode) ? CourseSearchOrderBy.Distance.ToString() : CourseSearchOrderBy.Relevance.ToString();
 
             try
             {

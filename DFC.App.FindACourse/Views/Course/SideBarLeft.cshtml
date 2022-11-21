@@ -70,7 +70,7 @@
     <noscript>
         @if (Model.SideBar.FiltersApplied)
         {
-            <p id="fac-clear-filters"><a href="@(Model.FreeCourseSearch ? $"/find-a-course/searchFreeCourse?searchTerm={@Model.SideBar.CurrentSearchTerm}" : $"/find-a-course/searchcxourse?searchTerm={@Model.SideBar.CurrentSearchTerm}")" aria-label="ClearFilters">Clear filters</a></p>
+            <p id="fac-clear-filters"><a href="@(Model.FreeCourseSearch ? $"/find-a-course/searchFreeCourse?searchTerm={@Model.SideBar.CurrentSearchTerm}&townOrPostcode={@Model.SideBar.TownOrPostcode}" : $"/find-a-course/searchcourse?searchTerm={@Model.SideBar.CurrentSearchTerm}&townOrPostcode={@Model.SideBar.TownOrPostcode}")" aria-label="ClearFilters">Clear filters</a></p>
         }
     </noscript>
 </div>
