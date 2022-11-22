@@ -616,6 +616,11 @@ namespace DFC.App.FindACourse.Controllers
             model.PageSize = int.TryParse(courseSearchClientSettings.CourseSearchSvcSettings?.SearchPageSize, out int pageSize) ? pageSize : 20;
             model.SideBar.SelectedOrderByValue = !string.IsNullOrWhiteSpace(model.SideBar.TownOrPostcode) ? CourseSearchOrderBy.Distance.ToString() : CourseSearchOrderBy.Relevance.ToString();
 
+            if (!string.IsNullOrWhiteSpace(model.CourseSearchFilters.Town))
+            {
+                model = await GetSuggestedLocationsAsync(model).ConfigureAwait(false);
+            }
+
             try
             {
                 model.Results = await findACourseService.GetFilteredData(filters, CourseSearchOrderBy.StartDate, 1)
