@@ -127,7 +127,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
             var viewResult = Assert.IsType<ViewResult>(result);
             var model = Assert.IsAssignableFrom<BodyViewModel>(viewResult.ViewData.Model);
 
-            Assert.NotNull(model.Results);
+            Assert.Null(model.Results);
 
             controller.Dispose();
         }
