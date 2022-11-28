@@ -19,7 +19,7 @@
                         {
                             @foreach (var location in Model.SideBar.DidYouMeanLocations)
                             {
-                                <li><button name="location" value="@location.Label|@location.Value">@location.Label</button></li>
+                                <li><button type="submit" name="location" value="@location.Label|@location.Value">@location.Label</button></li>
                             }
                         }
                     </ul>

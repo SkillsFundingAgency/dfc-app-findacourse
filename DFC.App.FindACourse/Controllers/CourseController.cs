@@ -296,12 +296,12 @@ namespace DFC.App.FindACourse.Controllers
                 return Task.FromResult<IActionResult>(StatusCode((int)HttpStatusCode.NotFound));
             }
 
-            if (model.SideBar.SuggestedLocation != model.SideBar.TownOrPostcode)
+            if (!string.IsNullOrWhiteSpace(model.SideBar.SuggestedLocation) && model.SideBar.SuggestedLocation != model.SideBar.TownOrPostcode)
             {
                 //if the user changed the text for the location invalidate the coordinates
                 model.SideBar.Coordinates = null;
             }
-            else if (!string.IsNullOrEmpty(location))
+            else if (!string.IsNullOrWhiteSpace(location))
             {
                 //If the user clicked on one of the suggested locations
                 var indexOfLocationSpliter = location.IndexOf("|", StringComparison.Ordinal);
