@@ -6,6 +6,7 @@
         <span class="fac-visually-hidden" aria-hidden="true">
             <input type="hidden" asp-for="SideBar.Coordinates" name="SideBar.Coordinates" id="coordinates" value="@Model.SideBar.Coordinates" />
             <input type="hidden" asp-for="SideBar.SuggestedLocation" name="SideBar.SuggestedLocation" id="suggestedLocation-input" value="@Model.SideBar.SuggestedLocation" />
+            <input type="hidden" asp-for="SideBar.D" name="D" id="D-input" value="@Model.SideBar.D" />
         </span>
         <div id="suggest-location" class="location-suggest@(Model.SideBar.DidYouMeanLocations?.Count() > 0 ? "-show" : "")" role="group">
             <details id="suggest-location-details" class="govuk-details" open>

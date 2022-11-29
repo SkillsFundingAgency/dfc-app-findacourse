@@ -464,7 +464,7 @@ namespace DFC.App.FindACourse.Controllers
                                      $"{nameof(orderByValue)}={orderByValue}&" +
                                      $"{nameof(coordinates)}={WebUtility.HtmlEncode(coordinates)}&" +
                                      $"{nameof(campaignCode)}={campaignCode}&" +
-                                     $"{nameof(qualificationLevels)}={qualificationLevels}"; ;
+                                     $"{nameof(qualificationLevels)}={qualificationLevels}";
             }
 
             model.SideBar = sideBarViewModel;
