@@ -333,9 +333,14 @@ namespace DFC.App.FindACourse.Controllers
         [Route("find-a-course/course/body")]
         [Route("find-a-course/search/searchCourse/body")]
         [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
-        public async Task<IActionResult> SearchCourse(string searchTerm, string townOrPostcode)
+        public async Task<IActionResult> SearchCourse(string searchTerm, string townOrPostcode, string sideBarCoordinates, string sideBarSuggestedLocation)
         {
             logService.LogInformation($"{nameof(this.SearchCourse)} has been called");
+
+            if (string.IsNullOrWhiteSpace(searchTerm) && string.IsNullOrWhiteSpace(townOrPostcode))
+            {
+                return Body();
+            }
 
             var model = new BodyViewModel();
             var courseSearchFilters = new CourseSearchFilters
@@ -347,14 +352,24 @@ namespace DFC.App.FindACourse.Controllers
                 SearchTerm = string.IsNullOrWhiteSpace(searchTerm) ? string.Empty : searchTerm,
                 Town = string.IsNullOrWhiteSpace(townOrPostcode) ? string.Empty : townOrPostcode,
             };
+            if (!string.IsNullOrWhiteSpace(townOrPostcode))
+            {
+                var locationCoordinates = GetCoordinates(sideBarCoordinates);
+                if (locationCoordinates.AreValid)
+                {
+                    courseSearchFilters.Latitude = locationCoordinates.Latitude;
+                    courseSearchFilters.Longitude = locationCoordinates.Longitude;
+                    courseSearchFilters.DistanceSpecified = locationCoordinates.AreValid;
+                }
+            }
 
-            return await SearchCourses(model, courseSearchFilters).ConfigureAwait(false);
+            return await SearchCourses(model, courseSearchFilters, sideBarSuggestedLocation).ConfigureAwait(false);
         }
 
         [HttpGet]
         [Route("find-a-course/search/searchFreeCourse/body")]
         [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
-        public async Task<IActionResult> SearchFreeCourse(string searchTerm, string townOrPostcode)
+        public async Task<IActionResult> SearchFreeCourse(string searchTerm, string townOrPostcode, string sideBarCoordinates, string sideBarSuggestedLocation)
         {
             logService.LogInformation($"{nameof(this.SearchFreeCourse)} has been called");
 
@@ -369,9 +384,21 @@ namespace DFC.App.FindACourse.Controllers
                 Town = string.IsNullOrWhiteSpace(townOrPostcode) ? string.Empty : townOrPostcode,
                 CampaignCode = FreeSearchCampaignCode,
             };
+
+            if (!string.IsNullOrWhiteSpace(townOrPostcode))
+            {
+                var locationCoordinates = GetCoordinates(sideBarCoordinates);
+                if (locationCoordinates.AreValid)
+                {
+                    courseSearchFilters.Latitude = locationCoordinates.Latitude;
+                    courseSearchFilters.Longitude = locationCoordinates.Longitude;
+                    courseSearchFilters.DistanceSpecified = locationCoordinates.AreValid;
+                }
+            }
+
             model.FreeCourseSearch = true;
 
-            return await SearchCourses(model, courseSearchFilters).ConfigureAwait(false);
+            return await SearchCourses(model, courseSearchFilters, sideBarSuggestedLocation).ConfigureAwait(false);
         }
 
         [HttpGet]
@@ -604,7 +631,7 @@ namespace DFC.App.FindACourse.Controllers
             return await FilterResults(model, string.Empty).ConfigureAwait(false);
         }
 
-        private async Task<IActionResult> SearchCourses(BodyViewModel model, CourseSearchFilters filters)
+        private async Task<IActionResult> SearchCourses(BodyViewModel model, CourseSearchFilters filters, string suggestedLocation)
         {
             model.SideBar = GetSideBarViewModel();
             model.SideBar.OrderByOptions = ListFilters.GetOrderByOptions();
@@ -615,10 +642,22 @@ namespace DFC.App.FindACourse.Controllers
             model.CourseSearchFilters = filters;
             model.PageSize = int.TryParse(courseSearchClientSettings.CourseSearchSvcSettings?.SearchPageSize, out int pageSize) ? pageSize : 20;
             model.SideBar.SelectedOrderByValue = !string.IsNullOrWhiteSpace(model.SideBar.TownOrPostcode) ? CourseSearchOrderBy.Distance.ToString() : CourseSearchOrderBy.Relevance.ToString();
+            model.SideBar.SuggestedLocation = suggestedLocation;
 
             if (!string.IsNullOrWhiteSpace(model.CourseSearchFilters.Town))
             {
                 model = await GetSuggestedLocationsAsync(model).ConfigureAwait(false);
+                if (!model.UsingAutoSuggestedLocation && model.SideBar.SuggestedLocation != model.SideBar.TownOrPostcode)
+                {
+                    model.SideBar.Coordinates = null;
+                }
+                else
+                {
+                    model.SideBar.Coordinates = string.IsNullOrWhiteSpace(model.SideBar.Coordinates) ? $"{filters.Longitude}|{filters.Latitude}" : model.SideBar.Coordinates;
+                    model.CourseSearchFilters.Town = !string.IsNullOrWhiteSpace(model.CourseSearchFilters.Latitude.ToString()) ? null : model.CourseSearchFilters.Town;
+                }
+
+                model.SideBar.SuggestedLocation = model.SideBar.TownOrPostcode;
             }
 
             try
