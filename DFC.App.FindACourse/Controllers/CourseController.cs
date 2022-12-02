@@ -343,25 +343,7 @@ namespace DFC.App.FindACourse.Controllers
             }
 
             var model = new BodyViewModel();
-            var courseSearchFilters = new CourseSearchFilters
-            {
-                CourseType = new List<CourseType> { CourseType.All },
-                CourseHours = new List<CourseHours> { CourseHours.All },
-                StartDate = StartDate.Anytime,
-                CourseStudyTime = new List<Fac.AttendancePattern> { Fac.AttendancePattern.Undefined },
-                SearchTerm = string.IsNullOrWhiteSpace(searchTerm) ? string.Empty : searchTerm,
-                Town = string.IsNullOrWhiteSpace(townOrPostcode) ? string.Empty : townOrPostcode,
-            };
-            if (!string.IsNullOrWhiteSpace(townOrPostcode))
-            {
-                var locationCoordinates = GetCoordinates(sideBarCoordinates);
-                if (locationCoordinates.AreValid)
-                {
-                    courseSearchFilters.Latitude = locationCoordinates.Latitude;
-                    courseSearchFilters.Longitude = locationCoordinates.Longitude;
-                    courseSearchFilters.DistanceSpecified = locationCoordinates.AreValid;
-                }
-            }
+            CourseSearchFilters courseSearchFilters = GetCourseSearchFilters(searchTerm, townOrPostcode, sideBarCoordinates);
 
             return await SearchCourses(model, courseSearchFilters, sideBarSuggestedLocation).ConfigureAwait(false);
         }
@@ -374,28 +356,8 @@ namespace DFC.App.FindACourse.Controllers
             logService.LogInformation($"{nameof(this.SearchFreeCourse)} has been called");
 
             var model = new BodyViewModel();
-            var courseSearchFilters = new CourseSearchFilters
-            {
-                CourseType = new List<CourseType> { CourseType.All },
-                CourseHours = new List<CourseHours> { CourseHours.All },
-                StartDate = StartDate.Anytime,
-                CourseStudyTime = new List<Fac.AttendancePattern> { Fac.AttendancePattern.Undefined },
-                SearchTerm = string.IsNullOrEmpty(searchTerm) ? string.Empty : searchTerm,
-                Town = string.IsNullOrWhiteSpace(townOrPostcode) ? string.Empty : townOrPostcode,
-                CampaignCode = FreeSearchCampaignCode,
-            };
-
-            if (!string.IsNullOrWhiteSpace(townOrPostcode))
-            {
-                var locationCoordinates = GetCoordinates(sideBarCoordinates);
-                if (locationCoordinates.AreValid)
-                {
-                    courseSearchFilters.Latitude = locationCoordinates.Latitude;
-                    courseSearchFilters.Longitude = locationCoordinates.Longitude;
-                    courseSearchFilters.DistanceSpecified = locationCoordinates.AreValid;
-                }
-            }
-
+            CourseSearchFilters courseSearchFilters = GetCourseSearchFilters(searchTerm, townOrPostcode, sideBarCoordinates);
+            courseSearchFilters.CampaignCode = FreeSearchCampaignCode;
             model.FreeCourseSearch = true;
 
             return await SearchCourses(model, courseSearchFilters, sideBarSuggestedLocation).ConfigureAwait(false);
@@ -506,6 +468,31 @@ namespace DFC.App.FindACourse.Controllers
             logService.LogInformation($"{nameof(this.Results)} generated the model and ready to pass to the view");
 
             return View("Body", model);
+        }
+
+        private static CourseSearchFilters GetCourseSearchFilters(string searchTerm, string townOrPostcode, string sideBarCoordinates)
+        {
+            var courseSearchFilters = new CourseSearchFilters
+            {
+                CourseType = new List<CourseType> { CourseType.All },
+                CourseHours = new List<CourseHours> { CourseHours.All },
+                StartDate = StartDate.Anytime,
+                CourseStudyTime = new List<Fac.AttendancePattern> { Fac.AttendancePattern.Undefined },
+                SearchTerm = string.IsNullOrWhiteSpace(searchTerm) ? string.Empty : searchTerm,
+                Town = string.IsNullOrWhiteSpace(townOrPostcode) ? string.Empty : townOrPostcode,
+            };
+            if (!string.IsNullOrWhiteSpace(townOrPostcode))
+            {
+                var locationCoordinates = GetCoordinates(sideBarCoordinates);
+                if (locationCoordinates.AreValid)
+                {
+                    courseSearchFilters.Latitude = locationCoordinates.Latitude;
+                    courseSearchFilters.Longitude = locationCoordinates.Longitude;
+                    courseSearchFilters.DistanceSpecified = locationCoordinates.AreValid;
+                }
+            }
+
+            return courseSearchFilters;
         }
 
         private static LocationCoordinates GetCoordinates(string coordinates)
