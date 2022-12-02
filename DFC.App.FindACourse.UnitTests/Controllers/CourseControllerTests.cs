@@ -142,7 +142,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
             A.CallTo(() => FakeFindACoursesService.GetFilteredData(A<CourseSearchFilters>._, A<CourseSearchOrderBy>._, A<int>._)).Returns(dummyCourseSearchResult);
 
             // act
-            var result = await controller.SearchFreeCourse("course", string.Empty).ConfigureAwait(false);
+            var result = await controller.SearchFreeCourse("course", string.Empty, string.Empty, string.Empty).ConfigureAwait(false);
 
             // assert
             var viewResult = Assert.IsType<ViewResult>(result);
@@ -603,7 +603,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
             A.CallTo(() => FakeFindACoursesService.GetFilteredData(A<CourseSearchFilters>.Ignored, A<CourseSearchOrderBy>.Ignored, A<int>.Ignored)).Throws(new Exception());
 
             // act
-            var result = await controller.SearchCourse("search term", string.Empty).ConfigureAwait(false);
+            var result = await controller.SearchCourse("search term", string.Empty, string.Empty, string.Empty).ConfigureAwait(false);
 
             // assert
             var viewResult = Assert.IsType<ViewResult>(result);
@@ -623,7 +623,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
             A.CallTo(() => FakeFindACoursesService.GetFilteredData(A<CourseSearchFilters>.Ignored, A<CourseSearchOrderBy>.Ignored, A<int>.Ignored)).Throws(new Exception());
 
             // act
-            var result = await controller.SearchCourse("search term", string.Empty).ConfigureAwait(false);
+            var result = await controller.SearchCourse("search term", string.Empty, string.Empty, string.Empty).ConfigureAwait(false);
 
             // assert
             var viewResult = Assert.IsType<ViewResult>(result);

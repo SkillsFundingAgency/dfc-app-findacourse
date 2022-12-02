@@ -1,6 +1,32 @@
 ﻿@model DFC.App.FindACourse.ViewModels.BodyViewModel
 
-
+<div class="govuk-form-group" id="location-block">
+    <span class="fac-visually-hidden" aria-hidden="true">
+        <input type="hidden" asp-for="SideBar.Coordinates" name="SideBar.Coordinates" id="coordinates" value="@Model.SideBar.Coordinates" />
+        <input type="hidden" asp-for="SideBar.SuggestedLocation" name="SideBar.SuggestedLocation" id="suggestedLocation-input" value="@Model.SideBar.SuggestedLocation" />
+        <input type="hidden" asp-for="SideBar.D" name="D" id="D-input" value="@Model.SideBar.D" />
+    </span>
+    <div id="suggest-location" class="location-suggest@(Model.SideBar.DidYouMeanLocations?.Count() > 0 ? "-show" : "")" role="group">
+        <details id="suggest-location-details" class="govuk-details" open>
+            <summary class=govuk-details__summary aria-describedby="suggested-locations-aria" role="button" aria-expanded="false" aria-controls="suggested-locations-text">
+                <span class="govuk-details__summary-text">which location did you mean</span>
+            </summary>
+            <p class="visuallyhidden" aria-live="polite" id="suggested-locations-aria">There are multiple locations with similar names, tab down to the suggestions, or collapse this panel</p>
+            <div class="govuk-details__summary suggest-locations-text" id="suggested-locations-text">
+                <ul id="suggested-locations">
+                    @if (Model.SideBar.DidYouMeanLocations?.Count() > 0)
+                    {
+                        @foreach (var location in Model.SideBar.DidYouMeanLocations)
+                        {
+                            <li><button type="submit" name="location" value="@location.Label|@location.Value">@location.Label</button></li>
+                        }
+                    }
+                </ul>
+            </div>
+        </details>
+    </div>
+</div>
+<button type="button" class="govuk-button filters-button" id="show-filters-button">Show filters</button>
 <div class="filters filters" id="filters-block">
     <div id="distance-block" class="govuk-form-group">
         <div id="distance">
@@ -50,7 +76,8 @@
     </div>
 
 
-    @if(!Model.FreeCourseSearch ){
+    @if (!Model.FreeCourseSearch)
+    {
         <div class="govuk-form-group">
             <div id="@Model.SideBar.QualificationLevels.FilterText">
                 <fieldset class="govuk-fieldset">
