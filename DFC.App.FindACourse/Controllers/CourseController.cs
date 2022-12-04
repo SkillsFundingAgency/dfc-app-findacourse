@@ -284,6 +284,39 @@ namespace DFC.App.FindACourse.Controllers
         }
 
         [HttpGet]
+        [Route("find-a-course/course/body/course/didyoumeansearchresults")]
+        [Route("find-a-course/search/didyoumeansearchresults/body")]
+        public async Task<IActionResult> DidYouMeanSearchResults(string searchTerm, string location, bool isFreeCourse = false)
+        {
+            logService.LogInformation($"{nameof(this.SearchCourse)} has been called");
+
+            if (string.IsNullOrWhiteSpace(searchTerm) && string.IsNullOrWhiteSpace(location))
+            {
+                return Body();
+            }
+
+            var model = new BodyViewModel();
+            model.SideBar = GetSideBarViewModel();
+
+            if (!string.IsNullOrWhiteSpace(location))
+            {
+                //If the user clicked on one of the suggested locations
+                var indexOfLocationSpliter = location.IndexOf("|", StringComparison.Ordinal);
+                model.SideBar.TownOrPostcode = location.Substring(0, indexOfLocationSpliter);
+                model.SideBar.Coordinates = location[(indexOfLocationSpliter + 1)..];
+            }
+            
+            CourseSearchFilters courseSearchFilters = GetCourseSearchFilters(searchTerm, model.SideBar.TownOrPostcode, model.SideBar.Coordinates);
+            if (isFreeCourse)
+            {
+                courseSearchFilters.CampaignCode = FreeSearchCampaignCode;
+                model.FreeCourseSearch = true;
+            }
+
+            return await SearchCourses(model, courseSearchFilters, model.SideBar.TownOrPostcode).ConfigureAwait(false);
+        }
+        
+        [HttpGet]
         [Route("find-a-course/course/body/course/filterresults")]
         [Route("find-a-course/search/filterresults/body")]
         public Task<IActionResult> FilterResults(BodyViewModel model, string location)
@@ -441,6 +474,7 @@ namespace DFC.App.FindACourse.Controllers
 
             if (!model.IsTest)
             {
+                TempData.Remove("params");
                 TempData["params"] = $"{nameof(searchTerm)}={searchTerm}&" +
                                      $"{nameof(town)}={WebUtility.HtmlEncode(town)}&" +
                                      $"{nameof(courseType)}={courseType}&" +

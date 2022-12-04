@@ -9,7 +9,7 @@
     <div id="suggest-location" class="location-suggest@(Model.SideBar.DidYouMeanLocations?.Count() > 0 ? "-show" : "")" role="group">
         <details id="suggest-location-details" class="govuk-details" open>
             <summary class=govuk-details__summary aria-describedby="suggested-locations-aria" role="button" aria-expanded="false" aria-controls="suggested-locations-text">
-                <span class="govuk-details__summary-text">which location did you mean</span>
+                <span class="govuk-details__summary-text">which location did you mean?</span>
             </summary>
             <p class="visuallyhidden" aria-live="polite" id="suggested-locations-aria">There are multiple locations with similar names, tab down to the suggestions, or collapse this panel</p>
             <div class="govuk-details__summary suggest-locations-text" id="suggested-locations-text">
@@ -18,7 +18,9 @@
                     {
                         @foreach (var location in Model.SideBar.DidYouMeanLocations)
                         {
-                            <li><button type="submit" name="location" value="@location.Label|@location.Value">@location.Label</button></li>
+                            <li>
+                                <a href="/find-a-course/didyoumeansearchresults?searchTerm=@Model.CurrentSearchTerm&location=@location.Label|@location.Value&isFreeCourse=@Model.FreeCourseSearch&D=1">@location.Label</a>
+                            </li>
                         }
                     }
                 </ul>
@@ -97,7 +99,7 @@
     <noscript>
         @if (Model.SideBar.FiltersApplied)
         {
-            <p id="fac-clear-filters"><a href="@(Model.FreeCourseSearch ? $"/find-a-course/searchFreeCourse?searchTerm={@Model.SideBar.CurrentSearchTerm}&townOrPostcode={@Model.SideBar.TownOrPostcode}" : $"/find-a-course/searchcourse?searchTerm={@Model.SideBar.CurrentSearchTerm}&townOrPostcode={@Model.SideBar.TownOrPostcode}")" aria-label="ClearFilters">Clear filters</a></p>
+            <p id="fac-clear-filters"><a href="@(Model.FreeCourseSearch ? $"/find-a-course/searchFreeCourse?searchTerm={@Model.SideBar.CurrentSearchTerm}&townOrPostcode={@Model.SideBar.TownOrPostcode}&sideBarCoordinates={@Model.SideBar.Coordinates}&sideBarSuggestedLocation={Model.SideBar.TownOrPostcode}" : $"/find-a-course/searchcourse?searchTerm={@Model.SideBar.CurrentSearchTerm}&townOrPostcode={@Model.SideBar.TownOrPostcode}&sideBarCoordinates={@Model.SideBar.Coordinates}&sideBarSuggestedLocation={Model.SideBar.TownOrPostcode}")" aria-label="ClearFilters">Clear filters</a></p>
         }
     </noscript>
 </div>
