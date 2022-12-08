@@ -298,14 +298,19 @@ namespace DFC.App.FindACourse.Controllers
             var model = new BodyViewModel();
             model.SideBar = GetSideBarViewModel();
 
-            if (!string.IsNullOrWhiteSpace(location))
+            if (string.IsNullOrWhiteSpace(location))
+            {
+                model.SideBar.Coordinates = null;
+                model.SideBar.TownOrPostcode = null;
+            }
+            else
             {
                 //If the user clicked on one of the suggested locations
                 var indexOfLocationSpliter = location.IndexOf("|", StringComparison.Ordinal);
                 model.SideBar.TownOrPostcode = location.Substring(0, indexOfLocationSpliter);
                 model.SideBar.Coordinates = location[(indexOfLocationSpliter + 1)..];
             }
-            
+
             CourseSearchFilters courseSearchFilters = GetCourseSearchFilters(searchTerm, model.SideBar.TownOrPostcode, model.SideBar.Coordinates);
             if (isFreeCourse)
             {
@@ -315,7 +320,7 @@ namespace DFC.App.FindACourse.Controllers
 
             return await SearchCourses(model, courseSearchFilters, model.SideBar.TownOrPostcode).ConfigureAwait(false);
         }
-        
+
         [HttpGet]
         [Route("find-a-course/course/body/course/filterresults")]
         [Route("find-a-course/search/filterresults/body")]
