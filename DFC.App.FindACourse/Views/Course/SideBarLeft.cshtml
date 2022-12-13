@@ -3,8 +3,8 @@
 
 <div class="govuk-form-group" id="location-block">
     <span class="fac-visually-hidden" aria-hidden="true">
-        <input type="hidden" asp-for="SideBar.Coordinates" name="SideBar.Coordinates" id="coordinates" value="@Model.SideBar.Coordinates" />
-        <input type="hidden" asp-for="SideBar.SuggestedLocation" name="SideBar.SuggestedLocation" id="suggestedLocation-input" value="@Model.SideBar.SuggestedLocation" />
+        <input type="hidden" asp-for="SideBar.Coordinates" name="SideBar.Coordinates" id="sidebarCoordinates" value="@Model.SideBar.Coordinates" />
+        <input type="hidden" asp-for="SideBar.SuggestedLocation" name="SideBar.SuggestedLocation" id="sidebarSuggestedLocation-input" value="@Model.SideBar.SuggestedLocation" />
         <input type="hidden" asp-for="SideBar.D" name="D" id="D-input" value="@Model.SideBar.D" />
     </span>
     <div id="suggest-location" class="location-suggest@(Model.SideBar.DidYouMeanLocations?.Count() > 0 ? "-show" : "")" role="group">
@@ -100,7 +100,7 @@
     <noscript>
         @if (Model.SideBar.FiltersApplied)
         {
-            <p id="fac-clear-filters"><a href="@(@Model.FreeCourseSearch ? $"/find-a-course/searchFreeCourse?searchTerm={@Model.SideBar.CurrentSearchTerm}&townOrPostcode={@Model.SideBar.TownOrPostcode}&sideBarCoordinates={@Model.SideBar.Coordinates}&sideBarSuggestedLocation={@Model.SideBar.TownOrPostcode}" : $"/find-a-course/searchcourse?searchTerm={@Model.SideBar.CurrentSearchTerm}&townOrPostcode={@Model.SideBar.TownOrPostcode}&sideBarCoordinates={@Model.SideBar.Coordinates}&sideBarSuggestedLocation={@Model.SideBar.TownOrPostcode}")" aria-label="ClearFilters">Clear filters</a></p>
+            <p id="fac-clear-filters"><a href="@(Model.FreeCourseSearch ? $"/find-a-course/searchFreeCourse?searchTerm={@Model.SideBar.CurrentSearchTerm}&townOrPostcode={@Model.SideBar.TownOrPostcode}&sideBarCoordinates={@Model.SideBar.Coordinates}&sideBarSuggestedLocation={@Model.SideBar.TownOrPostcode}" : $"/find-a-course/searchcourse?searchTerm={@Model.SideBar.CurrentSearchTerm}&townOrPostcode={@Model.SideBar.TownOrPostcode}&sideBarCoordinates={@Model.SideBar.Coordinates}&sideBarSuggestedLocation={@Model.SideBar.TownOrPostcode}")" aria-label="ClearFilters">Clear filters</a></p>
         }
     </noscript>
 </div>

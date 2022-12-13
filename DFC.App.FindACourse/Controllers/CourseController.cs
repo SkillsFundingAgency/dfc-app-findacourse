@@ -308,7 +308,7 @@ namespace DFC.App.FindACourse.Controllers
                 //If the user clicked on one of the suggested locations
                 var indexOfLocationSpliter = location.IndexOf("|", StringComparison.Ordinal);
                 model.SideBar.TownOrPostcode = location.Substring(0, indexOfLocationSpliter);
-                model.SideBar.Coordinates = location[(indexOfLocationSpliter + 1)..];
+                model.SideBar.Coordinates = location[(indexOfLocationSpliter + 1) ..];
             }
 
             CourseSearchFilters courseSearchFilters = GetCourseSearchFilters(searchTerm, model.SideBar.TownOrPostcode, model.SideBar.Coordinates);
