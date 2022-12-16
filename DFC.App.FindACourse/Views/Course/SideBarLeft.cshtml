@@ -31,6 +31,14 @@
 </div>
 <button type="button" class="govuk-button filters-button" id="show-filters-button">Show filters</button>
 <div class="filters filters" id="filters-block">
+    <div class="fac-filters-block"></div>
+
+    <noscript>
+        @if (Model.SideBar.FiltersApplied)
+        {
+            <div id="fac-clear-filters"><a class="govuk-button" href="@(Model.FreeCourseSearch ? $"/find-a-course/searchFreeCourse?searchTerm={@Model.SideBar.CurrentSearchTerm}&townOrPostcode={@Model.SideBar.TownOrPostcode}&sideBarCoordinates={@Model.SideBar.Coordinates}&sideBarSuggestedLocation={@Model.SideBar.TownOrPostcode}" : $"/find-a-course/searchcourse?searchTerm={@Model.SideBar.CurrentSearchTerm}&townOrPostcode={@Model.SideBar.TownOrPostcode}&sideBarCoordinates={@Model.SideBar.Coordinates}&sideBarSuggestedLocation={@Model.SideBar.TownOrPostcode}")" aria-label="ClearFilters">Clear filters</a></div>
+        }
+    </noscript>
     <div id="distance-block" class="govuk-form-group">
         <div id="distance">
             <label class="govuk-label govuk-!-font-weight-bold" for="location-distance" id="distance-label">Distance</label>
@@ -45,6 +53,8 @@
         </div>
     </div>
 
+    <button data-module="govuk-button" class="govuk-button" type="submit" id="applyfilters-button">Apply filters</button>
+    
     <div class="govuk-form-group" id="coursetype-block">
         <div id="@Model.SideBar.CourseType.FilterText" class="govuk-checkboxes">
             <fieldset class="govuk-fieldset">
@@ -92,15 +102,4 @@
             </div>
         </div>
     }
-
-    <button data-module="govuk-button" class="govuk-button" type="submit" id="applyfilters-button">Apply filters</button>
-
-    <div class="fac-filters-block"></div>
-
-    <noscript>
-        @if (Model.SideBar.FiltersApplied)
-        {
-            <p id="fac-clear-filters"><a href="@(Model.FreeCourseSearch ? $"/find-a-course/searchFreeCourse?searchTerm={@Model.SideBar.CurrentSearchTerm}&townOrPostcode={@Model.SideBar.TownOrPostcode}&sideBarCoordinates={@Model.SideBar.Coordinates}&sideBarSuggestedLocation={@Model.SideBar.TownOrPostcode}" : $"/find-a-course/searchcourse?searchTerm={@Model.SideBar.CurrentSearchTerm}&townOrPostcode={@Model.SideBar.TownOrPostcode}&sideBarCoordinates={@Model.SideBar.Coordinates}&sideBarSuggestedLocation={@Model.SideBar.TownOrPostcode}")" aria-label="ClearFilters">Clear filters</a></p>
-        }
-    </noscript>
 </div>
