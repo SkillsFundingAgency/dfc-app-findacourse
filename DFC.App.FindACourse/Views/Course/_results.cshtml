@@ -129,7 +129,7 @@
                                     <a class="govuk-link hods-pagination__navigation__link" aria-label="Previous page" href="/find-a-course/page?@previousLinkParams">
                                         <span aria-hidden="true" role="presentation">«</span>
                                         <!-- -->Previous
-                                    </a>
+                    </a>
                                 </li>
                             }
 
@@ -139,7 +139,7 @@
                                 {
                                     <li class="hods-pagination__navigation__item">
                                         <a aria-current="true" aria-label="Current page, page @i"
-                                        class="govuk-link hods-pagination__navigation__link hods-pagination__navigation__link--current">@i</a>
+                       class="govuk-link hods-pagination__navigation__link hods-pagination__navigation__link--current">@i</a>
                                     </li>
                                 }
                                 else
@@ -168,21 +168,19 @@
         }
         else
         {
-            <hr class="govuk-section-break govuk-section-break--visible">
             <div id="fac-result-list">
                 <div id="fac-result-list-Result">
                     <div id="no-results-block">
-                        <h3 class="govuk-body-s govuk-!-margin-bottom-1">
-                            <p class="govuk-body">We didn't find any results for <span id="search-term-no-results">'@Html.Raw(Model.CurrentSearchTerm)'</span> with the active filters you've applied. Try searching again.</p>
-                            <p class="govuk-body">You could:</p>
+                        <p class="govuk-body govuk-!-font-weight-bold">There are no matching results.</p>
+                        <div class="govuk-body-s govuk-!-margin-bottom-1">
+                            <div class="govuk-body">Improve your results by:</div>
                             <ul class="govuk-list--bullet govuk-body">
-                                <li>check your spelling</li>
-                                <li>change the start date</li>
-                                <li>check your town or postcode</li>
-                                <li>change your filters</li>
-                                <li>try different search terms</li>
+                                <li>removing filters</li>
+                                <li>double-checking your spelling</li>
+                                <li>using fewer keywords</li>
+                                <li>searching for something less specific </li>
                             </ul>
-                        </h3>
+                        </div>
                     </div>
                 </div>
             </div>
