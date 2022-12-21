@@ -5,7 +5,7 @@
     int.TryParse(resultString, out int durationInt);
 }
 
-<h3 class="govuk-heading-m govuk-!-margin-bottom-1">
+<div class="govuk-heading-m govuk-!-margin-bottom-1">
     @if (Model.OfferingType == OfferingType.TLevel)
     {
         <a class="govuk-link" href="/find-a-course/tdetails?tlevelId=@Model.TLevelId&tlevelLocationId=@Model.TLevelLocationId&@TempData["params"]">@Html.Raw(Model.Title)</a>
@@ -14,7 +14,7 @@
     {
         <a class="govuk-link" href="/find-a-course/details?courseId=@Model.CourseId&runId=@Model.RunId&@TempData["params"]">@Html.Raw(Model.Title)</a>
     }
-</h3>
+</div>
 
 <p class="course-provider-location">
     <span class="course-location">
