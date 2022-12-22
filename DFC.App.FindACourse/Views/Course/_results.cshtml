@@ -89,6 +89,25 @@
                     }
                 }
 
+                @if (Model.FreeCourseSearch)
+                {
+                    <div id="fac-results-cant-find" class="govuk-!-margin-top-6">
+                        <h2 class="govuk-heading-m">Additional courses in your local area</h2>
+                        <p class="govuk-body-s">
+                            You might find more courses with a training provider in your local area. Please see the full
+                            <a href="https://www.gov.uk/government/publications/find-a-free-level-3-qualification/list-of-colleges-and-training-providers-able-to-offer-free-places-for-level-3-qualifications">
+                                list of free courses for jobs providers
+                            </a> offering Level 3 courses.
+                        </p>
+                        <p class="govuk-body-s">
+                            If you cannot find what you’re looking for, you can
+                            <a href="/contact-us">
+                                speak to an adviser
+                            </a>.
+                        </p>
+                    </div>
+                }
+
                 @if (Model.Results.ResultProperties.TotalPages > 1)
                 {
                     if (Model.Results.ResultProperties.TotalPages <= showMaxPages)
@@ -117,7 +136,7 @@
                         }
                     }
 
-                    <nav class="hods-pagination__navigation" role="navigation" aria-label="Pagination Navigation">
+                    <nav class="hods-pagination__navigation govuk-!-margin-top-6" role="navigation" aria-label="Pagination Navigation">
                         <div class="hods-pagination__navigation__summary">
                             Showing @showRecordsFrom - @showRecordsTo of @Model.Results.ResultProperties.TotalResultCount results
                         </div>
