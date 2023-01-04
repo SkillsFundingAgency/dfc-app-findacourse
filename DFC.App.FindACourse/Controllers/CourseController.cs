@@ -146,6 +146,7 @@ namespace DFC.App.FindACourse.Controllers
 
         [HttpGet]
         [Route("find-a-course/search/body")]
+        [Route("find-a-course/search/search/body")]
         [ResponseCache(Duration = 43200)]
         public IActionResult Body()
         {
