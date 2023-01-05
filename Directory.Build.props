@@ -1,5 +1,5 @@
 <Project>
     <PropertyGroup>
-        <RollForward>Minor</RollForward>
+        <RollForward>LatestMinor</RollForward>
     </PropertyGroup>
 </Project>
