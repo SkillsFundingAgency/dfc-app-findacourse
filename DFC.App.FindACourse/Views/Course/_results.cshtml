@@ -183,19 +183,21 @@
         }
         else
         {
+            <hr class="govuk-section-break govuk-section-break--visible">
             <div id="fac-result-list">
                 <div id="fac-result-list-Result">
                     <div id="no-results-block">
-                        <p class="govuk-body govuk-!-font-weight-bold">There are no matching results.</p>
-                        <div class="govuk-body-s govuk-!-margin-bottom-1">
-                            <div class="govuk-body">Improve your results by:</div>
+                        <h3 class="govuk-body-s govuk-!-margin-bottom-1">
+                            <p class="govuk-body">We didn't find any results for <span id="search-term-no-results">'@Html.Raw(Model.CurrentSearchTerm)'</span> with the active filters you've applied. Try searching again.</p>
+                            <p class="govuk-body">You could:</p>
                             <ul class="govuk-list--bullet govuk-body">
-                                <li>removing filters</li>
-                                <li>double-checking your spelling</li>
-                                <li>using fewer keywords</li>
-                                <li>searching for something less specific </li>
+                                <li>check your spelling</li>
+                                <li>change the start date</li>
+                                <li>check your town or postcode</li>
+                                <li>change your filters</li>
+                                <li>try different search terms</li>
                             </ul>
-                        </div>
+                        </h3>
                     </div>
                 </div>
             </div>
