@@ -1,0 +1,60 @@
+﻿@model BodyViewModel
+@{
+    var brandingAssetsCdn = Model.CourseSearchSettings.BrandingAssetsCdn;
+    var cdnLocation = brandingAssetsCdn + "/nationalcareers_toolkit";
+}
+
+<section aria-label="Search">
+    <partial name="_herobanner.cshtml" model="Model" />
+</section>
+
+<div class="govuk-width-container margin-fix">
+    <main class="govuk-main-wrapper govuk-main-wrapper--auto-spacing govuk-body govuk-!-padding-top-0" id="main-content" role="main">
+        <div class="govuk-width-container">
+            <div class="govuk-main-wrapper">
+                <div id="home-block" class="govuk-grid-row">
+                    <div class="govuk-grid-row">
+                        <div class="govuk-grid-column-full">
+                            <h2 class="govuk-heading-l govuk-heading-l govuk-!-margin-bottom-3">
+                                Find courses to get a job
+                            </h2>
+                            <p class="govuk-body">Get the skills employers need with free courses that lead to jobs.</p>
+                        </div>
+                        <div class="govuk-grid-column-one-half">
+                            <div class="fac-feature-box  fac-feature-box__image fac-feature-box__card">
+                                <div class="fac-feature-box__content">
+                                    <img src="@cdnLocation/images/skills-bootcamp-header-image-construction.jpg" alt="skills bootcamps">
+                                    <h3 class="govuk-heading-m govuk-!-margin-top-3">
+                                        Skills Bootcamps
+                                    </h3>
+                                    <p class="govuk-body">
+                                        Free training to gain in-demand skills in 16 weeks or less, and the offer of a job interview.
+                                    </p>
+                                    <a href="https://www.gov.uk/government/publications/find-a-skills-bootcamp/list-of-skills-bootcamps" class="govuk-button govuk-heading-m govuk-!-margin-bottom-1">Find Skills Bootcamps</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="govuk-grid-column-one-half">
+                            <div class="fac-feature-box  fac-feature-box__image fac-feature-box__card">
+
+                                <div class="fac-feature-box__content">
+                                    <img src="@cdnLocation/images/free-level-3-header-image-academic.jpg" alt="two people studying - Free level 3 courses">
+
+                                    <h3 class="govuk-heading-m govuk-!-margin-top-3">
+                                        Free Courses for Jobs
+                                    </h3>
+                                    <p class="govuk-body">
+                                        Free Level 3 courses to help you improve your job prospects and gain skills that employers value.
+                                    </p>
+                                    <a href="/find-a-course/searchFreeCourse" class="govuk-button govuk-heading-m govuk-!-margin-bottom-1">Find Free Courses for Jobs</a>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>

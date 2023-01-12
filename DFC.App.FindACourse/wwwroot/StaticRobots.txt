@@ -1,3 +1,2 @@
-﻿User-agent: *
-
-Disallow: /StaticRobots.txt
+﻿User-agent: PowerMapper
+Allow: /

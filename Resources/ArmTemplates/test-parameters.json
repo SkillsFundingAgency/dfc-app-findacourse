@@ -97,6 +97,9 @@
         },
         "AzureSearchMaxNumberToSuggest": {
             "value": "AzureSearchMaxNumberToSuggest"
+        },
+        "BrandingAssetsCdn": {
+            "value": "BrandingAssetsCdn"
         }
 
     }

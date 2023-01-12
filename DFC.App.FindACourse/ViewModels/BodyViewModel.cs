@@ -1,4 +1,5 @@
-﻿using DFC.CompositeInterfaceModels.FindACourseClient;
+﻿using DFC.App.FindACourse.Data.Domain;
+using DFC.CompositeInterfaceModels.FindACourseClient;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
@@ -42,5 +43,9 @@ namespace DFC.App.FindACourse.ViewModels
         public bool FreeCourseSearch { get; set; }
 
         public string View { get; set; }
+
+        public int PageSize { get; set; }
+
+        public CourseSearchSettings CourseSearchSettings { get; set; }
     }
 }

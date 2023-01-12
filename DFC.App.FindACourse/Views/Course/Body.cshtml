@@ -2,49 +2,28 @@
 @model BodyViewModel
 
 <section aria-label="Search">
-    <partial name="_searchbanner.cshtml" model="Model" />
+    <partial name="_herobanner.cshtml" model="Model" />
 </section>
-<div class="govuk-width-container">
+<div class="govuk-width-container margin-fix">
     <main class="govuk-main-wrapper govuk-main-wrapper--auto-spacing govuk-body govuk-!-padding-top-0" id="main-content" role="main">
         <div class="govuk-width-container">
-            <main class="govuk-main-wrapper">
+            <div class="govuk-main-wrapper">
                 @if (Model.Results != null)
                 {
-                    <button class="govuk-button filters-button" id="show-filters-button">Show filters</button>
                     <form action="/find-a-course/filterresults" method="get" class="find-a-course-page" id="fac-filter-form">
+                        <span class="fac-visually-hidden" aria-hidden="true">
                         @Html.HiddenFor(m => m.CurrentSearchTerm)
+                        @Html.HiddenFor(m => m.SideBar.TownOrPostcode)
                         @Html.HiddenFor(m => m.RequestPage)
                         @Html.HiddenFor(m => m.FreeCourseSearch, new {id="facFreeCourseSearch"})
                         <input id="facCampaignCode" name="CourseSearchFilters.FreeSearchCampaignCode" type="hidden" value="@(Model.FreeCourseSearch ? CourseController.FreeSearchCampaignCode : String.Empty)">
-                        @if (!Model.FreeCourseSearch)
-                        {
-                            <div id="home-block" class="govuk-grid-row" style="display:@(string.IsNullOrWhiteSpace(Model.CurrentSearchTerm) || string.IsNullOrWhiteSpace(Model.SideBar.TownOrPostcode)? "block" : "none")">
-
-                                @if (!string.IsNullOrWhiteSpace(Model.View))
-                                {
-                                    <partial name=@Model.View />
-                                }
-                                else
-                                {
-                                    <partial name="Home" />
-                                }
-                                <partial name="_course_cost_funding" />
-                            </div>
-
-                            <div class="govuk-grid-row" id="search-result-block" style="display:@(string.IsNullOrWhiteSpace(Model.CurrentSearchTerm) || string.IsNullOrWhiteSpace(Model.SideBar.TownOrPostcode)? "none" : "block")">
-                                <div>search result</div>
-                                <partial name="_search_result" model="Model" />
-                            </div>
-                        }
-                        else
-                        {
+                        </span>
                             <div class="govuk-grid-row">
                                 <partial name="_search_result" model="Model" />
                             </div>
-                        }
                     </form>
                 }
-            </main>
+            </div>
         </div>
     </main>
 </div>
