@@ -19,7 +19,7 @@ namespace DFC.App.FindACourse.UI.FunctionalTests.Features
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "3.9.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public partial class GoBackToSearchResultsFromCourseDetailsFeature : object, Xunit.IClassFixture<GoBackToSearchResultsFromCourseDetailsFeature.FixtureData>, System.IDisposable
+    public partial class PaginationFeature : object, Xunit.IClassFixture<PaginationFeature.FixtureData>, System.IDisposable
     {
         
         private static TechTalk.SpecFlow.ITestRunner testRunner;
@@ -28,10 +28,10 @@ namespace DFC.App.FindACourse.UI.FunctionalTests.Features
         
         private Xunit.Abstractions.ITestOutputHelper _testOutputHelper;
         
-#line 1 "GoBackToSearchResultsFromCourseDetails.feature"
+#line 1 "Pagination.feature"
 #line hidden
         
-        public GoBackToSearchResultsFromCourseDetailsFeature(GoBackToSearchResultsFromCourseDetailsFeature.FixtureData fixtureData, DFC_App_FindACourse_UI_FunctionalTests_XUnitAssemblyFixture assemblyFixture, Xunit.Abstractions.ITestOutputHelper testOutputHelper)
+        public PaginationFeature(PaginationFeature.FixtureData fixtureData, DFC_App_FindACourse_UI_FunctionalTests_XUnitAssemblyFixture assemblyFixture, Xunit.Abstractions.ITestOutputHelper testOutputHelper)
         {
             this._testOutputHelper = testOutputHelper;
             this.TestInitialize();
@@ -40,9 +40,8 @@ namespace DFC.App.FindACourse.UI.FunctionalTests.Features
         public static void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features", "GoBackToSearchResultsFromCourseDetails", "\tIn order to find a suitable course\r\n\tAs someone looking to attend a new course\r\n" +
-                    "\tI want to search for courses relevant to me\r\n\tAnd view the course details\r\n\tThe" +
-                    "n I go back to the search results page", ProgrammingLanguage.CSharp, ((string[])(null)));
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features", "Pagination", "\tIn order to find a suitable course\r\n\tAs someone looking to attend a new course\r\n" +
+                    "\tI want to search for courses relevant to me\r\n\tAnd view the course details", ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -82,17 +81,19 @@ namespace DFC.App.FindACourse.UI.FunctionalTests.Features
             this.TestTearDown();
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="Go back to search results page from course details")]
-        [Xunit.TraitAttribute("FeatureTitle", "GoBackToSearchResultsFromCourseDetails")]
-        [Xunit.TraitAttribute("Description", "Go back to search results page from course details")]
+        [Xunit.SkippableFactAttribute(DisplayName="Search a course and click on next and previous page links")]
+        [Xunit.TraitAttribute("FeatureTitle", "Pagination")]
+        [Xunit.TraitAttribute("Description", "Search a course and click on next and previous page links")]
+        [Xunit.TraitAttribute("Category", "Smoke")]
         [Xunit.TraitAttribute("Category", "FindACourse")]
-        public virtual void GoBackToSearchResultsPageFromCourseDetails()
+        public virtual void SearchACourseAndClickOnNextAndPreviousPageLinks()
         {
             string[] tagsOfScenario = new string[] {
+                    "Smoke",
                     "FindACourse"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Go back to search results page from course details", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
-#line 9
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Search a course and click on next and previous page links", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
+#line 8
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -112,29 +113,32 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 10
+#line 9
  testRunner.Given("I am on the find a course landing page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 11
- testRunner.When("I enter the search term computing in the search box", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 10
+ testRunner.When("I enter the search term maths in the search box", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 12
+#line 11
  testRunner.And("I click the search button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 13
+#line 12
  testRunner.Then("search results are displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
+#line 13
+ testRunner.When("i click on the next page link", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
 #line 14
- testRunner.When("I click on the first search result", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.Then("next page of results are displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
 #line 15
- testRunner.Then("the course details page is displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.When("i click on the previous page link", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 16
- testRunner.When("I click the back to search results link", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("I click on the first search result", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 17
- testRunner.Then("I am returned to same search results page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("the course details page is displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
             this.ScenarioCleanup();
@@ -147,12 +151,12 @@ this.ScenarioInitialize(scenarioInfo);
             
             public FixtureData()
             {
-                GoBackToSearchResultsFromCourseDetailsFeature.FeatureSetup();
+                PaginationFeature.FeatureSetup();
             }
             
             void System.IDisposable.Dispose()
             {
-                GoBackToSearchResultsFromCourseDetailsFeature.FeatureTearDown();
+                PaginationFeature.FeatureTearDown();
             }
         }
     }

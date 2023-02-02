@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using DFC.App.FindACourse.Controllers;
+using DFC.App.FindACourse.Data.Domain;
 using DFC.App.FindACourse.Data.Models;
 using DFC.App.FindACourse.Helpers;
 using DFC.App.FindACourse.Services;
 using DFC.Compui.Cosmos.Contracts;
 using DFC.Content.Pkg.Netcore.Data.Models.ClientOptions;
+using DFC.FindACourseClient;
 using DFC.Logger.AppInsights.Contracts;
 using FakeItEasy;
 using Microsoft.AspNetCore.Http;
@@ -66,12 +68,13 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
         {
             var httpContext = new DefaultHttpContext();
             var fakeTempDataProvider = A.Fake<ITempDataProvider>();
-
+            var fakeCourseSearchClientSettings = A.Fake<CourseSearchClientSettings>();
+            var fakeCourseSearchSettings = A.Fake<CourseSearchSettings>();
             httpContext.Request.Headers[HeaderNames.Accept] = mediaTypeName;
             httpContext.RequestServices = A.Fake<IServiceProvider>();
             FakeLocationsService = A.Fake<ILocationService>();
 
-            var controller = new CourseController(FakeLogService, FakeFindACoursesService, FakeViewHelper, FakeLocationsService)
+            var controller = new CourseController(FakeLogService, FakeFindACoursesService, FakeViewHelper, FakeLocationsService, fakeCourseSearchClientSettings, fakeCourseSearchSettings)
             {
                 ControllerContext = new ControllerContext()
                 {

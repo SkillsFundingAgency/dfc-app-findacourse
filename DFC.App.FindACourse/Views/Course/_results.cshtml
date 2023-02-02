@@ -43,86 +43,163 @@
     {
         if (Model.Results.Courses.Count() > 0)
         {
-            @foreach (var result in Model.Results.Courses)
+            int showRecordsFrom;
+            int showRecordsTo;
+            int showMaxPages = 5;
+            int startPage;
+            int endPage;
+            int currentPage;
+            if (Model.RequestPage == 1)
             {
-                result.HasCampaignCode = Model.FreeCourseSearch;
-                switch (result.AttendanceMode)
+                showRecordsFrom = 1;
+                showRecordsTo = Model.PageSize > @Model.Results.ResultProperties.TotalResultCount ? @Model.Results.ResultProperties.TotalResultCount : Model.PageSize;
+                currentPage = 1;
+            }
+            else
+            {
+                showRecordsFrom = ((Model.Results.ResultProperties.Page - 1) * Model.PageSize) + 1;
+                showRecordsTo = Model.Results.ResultProperties.TotalPages == Model.RequestPage ? Model.Results.ResultProperties.TotalResultCount : Model.PageSize * (Model.RequestPage);
+                currentPage = Model.RequestPage;
+            }
+
+            <div class="govuk-heading-s fac-show-courses-count">Showing @showRecordsFrom to @showRecordsTo of  @Model.Results.ResultProperties.TotalResultCount courses</div>
+
+            <div class="fac-search-results-list fac-govuk-list">
+                <hr class="govuk-section-break govuk-section-break--visible">
+
+                @foreach (var result in Model.Results.Courses)
                 {
-                    case "Classroom based":
-                        <partial name="_results_classroom" model="result"/>
-                        <hr class="govuk-section-break govuk-section-break--visible">
-                        break;
-                    case "Work based":
-                        <partial name="_results_workbased" model="result"/>
-                        <hr class="govuk-section-break govuk-section-break--visible">
-                        break;
-                    case "Online":
-                        <partial name="_results_online" model="result"/>
-                        <hr class="govuk-section-break govuk-section-break--visible">
-                        break;
+                    result.HasCampaignCode = Model.FreeCourseSearch;
+                    switch (result.AttendanceMode)
+                    {
+                        case "Classroom based":
+                            <partial name="_results_classroom" model="result" />
+                            <hr class="govuk-section-break govuk-section-break--visible">
+                            break;
+                        case "Work based":
+                            <partial name="_results_workbased" model="result" />
+                            <hr class="govuk-section-break govuk-section-break--visible">
+                            break;
+                        case "Online":
+                            <partial name="_results_online" model="result" />
+                            <hr class="govuk-section-break govuk-section-break--visible">
+                            break;
+                        default:
+                            break;
+                    }
                 }
-            }
 
-            @if (Model.FreeCourseSearch)
-            {
-                <div id="fac-results-cant-find" class="govuk-!-margin-top-6">
-                    <h2 class="govuk-heading-m">Additional courses in your local area</h2>
-                    <p class="govuk-body-s">
-                        You might find more courses with a training provider in your local area. Please see the full
-                        <a href="https://www.gov.uk/government/publications/find-a-free-level-3-qualification/list-of-colleges-and-training-providers-able-to-offer-free-places-for-level-3-qualifications">
-                            list of free courses for jobs providers
-                        </a> offering Level 3 courses.
-                    </p>
-                    <p class="govuk-body-s">
-                        If you cannot find what you’re looking for, you can
-                        <a href="https://nationalcareers.service.gov.uk/contact-us">
-                            speak to an adviser
-                        </a>.
-                    </p>
-                </div>
-            }
+                @if (Model.FreeCourseSearch)
+                {
+                    <div id="fac-results-cant-find" class="govuk-!-margin-top-6">
+                        <h2 class="govuk-heading-m">Additional courses in your local area</h2>
+                        <p class="govuk-body-s">
+                            You might find more courses with a training provider in your local area. Please see the full
+                            <a href="https://www.gov.uk/government/publications/find-a-free-level-3-qualification/list-of-colleges-and-training-providers-able-to-offer-free-places-for-level-3-qualifications">list of free courses for jobs providers</a> offering Level 3 courses.
+                        </p>
+                        <p class="govuk-body-s">
+                            If you cannot find what you’re looking for, you can
+                            <a href="/contact-us">speak to an adviser</a>.
+                        </p>
+                    </div>
+                }
 
-            @if (Model.Results.ResultProperties.TotalPages > 1)
-            {
-                <ul class="previous-next-navigation govuk-!-margin-top-3" id="page-identifiers">
-                    @if (Model.Results.ResultProperties.Page < Model.Results.ResultProperties.TotalPages)
+                @if (Model.Results.ResultProperties.TotalPages > 1)
+                {
+                    if (Model.Results.ResultProperties.TotalPages <= showMaxPages)
                     {
-                        <li class="next">
-                            <a href="/find-a-course/page?@nextLinkParams">
-                                <span class="pagination-label">Next</span>
-                                <span class="govuk-visually-hidden">page</span>
-                                <span class="page-numbers">@nextPage of @Model.Results.ResultProperties.TotalPages</span>
-                            </a>
-                        </li>
+                        startPage = 1;
+                        endPage = Model.Results.ResultProperties.TotalPages;
+                    }
+                    else
+                    {
+                        var maxPagesBeforeCurrentPage = (int)Math.Floor((decimal)showMaxPages / (decimal)2);
+                        var maxPagesAfterCurrentPage = (int)Math.Ceiling((decimal)showMaxPages / (decimal)2) - 1;
+                        if (currentPage <= maxPagesBeforeCurrentPage)
+                        {
+                            startPage = 1;
+                            endPage = showMaxPages;
+                        }
+                        else if (currentPage + maxPagesAfterCurrentPage >= Model.Results.ResultProperties.TotalPages)
+                        {
+                            startPage = Model.Results.ResultProperties.TotalPages - showMaxPages + 1;
+                            endPage = Model.Results.ResultProperties.TotalPages;
+                        }
+                        else
+                        {
+                            startPage = currentPage - maxPagesBeforeCurrentPage;
+                            endPage = currentPage + maxPagesAfterCurrentPage;
+                        }
                     }
 
-                    @if (Model.Results.ResultProperties.Page > 1)
-                    {
-                        <li class="previous">
-                            <a href="/find-a-course/page?@previousLinkParams">
-                                <span class="pagination-label">Previous</span>
-                                <span class="govuk-visually-hidden">page</span>
-                                <span class="page-numbers">@previousPage of @Model.Results.ResultProperties.TotalPages</span>
-                            </a>
-                        </li>
-                    }
-                </ul>
-            }
+                    <nav class="hods-pagination__navigation govuk-!-margin-top-6" role="navigation" aria-label="Pagination Navigation">
+                        <div class="hods-pagination__navigation__summary">
+                            Showing @showRecordsFrom - @showRecordsTo of @Model.Results.ResultProperties.TotalResultCount results
+                        </div>
+                        <ul class="hods-pagination__navigation__list-items">
+
+                            @if (Model.Results.ResultProperties.Page > 1)
+                            {
+                                <li class="hods-pagination__navigation__item">
+                                    <a class="govuk-link hods-pagination__navigation__link" aria-label="Previous page" href="/find-a-course/page?@previousLinkParams">
+                                        <span aria-hidden="true" role="presentation">«</span>
+                                        <!-- -->Previous
+                    </a>
+                                </li>
+                            }
+
+                            @for (int i = startPage; i <= endPage; i++)
+                            {
+                                @if (i == Model.RequestPage)
+                                {
+                                    <li class="hods-pagination__navigation__item">
+                                        <a aria-current="true" aria-label="Current page, page @i"
+                       class="govuk-link hods-pagination__navigation__link hods-pagination__navigation__link--current">@i</a>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li class="hods-pagination__navigation__item">
+                                        <a class="govuk-link hods-pagination__navigation__link" aria-label="Page @(i == endPage ? endPage : i)" href="/find-a-course/page?@parameters&page=@i" aria-current="page">
+                                            @i
+                                        </a>
+                                    </li>
+                                }
+                            }
+
+                            @if (Model.Results.ResultProperties.Page < Model.Results.ResultProperties.TotalPages)
+                            {
+                                <li class="hods-pagination__navigation__item">
+                                    <a class="govuk-link hods-pagination__navigation__link" aria-label="Next page" href="/find-a-course/page?@nextLinkParams">
+                                        Next
+                                        <!-- --> <span aria-hidden="true" role="presentation">»</span>
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </nav>
+                }
+            </div>
         }
         else
         {
-            <div id="no-results-block">
-                <h3 class="govuk-body-s govuk-!-margin-bottom-1">
-                    <p class="govuk-body">We didn't find any results for <span id="search-term-no-results">'@Html.Raw(Model.CurrentSearchTerm)'</span> with the active filters you've applied. Try searching again.</p>
-                    <p class="govuk-body">You could:</p>
-                    <ul class="list list-bullet govuk-body">
-                        <li>check your spelling</li>
-                        <li>change the start date</li>
-                        <li>check your town or postcode</li>
-                        <li>change your filters</li>
-                        <li>try different search terms</li>
-                    </ul>
-                </h3>
+            <hr class="govuk-section-break govuk-section-break--visible">
+            <div id="fac-result-list">
+                <div id="fac-result-list-Result">
+                    <div id="no-results-block">
+                        <h3 class="govuk-body-s govuk-!-margin-bottom-1">
+                            <p class="govuk-body">We didn't find any results for <span id="search-term-no-results">'@Html.Raw(Model.CurrentSearchTerm)'</span> with the active filters you've applied. Try searching again.</p>
+                            <p class="govuk-body">You could:</p>
+                            <ul class="govuk-list--bullet govuk-body">
+                                <li>check your spelling</li>
+                                <li>change the start date</li>
+                                <li>check your town or postcode</li>
+                                <li>change your filters</li>
+                                <li>try different search terms</li>
+                            </ul>
+                        </h3>
+                    </div>
+                </div>
             </div>
         }
     }

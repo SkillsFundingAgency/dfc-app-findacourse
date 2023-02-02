@@ -1,40 +1,36 @@
-﻿@model DFC.App.FindACourse.ViewModels.BodyViewModel
+﻿@using System.Net;
+@model DFC.App.FindACourse.ViewModels.BodyViewModel
 
-
-<div class="filters filters" id="filters-block">
-
-    <div class="govuk-form-group" id="location-block">
-        <label class="govuk-label govuk-!-font-weight-bold" for="location" id="location-label">
-            Location
-        </label>
-        <span id="location-hint" class="govuk-hint">
-            <label aria-label="TownOrPostCodeLabel">Enter a town or postcode</label>
-        </span>
-        <input type="text" asp-for="SideBar.TownOrPostcode" aria-label="TownOrPostcode" name="SideBar.TownOrPostcode" class="govuk-input govuk-input--width-10" id="location-input" value="@Model.SideBar.TownOrPostcode" />
-        <span asp-validation-for="SideBar.TownOrPostcode" class="text-danger" id="location-validator"></span>
-        <input type="hidden" asp-for="SideBar.Coordinates" name="SideBar.Coordinates" id="coordinates" value="@Model.SideBar.Coordinates" />
-        <input type="hidden" asp-for="SideBar.SuggestedLocation" name="SideBar.SuggestedLocation" id="suggestedLocation-input" value="@Model.SideBar.SuggestedLocation" />
-        <div id="suggest-location" class="location-suggest@(Model.SideBar.DidYouMeanLocations?.Count() > 0 ? "-show" : "")" role="group">
-            <details id="suggest-location-details" class="govuk-details" open>
-                <summary class=govuk-details__summary aria-describedby="suggested-locations-aria" role="button" aria-expanded="false" aria-controls="suggested-locations-text">
-                    <span class="govuk-details__summary-text">Did you mean:</span>
-                </summary>
-                <p class="visuallyhidden" aria-live="polite" id="suggested-locations-aria">There are multiple locations with similar names, tab down to the suggestions, or collapse this panel</p>
-                <div class="govuk-details__summary suggest-locations-text" id="suggested-locations-text">
-                    <ul id="suggested-locations">
-                        @if (Model.SideBar.DidYouMeanLocations?.Count() > 0)
+<div class="govuk-form-group" id="location-block">
+    <span class="fac-visually-hidden" aria-hidden="true">
+        <input type="hidden" asp-for="SideBar.Coordinates" name="SideBar.Coordinates" id="sidebarCoordinates" value="@Model.SideBar.Coordinates" />
+        <input type="hidden" asp-for="SideBar.SuggestedLocation" name="SideBar.SuggestedLocation" id="sidebarSuggestedLocation-input" value="@Model.SideBar.SuggestedLocation" />
+        <input type="hidden" asp-for="SideBar.D" name="D" id="D-input" value="@Model.SideBar.D" />
+    </span>
+    <div id="suggest-location" class="location-suggest@(Model.SideBar.DidYouMeanLocations?.Count() > 0 ? "-show" : "")" role="group">
+        <details id="suggest-location-details" class="govuk-details" open>
+            <summary class=govuk-details__summary aria-describedby="suggested-locations-aria" role="button" aria-expanded="false" aria-controls="suggested-locations-text">
+                <span class="govuk-details__summary-text">Did you mean:</span>
+            </summary>
+            <p class="visuallyhidden" aria-live="polite" id="suggested-locations-aria">There are multiple locations with similar names, tab down to the suggestions, or collapse this panel</p>
+            <div class="govuk-details__summary suggest-locations-text" id="suggested-locations-text">
+                <ul id="suggested-locations">
+                    @if (Model.SideBar.DidYouMeanLocations?.Count() > 0)
+                    {
+                        @foreach (var location in Model.SideBar.DidYouMeanLocations)
                         {
-                            @foreach (var location in Model.SideBar.DidYouMeanLocations)
-                            {
-                                <li><button name="location" value="@location.Label|@location.Value">@location.Label</button></li>
-                            }
+                            <li>
+                                <a href="/find-a-course/didyoumeansearchresults?searchTerm=@WebUtility.UrlEncode(@Model.CurrentSearchTerm)&location=@WebUtility.UrlEncode(@location.Label)|@location.Value&isFreeCourse=@Model.FreeCourseSearch&D=1">@location.Label</a>
+                            </li>
                         }
-                    </ul>
-                </div>
-            </details>
-        </div>
+                    }
+                </ul>
+            </div>
+        </details>
     </div>
-
+</div>
+<button type="button" class="govuk-button filters-button" id="show-filters-button">Show filters</button>
+<div class="filters filters" id="filters-block">
     <div id="distance-block" class="govuk-form-group">
         <div id="distance">
             <label class="govuk-label govuk-!-font-weight-bold" for="location-distance" id="distance-label">Distance</label>
@@ -83,7 +79,8 @@
     </div>
 
 
-    @if(!Model.FreeCourseSearch ){
+    @if (!Model.FreeCourseSearch)
+    {
         <div class="govuk-form-group">
             <div id="@Model.SideBar.QualificationLevels.FilterText">
                 <fieldset class="govuk-fieldset">
@@ -103,7 +100,7 @@
     <noscript>
         @if (Model.SideBar.FiltersApplied)
         {
-            <p id="fac-clear-filters"><a href="@(Model.FreeCourseSearch ? $"/find-a-course/searchFreeCourse?searchTerm={@Model.SideBar.CurrentSearchTerm}" : $"/find-a-course/searchcxourse?searchTerm={@Model.SideBar.CurrentSearchTerm}")" aria-label="ClearFilters">Clear filters</a></p>
+            <p id="fac-clear-filters"><a href="@(Model.FreeCourseSearch ? $"/find-a-course/searchFreeCourse?searchTerm={@Model.SideBar.CurrentSearchTerm}&townOrPostcode={@Model.SideBar.TownOrPostcode}&sideBarCoordinates={@Model.SideBar.Coordinates}&sideBarSuggestedLocation={@Model.SideBar.TownOrPostcode}" : $"/find-a-course/searchcourse?searchTerm={@Model.SideBar.CurrentSearchTerm}&townOrPostcode={@Model.SideBar.TownOrPostcode}&sideBarCoordinates={@Model.SideBar.Coordinates}&sideBarSuggestedLocation={@Model.SideBar.TownOrPostcode}")" aria-label="ClearFilters">Clear filters</a></p>
         }
     </noscript>
 </div>
