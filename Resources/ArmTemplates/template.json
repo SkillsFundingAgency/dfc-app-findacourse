@@ -429,7 +429,7 @@
               {
                 "name": "Configuration__CourseSearch__BrandingAssetsCdn",
                 "value": "[parameters('BrandingAssetsCdn')]"
-              }
+              },
               {
                 "name": "DOTNET_ROLL_FORWARD",
                 "value": "Minor"
