@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
 	  <CodeAnalysisRuleSet>../UnitTests.CodeAnalysis.ruleset</CodeAnalysisRuleSet>
 	  <ProjectGuid>{bf7a3791-533f-48ab-9b22-e642a34257fc}</ProjectGuid>
 	  <IsPackable>false</IsPackable>
