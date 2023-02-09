@@ -34,5 +34,13 @@
             }
         }
     </span>
-    <span class="course-provider">&nbsp;&nbsp;@Html.Raw(Model.ProviderName)</span>
+
+    @if (Model.AttendanceMode == "Online")
+    {
+        <span class="course-provider">@Html.Raw(Model.ProviderName)</span>
+    }
+    else
+    {
+        <span class="course-provider">&nbsp;&nbsp;@Html.Raw(Model.ProviderName)</span>
+    }
 </p>
