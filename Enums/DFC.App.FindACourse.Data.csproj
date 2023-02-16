@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
 	  <CodeAnalysisRuleSet>../DFC.Digital.CodeAnalysis.ruleset</CodeAnalysisRuleSet>
 	  <ProjectGuid>{e5ae69a6-0f13-4fe7-872f-370211adf0eb}</ProjectGuid>
   </PropertyGroup>
@@ -20,7 +20,7 @@
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 	  </PackageReference>
-		<PackageReference Include="DFC.Content.Pkg.Netcore" Version="1.0.106" />
+		<PackageReference Include="DFC.Content.Pkg.Netcore" Version="2.0.0" />
 	</ItemGroup>
 
 </Project>
