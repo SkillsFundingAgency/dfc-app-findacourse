@@ -45,6 +45,9 @@
     </Compile>
     <Compile Update="Features\ViewCourseDetails.feature.cs">
       <DependentUpon>ViewCourseDetails.feature</DependentUpon>
+    </Compile>
+    <Compile Update="Features\Pagination.feature.cs">
+      <DependentUpon>Pagination.feature</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
@@ -89,8 +92,14 @@
     <SpecFlowFeatureFiles Update="Features\ViewCourseDetails.feature">
       <Visible>$(UsingMicrosoftNETSdk)</Visible>
       <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
-      <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ViewCourseDetails.feature.cs</LastGenOutput>
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+    </SpecFlowFeatureFiles>
+    <SpecFlowFeatureFiles Update="Features\Pagination.feature">
+      <Visible>$(UsingMicrosoftNETSdk)</Visible>
+      <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>Pagination.feature.cs</LastGenOutput>
     </SpecFlowFeatureFiles>
     <SpecFlowFeatureFiles Update="Features\SearchForACourseSortResults.feature">
       <Visible>$(UsingMicrosoftNETSdk)</Visible>

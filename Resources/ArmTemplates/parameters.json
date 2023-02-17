@@ -103,6 +103,9 @@
         },
         "AzureSearchMaxNumberToSuggest": {
             "value": "__LocationMaxNumberToSuggest__"
+        },
+        "BrandingAssetsCdn": {
+            "value": "__BrandingAssetsCdn__"
         }
     }
 }

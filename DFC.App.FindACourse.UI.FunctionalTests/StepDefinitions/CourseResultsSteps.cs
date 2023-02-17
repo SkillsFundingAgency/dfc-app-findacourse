@@ -78,6 +78,13 @@ namespace DFC.App.FindACourse.UI.FunctionalTests.StepDefinitions
             this.Context.Get<IObjectContext>().UpdateObject("SearchResults", searchResults);
         }
 
+        [Then(@"next page of results are displayed")]
+        public void ThenNextPageOfResultsAreDisplayed()
+        {
+            var results = this.Context.GetWebDriver().FindElements(By.CssSelector(".govuk-\\!-margin-top-6"));
+            Assert.True(results.Count > 0);
+        }
+
         [When(@"I click on the first search result")]
         public void WhenIClickTheFirstResult()
         {
@@ -87,6 +94,15 @@ namespace DFC.App.FindACourse.UI.FunctionalTests.StepDefinitions
             var firstResult = results[1];
             this.Context.Get<IObjectContext>().SetObject("FirstResult", firstResult.GetAttribute("innerText"));
             this.Context.GetWebDriver().FindElement(By.LinkText(this.Context.Get<IObjectContext>().GetObject("FirstResult"))).Click();
+        }
+
+        [When(@"i click on the previous page link")]
+        [When(@"i click on the next page link")]
+        public void WhenIClickOnTheNextPageLink()
+        {
+            Thread.Sleep(2000);
+            var page = this.Context.GetWebDriver().FindElements(By.ClassName("pagination-label"));
+            page[0].Click();
         }
 
         [Then(@"I am returned to same search results page")]
