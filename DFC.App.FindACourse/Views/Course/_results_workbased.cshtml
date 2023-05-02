@@ -29,11 +29,7 @@
                 <li>
                     <span class="learning-format govuk-secondary-colour">Duration:</span>
 
-                    @if (durationInt == 1)
-                    {
-                        @Html.Raw($"1 Year")
-                    }
-                    else if (durationInt > 1)
+                    @if (durationInt >= 1)
                     {
                         @Html.Raw(Model.Duration)
                     }
