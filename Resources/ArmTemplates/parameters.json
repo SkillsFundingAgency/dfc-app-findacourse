@@ -103,6 +103,9 @@
         },
         "AzureSearchMaxNumberToSuggest": {
             "value": "__LocationMaxNumberToSuggest__"
-        }
+        },
+        "appInsightsInstrumentationKey": {
+          "value": "__appInsightsInstrumentationKey__" 
+        }  
     }
 }
