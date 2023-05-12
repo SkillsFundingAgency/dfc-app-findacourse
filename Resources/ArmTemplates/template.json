@@ -404,7 +404,7 @@
               },
               {
                 "name": "AzureSearch__LocationSearchIndex",
-                "value": "dfc-digital-locations"
+                "value": "dfc-digital-locations-ordnance-survey"
               },
               {
                 "name": "AzureSearch__SearchServiceName",
