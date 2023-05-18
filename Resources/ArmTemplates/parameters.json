@@ -104,8 +104,8 @@
         "AzureSearchMaxNumberToSuggest": {
             "value": "__LocationMaxNumberToSuggest__"
         },
-        "BrandingAssetsCdn": {
-            "value": "__BrandingAssetsCdn__"
-        }
+        "appInsightsInstrumentationKey": {
+          "value": "__appInsightsInstrumentationKey__" 
+        }  
     }
 }
