@@ -45,7 +45,7 @@
             "value": __CosmosDbDatabaseDoesntExist__
         },
         "facAppDatabaseThroughput": {
-            "value": "__facAppDatabaseThroughput__"
+            "value": __facAppDatabaseThroughput__
         },
         "courseProviderServiceEndpoint": {
             "value": "__courseProviderServiceEndpoint__"
@@ -57,7 +57,7 @@
             "value": "__ReleaseEnvironmentName__"
         },
         "enableAlerts": {
-            "value": "__EnableAzureMonitorAlerting__"
+            "value": __EnableAzureMonitorAlerting__
         },
         "CmsApiClientOptionsBaseAddress": {
             "value": "__CmsApiClientOptionsBaseAddress__"
