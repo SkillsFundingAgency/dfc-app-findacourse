@@ -42,7 +42,7 @@
             "value": "__facCosmosStaticContentCollectionName__"
         },
         "facAppDatabaseNeedsCreation": {
-            "value": "True"
+            "value": __CosmosDbDatabaseDoesntExist__
         },
         "facAppDatabaseThroughput": {
             "value": __facAppDatabaseThroughput__
