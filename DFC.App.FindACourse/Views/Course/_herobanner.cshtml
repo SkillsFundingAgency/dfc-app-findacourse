@@ -90,7 +90,7 @@
     </div>
     
     
-<form action="@(Model.FreeCourseSearch ? "/find-a-course/searchFreeCourse" : "/find-a-course/searchcourse")" method="get" id="fac-search-course-form" class="find-a-course-page">   
+<form action="@(Model.FreeCourseSearch ? "/find-a-course/searchFreeCourse" : "/find-a-course/searchcourse")" method="get" id="fac-search-course-form" class="find-a-course-page ncs-search ncs-search__bar">   
     <div class="search-wrapper"> 
       <div class="govuk-width-container"> 
         <div class="govuk-grid-row"> 
@@ -101,13 +101,12 @@
               <label class="ncs-label govuk-label" for="location-input">Town, city or postcode</label>
               
               <div class="input-wrapper">
-                <input id="location-input" name="townOrPostcode" type="search" class="govuk-input govuk-!-width-full ui-autocomplete-input" aria-label="Enter Town, city or postcode" title="Enter a keyword" autocomplete="off" />
+                <input type="search" aria-label="Enter Town, city or postcode" name="townOrPostcode" class="govuk-input govuk-!-width-full" id="location-input" value="@Model.SideBar.TownOrPostcode" autocomplete="off" />
               </div>
               
-            
               <span class="fac-visually-hidden" aria-hidden="true">
-                <input id="coordinates" name="sideBarCoordinates" type="hidden" value="" />
-                <input id="suggestedLocation-input" name="sideBarSuggestedLocation" type="hidden" value="" />
+                <input type="hidden" asp-for="SideBar.Coordinates" name="sideBarCoordinates" id="coordinates" value="@Model.SideBar.Coordinates" />
+                <input type="hidden" asp-for="SideBar.SuggestedLocation" name="sideBarSuggestedLocation" id="suggestedLocation-input" value="@Model.SideBar.SuggestedLocation" />
               </span>
 
             </div>
@@ -116,14 +115,12 @@
           <div class="govuk-grid-column-two-thirds">
             <div class="govuk-form-group">
               
-              <label class="ncs-label govuk-label" for="searchTerm">Course or keyword</label>
+              <label class="ncs-labelgovuk-label" id="enter-keyword-label" for="search-input">Course or keyword</label>
               <div class="input-wrapper">
-                <input id="search-input" name="searchTerm" type="search" class="govuk-input search-input govuk-!-width-full" aria-label="Enter a keyword" title="Enter a keyword" autocomplete="off" />
-          
-                <div class="input-search-item input-submit-wrapper"> 
-                  <button id="search-button" class="input-search-submit" type="submit" data-module="govuk-button">Search</button>
-                </div>
-
+                    <input type="search" id="search-input" name="searchTerm" value="@Model.CurrentSearchTerm" aria-label="Enter a keyword" title="Enter a keyword" class="govuk-input govuk-!-width-full" autocomplete="off">
+                    <div class="input-search-item input-submit-wrapper">
+                        <button data-module="govuk-button ncs-button__primary" type="submit" class="input-search-submit" id="search-button">Search</button>
+                    </div>
               </div>
             </div>
           </div>
