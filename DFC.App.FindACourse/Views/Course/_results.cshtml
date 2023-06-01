@@ -7,7 +7,15 @@
     var previousPage = Model.RequestPage - 1;
     var nextPage = Model.RequestPage + 1;
 
-    var town = Model.SideBar.TownOrPostcode.Replace("&#39;", "%27");
+    string town;
+
+    if (Model.SideBar.TownOrPostcode != null)
+    {
+        town = Model.SideBar.TownOrPostcode.Replace("&#39;", "%27");
+    } else
+    {
+        town = Model.SideBar.TownOrPostcode;
+    }
     var distance = Model.SideBar.DistanceValue;
     var courseType = Html.Raw(Json.Serialize(Model.SideBar.CourseType.SelectedIds));
     var courseHours = Html.Raw(Json.Serialize(Model.SideBar.CourseHours.SelectedIds));

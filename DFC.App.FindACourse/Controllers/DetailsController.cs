@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using System.Web;
 using SubRegion = DFC.CompositeInterfaceModels.FindACourseClient.SubRegion;
 
 namespace DFC.App.FindACourse.Controllers
@@ -76,6 +77,8 @@ namespace DFC.App.FindACourse.Controllers
                     logService.LogWarning($"Get course details retrieved no data. The values passed were: course id: {courseId} and run id: {runId}");
                     return NotFound();
                 }
+
+                model.CourseDetails.Description = HttpUtility.HtmlDecode(model.CourseDetails.Description);
 
                 model.CourseRegions = model.CourseDetails.SubRegions != null ? TransformSubRegionsToRegions(model.CourseDetails.SubRegions) : null;
                 model.DetailsRightBarViewModel.Provider = mapper.Map<ProviderViewModel>(model.CourseDetails.ProviderDetails);
