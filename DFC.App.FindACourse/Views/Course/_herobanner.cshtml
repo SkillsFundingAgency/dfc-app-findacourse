@@ -109,13 +109,18 @@
                 <input type="hidden" asp-for="SideBar.SuggestedLocation" name="sideBarSuggestedLocation" id="suggestedLocation-input" value="@Model.SideBar.SuggestedLocation" />
               </span>
 
+              <span class="fac-visually-hidden" aria-hidden="true">
+                            <input type="hidden" asp-for="SideBar.Coordinates" name="sideBarCoordinates" id="coordinates" value="@Model.SideBar.Coordinates" />
+                            <input type="hidden" asp-for="SideBar.SuggestedLocation" name="sideBarSuggestedLocation" id="suggestedLocation-input" value="@Model.SideBar.SuggestedLocation" />
+                        </span>
+
             </div>
           </div>
 
           <div class="govuk-grid-column-two-thirds">
             <div class="govuk-form-group">
               
-              <label class="ncs-labelgovuk-label" id="enter-keyword-label" for="search-input">Course or keyword</label>
+              <label class="ncs-label govuk-label" id="enter-keyword-label" for="search-input">Course or keyword</label>
               <div class="input-wrapper">
                     <input type="search" id="search-input" name="searchTerm" value="@Model.CurrentSearchTerm" aria-label="Enter a keyword" title="Enter a keyword" class="govuk-input govuk-!-width-full" autocomplete="off">
                     <div class="input-search-item input-submit-wrapper">
@@ -129,3 +134,4 @@
     </div>
   
   </form>
+   
