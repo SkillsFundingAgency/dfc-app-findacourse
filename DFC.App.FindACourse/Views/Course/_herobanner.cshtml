@@ -1,15 +1,19 @@
 ﻿@using DFC.App.FindACourse.Controllers
 @model BodyViewModel
+@{
+    var brandingAssetsCdn = Model.CourseSearchSettings.BrandingAssetsCdn;
+    var cdnLocation = brandingAssetsCdn;
+}
 
     <div class="ncs-hero page-hero">
     
         <div class="d-only">
-            <img src="https://lab-cdn.nationalcareersservice.org.uk/media/headers/page-header.jpg" alt="">
+        <img src="@cdnLocation/media/headers/find-a-course-desktop-header.png" alt="">
         </div>
 
         
         <div class="m-only">
-            <img src="https://lab-cdn.nationalcareersservice.org.uk/media/headers/page-mobile-header.jpg" alt="">
+        <img src="@cdnLocation/media/headers/find-a-course-mobile-header.png" alt="">
         </div>
 
         <div class="content govuk-width-container">
