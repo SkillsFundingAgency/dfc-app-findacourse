@@ -1,4 +1,5 @@
-﻿using DFC.App.FindACourse.Data.Domain;
+﻿using Antlr.Runtime.Misc;
+using DFC.App.FindACourse.Data.Domain;
 using DFC.App.FindACourse.Data.Helpers;
 using DFC.App.FindACourse.Data.Models;
 using DFC.App.FindACourse.Extensions;
@@ -461,6 +462,11 @@ namespace DFC.App.FindACourse.Controllers
                     if (item.Description.Length > 220)
                     {
                         item.Description = item.Description.Substring(0, 200) + "...";
+                        if (item.Description.Contains("<a href") && !item.Description.Contains("</a>"))
+                        {
+                            var end = item.Description.IndexOf("<a href");
+                            item.Description = item.Description.Substring(0, end) + "...";
+                        }
                     }
                 }
             }
