@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Threading.Tasks;
 using SubRegion = DFC.CompositeInterfaceModels.FindACourseClient.SubRegion;
 
@@ -89,6 +90,7 @@ namespace DFC.App.FindACourse.Controllers
                 return DetailsErrorReturnStatus(ex);
             }
 
+            logService.LogInformation($"{nameof(this.Details)} generated the model and ready to pass to the view");
             return View(model);
         }
 
@@ -131,6 +133,7 @@ namespace DFC.App.FindACourse.Controllers
                 return DetailsErrorReturnStatus(ex);
             }
 
+            logService.LogInformation($"{nameof(this.TLevelDetails)} generated the model and ready to pass to the view");
             return View("tlevelDetails", model);
         }
 

@@ -21,6 +21,8 @@ namespace DFC.App.FindACourse.Controllers
         [Route("pages/sitemap")]
         public IActionResult SitemapView()
         {
+            logger.LogInformation($"{nameof(SitemapView)} has been called");
+
             return Sitemap();
         }
 
