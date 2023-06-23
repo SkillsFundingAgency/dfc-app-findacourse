@@ -145,7 +145,7 @@ namespace DFC.App.FindACourse.Controllers
             }
 
             var searchTerm = $"{nameof(paramValues.SearchTerm)}={paramValues.SearchTerm}&" +
-                             $"{nameof(paramValues.Town)}={WebUtility.HtmlEncode(paramValues.Town)}&" +
+                             $"{nameof(paramValues.Town)}={WebUtility.HtmlEncode(paramValues.Town).Replace("&#39;", "%27")}&" +
                              $"{nameof(paramValues.CourseType)}={paramValues.CourseType}&" +
                              $"{nameof(paramValues.CourseHours)}={paramValues.CourseHours}&" +
                              $"{nameof(paramValues.CourseStudyTime)}={paramValues.CourseStudyTime}&" +

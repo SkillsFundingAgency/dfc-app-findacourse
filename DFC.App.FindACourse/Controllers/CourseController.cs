@@ -489,7 +489,7 @@ namespace DFC.App.FindACourse.Controllers
             {
                 TempData.Remove("params");
                 TempData["params"] = $"{nameof(searchTerm)}={searchTerm}&" +
-                                     $"{nameof(town)}={WebUtility.HtmlEncode(town)}&" +
+                                     $"{nameof(town)}={WebUtility.HtmlEncode(town).Replace("&amp;#39;", "%27")}&" +
                                      $"{nameof(courseType)}={courseType}&" +
                                      $"{nameof(courseHours)}={courseHours}&" +
                                      $"{nameof(courseStudyTime)}={courseStudyTime}&" +
