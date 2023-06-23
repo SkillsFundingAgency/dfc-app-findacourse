@@ -11,6 +11,7 @@ using DFC.Logger.AppInsights.Contracts;
 using GdsCheckboxList.Models;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Azure.Documents.SystemFunctions;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -488,8 +489,18 @@ namespace DFC.App.FindACourse.Controllers
             if (!model.IsTest)
             {
                 TempData.Remove("params");
+
+                string townSearchTerm;
+                if (town != null)
+                {
+                    townSearchTerm = WebUtility.HtmlEncode(town).Replace("&amp;#39;", "%27");
+                } else
+                {
+                    townSearchTerm = WebUtility.HtmlEncode(town);
+                }
+
                 TempData["params"] = $"{nameof(searchTerm)}={searchTerm}&" +
-                                     $"{nameof(town)}={WebUtility.HtmlEncode(town).Replace("&amp;#39;", "%27")}&" +
+                                     $"{nameof(town)}={townSearchTerm}&" +
                                      $"{nameof(courseType)}={courseType}&" +
                                      $"{nameof(courseHours)}={courseHours}&" +
                                      $"{nameof(courseStudyTime)}={courseStudyTime}&" +
