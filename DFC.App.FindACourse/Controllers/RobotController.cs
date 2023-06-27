@@ -46,11 +46,14 @@ namespace DFC.App.FindACourse.Controllers
 
         private Robot GenerateThisSiteRobot()
         {
+            logger.LogInformation($"{nameof(this.GenerateThisSiteRobot)} has been called");
+
             var robot = new Robot();
             var robotsFilePath = System.IO.Path.Combine(this.hostingEnvironment.WebRootPath, "StaticRobots.txt");
 
             if (!System.IO.File.Exists(robotsFilePath))
             {
+                logger.LogWarning($"{nameof(robotsFilePath)} does not exist");
                 return robot;
             }
 
@@ -62,6 +65,7 @@ namespace DFC.App.FindACourse.Controllers
                 robot.Add(staticRobotsText);
             }
 
+            logger.LogInformation("Generated Robots.txt");
             return robot;
         }
     }

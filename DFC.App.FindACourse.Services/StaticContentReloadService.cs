@@ -61,6 +61,8 @@ namespace DFC.App.FindACourse.Services
 
         public async Task ReloadSharedContent(CancellationToken stoppingToken)
         {
+            logger.LogInformation($"{nameof(ReloadSharedContent)} has been called");
+
             await staticContentDocumentService.PurgeAsync().ConfigureAwait(false);
 
             var contentIds = cmsApiClientOptions.ContentIds.Split(",", StringSplitOptions.RemoveEmptyEntries);
@@ -97,6 +99,8 @@ namespace DFC.App.FindACourse.Services
         public bool TryValidateModel<TModel>(TModel model)
             where TModel : class, ICachedModel
         {
+            logger.LogInformation($"{nameof(TryValidateModel)} has been called");
+
             _ = model ?? throw new ArgumentNullException(nameof(model));
 
             var validationContext = new ValidationContext(model, null, null);
