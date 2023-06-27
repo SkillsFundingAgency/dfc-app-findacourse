@@ -235,11 +235,22 @@ namespace DFC.App.FindACourse.Controllers
                         item.Description = item.Description.Substring(0, 200) + "...";
                     }
                 }
+                string townSearchTerm;
+
+                if (paramValues.Town != null)
+                {
+                    townSearchTerm = WebUtility.HtmlEncode(paramValues.Town).Replace("&#39;", "%27");
+                }
+                else
+                {
+                    townSearchTerm = WebUtility.HtmlEncode(paramValues.Town);
+                }
+
 
                 if (!model.IsTest)
                 {
                     TempData["params"] = $"{nameof(paramValues.SearchTerm)}={paramValues.SearchTerm}&" +
-                                         $"{nameof(paramValues.Town)}={WebUtility.HtmlEncode(paramValues.Town)}&" +
+                                         $"{nameof(paramValues.Town)}={townSearchTerm}&" +
                                          $"{nameof(paramValues.CourseType)}={paramValues.CourseType}&" +
                                          $"{nameof(paramValues.CourseHours)}={paramValues.CourseHours}&" +
                                          $"{nameof(paramValues.CourseStudyTime)}={paramValues.CourseStudyTime}&" +
@@ -493,7 +504,7 @@ namespace DFC.App.FindACourse.Controllers
                 string townSearchTerm;
                 if (town != null)
                 {
-                    townSearchTerm = WebUtility.HtmlEncode(town).Replace("&#39;", "%27");
+                    townSearchTerm = WebUtility.HtmlEncode(town).Replace("&amp;#39;", "%27");
                 } else
                 {
                     townSearchTerm = WebUtility.HtmlEncode(town);
