@@ -914,6 +914,11 @@ namespace DFC.App.FindACourse.Controllers
                         }
                     }
                 }
+                model.SideBar.TownOrPostcode = $"{topSuggestion.LocationName} ({topSuggestion.LocalAuthorityName})";
+                if (model.CourseSearchFilters.Longitude != null)
+                {
+                    return model;
+                }
                 model.CourseSearchFilters.Longitude = topSuggestion.Longitude;
                 model.CourseSearchFilters.Latitude = topSuggestion.Latitude;
                 model.CourseSearchFilters.Distance = 10;
@@ -924,7 +929,6 @@ namespace DFC.App.FindACourse.Controllers
                     Label = $"{x.LocationName} ({x.LocalAuthorityName})",
                     Value = $"{x.Longitude}|{x.Latitude}",
                 }).ToList();
-                model.SideBar.TownOrPostcode = $"{topSuggestion.LocationName} ({topSuggestion.LocalAuthorityName})";
                 model.SideBar.Coordinates = $"{topSuggestion.Longitude}|{topSuggestion.Latitude}";
                 model.UsingAutoSuggestedLocation = true;
             }
