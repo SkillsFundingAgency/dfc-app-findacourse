@@ -1,5 +1,4 @@
-﻿using Antlr.Runtime.Misc;
-using DFC.App.FindACourse.Data.Domain;
+﻿using DFC.App.FindACourse.Data.Domain;
 using DFC.App.FindACourse.Data.Helpers;
 using DFC.App.FindACourse.Data.Models;
 using DFC.App.FindACourse.Extensions;
@@ -11,8 +10,9 @@ using DFC.Logger.AppInsights.Contracts;
 using GdsCheckboxList.Models;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.Documents.SystemFunctions;
+using Microsoft.Azure.Documents;
 using Newtonsoft.Json;
+using NHibernate.Mapping;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -865,6 +865,10 @@ namespace DFC.App.FindACourse.Controllers
                         model.CourseSearchFilters.Longitude = locationCoordinates.Longitude;
                         model.CourseSearchFilters.Latitude = locationCoordinates.Latitude;
                         model.CourseSearchFilters.DistanceSpecified = true;
+                        if (!model.SideBar.TownOrPostcode.Contains(')'))
+                        {
+                            model = await GetSuggestedLocationsAsync(model).ConfigureAwait(false);
+                        }
                     }
                     else
                     {
@@ -882,11 +886,34 @@ namespace DFC.App.FindACourse.Controllers
 
         private async Task<BodyViewModel> GetSuggestedLocationsAsync(BodyViewModel model)
         {
-            var suggestedLocations = await locationService.GetSuggestedLocationsAsync(model.CourseSearchFilters.Town).ConfigureAwait(false);
+            var town = "";
+            var index = -1;
+            if (model.SideBar.TownOrPostcode.Contains('('))
+            {
+                index = model.SideBar.TownOrPostcode.IndexOf(" (");
+                town = model.SideBar.TownOrPostcode.Substring(0, index);
+            }
+            else
+            {
+                town = model.SideBar.TownOrPostcode;
+            }
+
+            var suggestedLocations = await locationService.GetSuggestedLocationsAsync(WebUtility.HtmlDecode(town)).ConfigureAwait(false);
 
             if (suggestedLocations.Any())
             {
                 var topSuggestion = suggestedLocations.FirstOrDefault();
+                if (index > -1)
+                {
+                    foreach (var location in suggestedLocations)
+                    {
+                        if (location.LocalAuthorityName.Contains(model.SideBar.TownOrPostcode.Substring(index + 2)))
+                        {
+                            model.SideBar.TownOrPostcode = $"{location.LocationName} ({location.LocalAuthorityName})";
+                            return model;
+                        }
+                    }
+                }
                 model.CourseSearchFilters.Longitude = topSuggestion.Longitude;
                 model.CourseSearchFilters.Latitude = topSuggestion.Latitude;
                 model.CourseSearchFilters.Distance = 10;
