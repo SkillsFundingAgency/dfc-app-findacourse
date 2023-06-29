@@ -51,6 +51,8 @@ namespace DFC.App.FindACourse.Services
 
         private void CreateSearchClient()
         {
+            logger.LogInformation($"{nameof(CreateSearchClient)} has been called");
+
             this.suggestOptions = new SuggestOptions()
             {
                 Size = azureSearchIndexConfig.SearchMaxNumberToSuggest,
