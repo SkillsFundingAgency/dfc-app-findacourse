@@ -505,6 +505,7 @@ namespace DFC.App.FindACourse.Controllers
                 if (town != null)
                 {
                     townSearchTerm = WebUtility.HtmlEncode(town).Replace("&amp;#39;", "%27");
+                    townSearchTerm = townSearchTerm.Replace("&#39;", "%27");
                 } else
                 {
                     townSearchTerm = WebUtility.HtmlEncode(town);
