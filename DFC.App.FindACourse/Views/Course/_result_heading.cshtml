@@ -20,7 +20,7 @@
     <span class="course-location">
         @if (Model.AttendanceMode == "Work based" || Model.AttendanceMode == "Classroom based")
         {
-            @if (Model.LocationDetails.Distance > 0)
+            @if (Model.LocationDetails.Distance > 0 && Model.AttendanceMode != "Work based")
             {
                 <strong>@Html.Raw(@Model.LocationDetails.Distance) miles  | </strong>
             }
