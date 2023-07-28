@@ -1,48 +1,139 @@
 ﻿@using DFC.App.FindACourse.Controllers
 @model BodyViewModel
+@{
+    var brandingAssetsCdn = Model.CourseSearchSettings.BrandingAssetsCdn;
+    var cdnLocation = brandingAssetsCdn;
+}
 
-<form action="@(Model.FreeCourseSearch ? "/find-a-course/searchFreeCourse" : "/find-a-course/searchcourse")" method="get" id="fac-search-course-form" class="find-a-course-page">
-    <section id="fac-search-banner" class="primary-hero">
-        <div class="govuk-width-container">
+    <div class="ncs-hero page-hero">
+    
+        <div class="d-only">
+        <img src="@cdnLocation/media/headers/find-a-course-desktop-header.png" alt="an apprentice wearing a high visibility jacket and a hard hat sat next to large pipes to test them. This is the type of course you can find using our search.">
+        </div>
+
+        
+        <div class="m-only">
+        <img src="@cdnLocation/media/headers/find-a-course-mobile-header.png" alt="an apprentice wearing a high visibility jacket and a hard hat sat next to large pipes to test them. This is the type of course you can find using our search.">
+        </div>
+
+        <div class="content govuk-width-container">
             <div class="govuk-grid-row">
-                <div class="govuk-grid-column-full">
-                    @if (Model.FreeCourseSearch)
-                    {
-                        <h1 class="govuk-!-margin-bottom-2 govuk-heading-xl">Find free courses for jobs</h1>
-                        <p class="govuk-body-l">Search for free courses to help you get skills employers need.</p>
-                    }
-                    else
-                    {
-                        <h1 class="govuk-!-margin-bottom-2 govuk-heading-xl">Find a course</h1>
-                        <p class="govuk-body-l">Search for online and classroom courses near you, to help you get a job or develop your skills.</p>
-                    }
+                
+                
+                <div class="govuk-grid-column-two-thirds">
+
+                    <div class="govuk-grid-column-full">
+                        @if (Model.FreeCourseSearch)
+                        {
+                            <h1 class="govuk-heading-xl">
+                                <div class="block ncs">
+                                    <span>Find</span>
+                                    <span>free</span>
+                                    <span>courses</span>
+                                    <span>for</span>
+                                    <span>jobs</span>
+                                </div>
+                            </h1>
+                            
+                            <div class="sub-heading">
+                                <p class="block">
+                                    <span>Search</span>
+                                    <span>for</span>
+                                    <span>free</span>
+                                    <span>courses</span>                      
+                                    <span>to</span>                        
+                                    <span>help</span>                        
+                                    <span>you</span>
+                                    <span>get</span>
+                                    <span>skills</span>
+                                    <span>employers</span>
+                                    <span>need.</span>
+                                </p>
+                            </div>
+                        }
+                        else
+                        {
+                            <h1 class="govuk-heading-xl">
+                                <div class="block ncs">
+                                    <span>Find</span>
+                                    <span>a course</span>
+                                </div>
+                            </h1>
+                            
+                            <div class="sub-heading">
+                                <p class="block">
+                                    <span>Search</span>
+                                    <span>for</span>
+                                    <span>online</span>
+                                    <span>and</span>
+                                    <span>classroom</span>
+                                    <span>courses</span>
+                                    <span>near</span>                        
+                                    <span>you,</span>                        
+                                    <span>to</span>                        
+                                    <span>help</span>                        
+                                    <span>you</span>
+                                    <span>get</span>
+                                    <span>a</span>
+                                    <span>job</span>
+                                    <span>or</span>
+                                    <span>develop</span>
+                                    <span>your</span>
+                                    <span>skills.</span>
+                                </p>
+                            </div>
+                        }
+                    </div>
+
                 </div>
-            </div>
-            <div class="govuk-grid-row">
-                <div class="govuk-grid-column-one-third">
-                    <div class="govuk-form-group">
-                        <label class="govuk-label" for="location-input">Town, city or postcode</label>
-                        <div class="input-wrapper">
-                            <input type="search" aria-label="Enter Town, city or postcode" name="townOrPostcode" class="govuk-input govuk-!-width-full" id="location-input" value="@Html.Raw(@Model.SideBar.TownOrPostcode)" autocomplete="off" />
-                        </div>
-                        <span class="fac-visually-hidden" aria-hidden="true">
+           </div>
+        </div>
+     
+    </div>
+    
+    
+<form action="@(Model.FreeCourseSearch ? "/find-a-course/searchFreeCourse" : "/find-a-course/searchcourse")" method="get" id="fac-search-course-form" class="find-a-course-page ncs-search ncs-search__bar">   
+    <div class="search-wrapper"> 
+      <div class="govuk-width-container"> 
+        <div class="govuk-grid-row"> 
+
+          <div class="govuk-grid-column-one-third">                    
+            <div class="govuk-form-group">
+              
+              <label class="ncs-label govuk-label" for="location-input">Town, city or postcode</label>
+              
+              <div class="input-wrapper">
+                <input type="search" aria-label="Enter Town, city or postcode" name="townOrPostcode" class="govuk-input govuk-!-width-full" id="location-input" value="@Model.SideBar.TownOrPostcode" autocomplete="off" />
+              </div>
+              
+              <span class="fac-visually-hidden" aria-hidden="true">
+                <input type="hidden" asp-for="SideBar.Coordinates" name="sideBarCoordinates" id="coordinates" value="@Model.SideBar.Coordinates" />
+                <input type="hidden" asp-for="SideBar.SuggestedLocation" name="sideBarSuggestedLocation" id="suggestedLocation-input" value="@Model.SideBar.SuggestedLocation" />
+              </span>
+
+              <span class="fac-visually-hidden" aria-hidden="true">
                             <input type="hidden" asp-for="SideBar.Coordinates" name="sideBarCoordinates" id="coordinates" value="@Model.SideBar.Coordinates" />
                             <input type="hidden" asp-for="SideBar.SuggestedLocation" name="sideBarSuggestedLocation" id="suggestedLocation-input" value="@Model.SideBar.SuggestedLocation" />
                         </span>
-                    </div>
-                </div>
-                <div class="govuk-grid-column-two-thirds">
-                    <div class="govuk-form-group">
-                        <label class="govuk-label" id="enter-keyword-label" for="search-input">Course or keyword</label>
-                        <div class="input-wrapper">
-                            <input type="search" id="search-input" name="searchTerm" value="@Model.CurrentSearchTerm" aria-label="Enter a keyword" title="Enter a keyword" class="govuk-input govuk-!-width-full" autocomplete="off">
-                            <div class="input-search-item input-submit-wrapper">
-                                <button data-module="govuk-button" type="submit" class="input-search-submit" id="search-button">Search</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+
             </div>
+          </div>
+
+          <div class="govuk-grid-column-two-thirds">
+            <div class="govuk-form-group">
+              
+              <label class="ncs-label govuk-label" id="enter-keyword-label" for="search-input">Course or keyword</label>
+              <div class="input-wrapper">
+                    <input type="search" id="search-input" name="searchTerm" value="@Model.CurrentSearchTerm" aria-label="Enter a keyword" title="Enter a keyword" class="govuk-input govuk-!-width-full" autocomplete="off">
+                    <div class="input-search-item input-submit-wrapper">
+                        <button data-module="govuk-button ncs-button__primary" type="submit" class="input-search-submit" id="search-button">Search</button>
+                    </div>
+              </div>
+            </div>
+          </div>
         </div>
-    </section>
-</form>
+      </div>
+    </div>
+  
+  </form>
+   

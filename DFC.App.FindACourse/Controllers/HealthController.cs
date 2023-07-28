@@ -63,6 +63,8 @@ namespace DFC.App.FindACourse.Controllers
 
         private HealthViewModel CreateHealthViewModel(string message)
         {
+            logger.LogInformation($"{nameof(this.CreateHealthViewModel)} has been called");
+
             return new HealthViewModel
             {
                 HealthItems = new List<HealthItemViewModel>

@@ -11,6 +11,7 @@ using DFC.Logger.AppInsights.Contracts;
 using GdsCheckboxList.Models;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -47,6 +48,7 @@ namespace DFC.App.FindACourse.Controllers
         [Route("search/")]
         public IActionResult Index()
         {
+            logService.LogInformation($"{nameof(Index)} has been called");
             var viewModel = new IndexViewModel
             {
                 Documents = new List<IndexDocumentViewModel> { new IndexDocumentViewModel { CanonicalName = "Index" } },
@@ -129,6 +131,8 @@ namespace DFC.App.FindACourse.Controllers
         [Route("find-a-course/search/find-courses-to-get-a-job")]
         public IActionResult FindCoursedToGetAJob()
         {
+            logService.LogInformation($"{nameof(FindCoursedToGetAJob)} has been called");
+
             var model = new BodyViewModel { Content = new HtmlString("Find a course: Body element") };
             model.CourseSearchSettings = courseSearchSettings;
             model.SideBar = GetSideBarViewModel();
@@ -140,6 +144,8 @@ namespace DFC.App.FindACourse.Controllers
         [Route("find-a-course/search/help-with-choices")]
         public IActionResult HelpWithChoices()
         {
+            logService.LogInformation($"{nameof(HelpWithChoices)} has been called");
+
             var model = new BodyViewModel { Content = new HtmlString("Find a course: Body element") };
             model.CourseSearchSettings = courseSearchSettings;
             model.SideBar = GetSideBarViewModel();
@@ -179,6 +185,7 @@ namespace DFC.App.FindACourse.Controllers
         [Route("api/get/find-a-course/search/{appData}/ajax")]
         public async Task<AjaxModel> AjaxChanged(string appData)
         {
+            logService.LogInformation($"{nameof(AjaxChanged)} has been called");
             if (string.IsNullOrWhiteSpace(appData))
             {
                 throw new ArgumentNullException(nameof(appData));
@@ -218,6 +225,7 @@ namespace DFC.App.FindACourse.Controllers
             if (paramValues.CampaignCode == "LEVEL3_FREE")
             {
                 model.FreeCourseSearch = true;
+                logService.LogInformation($"{nameof(paramValues.CampaignCode)} has been called");
             }
 
             var newBodyViewModel = await GenerateModelAsync(model).ConfigureAwait(false);
@@ -295,6 +303,7 @@ namespace DFC.App.FindACourse.Controllers
 
             if (string.IsNullOrWhiteSpace(searchTerm) && string.IsNullOrWhiteSpace(location))
             {
+                logService.LogInformation($"{nameof(searchTerm)} and {nameof(location)} is null or whitespace");
                 return Body();
             }
 
@@ -303,6 +312,7 @@ namespace DFC.App.FindACourse.Controllers
 
             if (string.IsNullOrWhiteSpace(location))
             {
+                logService.LogInformation($"{nameof(location)} is null or whitespace");
                 model.SideBar.Coordinates = null;
                 model.SideBar.TownOrPostcode = null;
             }
@@ -317,6 +327,7 @@ namespace DFC.App.FindACourse.Controllers
             CourseSearchFilters courseSearchFilters = GetCourseSearchFilters(searchTerm, model.SideBar.TownOrPostcode, model.SideBar.Coordinates);
             if (isFreeCourse)
             {
+                logService.LogInformation($"{nameof(isFreeCourse)} has been called");
                 courseSearchFilters.CampaignCode = FreeSearchCampaignCode;
                 model.FreeCourseSearch = true;
             }
@@ -380,6 +391,7 @@ namespace DFC.App.FindACourse.Controllers
 
             if (string.IsNullOrWhiteSpace(searchTerm) && string.IsNullOrWhiteSpace(townOrPostcode))
             {
+                logService.LogInformation($"{nameof(searchTerm)} and {nameof(townOrPostcode)} is null or whitespace");
                 return Body();
             }
 
@@ -628,6 +640,7 @@ namespace DFC.App.FindACourse.Controllers
 
         private async Task<IActionResult> PageInternalAsync(ParamValues paramValues, bool isTest)
         {
+            logService.LogInformation($"{nameof(PageInternalAsync)} has been called for {paramValues}");
             var model = new BodyViewModel
             {
                 CurrentSearchTerm = paramValues.SearchTerm,
@@ -667,6 +680,8 @@ namespace DFC.App.FindACourse.Controllers
 
         private async Task<IActionResult> SearchCourses(BodyViewModel model, CourseSearchFilters filters, string suggestedLocation)
         {
+            logService.LogInformation($"{nameof(SearchCourses)} has been called for {filters} and {suggestedLocation}");
+
             model.SideBar = GetSideBarViewModel();
             model.SideBar.OrderByOptions = ListFilters.GetOrderByOptions();
             model.CurrentSearchTerm = filters?.SearchTerm;
@@ -711,6 +726,8 @@ namespace DFC.App.FindACourse.Controllers
 
         private async Task<IActionResult> FilterResultsInternal(BodyViewModel model)
         {
+            logService.LogInformation($"{nameof(FilterResultsInternal)} has been called");
+
             var newBodyViewModel = await GenerateModelAsync(model).ConfigureAwait(false);
 
             try
@@ -725,18 +742,20 @@ namespace DFC.App.FindACourse.Controllers
                 }
                 model.UsingAutoSuggestedLocation = newBodyViewModel.UsingAutoSuggestedLocation;
                 model.SideBar.DidYouMeanLocations = newBodyViewModel.SideBar.DidYouMeanLocations;
-                logService.LogInformation($"{nameof(this.FilterResults)} generated the model and ready to pass to the view");
             }
             catch (Exception ex)
             {
                 logService.LogError($"{nameof(this.FilterResults)} threw an exception" + ex.Message);
             }
 
+            logService.LogInformation($"{nameof(this.FilterResults)} generated the model and ready to pass to the view");
             return Results(model);
         }
 
         private async Task<BodyViewModel> GenerateModelAsync(BodyViewModel model)
         {
+            logService.LogInformation($"{nameof(GenerateModelAsync)} has been called");
+
             var courseTypeList = new List<CourseType>();
             var courseHoursList = new List<CourseHours>();
             var courseStudyTimeList = new List<Fac.AttendancePattern>();
@@ -813,11 +832,15 @@ namespace DFC.App.FindACourse.Controllers
 
             // Enter filters criteria here
             model.RequestPage = (model.RequestPage > 1) ? model.RequestPage : 1;
+
+            logService.LogInformation($"{nameof(this.GenerateModelAsync)} generated the model and ready to pass to the view");
             return model;
         }
 
         private async Task<BodyViewModel> AddInLocationRequestParametersAsync(BodyViewModel model)
         {
+            logService.LogInformation($"{nameof(AddInLocationRequestParametersAsync)} has been called");
+
             float selectedDistanceValue = 10;
 
             if (model.SelectedDistanceValue != null)
@@ -855,11 +878,14 @@ namespace DFC.App.FindACourse.Controllers
 
             model.SideBar.SuggestedLocation = model.SideBar.TownOrPostcode;
 
+            logService.LogInformation($"{nameof(this.AddInLocationRequestParametersAsync)} generated the model and ready to pass to the view");
             return model;
         }
 
         private async Task<BodyViewModel> GetSuggestedLocationsAsync(BodyViewModel model)
         {
+            logService.LogInformation($"{nameof(GetSuggestedLocationsAsync)} has been called");
+
             var suggestedLocations = await locationService.GetSuggestedLocationsAsync(model.CourseSearchFilters.Town).ConfigureAwait(false);
 
             if (suggestedLocations.Any())
@@ -880,6 +906,7 @@ namespace DFC.App.FindACourse.Controllers
                 model.UsingAutoSuggestedLocation = true;
             }
 
+            logService.LogInformation($"{nameof(this.GetSuggestedLocationsAsync)} generated the model and ready to pass to the view");
             return model;
         }
 
@@ -919,12 +946,14 @@ namespace DFC.App.FindACourse.Controllers
                 }
             }
 
+            logService.LogInformation($"{nameof(this.CheckCheckboxState)} generated the model and ready to pass to the view");
             return model;
         }
 
         [ResponseCache(Duration = 43200)]
         private SideBarViewModel GetSideBarViewModel()
         {
+            logService.LogInformation($"{nameof(GetSideBarViewModel)} has been called");
             var sideBarViewModel = new SideBarViewModel
             {
                 CourseType = MapFilter("courseType", "Course type", ListFilters.GetCourseTypeList()),
@@ -935,6 +964,7 @@ namespace DFC.App.FindACourse.Controllers
                 DistanceOptions = ListFilters.GetDistanceList(),
             };
 
+            logService.LogInformation($"{nameof(this.GetSideBarViewModel)} generated the model and ready to pass to the view");
             return sideBarViewModel;
         }
     }
