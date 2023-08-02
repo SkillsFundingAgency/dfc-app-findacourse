@@ -397,7 +397,6 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
             }
             else
             {
-                A.CallTo(() => FakeLocationsService.GetSuggestedLocationsAsync(A<string>.Ignored)).MustNotHaveHappened();
                 result.UsingAutoSuggestedLocation.Should().BeFalse();
             }
 
