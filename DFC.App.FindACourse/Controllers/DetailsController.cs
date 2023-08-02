@@ -5,12 +5,15 @@ using DFC.App.FindACourse.ViewModels;
 using DFC.Compui.Cosmos.Contracts;
 using DFC.Content.Pkg.Netcore.Data.Models.ClientOptions;
 using DFC.Logger.AppInsights.Contracts;
+using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Net.Http.Headers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using SubRegion = DFC.CompositeInterfaceModels.FindACourseClient.SubRegion;
@@ -82,7 +85,7 @@ namespace DFC.App.FindACourse.Controllers
 
                 model.CourseRegions = model.CourseDetails.SubRegions != null ? TransformSubRegionsToRegions(model.CourseDetails.SubRegions) : null;
                 model.DetailsRightBarViewModel.Provider = mapper.Map<ProviderViewModel>(model.CourseDetails.ProviderDetails);
-                model.DetailsRightBarViewModel.SpeakToAnAdviser = await staticContentDocumentService.GetByIdAsync(new Guid(cmsApiClientOptions.ContentIds)).ConfigureAwait(false);
+                model.DetailsRightBarViewModel.SpeakToAnAdviser = await staticContentDocumentService.GetByIdAsync(new Guid(cmsApiClientOptions.ContentIds), "shared-content").ConfigureAwait(false);
                 model.CourseDetails.CourseWebpageLink = CompareProviderLinkWithCourseLink(model?.CourseDetails?.CourseWebpageLink, model.CourseDetails?.ProviderDetails?.Website);
                 model.CourseDetails.HasCampaignCode = paramValues.CampaignCode == "LEVEL3_FREE";
             }
@@ -92,6 +95,7 @@ namespace DFC.App.FindACourse.Controllers
                 return DetailsErrorReturnStatus(ex);
             }
 
+            logService.LogInformation($"{nameof(this.Details)} generated the model and ready to pass to the view");
             return View(model);
         }
 
@@ -126,7 +130,7 @@ namespace DFC.App.FindACourse.Controllers
                 }
 
                 model.DetailsRightBarViewModel.Provider = mapper.Map<ProviderViewModel>(model.TlevelDetails.ProviderDetails);
-                model.DetailsRightBarViewModel.SpeakToAnAdviser = await staticContentDocumentService.GetByIdAsync(new Guid(cmsApiClientOptions.ContentIds)).ConfigureAwait(false);
+                model.DetailsRightBarViewModel.SpeakToAnAdviser = await staticContentDocumentService.GetByIdAsync(new Guid(cmsApiClientOptions.ContentIds), "shared-content").ConfigureAwait(false);
             }
             catch (Exception ex)
             {
@@ -134,6 +138,7 @@ namespace DFC.App.FindACourse.Controllers
                 return DetailsErrorReturnStatus(ex);
             }
 
+            logService.LogInformation($"{nameof(this.TLevelDetails)} generated the model and ready to pass to the view");
             return View("tlevelDetails", model);
         }
 
