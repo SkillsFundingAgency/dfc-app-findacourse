@@ -1,4 +1,5 @@
-﻿using DFC.App.FindACourse.Data.Domain;
+﻿using Antlr.Runtime.Misc;
+using DFC.App.FindACourse.Data.Domain;
 using DFC.App.FindACourse.Data.Helpers;
 using DFC.App.FindACourse.Data.Models;
 using DFC.App.FindACourse.Extensions;
@@ -18,6 +19,7 @@ using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Web;
 using Fac = DFC.FindACourseClient;
 
 namespace DFC.App.FindACourse.Controllers
@@ -472,6 +474,11 @@ namespace DFC.App.FindACourse.Controllers
                     if (item.Description.Length > 220)
                     {
                         item.Description = item.Description.Substring(0, 200) + "...";
+                        if (item.Description.Contains("<a href") && !item.Description.Contains("</a>"))
+                        {
+                            var end = item.Description.IndexOf("<a href");
+                            item.Description = item.Description.Substring(0, end) + "...";
+                        }
                     }
                 }
             }
@@ -726,6 +733,13 @@ namespace DFC.App.FindACourse.Controllers
             try
             {
                 model.Results = await findACourseService.GetFilteredData(newBodyViewModel.CourseSearchFilters, newBodyViewModel.CourseSearchOrderBy, model.RequestPage).ConfigureAwait(false);
+                foreach (var item in model.Results.Courses)
+                {
+                    if (item.Description != null && item.Description.Contains("&lt;a href"))
+                    {
+                        item.Description = HttpUtility.HtmlDecode(item.Description);
+                    }
+                }
                 model.UsingAutoSuggestedLocation = newBodyViewModel.UsingAutoSuggestedLocation;
                 model.SideBar.DidYouMeanLocations = newBodyViewModel.SideBar.DidYouMeanLocations;
             }
