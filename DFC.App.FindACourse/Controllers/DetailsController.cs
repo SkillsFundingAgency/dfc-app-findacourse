@@ -149,8 +149,17 @@ namespace DFC.App.FindACourse.Controllers
                 paramValues.SearchTerm = currentSearchTerm;
             }
 
+            string townSearchTerm;
+            if (paramValues.Town != null)
+            {
+                townSearchTerm = WebUtility.HtmlEncode(paramValues.Town).Replace("&#39;", "%27");
+            }
+            else
+            {
+                townSearchTerm = WebUtility.HtmlEncode(paramValues.Town);
+            }
             var searchTerm = $"{nameof(paramValues.SearchTerm)}={paramValues.SearchTerm}&" +
-                             $"{nameof(paramValues.Town)}={WebUtility.HtmlEncode(paramValues.Town)}&" +
+                             $"{nameof(paramValues.Town)}={townSearchTerm}&" +
                              $"{nameof(paramValues.CourseType)}={paramValues.CourseType}&" +
                              $"{nameof(paramValues.CourseHours)}={paramValues.CourseHours}&" +
                              $"{nameof(paramValues.CourseStudyTime)}={paramValues.CourseStudyTime}&" +

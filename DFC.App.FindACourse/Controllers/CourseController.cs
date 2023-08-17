@@ -11,8 +11,10 @@ using DFC.Logger.AppInsights.Contracts;
 using GdsCheckboxList.Models;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Azure.Documents;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using NHibernate.Mapping;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -242,11 +244,22 @@ namespace DFC.App.FindACourse.Controllers
                         item.Description = item.Description.Substring(0, 200) + "...";
                     }
                 }
+                string townSearchTerm;
+
+                if (paramValues.Town != null)
+                {
+                    townSearchTerm = WebUtility.HtmlEncode(paramValues.Town).Replace("&#39;", "%27");
+                }
+                else
+                {
+                    townSearchTerm = WebUtility.HtmlEncode(paramValues.Town);
+                }
+
 
                 if (!model.IsTest)
                 {
                     TempData["params"] = $"{nameof(paramValues.SearchTerm)}={paramValues.SearchTerm}&" +
-                                         $"{nameof(paramValues.Town)}={WebUtility.HtmlEncode(paramValues.Town)}&" +
+                                         $"{nameof(paramValues.Town)}={townSearchTerm}&" +
                                          $"{nameof(paramValues.CourseType)}={paramValues.CourseType}&" +
                                          $"{nameof(paramValues.CourseHours)}={paramValues.CourseHours}&" +
                                          $"{nameof(paramValues.CourseStudyTime)}={paramValues.CourseStudyTime}&" +
@@ -500,8 +513,19 @@ namespace DFC.App.FindACourse.Controllers
             if (!model.IsTest)
             {
                 TempData.Remove("params");
+
+                string townSearchTerm;
+                if (town != null)
+                {
+                    townSearchTerm = WebUtility.HtmlEncode(town).Replace("&amp;#39;", "%27");
+                    townSearchTerm = townSearchTerm.Replace("&#39;", "%27");
+                } else
+                {
+                    townSearchTerm = WebUtility.HtmlEncode(town);
+                }
+
                 TempData["params"] = $"{nameof(searchTerm)}={searchTerm}&" +
-                                     $"{nameof(town)}={WebUtility.HtmlEncode(town)}&" +
+                                     $"{nameof(town)}={townSearchTerm}&" +
                                      $"{nameof(courseType)}={courseType}&" +
                                      $"{nameof(courseHours)}={courseHours}&" +
                                      $"{nameof(courseStudyTime)}={courseStudyTime}&" +
@@ -866,6 +890,10 @@ namespace DFC.App.FindACourse.Controllers
                         model.CourseSearchFilters.Longitude = locationCoordinates.Longitude;
                         model.CourseSearchFilters.Latitude = locationCoordinates.Latitude;
                         model.CourseSearchFilters.DistanceSpecified = true;
+                        if (!model.SideBar.TownOrPostcode.Contains(')'))
+                        {
+                            model = await GetSuggestedLocationsAsync(model).ConfigureAwait(false);
+                        }
                     }
                     else
                     {
@@ -884,13 +912,41 @@ namespace DFC.App.FindACourse.Controllers
 
         private async Task<BodyViewModel> GetSuggestedLocationsAsync(BodyViewModel model)
         {
-            logService.LogInformation($"{nameof(GetSuggestedLocationsAsync)} has been called");
 
-            var suggestedLocations = await locationService.GetSuggestedLocationsAsync(model.CourseSearchFilters.Town).ConfigureAwait(false);
+            var town = "";
+            var index = -1;
+            if (model.SideBar.TownOrPostcode.Contains('('))
+            {
+                index = model.SideBar.TownOrPostcode.IndexOf(" (");
+                town = model.SideBar.TownOrPostcode.Substring(0, index);
+            }
+            else
+            {
+                town = model.SideBar.TownOrPostcode;
+            }
+
+            logService.LogInformation($"{nameof(GetSuggestedLocationsAsync)} has been called");
+            var suggestedLocations = await locationService.GetSuggestedLocationsAsync(WebUtility.HtmlDecode(town)).ConfigureAwait(false);
 
             if (suggestedLocations.Any())
             {
                 var topSuggestion = suggestedLocations.FirstOrDefault();
+                if (index > -1)
+                {
+                    foreach (var location in suggestedLocations)
+                    {
+                        if (location.LocalAuthorityName.Contains(model.SideBar.TownOrPostcode.Substring(index + 2)))
+                        {
+                            model.SideBar.TownOrPostcode = $"{location.LocationName} ({location.LocalAuthorityName})";
+                            return model;
+                        }
+                    }
+                }
+                model.SideBar.TownOrPostcode = $"{topSuggestion.LocationName} ({topSuggestion.LocalAuthorityName})";
+                if (model.CourseSearchFilters.Longitude != null)
+                {
+                    return model;
+                }
                 model.CourseSearchFilters.Longitude = topSuggestion.Longitude;
                 model.CourseSearchFilters.Latitude = topSuggestion.Latitude;
                 model.CourseSearchFilters.Distance = 10;
@@ -901,7 +957,6 @@ namespace DFC.App.FindACourse.Controllers
                     Label = $"{x.LocationName} ({x.LocalAuthorityName})",
                     Value = $"{x.Longitude}|{x.Latitude}",
                 }).ToList();
-                model.SideBar.TownOrPostcode = $"{topSuggestion.LocationName} ({topSuggestion.LocalAuthorityName})";
                 model.SideBar.Coordinates = $"{topSuggestion.Longitude}|{topSuggestion.Latitude}";
                 model.UsingAutoSuggestedLocation = true;
             }
