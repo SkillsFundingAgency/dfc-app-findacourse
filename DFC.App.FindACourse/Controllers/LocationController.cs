@@ -30,7 +30,8 @@ namespace DFC.App.FindACourse.Controllers
                 if (term.Any(char.IsDigit))
                 {
                     return new JsonResult(new List<LocationSuggestViewModel>());
-                };
+                }
+
                 var suggestedResults = await locationService.GetSuggestedLocationsAsync(term).ConfigureAwait(false);
                 List<LocationSuggestViewModel> suggestedLocations = suggestedResults.Select(x => new LocationSuggestViewModel
                 {
