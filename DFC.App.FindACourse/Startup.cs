@@ -65,8 +65,8 @@ namespace DFC.App.FindACourse
 
             services.AddAutoMapper(typeof(Startup).Assembly, typeof(DFC.FindACourseClient.FindACourseProfile).Assembly);
             services.AddScoped<ICorrelationIdProvider, CorrelationIdProvider>();
-            services.AddScoped<IFindACourseService, FindACourseService>();
-            services.AddScoped<IFindACourseRepository, FindACourseRepository>();
+            services.AddSingleton<IFindACourseService, FindACourseService>();
+            services.AddSingleton<IFindACourseRepository, FindACourseRepository>();
 
             services.AddApplicationInsightsTelemetry();
             services.AddDFCLogging(Configuration["ApplicationInsights:InstrumentationKey"]);
@@ -80,7 +80,7 @@ namespace DFC.App.FindACourse
                 PolicyOptions = Configuration.GetSection(CourseSearchClientPolicySettings).Get<PolicyOptions>() ?? new PolicyOptions(),
             };
             services.AddSingleton(courseSearchClientSettings);
-            services.AddScoped<ICourseSearchApiService, CourseSearchApiService>();
+            services.AddSingleton<ICourseSearchApiService, CourseSearchApiService>();
             services.AddFindACourseServicesWithoutFaultHandling(courseSearchClientSettings);
 
             services.AddSingleton(Configuration.GetSection(nameof(CmsApiClientOptions)).Get<CmsApiClientOptions>() ?? new CmsApiClientOptions());
