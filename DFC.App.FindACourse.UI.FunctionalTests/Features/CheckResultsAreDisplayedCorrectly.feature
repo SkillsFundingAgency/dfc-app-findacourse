@@ -11,6 +11,6 @@ Scenario: Check results are within the distance range selected
 	And I click the search button
 	When I enter CV1 2WT in the location filter
 	And I filter by 5 miles
-	And I select Classroom based in the course type filter
+	And I select Classroom based in the Learning method filter
 	And I select Distance in the sort by filter
 	Then all results are under 5 miles
