@@ -92,7 +92,7 @@ namespace DFC.App.FindACourse.UI.FunctionalTests.StepDefinitions
             Thread.Sleep(5000);
         }
 
-        [When(@"I select (.*) in the Learning method filter")]
+        [When(@"I select (.*) in the Course type filter")]
         public void WhenISelectCourseTypeFilter(string courseType)
         {
             switch (courseType)
@@ -110,7 +110,7 @@ namespace DFC.App.FindACourse.UI.FunctionalTests.StepDefinitions
                     this.Context.GetWebDriver().FindElement(By.Id("SideBar.CourseType.SelectedIds[3]")).Click();
                     break;
                 default:
-                    throw new OperationCanceledException($"Unable to perform the step: {this.Context.StepContext.StepInfo.Text}. The Learning method is not found.");
+                    throw new OperationCanceledException($"Unable to perform the step: {this.Context.StepContext.StepInfo.Text}. The Course type is not found.");
             }
 
             Thread.Sleep(5000);
