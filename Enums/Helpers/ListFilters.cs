@@ -31,6 +31,7 @@ namespace DFC.App.FindACourse.Data.Helpers
                 new Filter { Id = "Online", Text = "Online" },
                 new Filter { Id = "Classroom based", Text = "Classroom based" },
                 new Filter { Id = "Work based", Text = "Work based" },
+                new Filter { Id = "Blended Learning", Text = "Blended Learning" },
             };
 
             return lstCourseType;

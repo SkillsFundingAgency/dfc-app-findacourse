@@ -106,6 +106,9 @@ namespace DFC.App.FindACourse.UI.FunctionalTests.StepDefinitions
                 case "Work based":
                     this.Context.GetWebDriver().FindElement(By.Id("SideBar.CourseType.SelectedIds[2]")).Click();
                     break;
+                case "Blended Learning":
+                    this.Context.GetWebDriver().FindElement(By.Id("SideBar.CourseType.SelectedIds[3]")).Click();
+                    break;
                 default:
                     throw new OperationCanceledException($"Unable to perform the step: {this.Context.StepContext.StepInfo.Text}. The Course type is not found.");
             }

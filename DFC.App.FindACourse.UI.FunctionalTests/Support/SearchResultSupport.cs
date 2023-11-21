@@ -121,7 +121,7 @@ namespace DFC.App.FindACourse.UI.FunctionalTests.Support
 
             if (!courseTypeFound)
             {
-                throw new OperationCanceledException("No course type data was found within the search result container. As all results should have a course type value, the container is not recognised.");
+                throw new OperationCanceledException("No course type data was found within the search result container. As all results should have a Course type value, the container is not recognised.");
             }
 
             foreach (var detail in details)
