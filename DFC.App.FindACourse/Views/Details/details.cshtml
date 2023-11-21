@@ -19,6 +19,7 @@
                     @{
                         switch (Model.CourseDetails.AttendanceMode)
                         {
+                            case "Blended learning":
                             case "Classroom based":
                                 <partial name="courseDetailsClassroom" model="Model" />
                                 break;
