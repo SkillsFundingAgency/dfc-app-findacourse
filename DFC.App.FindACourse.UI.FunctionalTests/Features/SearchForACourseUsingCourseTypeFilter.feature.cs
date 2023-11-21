@@ -82,16 +82,16 @@ namespace DFC.App.FindACourse.UI.FunctionalTests.Features
             this.TestTearDown();
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="Search for a course using Course type search filter")]
+        [Xunit.SkippableFactAttribute(DisplayName="Search for a course using course type search filter")]
         [Xunit.TraitAttribute("FeatureTitle", "SearchForACourseUsingCourseTypeFilter")]
-        [Xunit.TraitAttribute("Description", "Search for a course using Course type search filter")]
+        [Xunit.TraitAttribute("Description", "Search for a course using course type search filter")]
         [Xunit.TraitAttribute("Category", "FindACourse")]
         public virtual void SearchForACourseUsingCourseTypeSearchFilter()
         {
             string[] tagsOfScenario = new string[] {
                     "FindACourse"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Search for a course using Course type search filter", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Search for a course using course type search filter", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
 #line 8
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -125,7 +125,7 @@ this.ScenarioInitialize(scenarioInfo);
  testRunner.Then("search results are displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
 #line 13
- testRunner.When("I select Work based in the Course type filter", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("I select Work based in the course type filter", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 14
  testRunner.Then("search results are updated", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");

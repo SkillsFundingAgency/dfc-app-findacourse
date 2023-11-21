@@ -109,7 +109,7 @@ namespace DFC.App.FindACourse.UI.FunctionalTests.Support
             var courseTypeFound = false;
             foreach (var detail in details)
             {
-                if (detail.Text.ToLower(CultureInfo.CurrentCulture).Contains("Course type"))
+                if (detail.Text.ToLower(CultureInfo.CurrentCulture).Contains("course type"))
                 {
                     var parentNode = this.Context.GetHelperLibrary<AppSettings>().JavaScriptHelper.GetParentElement(detail);
                     var courseTypeValue = parentNode.Text.Replace("Course type:", string.Empty).Trim();
@@ -121,7 +121,7 @@ namespace DFC.App.FindACourse.UI.FunctionalTests.Support
 
             if (!courseTypeFound)
             {
-                throw new OperationCanceledException("No Course type data was found within the search result container. As all results should have a Course type value, the container is not recognised.");
+                throw new OperationCanceledException("No course type data was found within the search result container. As all results should have a Course type value, the container is not recognised.");
             }
 
             foreach (var detail in details)

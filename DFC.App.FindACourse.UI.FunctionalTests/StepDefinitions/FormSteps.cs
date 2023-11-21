@@ -92,7 +92,7 @@ namespace DFC.App.FindACourse.UI.FunctionalTests.StepDefinitions
             Thread.Sleep(5000);
         }
 
-        [When(@"I select (.*) in the Course type filter")]
+        [When(@"I select (.*) in the course type filter")]
         public void WhenISelectCourseTypeFilter(string courseType)
         {
             switch (courseType)
