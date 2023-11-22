@@ -73,7 +73,7 @@
             <div class="govuk-heading-s fac-show-courses-count">Showing @showRecordsFrom to @showRecordsTo of  @Model.Results.ResultProperties.TotalResultCount courses</div>
 
             <div class="fac-search-results-list fac-govuk-list">
-                <hr class="govuk-section-break govuk-section-break--visible" aria-hidde="true">
+                <hr class="govuk-section-break govuk-section-break--visible" aria-hidden="true">
 
                 @foreach (var result in Model.Results.Courses)
                 {
@@ -82,15 +82,15 @@
                     {
                         case "Classroom based":
                             <partial name="_results_classroom" model="result" />
-                            <hr class="govuk-section-break govuk-section-break--visible" aria-hidde="true">
+                            <hr class="govuk-section-break govuk-section-break--visible" aria-hidden="true">
                             break;
                         case "Work based":
                             <partial name="_results_workbased" model="result" />
-                            <hr class="govuk-section-break govuk-section-break--visible" aria-hidde="true">
+                            <hr class="govuk-section-break govuk-section-break--visible" aria-hidden="true">
                             break;
                         case "Online":
                             <partial name="_results_online" model="result" />
-                            <hr class="govuk-section-break govuk-section-break--visible" aria-hidde="true">
+                            <hr class="govuk-section-break govuk-section-break--visible" aria-hidden="true">
                             break;
                         default:
                             break;
