@@ -18,7 +18,7 @@
 
 <p class="course-provider-location">
     <span class="course-location">
-        @if (Model.AttendanceMode == "Work based" || Model.AttendanceMode == "Classroom based")
+        @if (Model.AttendanceMode == "Work based" || Model.AttendanceMode == "Classroom based"|| || Model.AttendanceMode == "Blended learning")
         {
             @if (Model.LocationDetails.Distance > 0)
             {
