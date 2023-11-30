@@ -80,6 +80,7 @@
                     result.HasCampaignCode = Model.FreeCourseSearch;
                     switch (result.AttendanceMode)
                     {
+                        case "Blended learning":
                         case "Classroom based":
                             <partial name="_results_classroom" model="result" />
                             <hr class="govuk-section-break govuk-section-break--visible">

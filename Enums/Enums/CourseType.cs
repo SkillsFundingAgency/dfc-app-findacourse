@@ -7,5 +7,6 @@
         ClassroomBased = 1,
 
         WorkBased = 2,
+        BlendedLearning = 3,
     }
 }
