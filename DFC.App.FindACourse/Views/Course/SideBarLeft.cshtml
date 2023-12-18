@@ -8,7 +8,7 @@
         <input type="hidden" asp-for="SideBar.D" name="D" id="D-input" value="@Model.SideBar.D" />
     </span>
     <div id="suggest-location" class="location-suggest@(Model.SideBar.DidYouMeanLocations?.Count() > 0 ? "-show" : "")" role="group">
-            <summary class=govuk-heading-s aria-describedby="suggested-locations-aria" role="button" aria-expanded="false" aria-controls="suggested-locations-text">
+            <summary class="govuk-heading-s" aria-describedby="suggested-locations-aria" role="button" aria-expanded="false" aria-controls="suggested-locations-text">
                 <span>Did you mean:</span>
             </summary>
             <p class="visuallyhidden" aria-live="polite" id="suggested-locations-aria">There are multiple locations with similar names, tab down to the suggestions, or collapse this panel</p>
