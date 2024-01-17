@@ -5,12 +5,17 @@
     <CodeAnalysisRuleSet>../DFC.Digital.CodeAnalysis.ruleset</CodeAnalysisRuleSet>
 	  <ProjectGuid>{733dfd5b-ac11-4dfc-a60f-bb5df21c32c0}</ProjectGuid>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Controllers\WebhooksController.cs" />
+  </ItemGroup>
   <ItemGroup>
     <AdditionalFiles Include="..\stylecop.json" Link="../stylecop.json" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="9.0.0" />
+    <PackageReference Include="DFC.Common.SharedContent.Pkg.Netcore" Version="0.1.22" />
     <PackageReference Include="DFC.Compui.Cosmos" Version="1.0.67" />
     <PackageReference Include="DFC.Compui.Telemetry" Version="1.0.31" />
     <PackageReference Include="DFC.Logger.AppInsights" Version="1.0.8" />
