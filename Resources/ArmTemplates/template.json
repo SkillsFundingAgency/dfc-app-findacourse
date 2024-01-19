@@ -122,7 +122,27 @@
       "type": "string"
     },
     "workspaceResourceGroup": {
-        "type": "string"
+      "type": "string"
+    },
+    {
+      "name": "Cms__TokenEndPointUrl",
+      "value": "[parameters('CmsTokenEndpointUrl')]"
+    },
+    {
+      "name": "Cms__GraphApiUrl",
+      "value": "[parameters('CmsGraphApiUrl')]"
+    },
+    {
+      "name": "Cms__ClientId",
+      "value": "[parameters('CmsClientId')]"
+    },
+    {
+      "name": "Cms__ClientSecret",
+      "value": "[parameters('CmsClientSecret')]"
+    },
+    {
+      "name": "Cms__RedisCacheConnectionString",
+      "value": "[parameters('CmsRedisCacheConnectionString')]"
     }
   },
   "variables": {
