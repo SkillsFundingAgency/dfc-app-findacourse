@@ -83,4 +83,4 @@ jobs:
     parameters:
       SolutionBaseName: $(SolutionBaseName).UI.FunctionalTests
       BuildPlatform: $(BuildPlatform)
-              BuildConfiguration: $(BuildConfiguration)
+      BuildConfiguration: $(BuildConfiguration)
