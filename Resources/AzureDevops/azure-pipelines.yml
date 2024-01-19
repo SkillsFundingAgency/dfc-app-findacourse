@@ -84,11 +84,3 @@ jobs:
       SolutionBaseName: $(SolutionBaseName).UI.FunctionalTests
       BuildPlatform: $(BuildPlatform)
               BuildConfiguration: $(BuildConfiguration)
-
-    - job: PublishOpenApiDefinition
-      displayName: Publish Open Api Definition
-      steps:
-      - template: AzureDevOpsTemplates\Build\StepTemplates\dfc-build-openapi-definition.yml@dfc-devops
-        parameters:
-          OpenApiDefinitionDirectory: $(Build.SourcesDirectory)\Resources\OpenApiDocs
-          SolutionBaseName: $(SolutionBaseName)
