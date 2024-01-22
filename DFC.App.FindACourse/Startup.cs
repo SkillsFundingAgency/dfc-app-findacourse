@@ -4,7 +4,6 @@ using DFC.App.FindACourse.Data.Domain;
 using DFC.App.FindACourse.Data.Models;
 using DFC.App.FindACourse.Framework;
 using DFC.App.FindACourse.Helpers;
-using DFC.App.FindACourse.HostedServices;
 using DFC.App.FindACourse.Repository;
 using DFC.App.FindACourse.Services;
 using DFC.Compui.Cosmos;
@@ -117,15 +116,10 @@ namespace DFC.App.FindACourse
             services.AddFindACourseServicesWithoutFaultHandling(courseSearchClientSettings);
 
             services.AddSingleton(Configuration.GetSection(nameof(CmsApiClientOptions)).Get<CmsApiClientOptions>() ?? new CmsApiClientOptions());
-            //var staticContentDbConnection = Configuration.GetSection(StaticCosmosDbConfigAppSettings).Get<CosmosDbConnection>();
-            var cosmosRetryOptions = new RetryOptions { MaxRetryAttemptsOnThrottledRequests = 20, MaxRetryWaitTimeInSeconds = 60 };
-            //services.AddDocumentServices<StaticContentItemModel>(staticContentDbConnection, env.IsDevelopment(), cosmosRetryOptions);
-            //services.AddTransient<IStaticContentReloadService, StaticContentReloadService>();
             services.AddTransient<IApiService, ApiService>();
             services.AddTransient<ICmsApiService, CmsApiService>();
             services.AddTransient<IApiDataProcessorService, ApiDataProcessorService>();
             services.AddTransient<IApiCacheService, ApiCacheService>();
-            //services.AddTransient<IWebhooksService, WebhooksService>();
             services.AddTransient<IViewHelper, ViewHelper>();
             services.AddTransient<MemoryCache>();
 
@@ -134,7 +128,6 @@ namespace DFC.App.FindACourse
 
             services.AddHostedServiceTelemetryWrapper();
             services.AddSubscriptionBackgroundService(Configuration);
-            //services.AddHostedService<StaticContentReloadBackgroundService>();
 
             services.AddApiServices(Configuration, policyRegistry);
 

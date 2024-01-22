@@ -31,7 +31,6 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
         {
             FakeLogService = A.Fake<ILogService>();
             FakeFindACoursesService = A.Fake<IFindACourseService>();
-            //FakeStaticContentDocumentService = A.Fake<IDocumentService<StaticContentItemModel>>();
             FakeSharedContentRedisInterface = A.Fake<ISharedContentRedisInterface>();
             CmsApiClientOptions = new CmsApiClientOptions() { ContentIds = TestContentId };
             FakeMapper = A.Fake<IMapper>();
@@ -63,8 +62,6 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
         protected IViewHelper FakeViewHelper { get; }
 
         protected IMapper FakeMapper { get; }
-
-        // protected IDocumentService<StaticContentItemModel> FakeStaticContentDocumentService { get; set; }
 
         protected ISharedContentRedisInterface FakeSharedContentRedisInterface { get; set; }
 
@@ -98,17 +95,6 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
 
             httpContext.Request.Headers[HeaderNames.Accept] = mediaTypeName;
 
-            //A.CallTo(() => FakeStaticContentDocumentService.GetByIdAsync(A<Guid>.Ignored, null)).Returns(new StaticContentItemModel() { Title = nameof(StaticContentItemModel.Title) });
-
-            //A.CallTo(() => FakeSharedContentRedisInterface.GetDataAsync<SharedHtml>(A<Guid>.Ignored);
-
-            //var controller = new DetailsController(FakeLogService, FakeFindACoursesService, FakeStaticContentDocumentService, CmsApiClientOptions, FakeMapper)
-            //{
-            //    ControllerContext = new ControllerContext()
-            //    {
-            //        HttpContext = httpContext,
-            //    },
-            //};
             var controller = new DetailsController(FakeLogService, FakeFindACoursesService, FakeSharedContentRedisInterface, CmsApiClientOptions, FakeMapper)
             {
                 ControllerContext = new ControllerContext()

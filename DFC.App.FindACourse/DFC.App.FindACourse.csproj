@@ -39,4 +39,8 @@
     <ProjectReference Include="..\Gds.CheckboxList\Gds.CheckboxList.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="HostedServices\" />
+  </ItemGroup>
+
 </Project>

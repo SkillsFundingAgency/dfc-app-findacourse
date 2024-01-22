@@ -26,7 +26,6 @@ namespace DFC.App.FindACourse.Controllers
     {
         private readonly ILogService logService;
         private readonly IFindACourseService findACourseService;
-        //private readonly IDocumentService<StaticContentItemModel> staticContentDocumentService;
         private readonly ISharedContentRedisInterface sharedContentRedis;
         private readonly CmsApiClientOptions cmsApiClientOptions;
         private readonly IMapper mapper;
@@ -92,7 +91,6 @@ namespace DFC.App.FindACourse.Controllers
                 model.CourseRegions = model.CourseDetails.SubRegions != null ? TransformSubRegionsToRegions(model.CourseDetails.SubRegions) : null;
                 model.DetailsRightBarViewModel.Provider = mapper.Map<ProviderViewModel>(model.CourseDetails.ProviderDetails);
 
-                // model.DetailsRightBarViewModel.SpeakToAnAdviser = await staticContentDocumentService.GetByIdAsync(new Guid(cmsApiClientOptions.ContentIds), "shared-content").ConfigureAwait(false);
                 var sharedhtml = await sharedContentRedis.GetDataAsync<SharedHtml>("sharedContent/" + speakToanAdviserStaxId);
                 model.DetailsRightBarViewModel.SpeakToAnAdviser = sharedhtml.Html;
 
@@ -140,7 +138,6 @@ namespace DFC.App.FindACourse.Controllers
                 }
 
                 model.DetailsRightBarViewModel.Provider = mapper.Map<ProviderViewModel>(model.TlevelDetails.ProviderDetails);
-                //model.DetailsRightBarViewModel.SpeakToAnAdviser = await staticContentDocumentService.GetByIdAsync(new Guid(cmsApiClientOptions.ContentIds), "shared-content").ConfigureAwait(false);
                 var sharedhtml = await sharedContentRedis.GetDataAsync<SharedHtml>("sharedContent/" + speakToanAdviserStaxId);
                 model.DetailsRightBarViewModel.SpeakToAnAdviser = sharedhtml.Html;
             }
