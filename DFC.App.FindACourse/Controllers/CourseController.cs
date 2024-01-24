@@ -70,7 +70,7 @@ namespace DFC.App.FindACourse.Controllers
                 Title = "Find a Course",
                 BreadcrumbTitle = "Breadcrumb 1",
                 Keywords = "fac",
-                CanonicalName = "find-a-course",
+                CanonicalName = "https://nationalcareers.service.gov.uk/find-a-course",
                 Content = new HtmlString("Document Content"),
                 IncludeInSitemap = true,
             };
