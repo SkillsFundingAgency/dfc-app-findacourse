@@ -91,7 +91,7 @@ namespace DFC.App.FindACourse.Controllers
                 model.CourseRegions = model.CourseDetails.SubRegions != null ? TransformSubRegionsToRegions(model.CourseDetails.SubRegions) : null;
                 model.DetailsRightBarViewModel.Provider = mapper.Map<ProviderViewModel>(model.CourseDetails.ProviderDetails);
 
-                var sharedhtml = await sharedContentRedis.GetDataAsync<SharedHtml>("sharedContent/" + speakToanAdviserStaxId);
+                var sharedhtml = await sharedContentRedis.GetDataAsync<SharedHtml>("SharedContent/" + speakToanAdviserStaxId);
                 model.DetailsRightBarViewModel.SpeakToAnAdviser = sharedhtml.Html;
 
                 model.CourseDetails.CourseWebpageLink = CompareProviderLinkWithCourseLink(model?.CourseDetails?.CourseWebpageLink, model.CourseDetails?.ProviderDetails?.Website);
@@ -138,7 +138,7 @@ namespace DFC.App.FindACourse.Controllers
                 }
 
                 model.DetailsRightBarViewModel.Provider = mapper.Map<ProviderViewModel>(model.TlevelDetails.ProviderDetails);
-                var sharedhtml = await sharedContentRedis.GetDataAsync<SharedHtml>("sharedContent/" + speakToanAdviserStaxId);
+                var sharedhtml = await sharedContentRedis.GetDataAsync<SharedHtml>("SharedContent/" + speakToanAdviserStaxId);
                 model.DetailsRightBarViewModel.SpeakToAnAdviser = sharedhtml.Html;
             }
             catch (Exception ex)
