@@ -100,6 +100,12 @@
         },
         "BrandingAssetsCdn": {
             "value": "BrandingAssetsCdn"
+        },
+        "workspaceName": {
+            "value": "aTestLogAnalyticsAccount"
+        },
+        "workspaceResourceGroup": {
+            "value": "aResourceGroup"
         }
 
     }
