@@ -4,7 +4,7 @@
 {
     <details data-module="govuk-details" class="course-cost-desc">
         <summary class="govuk-details__summary">
-            <span class="govuk-details__summary-text">
+            <span class="govuk-details__summary-text" aria-label="View cost description. Press enter to access more information about the cost of this course.">
                 View cost description
             </span>
         </summary>
@@ -23,7 +23,7 @@ else
         if (!string.IsNullOrWhiteSpace(Model.CostDescription))
         {
             <details data-module="govuk-details" class="course-cost-desc">
-                <summary class="govuk-details__summary">
+                <summary class="govuk-details__summary" aria-label="View cost description. Press enter to access more information about the cost of this course.">
                     <span class="govuk-details__summary-text">
                         View cost description
                     </span>
