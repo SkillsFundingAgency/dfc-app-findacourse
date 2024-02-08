@@ -1,112 +1,127 @@
 {
     "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
     "contentVersion": "1.0.0.0",
-    "parameters": {
-        "resourcePrefix": {
-            "value": "dfc-foo-app-findacourse"
-        },
-        "appSharedResourceGroup": {
-            "value": "dfc-dev-app-sharedresources-rg"
-        },
-        "appSharedStorageAccountName": {
-            "value": "dfcdevappsharedstr"
-        },
-        "aspSize": {
-            "value": "2"
-        },
-        "aspTier": {
-            "value": "Standard"
-        },
-        "aspInstances": {
-            "value": 2
-        },
-        "CosmosDbResourceGroup": {
-            "value": "dfc-dev-app-sharedresources-rg"
-        },
-        "cosmosDBName": {
-            "value": "dfc-dev-app-sharedresources-cdb"
-        },
-        "cosmosDbKey": {
-            "value": "not-a-real-key"
-        },
-        "facCosmosAuditCollectionName": {
-            "value": "a-test-collection"
-        },
-        "facCosmosStaticContentCollectionName": {
-            "value": "another-test-collection"
-        },
-        "facAppDatabaseNeedsCreation": {
-            "value": true
-        },
-        "facAppDatabaseThroughput": {
-            "value": 400
-        },
-        "courseProviderServiceEndpoint": {
-            "value": "https://course-provider-service.example.net/"
-        },
-        "courseProviderServiceApiKey": {
-            "value": "not-a-real-key"
-        },
-        "Environment": {
-            "value": "FOO"
-        },
-        "enableAlerts": {
-            "value": false
-        },
-        "CmsApiClientOptionsBaseAddress": {
-            "value": "https://example.net/"
-        },
-        "SubscriptionSettingsFilterIncludeEventTypes3": {
-            "value": "foo"
-        },
-        "SubscriptionSettingsFilterIncludeEventTypes4": {
-            "value": "bar"
-        },
-        "SubscriptionSettingsEndpoint": {
-            "value": "https://example.net/"
-        },
-        "SubscriptionSettingsSubscriptionServiceEndpoint": {
-            "value": "https://example.net/"
-        },
-        "ApimResourceGroup": {
-            "value": "dfc-dev-shared-rg"
-        },
-        "ApimLoggerName": {
-            "value": "composite-ui-logger"
-        },
-        "ApimProductInstanceName": {
-            "value": "composite-ui"
-        },
-        "ApimServiceName": {
-            "value": "dfc-dev-shared-apim"
-        },
-        "ApiName": {
-            "value": "findacourse"
-        },
-        "ConfigurationApplicationName": {
-            "value": "findacourse"
-        },
-        "AzureSearchEndpointUri": {
-            "value": "AzureSearchEndpointUri"
-        },
-        "AzureSearchSearchServiceName": {
-            "value": "AzureSearchSearchServiceName"
-        },
-        "AzureSearchSearchServiceAdminAPIKey": {
-            "value": "AzureSearchSearchServiceAdminAPIKey"
-        },
-        "AzureSearchMaxNumberToSuggest": {
-            "value": "AzureSearchMaxNumberToSuggest"
-        },
-        "BrandingAssetsCdn": {
-            "value": "BrandingAssetsCdn"
-        },
-        "workspaceName": {
-            "value": "aTestLogAnalyticsAccount"
-        },
-        "workspaceResourceGroup": {
-            "value": "aResourceGroup"
-        }
-
+  "parameters": {
+    "resourcePrefix": {
+      "value": "dfc-foo-app-findacourse"
+    },
+    "appSharedResourceGroup": {
+      "value": "dfc-dev-app-sharedresources-rg"
+    },
+    "appSharedStorageAccountName": {
+      "value": "dfcdevappsharedstr"
+    },
+    "aspSize": {
+      "value": "2"
+    },
+    "aspTier": {
+      "value": "Standard"
+    },
+    "aspInstances": {
+      "value": 2
+    },
+    "CosmosDbResourceGroup": {
+      "value": "dfc-dev-app-sharedresources-rg"
+    },
+    "cosmosDBName": {
+      "value": "dfc-dev-app-sharedresources-cdb"
+    },
+    "cosmosDbKey": {
+      "value": "not-a-real-key"
+    },
+    "facCosmosAuditCollectionName": {
+      "value": "a-test-collection"
+    },
+    "facCosmosStaticContentCollectionName": {
+      "value": "another-test-collection"
+    },
+    "facAppDatabaseNeedsCreation": {
+      "value": true
+    },
+    "facAppDatabaseThroughput": {
+      "value": 400
+    },
+    "courseProviderServiceEndpoint": {
+      "value": "https://course-provider-service.example.net/"
+    },
+    "courseProviderServiceApiKey": {
+      "value": "not-a-real-key"
+    },
+    "Environment": {
+      "value": "FOO"
+    },
+    "enableAlerts": {
+      "value": false
+    },
+    "CmsApiClientOptionsBaseAddress": {
+      "value": "https://example.net/"
+    },
+    "SubscriptionSettingsFilterIncludeEventTypes3": {
+      "value": "foo"
+    },
+    "SubscriptionSettingsFilterIncludeEventTypes4": {
+      "value": "bar"
+    },
+    "SubscriptionSettingsEndpoint": {
+      "value": "https://example.net/"
+    },
+    "SubscriptionSettingsSubscriptionServiceEndpoint": {
+      "value": "https://example.net/"
+    },
+    "ApimResourceGroup": {
+      "value": "dfc-dev-shared-rg"
+    },
+    "ApimLoggerName": {
+      "value": "composite-ui-logger"
+    },
+    "ApimProductInstanceName": {
+      "value": "composite-ui"
+    },
+    "ApimServiceName": {
+      "value": "dfc-dev-shared-apim"
+    },
+    "ApiName": {
+      "value": "findacourse"
+    },
+    "ConfigurationApplicationName": {
+      "value": "findacourse"
+    },
+    "AzureSearchEndpointUri": {
+      "value": "AzureSearchEndpointUri"
+    },
+    "AzureSearchSearchServiceName": {
+      "value": "AzureSearchSearchServiceName"
+    },
+    "AzureSearchSearchServiceAdminAPIKey": {
+      "value": "AzureSearchSearchServiceAdminAPIKey"
+    },
+    "AzureSearchMaxNumberToSuggest": {
+      "value": "AzureSearchMaxNumberToSuggest"
+    },
+    "BrandingAssetsCdn": {
+      "value": "BrandingAssetsCdn"
+    },
+    "workspaceName": {
+      "value": "aTestLogAnalyticsAccount"
+    },
+    "workspaceResourceGroup": {
+      "value": "aResourceGroup"
+    },
+    "CmsTokenEndPointUrl": {
+      "value": "url.com"
+    },
+    "CmsGraphApiUrl": {
+      "value": "url.com"
+    },
+    "CmsClientId": {
+      "value": "testid"
+    },
+    "CmsClientSecret": {
+      "value": "testsecret"
+    },
+    "CmsRedisCacheConnectionString": {
+      "value": "teststring"
     }
+
+  }
 }

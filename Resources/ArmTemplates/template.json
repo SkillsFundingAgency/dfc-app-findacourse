@@ -122,7 +122,22 @@
       "type": "string"
     },
     "workspaceResourceGroup": {
-        "type": "string"
+      "type": "string"
+    },
+    "CmsRedisCacheConnectionString": {
+      "type": "string"
+    },
+    "CmsClientSecret": {
+      "type": "string"
+    },
+    "CmsClientId": {
+      "type": "string"
+    },
+    "CmsGraphApiUrl": {
+      "type": "string"
+    },
+    "CmsTokenEndPointUrl": {
+      "type": "string"
     }
   },
   "variables": {
@@ -449,6 +464,26 @@
               {
                 "name": "DOTNET_ROLL_FORWARD_ON_NO_CANDIDATE_FX",
                 "value": "1"
+              },
+              {
+                "name": "Cms__TokenEndPointUrl",
+                "value": "[parameters('CmsTokenEndpointUrl')]"
+              },
+              {
+                "name": "Cms__GraphApiUrl",
+                "value": "[parameters('CmsGraphApiUrl')]"
+              },
+              {
+                "name": "Cms__ClientId",
+                "value": "[parameters('CmsClientId')]"
+              },
+              {
+                "name": "Cms__ClientSecret",
+                "value": "[parameters('CmsClientSecret')]"
+              },
+              {
+                "name": "Cms__RedisCacheConnectionString",
+                "value": "[parameters('CmsRedisCacheConnectionString')]"
               }
             ]
           }

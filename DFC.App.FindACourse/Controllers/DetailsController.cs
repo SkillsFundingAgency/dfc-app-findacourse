@@ -2,6 +2,8 @@
 using DFC.App.FindACourse.Data.Models;
 using DFC.App.FindACourse.Services;
 using DFC.App.FindACourse.ViewModels;
+using DFC.Common.SharedContent.Pkg.Netcore.Interfaces;
+using DFC.Common.SharedContent.Pkg.Netcore.Model.ContentItems.SharedHtml;
 using DFC.Compui.Cosmos.Contracts;
 using DFC.Content.Pkg.Netcore.Data.Models.ClientOptions;
 using DFC.Logger.AppInsights.Contracts;
@@ -24,20 +26,23 @@ namespace DFC.App.FindACourse.Controllers
     {
         private readonly ILogService logService;
         private readonly IFindACourseService findACourseService;
-        private readonly IDocumentService<StaticContentItemModel> staticContentDocumentService;
+        private readonly ISharedContentRedisInterface sharedContentRedis;
         private readonly CmsApiClientOptions cmsApiClientOptions;
         private readonly IMapper mapper;
+        public const string contactusStaxId = "c0117ac7-115a-4bc1-9350-3fb4b00c7857";
+        public const string speakToanAdviserStaxId = "2c9da1b3-3529-4834-afc9-9cd741e59788";
+
 
         public DetailsController(
             ILogService logService,
             IFindACourseService findACourseService,
-            IDocumentService<StaticContentItemModel> staticContentDocumentService,
+           ISharedContentRedisInterface sharedContentRedis,
             CmsApiClientOptions cmsApiClientOptions,
             IMapper mapper)
         {
             this.logService = logService;
             this.findACourseService = findACourseService;
-            this.staticContentDocumentService = staticContentDocumentService;
+            this.sharedContentRedis = sharedContentRedis;
             this.cmsApiClientOptions = cmsApiClientOptions;
             this.mapper = mapper;
         }
@@ -85,7 +90,10 @@ namespace DFC.App.FindACourse.Controllers
 
                 model.CourseRegions = model.CourseDetails.SubRegions != null ? TransformSubRegionsToRegions(model.CourseDetails.SubRegions) : null;
                 model.DetailsRightBarViewModel.Provider = mapper.Map<ProviderViewModel>(model.CourseDetails.ProviderDetails);
-                model.DetailsRightBarViewModel.SpeakToAnAdviser = await staticContentDocumentService.GetByIdAsync(new Guid(cmsApiClientOptions.ContentIds), "shared-content").ConfigureAwait(false);
+
+                var sharedhtml = await sharedContentRedis.GetDataAsync<SharedHtml>("SharedContent/" + speakToanAdviserStaxId);
+                model.DetailsRightBarViewModel.SpeakToAnAdviser = sharedhtml.Html;
+
                 model.CourseDetails.CourseWebpageLink = CompareProviderLinkWithCourseLink(model?.CourseDetails?.CourseWebpageLink, model.CourseDetails?.ProviderDetails?.Website);
                 model.CourseDetails.HasCampaignCode = paramValues.CampaignCode == "LEVEL3_FREE";
             }
@@ -130,7 +138,8 @@ namespace DFC.App.FindACourse.Controllers
                 }
 
                 model.DetailsRightBarViewModel.Provider = mapper.Map<ProviderViewModel>(model.TlevelDetails.ProviderDetails);
-                model.DetailsRightBarViewModel.SpeakToAnAdviser = await staticContentDocumentService.GetByIdAsync(new Guid(cmsApiClientOptions.ContentIds), "shared-content").ConfigureAwait(false);
+                var sharedhtml = await sharedContentRedis.GetDataAsync<SharedHtml>("SharedContent/" + speakToanAdviserStaxId);
+                model.DetailsRightBarViewModel.SpeakToAnAdviser = sharedhtml.Html;
             }
             catch (Exception ex)
             {
