@@ -557,7 +557,7 @@ namespace DFC.App.FindACourse.Controllers
         {
             var courseSearchFilters = new CourseSearchFilters
             {
-                LearningMethod = new List<LearningMethod> { LearningMethod.All },
+                CourseType = new List<CourseType> { CourseType.All },
                 CourseHours = new List<CourseHours> { CourseHours.All },
                 StartDate = StartDate.Anytime,
                 CourseStudyTime = new List<Fac.AttendancePattern> { Fac.AttendancePattern.Undefined },
@@ -780,14 +780,14 @@ namespace DFC.App.FindACourse.Controllers
         {
             logService.LogInformation($"{nameof(GenerateModelAsync)} has been called");
 
-            var LearningMethodList = new List<LearningMethod>();
+            var LearningMethodList = new List<CourseType>();
             var courseHoursList = new List<CourseHours>();
             var courseStudyTimeList = new List<Fac.AttendancePattern>();
             var selectedStartDateValue = StartDate.Anytime;
 
             if (model.SideBar.LearningMethod != null && model.SideBar.LearningMethod.SelectedIds.Any())
             {
-                LearningMethodList = ConvertToEnumList<LearningMethod>(model.SideBar.LearningMethod.SelectedIds);
+                LearningMethodList = ConvertToEnumList<CourseType>(model.SideBar.LearningMethod.SelectedIds);
             }
 
             if (model.SideBar.CourseHours != null && model.SideBar.CourseHours.SelectedIds.Any())
@@ -814,7 +814,7 @@ namespace DFC.App.FindACourse.Controllers
             model.CourseSearchFilters ??= new CourseSearchFilters();
 
             model.CourseSearchFilters.SearchTerm = model.CurrentSearchTerm;
-            model.CourseSearchFilters.LearningMethod = LearningMethodList;
+            model.CourseSearchFilters.CourseType = LearningMethodList;
             model.CourseSearchFilters.CourseHours = courseHoursList;
             model.CourseSearchFilters.StartDate = selectedStartDateValue;
             model.CourseSearchFilters.CourseStudyTime = courseStudyTimeList;
