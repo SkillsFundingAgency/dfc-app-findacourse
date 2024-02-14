@@ -38,13 +38,13 @@ namespace DFC.App.FindACourse.Services.UnitTests
                 Page = 1,
             };
             courseProperties.Filters.SearchTerm = "Maths";
-            courseProperties.Filters.LearningMethod = new List<LearningMethod> { LearningMethod.All };
+            courseProperties.Filters.CourseType = new List<CourseType> { CourseType.All };
             courseProperties.Filters.CourseHours = new List<CourseHours> { CourseHours.All };
 
             var courseSearchFilters = new CourseSearchFilters
             {
                 SearchTerm = "Maths",
-                LearningMethod = new List<LearningMethod> { LearningMethod.All },
+                CourseType = new List<CourseType> { CourseType.All },
                 CourseHours = new List<CourseHours> { CourseHours.All },
             };
 
@@ -74,12 +74,12 @@ namespace DFC.App.FindACourse.Services.UnitTests
             //Arrange
             var repository = A.Fake<IFindACourseRepository>();
             var findACourseService = new FindACourseService(repository);
-            var returnList = new List<LearningMethod> { LearningMethod.All, LearningMethod.ClassroomBased, LearningMethod.ClassroomBased, LearningMethod.WorkBased, };
+            var returnList = new List<CourseType> { CourseType.All, CourseType.ClassroomBased, CourseType.ClassroomBased, CourseType.WorkBased, };
 
-            A.CallTo(() => repository.GetFilter<LearningMethod>()).Returns(returnList);
+            A.CallTo(() => repository.GetFilter<CourseType>()).Returns(returnList);
 
             //Act
-            var result = findACourseService.GetFilterByName<LearningMethod>();
+            var result = findACourseService.GetFilterByName<CourseType>();
 
             //Assert
             Assert.Equal(4, result.Count);
