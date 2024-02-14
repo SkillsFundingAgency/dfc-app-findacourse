@@ -24,7 +24,7 @@ namespace DFC.App.FindACourse.Data.Helpers
             return lstDistance;
         }
 
-        public static List<Filter> GetCourseTypeList()
+        public static List<Filter> GetLearningMethodList()
         {
             var lstCourseType = new List<Filter>
             {

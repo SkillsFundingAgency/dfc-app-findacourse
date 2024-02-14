@@ -29,7 +29,7 @@ namespace DFC.App.FindACourse.ViewModels
 
         public FiltersListViewModel CourseHours { get; set; }
 
-        public FiltersListViewModel CourseType { get; set; }
+        public FiltersListViewModel LearningMethod { get; set; }
 
         public List<SelectListItem> StartDateOptions { get; set; }
 
