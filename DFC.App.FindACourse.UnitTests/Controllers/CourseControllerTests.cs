@@ -181,7 +181,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
                 SideBar = new SideBarViewModel
                 {
                     DistanceValue = "15 miles",
-                    CourseType = new FiltersListViewModel
+                    LearningMethod = new FiltersListViewModel
                     {
                         SelectedIds = new List<string> { "Online" },
                     },
@@ -229,7 +229,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
             var paramValues = new ParamValues
             {
                 Town = town,
-                CourseType = "Online",
+                LearningMethod = "Online",
                 CourseHours = "Full time",
                 CourseStudyTime = "Daytime",
             };
@@ -262,7 +262,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
             var paramValues = new ParamValues
             {
                 Town = "town",
-                CourseType = "Online",
+                LearningMethod = "Online",
                 CourseHours = "Full time",
                 CourseStudyTime = "Daytime",
                 CampaignCode = CourseController.FreeSearchCampaignCode,
@@ -319,7 +319,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
             {
                 Town = townOrPostcode,
                 Coordinates = coordinates,
-                CourseType = "Online",
+                LearningMethod = "Online",
                 CourseHours = "Full time",
                 CourseStudyTime = "Daytime",
             };
@@ -411,7 +411,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
             var paramValues = new ParamValues
             {
                 Town = "CV1 2WT",
-                CourseType = "Online",
+                LearningMethod = "Online",
                 CourseHours = "Full time",
                 CourseStudyTime = "Daytime",
             };

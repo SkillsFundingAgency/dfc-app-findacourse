@@ -1,4 +1,4 @@
-﻿Feature: SearchForACourseUsingCourseTypeFilter
+﻿Feature: SearchForACourseUsingLearningMethodFilter
 	In order to find a suitable course
 	As someone looking to attend a new course
 	I want to search for courses relevant to me

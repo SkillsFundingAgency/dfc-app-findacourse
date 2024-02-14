@@ -93,21 +93,21 @@ namespace DFC.App.FindACourse.UI.FunctionalTests.StepDefinitions
         }
 
         [When(@"I select (.*) in the learning method filter")]
-        public void WhenISelectCourseTypeFilter(string courseType)
+        public void WhenISelectLearningMethodFilter(string LearningMethod)
         {
-            switch (courseType)
+            switch (LearningMethod)
             {
                 case "Online":
-                    this.Context.GetWebDriver().FindElement(By.Id("SideBar.CourseType.SelectedIds[0]")).Click();
+                    this.Context.GetWebDriver().FindElement(By.Id("SideBar.LearningMethod.SelectedIds[0]")).Click();
                     break;
                 case "Classroom based":
-                    this.Context.GetWebDriver().FindElement(By.Id("SideBar.CourseType.SelectedIds[1]")).Click();
+                    this.Context.GetWebDriver().FindElement(By.Id("SideBar.LearningMethod.SelectedIds[1]")).Click();
                     break;
                 case "Work based":
-                    this.Context.GetWebDriver().FindElement(By.Id("SideBar.CourseType.SelectedIds[2]")).Click();
+                    this.Context.GetWebDriver().FindElement(By.Id("SideBar.LearningMethod.SelectedIds[2]")).Click();
                     break;
                 case "Blended learning":
-                    this.Context.GetWebDriver().FindElement(By.Id("SideBar.CourseType.SelectedIds[3]")).Click();
+                    this.Context.GetWebDriver().FindElement(By.Id("SideBar.LearningMethod.SelectedIds[3]")).Click();
                     break;
                 default:
                     throw new OperationCanceledException($"Unable to perform the step: {this.Context.StepContext.StepInfo.Text}. The learning method is not found.");

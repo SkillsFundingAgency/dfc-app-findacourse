@@ -26,7 +26,7 @@ namespace DFC.App.FindACourse.Data.Helpers
 
         public static List<Filter> GetLearningMethodList()
         {
-            var lstCourseType = new List<Filter>
+            var lstLearningMethod = new List<Filter>
             {
                 new Filter { Id = "Online", Text = "Online" },
                 new Filter { Id = "Classroom based", Text = "Classroom based" },
@@ -34,7 +34,7 @@ namespace DFC.App.FindACourse.Data.Helpers
                 new Filter { Id = "Blended Learning", Text = "Blended learning" },
             };
 
-            return lstCourseType;
+            return lstLearningMethod;
         }
 
         public static List<Filter> GetHoursList()
