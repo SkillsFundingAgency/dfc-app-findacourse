@@ -498,7 +498,7 @@ namespace DFC.App.FindACourse.Controllers
 
             var town = model.SideBar.TownOrPostcode;
             var distance = model.SideBar.DistanceValue;
-            var LearningMethod = model.SideBar.LearningMethod != null && model.SideBar.LearningMethod.SelectedIds?.Count > 0 ? JsonConvert.SerializeObject(model.SideBar.LearningMethod.SelectedIds) : null;
+            var learningMethod = model.SideBar.LearningMethod != null && model.SideBar.LearningMethod.SelectedIds?.Count > 0 ? JsonConvert.SerializeObject(model.SideBar.LearningMethod.SelectedIds) : null;
             var courseHours = model.SideBar.CourseHours != null && model.SideBar.CourseHours.SelectedIds?.Count > 0 ? JsonConvert.SerializeObject(model.SideBar.CourseHours.SelectedIds) : null;
             var courseStudyTime = model.SideBar.CourseStudyTime != null && model.SideBar.CourseStudyTime?.SelectedIds.Count > 0 ? JsonConvert.SerializeObject(model.SideBar.CourseStudyTime.SelectedIds) : null;
             var startDate = model.SideBar.StartDateValue;
@@ -526,7 +526,7 @@ namespace DFC.App.FindACourse.Controllers
 
                 TempData["params"] = $"{nameof(searchTerm)}={searchTerm}&" +
                                      $"{nameof(town)}={townSearchTerm}&" +
-                                     $"{nameof(LearningMethod)}={LearningMethod}&" +
+                                     $"{nameof(learningMethod)}={learningMethod}&" +
                                      $"{nameof(courseHours)}={courseHours}&" +
                                      $"{nameof(courseStudyTime)}={courseStudyTime}&" +
                                      $"{nameof(startDate)}={startDate}&" +
@@ -780,14 +780,14 @@ namespace DFC.App.FindACourse.Controllers
         {
             logService.LogInformation($"{nameof(GenerateModelAsync)} has been called");
 
-            var LearningMethodList = new List<CourseType>();
+            var learningMethodList = new List<CourseType>();
             var courseHoursList = new List<CourseHours>();
             var courseStudyTimeList = new List<Fac.AttendancePattern>();
             var selectedStartDateValue = StartDate.Anytime;
 
             if (model.SideBar.LearningMethod != null && model.SideBar.LearningMethod.SelectedIds.Any())
             {
-                LearningMethodList = ConvertToEnumList<CourseType>(model.SideBar.LearningMethod.SelectedIds);
+                learningMethodList = ConvertToEnumList<CourseType>(model.SideBar.LearningMethod.SelectedIds);
             }
 
             if (model.SideBar.CourseHours != null && model.SideBar.CourseHours.SelectedIds.Any())
@@ -814,7 +814,7 @@ namespace DFC.App.FindACourse.Controllers
             model.CourseSearchFilters ??= new CourseSearchFilters();
 
             model.CourseSearchFilters.SearchTerm = model.CurrentSearchTerm;
-            model.CourseSearchFilters.CourseType = LearningMethodList;
+            model.CourseSearchFilters.CourseType = learningMethodList;
             model.CourseSearchFilters.CourseHours = courseHoursList;
             model.CourseSearchFilters.StartDate = selectedStartDateValue;
             model.CourseSearchFilters.CourseStudyTime = courseStudyTimeList;
@@ -1011,7 +1011,7 @@ namespace DFC.App.FindACourse.Controllers
             logService.LogInformation($"{nameof(GetSideBarViewModel)} has been called");
             var sideBarViewModel = new SideBarViewModel
             {
-                LearningMethod = MapFilter("learningMethod", "Learning method", ListFilters.GetLearningMethodList()),
+                LearningMethod = MapFilter("courseType", "Learning method", ListFilters.GetLearningMethodList()),
                 CourseHours = MapFilter("courseHours", "Course hours", ListFilters.GetHoursList()),
                 CourseStudyTime = MapFilter("courseStudyTime", "Course study time", ListFilters.GetStudyTimeList()),
                 QualificationLevels = MapFilter("qualificationLevels", "Course qualification level", ListFilters.GetLevelList()),
