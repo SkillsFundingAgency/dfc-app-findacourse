@@ -1011,7 +1011,7 @@ namespace DFC.App.FindACourse.Controllers
             logService.LogInformation($"{nameof(GetSideBarViewModel)} has been called");
             var sideBarViewModel = new SideBarViewModel
             {
-                LearningMethod = MapFilter("courseType", "Learning method", ListFilters.GetLearningMethodList()),
+                LearningMethod = MapFilter("learningMethod", "Learning method", ListFilters.GetLearningMethodList()),
                 CourseHours = MapFilter("courseHours", "Course hours", ListFilters.GetHoursList()),
                 CourseStudyTime = MapFilter("courseStudyTime", "Course study time", ListFilters.GetStudyTimeList()),
                 QualificationLevels = MapFilter("qualificationLevels", "Course qualification level", ListFilters.GetLevelList()),
