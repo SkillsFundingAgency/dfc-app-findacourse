@@ -25,7 +25,7 @@
                                 <p class="govuk-body">
                                     Browse available courses to find the one that's right for you.
                                 </p>
-                                    <a href="/find-a-course/find-courses-to-get-a-job" class="govuk-button ncs-button__primary govuk-!-margin-bottom-1">Show all courses</a>
+                                    <a href="@(Model.FreeCourseSearch ? "/find-a-course/searchFreeCourse" : "/find-a-course/searchcourse")" class="govuk-button ncs-button__primary govuk-!-margin-bottom-1">Show all courses</a>
                             </div>
                         </div>
                     </div>

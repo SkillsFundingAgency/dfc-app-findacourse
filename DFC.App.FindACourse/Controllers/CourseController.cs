@@ -402,11 +402,11 @@ namespace DFC.App.FindACourse.Controllers
         {
             logService.LogInformation($"{nameof(this.SearchCourse)} has been called");
 
-            if (string.IsNullOrWhiteSpace(searchTerm) && string.IsNullOrWhiteSpace(townOrPostcode))
-            {
-                logService.LogInformation($"{nameof(searchTerm)} and {nameof(townOrPostcode)} is null or whitespace");
-                return Body();
-            }
+            //if (string.IsNullOrWhiteSpace(searchTerm) && string.IsNullOrWhiteSpace(townOrPostcode))
+            //{
+            //    logService.LogInformation($"{nameof(searchTerm)} and {nameof(townOrPostcode)} is null or whitespace");
+            //    return Body();
+            //}
 
             var model = new BodyViewModel();
             CourseSearchFilters courseSearchFilters = GetCourseSearchFilters(searchTerm, townOrPostcode, sideBarCoordinates);
