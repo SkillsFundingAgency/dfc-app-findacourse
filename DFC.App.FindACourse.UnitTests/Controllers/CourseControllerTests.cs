@@ -181,6 +181,10 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
                 SideBar = new SideBarViewModel
                 {
                     DistanceValue = "15 miles",
+                    CourseType = new FiltersListViewModel
+                    {
+                        SelectedIds = new List<string> { "Skills Bootcamps" },
+                    },
                     LearningMethod = new FiltersListViewModel
                     {
                         SelectedIds = new List<string> { "Online" },

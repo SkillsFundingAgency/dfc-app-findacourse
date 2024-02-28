@@ -37,6 +37,21 @@ namespace DFC.App.FindACourse.Data.Helpers
             return lstLearningMethod;
         }
 
+        public static List<Filter> GetCourseTypeList()
+        {
+            var courseTypes = new List<Filter>
+            {
+                new Filter { Id = "Essential Skills", Text = "Essential skills" },
+                new Filter { Id = "T-levels", Text = "T-levels" },
+                new Filter { Id = "HTQs", Text = "HTQs" },
+                new Filter { Id = "Free courses for Jobs", Text = "Free courses for Jobs" },
+                new Filter { Id = "Multiply", Text = "Multiply" },
+                new Filter { Id = "Skills Bootcamps", Text = "Skills bootcamps" },
+            };
+
+            return courseTypes;
+        }
+
         public static List<Filter> GetHoursList()
         {
             var lstCourseHours = new List<Filter>
