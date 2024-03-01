@@ -93,7 +93,7 @@ namespace DFC.App.FindACourse.Services.UnitTests
             //Arrange
             var repository = A.Fake<IFindACourseRepository>();
             var findACourseService = new FindACourseService(repository);
-            var returnList = new List<CourseType> { CourseType.Multiply, CourseType.EssentialSkills, CourseType.SkillsBootcamps, CourseType.HTQs,CourseType.FreeCoursesForJobs,CourseType.TLevels };
+            var returnList = new List<CourseType> { CourseType.Multiply, CourseType.EssentialSkills, CourseType.SkillsBootcamp, CourseType.HTQs,CourseType.FreeCoursesForJobs,CourseType.TLevels };
 
             A.CallTo(() => repository.GetFilter<CourseType>()).Returns(returnList);
 
