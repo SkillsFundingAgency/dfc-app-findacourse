@@ -46,7 +46,7 @@ namespace DFC.App.FindACourse.Data.Helpers
                 new Filter { Id = "HTQs", Text = "HTQs" },
                 new Filter { Id = "Free courses for Jobs", Text = "Free courses for Jobs" },
                 new Filter { Id = "Multiply", Text = "Multiply" },
-                new Filter { Id = "Skills Bootcamps", Text = "Skills bootcamps" },
+                new Filter { Id = "Skills Bootcamp", Text = "Skills bootcamp" },
             };
 
             return courseTypes;
