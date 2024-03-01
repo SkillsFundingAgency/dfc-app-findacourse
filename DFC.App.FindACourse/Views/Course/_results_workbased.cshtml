@@ -19,6 +19,9 @@
                 <li>
                     <partial name="_Cost" model="Model" />
                 </li>
+                <li>
+                    <span class="learning-format govuk-secondary-colour">Course type:</span> @Html.Raw(Model.CourseType)
+                </li>
             </ul>
         </div>
         <div class="govuk-grid-column-one-half">
@@ -34,7 +37,7 @@
                         @Html.Raw(Model.Duration)
                     }
 
-                </li>
+                </li>                
             </ul>
         </div>
     </div>

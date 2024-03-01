@@ -42,7 +42,7 @@ namespace DFC.App.FindACourse.Data.Helpers
             var courseTypes = new List<Filter>
             {
                 new Filter { Id = "Essential Skills", Text = "Essential skills" },
-                new Filter { Id = "T-levels", Text = "T-levels" },
+                new Filter { Id = "T Levels", Text = "T-levels" },
                 new Filter { Id = "HTQs", Text = "HTQs" },
                 new Filter { Id = "Free courses for Jobs", Text = "Free courses for Jobs" },
                 new Filter { Id = "Multiply", Text = "Multiply" },
