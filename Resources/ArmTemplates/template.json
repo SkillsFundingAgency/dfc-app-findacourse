@@ -138,6 +138,12 @@
     },
     "CmsTokenEndPointUrl": {
       "type": "string"
+    },
+    "WorkerThreads": {
+      "type": "string"
+    },
+    "IocpThreads": {
+        "type": "string"
     }
   },
   "variables": {
@@ -484,6 +490,14 @@
               {
                 "name": "Cms__RedisCacheConnectionString",
                 "value": "[parameters('CmsRedisCacheConnectionString')]"
+              },
+              {
+                "name": "ThreadSettings__WorkerThreads",
+                "value": "[parameters('WorkerThreads')]"
+              },
+              {
+                 "name": "ThreadSettings__IocpThreads",
+                 "value": "[parameters('IocpThreads')]"
               }
             ]
           }

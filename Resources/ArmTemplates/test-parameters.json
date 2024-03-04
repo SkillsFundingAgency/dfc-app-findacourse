@@ -121,6 +121,12 @@
     },
     "CmsRedisCacheConnectionString": {
       "value": "teststring"
+    },
+    "WorkerThreads": {
+      "value": "200"
+    },
+    "IocpThreads": {
+        "value": "200"
     }
 
   }
