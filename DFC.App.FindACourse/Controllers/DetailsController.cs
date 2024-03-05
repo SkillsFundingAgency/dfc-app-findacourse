@@ -161,6 +161,7 @@ namespace DFC.App.FindACourse.Controllers
             var searchTerm = $"{nameof(paramValues.SearchTerm)}={paramValues.SearchTerm}&" +
                              $"{nameof(paramValues.Town)}={townSearchTerm}&" +
                              $"{nameof(paramValues.LearningMethod)}={paramValues.LearningMethod}&" +
+                             $"{nameof(paramValues.CourseType)}={paramValues.CourseType}&" +
                              $"{nameof(paramValues.CourseHours)}={paramValues.CourseHours}&" +
                              $"{nameof(paramValues.CourseStudyTime)}={paramValues.CourseStudyTime}&" +
                              $"{nameof(paramValues.StartDate)}={paramValues.StartDate}&" +

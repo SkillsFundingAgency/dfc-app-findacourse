@@ -692,7 +692,7 @@ namespace DFC.App.FindACourse.Controllers
                     SuggestedLocation = WebUtility.HtmlEncode(paramValues.Town),
                     DistanceValue = paramValues.Distance,
                     LearningMethod = ConvertStringToFiltersListViewModel(paramValues.LearningMethod),
-                    CourseType = ConvertStringToFiltersListViewModel(paramValues.LearningMethod),
+                    CourseType = ConvertStringToFiltersListViewModel(paramValues.CourseType),
                     Sectors = ConvertStringToFiltersListViewModel(paramValues.Sectors),
                     CourseHours = ConvertStringToFiltersListViewModel(paramValues.CourseHours),
                     CourseStudyTime = ConvertStringToFiltersListViewModel(paramValues.CourseStudyTime),
