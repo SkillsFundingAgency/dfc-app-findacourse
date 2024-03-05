@@ -183,7 +183,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
                     DistanceValue = "15 miles",
                     CourseType = new FiltersListViewModel
                     {
-                        SelectedIds = new List<string> { "Skills Bootcamps" },
+                        SelectedIds = new List<string> { "Skills Bootcamp" },
                     },
                     LearningMethod = new FiltersListViewModel
                     {
