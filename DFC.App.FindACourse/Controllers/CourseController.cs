@@ -200,6 +200,7 @@ namespace DFC.App.FindACourse.Controllers
                     DistanceValue = paramValues.Distance,
                     LearningMethod = ConvertStringToFiltersListViewModel(paramValues.LearningMethod),
                     CourseType = ConvertStringToFiltersListViewModel(paramValues.CourseType),
+                    Sectors = ConvertStringToFiltersListViewModel(paramValues.Sectors),
                     CourseHours = ConvertStringToFiltersListViewModel(paramValues.CourseHours),
                     CourseStudyTime = ConvertStringToFiltersListViewModel(paramValues.CourseStudyTime),
                     QualificationLevels = string.IsNullOrEmpty(paramValues.QualificationLevels) ? new FiltersListViewModel() : ConvertStringToFiltersListViewModel(paramValues.QualificationLevels),
@@ -260,6 +261,8 @@ namespace DFC.App.FindACourse.Controllers
                     TempData["params"] = $"{nameof(paramValues.SearchTerm)}={paramValues.SearchTerm}&" +
                                          $"{nameof(paramValues.Town)}={townSearchTerm}&" +
                                          $"{nameof(paramValues.LearningMethod)}={paramValues.LearningMethod}&" +
+                                         $"{nameof(paramValues.CourseType)}={paramValues.CourseType}&" +
+                                         $"{nameof(paramValues.Sectors)}={paramValues.Sectors}&" +
                                          $"{nameof(paramValues.CourseHours)}={paramValues.CourseHours}&" +
                                          $"{nameof(paramValues.CourseStudyTime)}={paramValues.CourseStudyTime}&" +
                                          $"{nameof(paramValues.StartDate)}={paramValues.StartDate}&" +
