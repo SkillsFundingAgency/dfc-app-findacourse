@@ -835,7 +835,7 @@ namespace DFC.App.FindACourse.Controllers
 
             if (model.SideBar.Sectors != null && model.SideBar.Sectors.SelectedIds.Any())
             {
-                sectorsList = model.SideBar.CourseType.SelectedIds.Select(int.Parse).ToList();
+                sectorsList = model.SideBar.Sectors.SelectedIds.Select(int.Parse).ToList();
             }
 
             if (model.SideBar.CourseHours != null && model.SideBar.CourseHours.SelectedIds.Any())
