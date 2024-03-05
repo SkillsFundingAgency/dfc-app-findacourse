@@ -1,5 +1,4 @@
-﻿using Antlr.Runtime.Misc;
-using DFC.App.FindACourse.Data.Domain;
+﻿using DFC.App.FindACourse.Data.Domain;
 using DFC.App.FindACourse.Data.Helpers;
 using DFC.App.FindACourse.Data.Models;
 using DFC.App.FindACourse.Extensions;
@@ -234,6 +233,8 @@ namespace DFC.App.FindACourse.Controllers
             {
                 model.Results = await findACourseService.GetFilteredData(newBodyViewModel.CourseSearchFilters, newBodyViewModel.CourseSearchOrderBy, model.RequestPage).ConfigureAwait(false);
                 model.PageSize = int.TryParse(courseSearchClientSettings.CourseSearchSvcSettings?.SearchPageSize, out int pageSize) ? pageSize : 20;
+
+                TempData["Sectors"] = model.Results.AttachedSectors;
 
                 foreach (var item in model.Results?.Courses)
                 {
@@ -472,6 +473,12 @@ namespace DFC.App.FindACourse.Controllers
                 sideBarViewModel.CourseType.SelectedIds = model.SideBar.CourseType.SelectedIds;
             }
 
+            if (model.SideBar.Sectors != null && model.SideBar.Sectors.SelectedIds.Any())
+            {
+                model.SideBar.Sectors = CheckCheckboxState(model.SideBar.Sectors, sideBarViewModel.Sectors);
+                sideBarViewModel.Sectors.SelectedIds = model.SideBar.Sectors.SelectedIds;
+            }
+
             if (model.SideBar.CourseHours != null && model.SideBar.CourseHours.SelectedIds.Any())
             {
                 model.SideBar.CourseHours = CheckCheckboxState(model.SideBar.CourseHours, sideBarViewModel.CourseHours);
@@ -504,6 +511,7 @@ namespace DFC.App.FindACourse.Controllers
             var distance = model.SideBar.DistanceValue;
             var learningMethod = model.SideBar.LearningMethod != null && model.SideBar.LearningMethod.SelectedIds?.Count > 0 ? JsonConvert.SerializeObject(model.SideBar.LearningMethod.SelectedIds) : null;
             var courseType = model.SideBar.CourseType != null && model.SideBar.CourseType.SelectedIds?.Count > 0 ? JsonConvert.SerializeObject(model.SideBar.CourseType.SelectedIds) : null;
+            var sectors = model.SideBar.Sectors != null && model.SideBar.Sectors.SelectedIds?.Count > 0 ? JsonConvert.SerializeObject(model.SideBar.Sectors.SelectedIds) : null;
             var courseHours = model.SideBar.CourseHours != null && model.SideBar.CourseHours.SelectedIds?.Count > 0 ? JsonConvert.SerializeObject(model.SideBar.CourseHours.SelectedIds) : null;
             var courseStudyTime = model.SideBar.CourseStudyTime != null && model.SideBar.CourseStudyTime?.SelectedIds.Count > 0 ? JsonConvert.SerializeObject(model.SideBar.CourseStudyTime.SelectedIds) : null;
             var startDate = model.SideBar.StartDateValue;
@@ -682,6 +690,7 @@ namespace DFC.App.FindACourse.Controllers
                     DistanceValue = paramValues.Distance,
                     LearningMethod = ConvertStringToFiltersListViewModel(paramValues.LearningMethod),
                     CourseType = ConvertStringToFiltersListViewModel(paramValues.LearningMethod),
+                    Sectors = ConvertStringToFiltersListViewModel(paramValues.Sectors),
                     CourseHours = ConvertStringToFiltersListViewModel(paramValues.CourseHours),
                     CourseStudyTime = ConvertStringToFiltersListViewModel(paramValues.CourseStudyTime),
                     StartDateValue = paramValues.StartDate,
@@ -745,6 +754,8 @@ namespace DFC.App.FindACourse.Controllers
             {
                 model.Results = await findACourseService.GetFilteredData(filters, CourseSearchOrderBy.StartDate, 1)
                     .ConfigureAwait(true);
+
+                TempData["Sectors"] = model.Results.AttachedSectors;
             }
             catch (Exception ex)
             {
@@ -765,6 +776,9 @@ namespace DFC.App.FindACourse.Controllers
             try
             {
                 model.Results = await findACourseService.GetFilteredData(newBodyViewModel.CourseSearchFilters, newBodyViewModel.CourseSearchOrderBy, model.RequestPage).ConfigureAwait(false);
+
+                TempData["Sectors"] = model.Results.AttachedSectors;
+
                 foreach (var item in model.Results.Courses)
                 {
                     if (item.Description != null && item.Description.Contains("&lt;a href"))
@@ -788,6 +802,7 @@ namespace DFC.App.FindACourse.Controllers
         {
             logService.LogInformation($"{nameof(GenerateModelAsync)} has been called");
             var courseTypeList = new List<CourseType>();
+            var sectorsList = new List<int>();
             var learningMethodList = new List<LearningMethod>();
             var courseHoursList = new List<CourseHours>();
             var courseStudyTimeList = new List<Fac.AttendancePattern>();
@@ -801,6 +816,11 @@ namespace DFC.App.FindACourse.Controllers
             if (model.SideBar.CourseType != null && model.SideBar.CourseType.SelectedIds.Any())
             {
                 courseTypeList = ConvertToEnumList<CourseType>(model.SideBar.CourseType.SelectedIds);
+            }
+
+            if (model.SideBar.Sectors != null && model.SideBar.Sectors.SelectedIds.Any())
+            {
+                sectorsList = model.SideBar.CourseType.SelectedIds.Select(int.Parse).ToList();
             }
 
             if (model.SideBar.CourseHours != null && model.SideBar.CourseHours.SelectedIds.Any())
@@ -1023,9 +1043,12 @@ namespace DFC.App.FindACourse.Controllers
         private SideBarViewModel GetSideBarViewModel()
         {
             logService.LogInformation($"{nameof(GetSideBarViewModel)} has been called");
+
+            var sectors = TempData["Sectors"] as List<Fac.Sector>;
             var sideBarViewModel = new SideBarViewModel
             {
                 CourseType = MapFilter("courseType", "Course type", ListFilters.GetCourseTypeList()),
+                Sectors = MapFilter("sectors", "Sectors", sectors?.Select(s => new Filter { Id = s.Id.ToString(), Text = s.Description }).ToList() ?? new List<Filter>()),
                 LearningMethod = MapFilter("learningMethod", "Learning method", ListFilters.GetLearningMethodList()),
                 CourseHours = MapFilter("courseHours", "Course hours", ListFilters.GetHoursList()),
                 CourseStudyTime = MapFilter("courseStudyTime", "Course study time", ListFilters.GetStudyTimeList()),

@@ -12,7 +12,7 @@
 
   <ItemGroup>
     <PackageReference Include="Azure.Search.Documents" Version="11.4.0" />
-    <PackageReference Include="DFC.FindACourseClient" Version="51.2.6" />
+    <PackageReference Include="DFC.FindACourseClient" Version="51.2.7" />
     <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="7.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

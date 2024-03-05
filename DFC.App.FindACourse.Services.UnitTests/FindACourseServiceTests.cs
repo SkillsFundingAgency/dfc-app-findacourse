@@ -93,7 +93,7 @@ namespace DFC.App.FindACourse.Services.UnitTests
             //Arrange
             var repository = A.Fake<IFindACourseRepository>();
             var findACourseService = new FindACourseService(repository);
-            var returnList = new List<CourseType> { CourseType.Multiply, CourseType.EssentialSkills, CourseType.SkillsBootcamps, CourseType.HTQs,CourseType.FreeCoursesForJobs,CourseType.TLevels };
+            var returnList = new List<CourseType> { CourseType.Multiply, CourseType.EssentialSkills, CourseType.SkillsBootcamp, CourseType.HTQs, CourseType.FreeCoursesForJobs, CourseType.TLevels };
 
             A.CallTo(() => repository.GetFilter<CourseType>()).Returns(returnList);
 
@@ -102,6 +102,23 @@ namespace DFC.App.FindACourse.Services.UnitTests
 
             //Assert
             Assert.Equal(6, result.Count);
+        }
+
+        [Fact]
+        public void CheckIntegerOfSectorsIsReturned()
+        {
+            //Arrange
+            var repository = A.Fake<IFindACourseRepository>();
+            var findACourseService = new FindACourseService(repository);
+            var returnList = new List<int> { 1, 2, 3 };
+
+            A.CallTo(() => repository.GetFilter<int>()).Returns(returnList);
+
+            //Act
+            var result = findACourseService.GetFilterByName<int>();
+
+            //Assert
+            Assert.Equal(3, result.Count);
         }
 
         [Fact]
