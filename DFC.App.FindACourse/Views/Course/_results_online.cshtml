@@ -21,7 +21,7 @@
                 @if (!string.IsNullOrEmpty(Model.CourseType))
                 {
                     <li>
-                        <span class="learning-format govuk-secondary-colour">Course type:</span> @Html.Raw(Model.CourseType)
+                        <span class="course-type govuk-secondary-colour">Course type:</span> @Html.Raw(Model.CourseType)
                     </li>
                 }
                 <li>
@@ -45,7 +45,7 @@
                 @if (!string.IsNullOrEmpty(Model.Sector))
                 {
                     <li>
-                        <span class="learning-format govuk-secondary-colour">Sector:</span> @Html.Raw(Model.Sector)
+                        <span class="sector govuk-secondary-colour">Sector:</span> @Html.Raw(Model.Sector)
                     </li>
                 }
             </ul>
