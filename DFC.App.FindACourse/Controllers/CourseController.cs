@@ -235,7 +235,10 @@ namespace DFC.App.FindACourse.Controllers
                 model.Results = await findACourseService.GetFilteredData(newBodyViewModel.CourseSearchFilters, newBodyViewModel.CourseSearchOrderBy, model.RequestPage).ConfigureAwait(false);
                 model.PageSize = int.TryParse(courseSearchClientSettings.CourseSearchSvcSettings?.SearchPageSize, out int pageSize) ? pageSize : 20;
 
-                TempData["Sectors"] = model.Results.AttachedSectors;
+                if (model.SideBar != null)
+                {
+                    model.SideBar.Sectors = MapFilter("sectors", "Sectors", model.Results.AttachedSectors?.Select(s => new Filter { Id = s.Id.ToString(), Text = s.Description }).ToList() ?? new List<Filter>());
+                }
 
                 foreach (var item in model.Results?.Courses)
                 {
@@ -446,6 +449,7 @@ namespace DFC.App.FindACourse.Controllers
                 }
             }
 
+            sideBarViewModel.Sectors = model.SideBar.Sectors;
             sideBarViewModel.DistanceValue = model.SideBar.DistanceValue;
             sideBarViewModel.TownOrPostcode = model.SideBar.TownOrPostcode;
             sideBarViewModel.StartDateValue = model.SideBar.StartDateValue;
@@ -544,6 +548,7 @@ namespace DFC.App.FindACourse.Controllers
                                      $"{nameof(town)}={townSearchTerm}&" +
                                      $"{nameof(learningMethod)}={learningMethod}&" +
                                      $"{nameof(courseType)}={courseType}&" +
+                                     $"{nameof(sectors)}={sectors}&" +
                                      $"{nameof(courseHours)}={courseHours}&" +
                                      $"{nameof(courseStudyTime)}={courseStudyTime}&" +
                                      $"{nameof(startDate)}={startDate}&" +
@@ -758,7 +763,10 @@ namespace DFC.App.FindACourse.Controllers
                 model.Results = await findACourseService.GetFilteredData(filters, CourseSearchOrderBy.StartDate, 1)
                     .ConfigureAwait(true);
 
-                TempData["Sectors"] = model.Results.AttachedSectors;
+                if (model.SideBar != null)
+                {
+                    model.SideBar.Sectors = MapFilter("sectors", "Sectors", model.Results.AttachedSectors?.Select(s => new Filter { Id = s.Id.ToString(), Text = s.Description }).ToList() ?? new List<Filter>());
+                }
             }
             catch (Exception ex)
             {
@@ -780,7 +788,10 @@ namespace DFC.App.FindACourse.Controllers
             {
                 model.Results = await findACourseService.GetFilteredData(newBodyViewModel.CourseSearchFilters, newBodyViewModel.CourseSearchOrderBy, model.RequestPage).ConfigureAwait(false);
 
-                TempData["Sectors"] = model.Results.AttachedSectors;
+                if (model.SideBar != null)
+                {
+                    model.SideBar.Sectors = MapFilter("sectors", "Sectors", model.Results.AttachedSectors?.Select(s => new Filter { Id = s.Id.ToString(), Text = s.Description }).ToList() ?? new List<Filter>());
+                }
 
                 foreach (var item in model.Results.Courses)
                 {
@@ -789,6 +800,7 @@ namespace DFC.App.FindACourse.Controllers
                         item.Description = HttpUtility.HtmlDecode(item.Description);
                     }
                 }
+
                 model.UsingAutoSuggestedLocation = newBodyViewModel.UsingAutoSuggestedLocation;
                 model.SideBar.DidYouMeanLocations = newBodyViewModel.SideBar.DidYouMeanLocations;
             }
@@ -1047,11 +1059,9 @@ namespace DFC.App.FindACourse.Controllers
         {
             logService.LogInformation($"{nameof(GetSideBarViewModel)} has been called");
 
-            var sectors = TempData["Sectors"] as List<Fac.Sector>;
             var sideBarViewModel = new SideBarViewModel
             {
                 CourseType = MapFilter("courseType", "Course type", ListFilters.GetCourseTypeList()),
-                Sectors = MapFilter("sectors", "Sectors", sectors?.Select(s => new Filter { Id = s.Id.ToString(), Text = s.Description }).ToList() ?? new List<Filter>()),
                 LearningMethod = MapFilter("learningMethod", "Learning method", ListFilters.GetLearningMethodList()),
                 CourseHours = MapFilter("courseHours", "Course hours", ListFilters.GetHoursList()),
                 CourseStudyTime = MapFilter("courseStudyTime", "Course study time", ListFilters.GetStudyTimeList()),

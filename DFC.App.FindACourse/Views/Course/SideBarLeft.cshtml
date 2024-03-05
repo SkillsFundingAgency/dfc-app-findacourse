@@ -54,7 +54,7 @@
         <div id="fac-course-type"><a id="course-type-mean" class="govuk-link" href="https://www.skillsforcareers.education.gov.uk/your-training-options" aria-label="CourseTypeFilters">What course types mean</a></div>
     </div>
 
-    @if (Model.SideBar.Sectors.LstChkFilter?.Count() > 0)
+    @if (Model.SideBar.Sectors?.LstChkFilter?.Count() > 0)
     {
         <div class="govuk-form-group" id="sectors-block">
             <div id="@Model.SideBar.Sectors.FilterText" class="govuk-checkboxes">
