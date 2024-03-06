@@ -235,10 +235,7 @@ namespace DFC.App.FindACourse.Controllers
                 model.Results = await findACourseService.GetFilteredData(newBodyViewModel.CourseSearchFilters, newBodyViewModel.CourseSearchOrderBy, model.RequestPage).ConfigureAwait(false);
                 model.PageSize = int.TryParse(courseSearchClientSettings.CourseSearchSvcSettings?.SearchPageSize, out int pageSize) ? pageSize : 20;
 
-                if (model.SideBar != null)
-                {
-                    model.SideBar.Sectors = MapFilter("sectors", "Sectors", model.Results.AttachedSectors?.Select(s => new Filter { Id = s.Id.ToString(), Text = s.Description }).ToList() ?? new List<Filter>());
-                }
+                await SetSideBarSectors(model);
 
                 foreach (var item in model.Results?.Courses)
                 {
@@ -339,7 +336,7 @@ namespace DFC.App.FindACourse.Controllers
                 //If the user clicked on one of the suggested locations
                 var indexOfLocationSpliter = location.IndexOf("|", StringComparison.Ordinal);
                 model.SideBar.TownOrPostcode = location.Substring(0, indexOfLocationSpliter);
-                model.SideBar.Coordinates = location[(indexOfLocationSpliter + 1) ..];
+                model.SideBar.Coordinates = location[(indexOfLocationSpliter + 1)..];
             }
 
             CourseSearchFilters courseSearchFilters = GetCourseSearchFilters(searchTerm, model.SideBar.TownOrPostcode, model.SideBar.Coordinates);
@@ -406,12 +403,6 @@ namespace DFC.App.FindACourse.Controllers
         public async Task<IActionResult> SearchCourse(string searchTerm, string townOrPostcode, string sideBarCoordinates, string sideBarSuggestedLocation)
         {
             logService.LogInformation($"{nameof(this.SearchCourse)} has been called");
-
-            //if (string.IsNullOrWhiteSpace(searchTerm) && string.IsNullOrWhiteSpace(townOrPostcode))
-            //{
-            //    logService.LogInformation($"{nameof(searchTerm)} and {nameof(townOrPostcode)} is null or whitespace");
-            //    return Body();
-            //}
 
             var model = new BodyViewModel();
             CourseSearchFilters courseSearchFilters = GetCourseSearchFilters(searchTerm, townOrPostcode, sideBarCoordinates);
@@ -539,7 +530,8 @@ namespace DFC.App.FindACourse.Controllers
                 {
                     townSearchTerm = WebUtility.HtmlEncode(town).Replace("&amp;#39;", "%27");
                     townSearchTerm = townSearchTerm.Replace("&#39;", "%27");
-                } else
+                }
+                else
                 {
                     townSearchTerm = WebUtility.HtmlEncode(town);
                 }
@@ -579,7 +571,7 @@ namespace DFC.App.FindACourse.Controllers
         {
             var courseSearchFilters = new CourseSearchFilters
             {
-                CourseType = new List<CourseType> { CourseType.All},
+                CourseType = new List<CourseType> { CourseType.All },
                 LearningMethod = new List<LearningMethod> { LearningMethod.All },
                 CourseHours = new List<CourseHours> { CourseHours.All },
                 StartDate = StartDate.Anytime,
@@ -763,10 +755,7 @@ namespace DFC.App.FindACourse.Controllers
                 model.Results = await findACourseService.GetFilteredData(filters, CourseSearchOrderBy.StartDate, 1)
                     .ConfigureAwait(true);
 
-                if (model.SideBar != null)
-                {
-                    model.SideBar.Sectors = MapFilter("sectors", "Sectors", model.Results.AttachedSectors?.Select(s => new Filter { Id = s.Id.ToString(), Text = s.Description }).ToList() ?? new List<Filter>());
-                }
+                await SetSideBarSectors(model);
             }
             catch (Exception ex)
             {
@@ -788,10 +777,7 @@ namespace DFC.App.FindACourse.Controllers
             {
                 model.Results = await findACourseService.GetFilteredData(newBodyViewModel.CourseSearchFilters, newBodyViewModel.CourseSearchOrderBy, model.RequestPage).ConfigureAwait(false);
 
-                if (model.SideBar != null)
-                {
-                    model.SideBar.Sectors = MapFilter("sectors", "Sectors", model.Results.AttachedSectors?.Select(s => new Filter { Id = s.Id.ToString(), Text = s.Description }).ToList() ?? new List<Filter>());
-                }
+                await SetSideBarSectors(model);
 
                 foreach (var item in model.Results.Courses)
                 {
@@ -1077,6 +1063,23 @@ namespace DFC.App.FindACourse.Controllers
 
             logService.LogInformation($"{nameof(this.GetSideBarViewModel)} generated the model and ready to pass to the view");
             return sideBarViewModel;
+        }
+
+        private async Task<List<Filter>> GetSectorsFilters(List<string> sectorIds)
+        {
+            var sectors = await findACourseService.GetSectors();
+
+            var attachedSectors = sectors.Where(s => sectorIds.Contains(s.Id.ToString())).ToList();
+
+            return attachedSectors?.Select(s => new Filter { Id = s.Id.ToString(), Text = s.Description }).ToList() ?? new List<Filter>();
+        }
+
+        private async Task SetSideBarSectors(BodyViewModel model)
+        {
+            if (model.SideBar != null)
+            {
+                model.SideBar.Sectors = MapFilter("sectors", "Sectors", await GetSectorsFilters(model.Results.AttachedSectorIds));
+            }
         }
     }
 }
