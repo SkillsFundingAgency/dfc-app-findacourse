@@ -19,7 +19,7 @@ namespace DFC.App.FindACourse.UI.FunctionalTests.Features
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "3.9.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public partial class SearchForACourseUsingCourseTypeFilterFeature : object, Xunit.IClassFixture<SearchForACourseUsingCourseTypeFilterFeature.FixtureData>, System.IDisposable
+    public partial class SearchForACourseUsingLearningMethodFilterFeature : object, Xunit.IClassFixture<SearchForACourseUsingLearningMethodFilterFeature.FixtureData>, System.IDisposable
     {
         
         private static TechTalk.SpecFlow.ITestRunner testRunner;
@@ -31,7 +31,7 @@ namespace DFC.App.FindACourse.UI.FunctionalTests.Features
 #line 1 "SearchForACourseUsingCourseTypeFilter.feature"
 #line hidden
         
-        public SearchForACourseUsingCourseTypeFilterFeature(SearchForACourseUsingCourseTypeFilterFeature.FixtureData fixtureData, DFC_App_FindACourse_UI_FunctionalTests_XUnitAssemblyFixture assemblyFixture, Xunit.Abstractions.ITestOutputHelper testOutputHelper)
+        public SearchForACourseUsingLearningMethodFilterFeature(SearchForACourseUsingLearningMethodFilterFeature.FixtureData fixtureData, DFC_App_FindACourse_UI_FunctionalTests_XUnitAssemblyFixture assemblyFixture, Xunit.Abstractions.ITestOutputHelper testOutputHelper)
         {
             this._testOutputHelper = testOutputHelper;
             this.TestInitialize();
@@ -40,9 +40,9 @@ namespace DFC.App.FindACourse.UI.FunctionalTests.Features
         public static void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features", "SearchForACourseUsingCourseTypeFilter", "\tIn order to find a suitable course\r\n\tAs someone looking to attend a new course\r\n" +
-                    "\tI want to search for courses relevant to me\r\n\tAnd filter the results by course " +
-                    "type", ProgrammingLanguage.CSharp, ((string[])(null)));
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features", "SearchForACourseUsingLearningMethodFilter", "\tIn order to find a suitable course\r\n\tAs someone looking to attend a new course\r\n" +
+                    "\tI want to search for courses relevant to me\r\n\tAnd filter the results by learnin" +
+                    "g method", ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -82,16 +82,16 @@ namespace DFC.App.FindACourse.UI.FunctionalTests.Features
             this.TestTearDown();
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="Search for a course using course type search filter")]
-        [Xunit.TraitAttribute("FeatureTitle", "SearchForACourseUsingCourseTypeFilter")]
-        [Xunit.TraitAttribute("Description", "Search for a course using course type search filter")]
+        [Xunit.SkippableFactAttribute(DisplayName="Search for a course using learning method search filter")]
+        [Xunit.TraitAttribute("FeatureTitle", "SearchForACourseUsingLearningMethodFilter")]
+        [Xunit.TraitAttribute("Description", "Search for a course using learning method search filter")]
         [Xunit.TraitAttribute("Category", "FindACourse")]
-        public virtual void SearchForACourseUsingCourseTypeSearchFilter()
+        public virtual void SearchForACourseUsingLearningMethodSearchFilter()
         {
             string[] tagsOfScenario = new string[] {
                     "FindACourse"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Search for a course using course type search filter", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Search for a course using learning method search filter", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
 #line 8
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -125,7 +125,7 @@ this.ScenarioInitialize(scenarioInfo);
  testRunner.Then("search results are displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
 #line 13
- testRunner.When("I select Work based in the course type filter", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("I select Work based in the learning method filter", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 14
  testRunner.Then("search results are updated", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
@@ -141,12 +141,12 @@ this.ScenarioInitialize(scenarioInfo);
             
             public FixtureData()
             {
-                SearchForACourseUsingCourseTypeFilterFeature.FeatureSetup();
+                SearchForACourseUsingLearningMethodFilterFeature.FeatureSetup();
             }
             
             void System.IDisposable.Dispose()
             {
-                SearchForACourseUsingCourseTypeFilterFeature.FeatureTearDown();
+                SearchForACourseUsingLearningMethodFilterFeature.FeatureTearDown();
             }
         }
     }

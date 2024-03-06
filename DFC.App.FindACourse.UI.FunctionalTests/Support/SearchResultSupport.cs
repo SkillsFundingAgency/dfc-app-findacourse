@@ -106,22 +106,22 @@ namespace DFC.App.FindACourse.UI.FunctionalTests.Support
                 throw new OperationCanceledException("No provider data was found within the search result container. As all results should have a provider value, the container is not recognised.");
             }
 
-            var courseTypeFound = false;
+            var LearningMethodFound = false;
             foreach (var detail in details)
             {
-                if (detail.Text.ToLower(CultureInfo.CurrentCulture).Contains("course type"))
+                if (detail.Text.ToLower(CultureInfo.CurrentCulture).Contains("learning method"))
                 {
                     var parentNode = this.Context.GetHelperLibrary<AppSettings>().JavaScriptHelper.GetParentElement(detail);
-                    var courseTypeValue = parentNode.Text.Replace("Course type:", string.Empty).Trim();
-                    searchResult.CourseType = courseTypeValue;
-                    courseTypeFound = true;
+                    var LearningMethodValue = parentNode.Text.Replace("Learning method:", string.Empty).Trim();
+                    searchResult.LearningMethod = LearningMethodValue;
+                    LearningMethodFound = true;
                     break;
                 }
             }
 
-            if (!courseTypeFound)
+            if (!LearningMethodFound)
             {
-                throw new OperationCanceledException("No course type data was found within the search result container. As all results should have a course type value, the container is not recognised.");
+                throw new OperationCanceledException("No learning method data was found within the search result container. As all results should have a learning method value, the container is not recognised.");
             }
 
             foreach (var detail in details)
