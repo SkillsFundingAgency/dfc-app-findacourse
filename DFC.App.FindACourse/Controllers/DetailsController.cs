@@ -49,9 +49,9 @@ namespace DFC.App.FindACourse.Controllers
             this.sharedContentRedis = sharedContentRedis;
             this.cmsApiClientOptions = cmsApiClientOptions;
             this.mapper = mapper;
-            status = configuration.GetConnectionString("contentMode.contentMode");
+            status = configuration.GetConnectionString("contentMode:contentMode");
 
-            if (status == string.Empty)
+            if (string.IsNullOrEmpty(status))
             {
                 status = "PUBLISHED";
             }
