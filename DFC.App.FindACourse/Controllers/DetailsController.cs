@@ -49,7 +49,7 @@ namespace DFC.App.FindACourse.Controllers
             this.sharedContentRedis = sharedContentRedis;
             this.cmsApiClientOptions = cmsApiClientOptions;
             this.mapper = mapper;
-            status = configuration.GetConnectionString("contentMode:contentMode");
+            status = configuration.GetSection("contentMode:contentMode").Get<string>();
 
             if (string.IsNullOrEmpty(status))
             {
