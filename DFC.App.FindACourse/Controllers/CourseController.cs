@@ -835,7 +835,11 @@ namespace DFC.App.FindACourse.Controllers
 
             if (model.SideBar.Sectors != null && model.SideBar.Sectors.SelectedIds.Any())
             {
-                sectorsList = model.SideBar.Sectors.SelectedIds.Select(int.Parse).ToList();
+                sectorsList = model.SideBar.Sectors.SelectedIds
+                .Select(s => { int i; return int.TryParse(s, out i) ? i : (int?)null; })
+                .Where(i => i.HasValue)
+                    .Select(i => i.Value)
+                    .ToList();
             }
 
             if (model.SideBar.CourseHours != null && model.SideBar.CourseHours.SelectedIds.Any())
@@ -864,6 +868,7 @@ namespace DFC.App.FindACourse.Controllers
             model.CourseSearchFilters.SearchTerm = model.CurrentSearchTerm;
             model.CourseSearchFilters.LearningMethod = learningMethodList;
             model.CourseSearchFilters.CourseType = courseTypeList;
+            model.CourseSearchFilters.SectorIds = sectorsList;
             model.CourseSearchFilters.CourseHours = courseHoursList;
             model.CourseSearchFilters.StartDate = selectedStartDateValue;
             model.CourseSearchFilters.CourseStudyTime = courseStudyTimeList;
