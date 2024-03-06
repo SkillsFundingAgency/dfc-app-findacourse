@@ -1,13 +1,15 @@
 ﻿using AutoMapper;
-using DFC.App.FindACourse.Data.Contracts;
 using DFC.App.FindACourse.Data.Domain;
-using DFC.App.FindACourse.Data.Models;
 using DFC.App.FindACourse.Framework;
 using DFC.App.FindACourse.Helpers;
 using DFC.App.FindACourse.Repository;
 using DFC.App.FindACourse.Services;
-using DFC.Compui.Cosmos;
-using DFC.Compui.Cosmos.Contracts;
+using DFC.Common.SharedContent.Pkg.Netcore;
+using DFC.Common.SharedContent.Pkg.Netcore.Infrastructure;
+using DFC.Common.SharedContent.Pkg.Netcore.Infrastructure.Strategy;
+using DFC.Common.SharedContent.Pkg.Netcore.Interfaces;
+using DFC.Common.SharedContent.Pkg.Netcore.Model.ContentItems.SharedHtml;
+using DFC.Common.SharedContent.Pkg.Netcore.RequestHandler;
 using DFC.Compui.Subscriptions.Pkg.Netstandard.Extensions;
 using DFC.Compui.Telemetry;
 using DFC.Content.Pkg.Netcore.Data.Contracts;
@@ -19,11 +21,13 @@ using DFC.Content.Pkg.Netcore.Services.CmsApiProcessorService;
 using DFC.FindACourseClient;
 using DFC.Logger.AppInsights.Contracts;
 using DFC.Logger.AppInsights.Extensions;
+using GraphQL.Client.Abstractions;
+using GraphQL.Client.Http;
+using GraphQL.Client.Serializer.Newtonsoft;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.Documents.Client;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,15 +35,6 @@ using Microsoft.Extensions.Hosting;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Net.Http;
-using DFC.Common.SharedContent.Pkg.Netcore;
-using GraphQL.Client.Abstractions;
-using GraphQL.Client.Http;
-using GraphQL.Client.Serializer.Newtonsoft;
-using DFC.Common.SharedContent.Pkg.Netcore.Infrastructure;
-using DFC.Common.SharedContent.Pkg.Netcore.Infrastructure.Strategy;
-using DFC.Common.SharedContent.Pkg.Netcore.Interfaces;
-using DFC.Common.SharedContent.Pkg.Netcore.Model.ContentItems.SharedHtml;
-using DFC.Common.SharedContent.Pkg.Netcore.RequestHandler;
 
 namespace DFC.App.FindACourse
 {
@@ -50,7 +45,6 @@ namespace DFC.App.FindACourse
         public const string CourseSearchClientSvcSettings = "Configuration:CourseSearchClient:CourseSearchSvc";
         public const string CourseSearchClientAuditSettings = "Configuration:CourseSearchClient:CosmosAuditConnection";
         public const string CourseSearchClientPolicySettings = "Configuration:CourseSearchClient:Policies";
-        //public const string StaticCosmosDbConfigAppSettings = "Configuration:CosmosDbConnections:StaticContent";
         private const string AzureSearchAppSettings = "AzureSearch";
         private const string RedisCacheConnectionStringAppSettings = "Cms:RedisCacheConnectionString";
         private const string GraphApiUrlAppSettings = "Cms:GraphApiUrl";
@@ -81,7 +75,6 @@ namespace DFC.App.FindACourse
                 var client = new GraphQLHttpClient(option, new NewtonsoftJsonSerializer());
                 return client;
             });
-
 
             services.AddSingleton<ISharedContentRedisInterfaceStrategy<SharedHtml>, SharedHtmlQueryStrategy>();
 
