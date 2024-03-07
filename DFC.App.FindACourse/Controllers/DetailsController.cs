@@ -39,8 +39,8 @@ namespace DFC.App.FindACourse.Controllers
         public DetailsController(
             ILogService logService,
             IFindACourseService findACourseService,
-           ISharedContentRedisInterface sharedContentRedis,
-           IConfiguration configuration,
+            ISharedContentRedisInterface sharedContentRedis,
+            IConfiguration configuration,
             CmsApiClientOptions cmsApiClientOptions,
             IMapper mapper)
         {
@@ -49,7 +49,8 @@ namespace DFC.App.FindACourse.Controllers
             this.sharedContentRedis = sharedContentRedis;
             this.cmsApiClientOptions = cmsApiClientOptions;
             this.mapper = mapper;
-            status = configuration.GetSection("contentMode:contentMode").Get<string>();
+            this.configuration = configuration;
+            status = configuration?.GetSection("contentMode:contentMode").Get<string>();
 
             if (string.IsNullOrEmpty(status))
             {
