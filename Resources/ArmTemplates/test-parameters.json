@@ -20,6 +20,9 @@
     "aspInstances": {
       "value": 2
     },
+    "contentMode": {
+      "value": "PUBLISHED"
+    },
     "CosmosDbResourceGroup": {
       "value": "dfc-dev-app-sharedresources-rg"
     },

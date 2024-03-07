@@ -28,6 +28,9 @@
     "aspTier": {
       "type": "string"
     },
+    "contentMode": {
+      "type": "string"
+    },
     "CosmosDbResourceGroup": {
       "type": "string"
     },
@@ -316,6 +319,10 @@
               {
                 "name": "Configuration__ApplicationName",
                 "value": "[Parameters('ConfigurationApplicationName')]"
+              },
+              {
+                "name": "contentMode__contentMode",
+                "value": "[parameters('contentMode')]"
               },
               {
                 "name": "Logging__ApplicationInsights__LogLevel__Default",

@@ -10,6 +10,7 @@ using DFC.Logger.AppInsights.Contracts;
 using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Net.Http.Headers;
 using System;
 using System.Collections.Generic;
@@ -27,16 +28,19 @@ namespace DFC.App.FindACourse.Controllers
         private readonly ILogService logService;
         private readonly IFindACourseService findACourseService;
         private readonly ISharedContentRedisInterface sharedContentRedis;
+        private readonly IConfiguration configuration;
         private readonly CmsApiClientOptions cmsApiClientOptions;
         private readonly IMapper mapper;
         public const string contactusStaxId = "c0117ac7-115a-4bc1-9350-3fb4b00c7857";
         public const string speakToanAdviserStaxId = "2c9da1b3-3529-4834-afc9-9cd741e59788";
+        private string status;
 
 
         public DetailsController(
             ILogService logService,
             IFindACourseService findACourseService,
-           ISharedContentRedisInterface sharedContentRedis,
+            ISharedContentRedisInterface sharedContentRedis,
+            IConfiguration configuration,
             CmsApiClientOptions cmsApiClientOptions,
             IMapper mapper)
         {
@@ -45,6 +49,13 @@ namespace DFC.App.FindACourse.Controllers
             this.sharedContentRedis = sharedContentRedis;
             this.cmsApiClientOptions = cmsApiClientOptions;
             this.mapper = mapper;
+            this.configuration = configuration;
+            status = configuration?.GetSection("contentMode:contentMode").Get<string>();
+
+            if (string.IsNullOrEmpty(status))
+            {
+                status = "PUBLISHED";
+            }
         }
 
         [HttpGet]
@@ -91,7 +102,7 @@ namespace DFC.App.FindACourse.Controllers
                 model.CourseRegions = model.CourseDetails.SubRegions != null ? TransformSubRegionsToRegions(model.CourseDetails.SubRegions) : null;
                 model.DetailsRightBarViewModel.Provider = mapper.Map<ProviderViewModel>(model.CourseDetails.ProviderDetails);
 
-                var sharedhtml = await sharedContentRedis.GetDataAsync<SharedHtml>("SharedContent/" + speakToanAdviserStaxId);
+                var sharedhtml = await sharedContentRedis.GetDataAsync<SharedHtml>("SharedContent/" + speakToanAdviserStaxId, status);
                 model.DetailsRightBarViewModel.SpeakToAnAdviser = sharedhtml.Html;
 
                 model.CourseDetails.CourseWebpageLink = CompareProviderLinkWithCourseLink(model?.CourseDetails?.CourseWebpageLink, model.CourseDetails?.ProviderDetails?.Website);
@@ -138,7 +149,7 @@ namespace DFC.App.FindACourse.Controllers
                 }
 
                 model.DetailsRightBarViewModel.Provider = mapper.Map<ProviderViewModel>(model.TlevelDetails.ProviderDetails);
-                var sharedhtml = await sharedContentRedis.GetDataAsync<SharedHtml>("SharedContent/" + speakToanAdviserStaxId);
+                var sharedhtml = await sharedContentRedis.GetDataAsync<SharedHtml>("SharedContent/" + speakToanAdviserStaxId, status);
                 model.DetailsRightBarViewModel.SpeakToAnAdviser = sharedhtml.Html;
             }
             catch (Exception ex)

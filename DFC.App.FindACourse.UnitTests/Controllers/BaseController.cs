@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.Net.Mime;
 using DFC.Common.SharedContent.Pkg.Netcore.Interfaces;
 using DFC.Common.SharedContent.Pkg.Netcore.Model.ContentItems.SharedHtml;
+using Microsoft.Extensions.Configuration;
 
 namespace DFC.App.FindACourse.UnitTests.Controllers
 {
@@ -65,6 +66,8 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
 
         protected ISharedContentRedisInterface FakeSharedContentRedisInterface { get; set; }
 
+        protected IConfiguration FakeConfiguration { get; set; }
+
         protected CmsApiClientOptions CmsApiClientOptions { get; set; }
 
         protected CourseController BuildCourseController(string mediaTypeName)
@@ -95,7 +98,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
 
             httpContext.Request.Headers[HeaderNames.Accept] = mediaTypeName;
 
-            var controller = new DetailsController(FakeLogService, FakeFindACoursesService, FakeSharedContentRedisInterface, CmsApiClientOptions, FakeMapper)
+            var controller = new DetailsController(FakeLogService, FakeFindACoursesService, FakeSharedContentRedisInterface, FakeConfiguration, CmsApiClientOptions, FakeMapper)
             {
                 ControllerContext = new ControllerContext()
                 {
