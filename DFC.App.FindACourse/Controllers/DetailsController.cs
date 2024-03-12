@@ -20,6 +20,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using SubRegion = DFC.CompositeInterfaceModels.FindACourseClient.SubRegion;
+using Constants = DFC.Common.SharedContent.Pkg.Netcore.Constant.ApplicationKeys;
 
 namespace DFC.App.FindACourse.Controllers
 {
@@ -31,8 +32,6 @@ namespace DFC.App.FindACourse.Controllers
         private readonly IConfiguration configuration;
         private readonly CmsApiClientOptions cmsApiClientOptions;
         private readonly IMapper mapper;
-        public const string contactusStaxId = "c0117ac7-115a-4bc1-9350-3fb4b00c7857";
-        public const string speakToanAdviserStaxId = "2c9da1b3-3529-4834-afc9-9cd741e59788";
         private string status;
 
 
@@ -102,7 +101,7 @@ namespace DFC.App.FindACourse.Controllers
                 model.CourseRegions = model.CourseDetails.SubRegions != null ? TransformSubRegionsToRegions(model.CourseDetails.SubRegions) : null;
                 model.DetailsRightBarViewModel.Provider = mapper.Map<ProviderViewModel>(model.CourseDetails.ProviderDetails);
 
-                var sharedhtml = await sharedContentRedis.GetDataAsync<SharedHtml>("SharedContent/" + speakToanAdviserStaxId, status);
+                var sharedhtml = await sharedContentRedis.GetDataAsync<SharedHtml>(Constants.SpeakToAnAdviserSharedContent, status);
                 model.DetailsRightBarViewModel.SpeakToAnAdviser = sharedhtml.Html;
 
                 model.CourseDetails.CourseWebpageLink = CompareProviderLinkWithCourseLink(model?.CourseDetails?.CourseWebpageLink, model.CourseDetails?.ProviderDetails?.Website);
@@ -149,7 +148,7 @@ namespace DFC.App.FindACourse.Controllers
                 }
 
                 model.DetailsRightBarViewModel.Provider = mapper.Map<ProviderViewModel>(model.TlevelDetails.ProviderDetails);
-                var sharedhtml = await sharedContentRedis.GetDataAsync<SharedHtml>("SharedContent/" + speakToanAdviserStaxId, status);
+                var sharedhtml = await sharedContentRedis.GetDataAsync<SharedHtml>(Constants.SpeakToAnAdviserSharedContent, status);
                 model.DetailsRightBarViewModel.SpeakToAnAdviser = sharedhtml.Html;
             }
             catch (Exception ex)
