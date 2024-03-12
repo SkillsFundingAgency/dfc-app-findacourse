@@ -1053,6 +1053,7 @@ namespace DFC.App.FindACourse.Controllers
             var sideBarViewModel = new SideBarViewModel
             {
                 CourseType = MapFilter("courseType", "Course type", ListFilters.GetCourseTypeList()),
+                Sectors = new FiltersListViewModel(),
                 LearningMethod = MapFilter("learningMethod", "Learning method", ListFilters.GetLearningMethodList()),
                 CourseHours = MapFilter("courseHours", "Course hours", ListFilters.GetHoursList()),
                 CourseStudyTime = MapFilter("courseStudyTime", "Course study time", ListFilters.GetStudyTimeList()),
@@ -1078,7 +1079,13 @@ namespace DFC.App.FindACourse.Controllers
         {
             if (model.SideBar != null)
             {
+                var selectedIds = model.SideBar.Sectors?.SelectedIds ?? new List<string>();
                 model.SideBar.Sectors = MapFilter("sectors", "Sectors", await GetSectorsFilters(model.Results.AttachedSectorIds));
+
+                if (selectedIds.Any())
+                {
+                    model.SideBar.Sectors.SelectedIds = selectedIds;
+                }
             }
         }
     }
