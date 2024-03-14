@@ -235,8 +235,6 @@ namespace DFC.App.FindACourse.Controllers
                 model.Results = await findACourseService.GetFilteredData(newBodyViewModel.CourseSearchFilters, newBodyViewModel.CourseSearchOrderBy, model.RequestPage).ConfigureAwait(false);
                 model.PageSize = int.TryParse(courseSearchClientSettings.CourseSearchSvcSettings?.SearchPageSize, out int pageSize) ? pageSize : 20;
 
-                await SetSideBarSectors(model);
-
                 foreach (var item in model.Results?.Courses)
                 {
                     if (item.Description.Length > 220)
@@ -281,11 +279,9 @@ namespace DFC.App.FindACourse.Controllers
             }
 
             var viewAsString = await viewHelper.RenderViewAsync(this, "~/Views/Course/_results.cshtml", model, true).ConfigureAwait(false);
-            var sectorsViewAsString = await viewHelper.RenderViewAsync(this, "~/Views/Course/_sidebar_left_sectors.cshtml", model.SideBar.Sectors, true).ConfigureAwait(false);
             return new AjaxModel
             {
                 HTML = viewAsString,
-                SectorsSideBarHTML = sectorsViewAsString,
                 Count = model.Results?.ResultProperties != null ? model.Results.ResultProperties.TotalResultCount : 0,
                 ShowDistanceSelector = newBodyViewModel.CourseSearchFilters.DistanceSpecified,
                 UsingAutoSuggestedLocation = newBodyViewModel.UsingAutoSuggestedLocation,
@@ -442,7 +438,6 @@ namespace DFC.App.FindACourse.Controllers
                 }
             }
 
-            sideBarViewModel.Sectors = model.SideBar.Sectors;
             sideBarViewModel.DistanceValue = model.SideBar.DistanceValue;
             sideBarViewModel.TownOrPostcode = model.SideBar.TownOrPostcode;
             sideBarViewModel.StartDateValue = model.SideBar.StartDateValue;
@@ -756,8 +751,6 @@ namespace DFC.App.FindACourse.Controllers
             {
                 model.Results = await findACourseService.GetFilteredData(filters, CourseSearchOrderBy.StartDate, 1)
                     .ConfigureAwait(true);
-
-                await SetSideBarSectors(model);
             }
             catch (Exception ex)
             {
@@ -778,8 +771,6 @@ namespace DFC.App.FindACourse.Controllers
             try
             {
                 model.Results = await findACourseService.GetFilteredData(newBodyViewModel.CourseSearchFilters, newBodyViewModel.CourseSearchOrderBy, model.RequestPage).ConfigureAwait(false);
-
-                await SetSideBarSectors(model);
 
                 foreach (var item in model.Results.Courses)
                 {
@@ -1055,7 +1046,7 @@ namespace DFC.App.FindACourse.Controllers
             var sideBarViewModel = new SideBarViewModel
             {
                 CourseType = MapFilter("courseType", "Course type", ListFilters.GetCourseTypeList()),
-                Sectors = new FiltersListViewModel(),
+                Sectors = MapFilter("sectors", "Sectors", GetSectorsList().Result),
                 LearningMethod = MapFilter("learningMethod", "Learning method", ListFilters.GetLearningMethodList()),
                 CourseHours = MapFilter("courseHours", "Course hours", ListFilters.GetHoursList()),
                 CourseStudyTime = MapFilter("courseStudyTime", "Course study time", ListFilters.GetStudyTimeList()),
@@ -1068,27 +1059,11 @@ namespace DFC.App.FindACourse.Controllers
             return sideBarViewModel;
         }
 
-        private async Task<List<Filter>> GetSectorsFilters(List<string> sectorIds)
+        private async Task<List<Filter>> GetSectorsList()
         {
             var sectors = await findACourseService.GetSectors();
 
-            var attachedSectors = sectors.Where(s => sectorIds.Contains(s.Id.ToString())).ToList();
-
-            return attachedSectors?.Select(s => new Filter { Id = s.Id.ToString(), Text = s.Description }).ToList() ?? new List<Filter>();
-        }
-
-        private async Task SetSideBarSectors(BodyViewModel model)
-        {
-            if (model.SideBar != null)
-            {
-                var selectedIds = model.SideBar.Sectors?.SelectedIds ?? new List<string>();
-                model.SideBar.Sectors = MapFilter("sectors", "Sectors", await GetSectorsFilters(model.Results.AttachedSectorIds));
-
-                if (selectedIds.Any())
-                {
-                    model.SideBar.Sectors.SelectedIds = selectedIds;
-                }
-            }
+            return sectors?.Select(s => new Filter { Id = s.Id.ToString(), Text = s.Description }).ToList() ?? new List<Filter>();
         }
     }
 }
