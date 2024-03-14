@@ -1,6 +1,6 @@
 ﻿namespace DFC.App.FindACourse.Data.Enums
 {
-    public enum CourseType
+    public enum LearningMethod
     {
         Online = 0,
 

@@ -69,7 +69,7 @@ namespace DFC.App.FindACourse.Services.UnitTests
         }
 
         [Fact]
-        public void CheckEnumOfCourseTypeIsReturned()
+        public void CheckEnumOfLearningMethodIsReturned()
         {
             //Arrange
             var repository = A.Fake<IFindACourseRepository>();
