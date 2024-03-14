@@ -8,6 +8,8 @@ namespace DFC.App.FindACourse.ViewModels
     {
         public string HTML { get; set; }
 
+        public string SectorsSideBarHTML { get; set; }
+
         public int Count { get; set; }
 
         public bool? ShowDistanceSelector { get; set; }
