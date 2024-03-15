@@ -13,6 +13,10 @@ namespace DFC.App.FindACourse.Data.Models
 
         public string LearningMethod { get; set; }
 
+        public string CourseType { get; set; }
+
+        public string Sectors { get; set; }
+
         public string CourseHours { get; set; }
 
         public string CourseStudyTime { get; set; }

@@ -42,6 +42,31 @@
             <select asp-for="SideBar.StartDateValue" asp-items="Model.SideBar.StartDateOptions" class="govuk-select" name="SideBar.StartDateValue" id="startdate-select" aria-label="StartDate"></select>
         </div>
     </div>
+    <div class="govuk-form-group" id="CourseType-block">
+        <div id="@Model.SideBar.CourseType.FilterText" class="govuk-checkboxes">
+            <fieldset class="govuk-fieldset">
+                <legend class="govuk-label govuk-!-font-weight-bold" id="CourseType-label">@Model.SideBar.CourseType.FilterTitle</legend>
+                <div class="govuk-checkboxes govuk-checkboxes--small">
+                    <check-box-list name="SideBar.CourseType.SelectedIds" aria-label="CourseType" items="Model.SideBar.CourseType.LstChkFilter" template="GDS"></check-box-list>
+                </div>
+            </fieldset>
+        </div>
+        <div id="fac-course-type"><a id="course-type-mean" class="govuk-link" href="https://www.skillsforcareers.education.gov.uk/your-training-options" aria-label="CourseTypeFilters">What course types mean</a></div>
+    </div>
+
+    @if (Model.SideBar.Sectors?.LstChkFilter?.Count() > 0)
+    {
+        <div class="govuk-form-group" id="sectors-block">
+            <div id="@Model.SideBar.Sectors.FilterText" class="govuk-checkboxes">
+                <fieldset class="govuk-fieldset">
+                    <legend class="govuk-label govuk-!-font-weight-bold" id="sectors-label">@Model.SideBar.Sectors.FilterTitle</legend>
+                    <div class="govuk-checkboxes govuk-checkboxes--small">
+                        <check-box-list name="SideBar.Sectors.SelectedIds" aria-label="Sectors" items="Model.SideBar.Sectors.LstChkFilter" template="GDS"></check-box-list>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+    }
 
     <div class="govuk-form-group" id="LearningMethod-block">
         <div id="@Model.SideBar.LearningMethod.FilterText" class="govuk-checkboxes">
