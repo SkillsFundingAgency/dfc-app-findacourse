@@ -17,7 +17,7 @@ namespace DFC.App.FindACourse.Services.UnitTests
     [Trait("Category", "Static content reload Service Unit Tests")]
     public class StaticContentReloadServiceTests
     {
-        private readonly ILogger<StaticContentReloadService> fakeLogger = A.Fake<ILogger<StaticContentReloadService>>();
+        //private readonly ILogger<StaticContentReloadService> fakeLogger = A.Fake<ILogger<StaticContentReloadService>>();
         private readonly IMapper fakeMapper = A.Fake<IMapper>();
         private readonly IDocumentService<StaticContentItemModel> fakeStaticContentDocumentService = A.Fake<IDocumentService<StaticContentItemModel>>();
         private readonly ICmsApiService fakeCmsApiService = A.Fake<ICmsApiService>();

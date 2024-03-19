@@ -33,7 +33,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
 
         protected const string ContentTypePages = "pages";
 
-        private readonly ILogger<WebhooksController> logger = A.Fake<ILogger<WebhooksController>>();
+        //private readonly ILogger<WebhooksController> logger = A.Fake<ILogger<WebhooksController>>();
         private readonly IWebhooksService fakeWebhooksService = A.Fake<IWebhooksService>();
 
         public static IEnumerable<object[]> PublishedEvents => new List<object[]>

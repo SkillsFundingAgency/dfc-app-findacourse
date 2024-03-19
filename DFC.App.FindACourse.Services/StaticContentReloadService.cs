@@ -1,6 +1,5 @@
 ﻿using DFC.App.FindACourse.Data.Contracts;
 using DFC.App.FindACourse.Data.Models;
-using DFC.Compui.Cosmos.Contracts;
 using DFC.Content.Pkg.Netcore.Data.Contracts;
 using DFC.Content.Pkg.Netcore.Data.Models.ClientOptions;
 using Microsoft.Extensions.Logging;
@@ -10,27 +9,29 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-
+using DFC.Common.SharedContent.Pkg.Netcore.Interfaces;
+using DFC.Common.SharedContent.Pkg.Netcore.Model.ContentItems.SharedHtml;
 namespace DFC.App.FindACourse.Services
 {
     public class StaticContentReloadService : IStaticContentReloadService
     {
         private readonly ILogger<StaticContentReloadService> logger;
         private readonly AutoMapper.IMapper mapper;
-        private readonly IDocumentService<StaticContentItemModel> staticContentDocumentService;
+        //private readonly IDocumentService<StaticContentItemModel> staticContentDocumentService;
+        private readonly ISharedContentRedisInterface sharedContentRedis;
         private readonly ICmsApiService cmsApiService;
         private readonly CmsApiClientOptions cmsApiClientOptions;
 
         public StaticContentReloadService(
             ILogger<StaticContentReloadService> logger,
             AutoMapper.IMapper mapper,
-            IDocumentService<StaticContentItemModel> staticContentDocumentService,
+          ISharedContentRedisInterface sharedContentRedis,
             ICmsApiService cmsApiService,
             CmsApiClientOptions cmsApiClientOptions)
         {
             this.logger = logger;
             this.mapper = mapper;
-            this.staticContentDocumentService = staticContentDocumentService;
+            this.sharedContentRedis = sharedContentRedis;
             this.cmsApiService = cmsApiService;
             this.cmsApiClientOptions = cmsApiClientOptions;
         }

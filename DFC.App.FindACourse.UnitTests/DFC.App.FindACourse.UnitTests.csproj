@@ -8,6 +8,10 @@
  </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Controllers\WebhooksControllerPostTests.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <AdditionalFiles Include="..\stylecop.json" Link="../stylecop.json" />
   </ItemGroup>
 

@@ -4,6 +4,7 @@ using DFC.App.FindACourse.Data.Domain;
 using DFC.App.FindACourse.Data.Models;
 using DFC.App.FindACourse.Helpers;
 using DFC.App.FindACourse.Services;
+using DFC.Common.SharedContent.Pkg.Netcore.Interfaces;
 using DFC.Compui.Cosmos.Contracts;
 using DFC.Content.Pkg.Netcore.Data.Models.ClientOptions;
 using DFC.FindACourseClient;
@@ -16,6 +17,9 @@ using Microsoft.Net.Http.Headers;
 using System;
 using System.Collections.Generic;
 using System.Net.Mime;
+using DFC.Common.SharedContent.Pkg.Netcore.Interfaces;
+using DFC.Common.SharedContent.Pkg.Netcore.Model.ContentItems.SharedHtml;
+using Microsoft.Extensions.Configuration;
 
 namespace DFC.App.FindACourse.UnitTests.Controllers
 {
@@ -28,7 +32,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
         {
             FakeLogService = A.Fake<ILogService>();
             FakeFindACoursesService = A.Fake<IFindACourseService>();
-            FakeStaticContentDocumentService = A.Fake<IDocumentService<StaticContentItemModel>>();
+            FakeSharedContentRedisInterface = A.Fake<ISharedContentRedisInterface>();
             CmsApiClientOptions = new CmsApiClientOptions() { ContentIds = TestContentId };
             FakeMapper = A.Fake<IMapper>();
             FakeViewHelper = A.Fake<IViewHelper>();
@@ -60,7 +64,9 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
 
         protected IMapper FakeMapper { get; }
 
-        protected IDocumentService<StaticContentItemModel> FakeStaticContentDocumentService { get; set; }
+        protected ISharedContentRedisInterface FakeSharedContentRedisInterface { get; set; }
+
+        protected IConfiguration FakeConfiguration { get; set; }
 
         protected CmsApiClientOptions CmsApiClientOptions { get; set; }
 
@@ -92,16 +98,13 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
 
             httpContext.Request.Headers[HeaderNames.Accept] = mediaTypeName;
 
-            A.CallTo(() => FakeStaticContentDocumentService.GetByIdAsync(A<Guid>.Ignored, null)).Returns(new StaticContentItemModel() { Title = nameof(StaticContentItemModel.Title) });
-
-            var controller = new DetailsController(FakeLogService, FakeFindACoursesService, FakeStaticContentDocumentService, CmsApiClientOptions, FakeMapper)
+            var controller = new DetailsController(FakeLogService, FakeFindACoursesService, FakeSharedContentRedisInterface, FakeConfiguration, CmsApiClientOptions, FakeMapper)
             {
                 ControllerContext = new ControllerContext()
                 {
                     HttpContext = httpContext,
                 },
             };
-
             return controller;
         }
     }
