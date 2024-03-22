@@ -4,23 +4,19 @@ using DFC.App.FindACourse.Services;
 using DFC.App.FindACourse.ViewModels;
 using DFC.Common.SharedContent.Pkg.Netcore.Interfaces;
 using DFC.Common.SharedContent.Pkg.Netcore.Model.ContentItems.SharedHtml;
-using DFC.Compui.Cosmos.Contracts;
 using DFC.Content.Pkg.Netcore.Data.Models.ClientOptions;
 using DFC.Logger.AppInsights.Contracts;
-using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Net.Http.Headers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
 using System.Web;
-using SubRegion = DFC.CompositeInterfaceModels.FindACourseClient.SubRegion;
 using Constants = DFC.Common.SharedContent.Pkg.Netcore.Constant.ApplicationKeys;
+using SubRegion = DFC.CompositeInterfaceModels.FindACourseClient.SubRegion;
 
 namespace DFC.App.FindACourse.Controllers
 {
@@ -34,12 +30,11 @@ namespace DFC.App.FindACourse.Controllers
         private readonly IMapper mapper;
         private string status;
 
-
         public DetailsController(
             ILogService logService,
             IFindACourseService findACourseService,
             ISharedContentRedisInterface sharedContentRedis,
-            IConfiguration configuration,
+            IConfiguration config,
             CmsApiClientOptions cmsApiClientOptions,
             IMapper mapper)
         {
@@ -48,7 +43,7 @@ namespace DFC.App.FindACourse.Controllers
             this.sharedContentRedis = sharedContentRedis;
             this.cmsApiClientOptions = cmsApiClientOptions;
             this.mapper = mapper;
-            this.configuration = configuration;
+            configuration = config;
             status = configuration?.GetSection("contentMode:contentMode").Get<string>();
 
             if (string.IsNullOrEmpty(status))
@@ -177,6 +172,7 @@ namespace DFC.App.FindACourse.Controllers
             {
                 townSearchTerm = WebUtility.HtmlEncode(paramValues.Town);
             }
+
             var searchTerm = $"{nameof(paramValues.SearchTerm)}={paramValues.SearchTerm}&" +
                              $"{nameof(paramValues.Town)}={townSearchTerm}&" +
                              $"{nameof(paramValues.CourseType)}={paramValues.CourseType}&" +
