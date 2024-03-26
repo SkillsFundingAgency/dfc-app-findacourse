@@ -17,9 +17,16 @@
                 <li>
                     <partial name="_StartDate" model="Model" />
                 </li>
+                @if (!string.IsNullOrWhiteSpace(Model.CourseType))
+                {
+                    <li>
+                        <span class="course-type govuk-secondary-colour">Course type:</span> @Html.Raw(Model.CourseType)
+                    </li>
+                }
                 <li>
                     <partial name="_Cost" model="Model" />
                 </li>
+               
             </ul>
         </div>
         <div class="govuk-grid-column-one-half">
@@ -32,10 +39,16 @@
 
                     @if (durationInt >= 1)
                     {
-                        @Html.Raw($"{@Html.Raw(Model.Duration)}, {@Html.Raw(Model.StudyMode.ToLower())} ({@Html.Raw(Model.AttendancePattern.ToLower())})")
+                        @Html.Raw($"{@Html.Raw(Model.Duration)}, {@Html.Raw(Model.StudyMode?.ToLower())} ({@Html.Raw(Model.AttendancePattern?.ToLower())})")
                     }
 
                 </li>
+                @if (!string.IsNullOrWhiteSpace(Model.Sector))
+                {
+                    <li>
+                        <span class="sector govuk-secondary-colour">Sector:</span> @Html.Raw(Model.Sector)
+                    </li>
+                }
             </ul>
         </div>
     </div>

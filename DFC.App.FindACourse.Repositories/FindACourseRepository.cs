@@ -40,5 +40,10 @@ namespace DFC.App.FindACourse.Repository
         {
             return await courseSearchApiService.GetTLevelDetailsAsync(tlevelId).ConfigureAwait(false);
         }
+
+        public async Task<List<Fac.Sector>> GetSectors()
+        {
+            return await courseSearchApiService.GetSectorsAsync().ConfigureAwait(false);
+        }
     }
 }
