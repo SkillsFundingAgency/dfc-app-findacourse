@@ -1,6 +1,7 @@
 ﻿using DFC.CompositeInterfaceModels.FindACourseClient;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Fac = DFC.FindACourseClient;
 
 namespace DFC.App.FindACourse.Services
 {
@@ -37,5 +38,11 @@ namespace DFC.App.FindACourse.Services
         Task<CourseDetails> GetCourseDetails(string courseId, string runId);
 
         Task<TLevelDetails> GetTLevelDetails(string tlevelId, string tlevelLocationId);
+
+        /// <summary>
+        ///     Gets the sectors.
+        /// </summary>
+        /// <returns>Sectors</returns>
+        Task<List<Fac.Sector>> GetSectors();
     }
 }

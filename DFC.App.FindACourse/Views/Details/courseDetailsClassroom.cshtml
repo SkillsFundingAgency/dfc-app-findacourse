@@ -10,6 +10,20 @@
                 <th class="govuk-table__header" scope="row">Learning method</th>
                 <td class="govuk-table__cell"><span id="attendance-mode">@Html.Raw(Model.CourseDetails.AttendanceMode)</span></td>
             </tr>
+            @if (Model.CourseDetails.CourseType != "All" && !string.IsNullOrWhiteSpace(Model.CourseDetails.CourseType))
+            {
+                <tr class="govuk-table__row">
+                    <th class="govuk-table__header" scope="row">Course type</th>
+                    <td class="govuk-table__cell"><span id="course-type">@Html.Raw(Model.CourseDetails.CourseType)</span></td>
+                </tr>
+            } 
+            @if (Model.CourseDetails.Sector != "All" && !string.IsNullOrWhiteSpace(Model.CourseDetails.Sector))
+            {
+                <tr class="govuk-table__row">
+                    <th class="govuk-table__header" scope="row">Sector</th>
+                    <td class="govuk-table__cell"><span id="sector">@Html.Raw(Model.CourseDetails.Sector)</span></td>
+                </tr>
+            }
             <tr class="govuk-table__row">
                 <th class="govuk-table__header" scope="row">Course hours</th>
                 <td class="govuk-table__cell">
