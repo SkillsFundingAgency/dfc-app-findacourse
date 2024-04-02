@@ -38,14 +38,16 @@ namespace DFC.App.FindACourse.Services.UnitTests
                 Page = 1,
             };
             courseProperties.Filters.SearchTerm = "Maths";
-            courseProperties.Filters.CourseType = new List<CourseType> { CourseType.All };
+            courseProperties.Filters.LearningMethod = new List<LearningMethod>() { LearningMethod.All };
+            courseProperties.Filters.CourseType = new List<CourseType>();
             courseProperties.Filters.CourseHours = new List<CourseHours> { CourseHours.All };
 
             var courseSearchFilters = new CourseSearchFilters
             {
                 SearchTerm = "Maths",
-                CourseType = new List<CourseType> { CourseType.All },
+                CourseType = new List<CourseType>(),
                 CourseHours = new List<CourseHours> { CourseHours.All },
+                LearningMethod = new List<LearningMethod>() { LearningMethod.All },
             };
 
             var returnedCourseData = new CourseSearchResult
@@ -69,12 +71,29 @@ namespace DFC.App.FindACourse.Services.UnitTests
         }
 
         [Fact]
+        public void CheckEnumOfLearningMethodIsReturned()
+        {
+            //Arrange
+            var repository = A.Fake<IFindACourseRepository>();
+            var findACourseService = new FindACourseService(repository);
+            var returnList = new List<LearningMethod> { LearningMethod.All, LearningMethod.ClassroomBased, LearningMethod.ClassroomBased, LearningMethod.WorkBased, };
+
+            A.CallTo(() => repository.GetFilter<LearningMethod>()).Returns(returnList);
+
+            //Act
+            var result = findACourseService.GetFilterByName<LearningMethod>();
+
+            //Assert
+            Assert.Equal(4, result.Count);
+        }
+
+        [Fact]
         public void CheckEnumOfCourseTypeIsReturned()
         {
             //Arrange
             var repository = A.Fake<IFindACourseRepository>();
             var findACourseService = new FindACourseService(repository);
-            var returnList = new List<CourseType> { CourseType.All, CourseType.ClassroomBased, CourseType.ClassroomBased, CourseType.WorkBased, };
+            var returnList = new List<CourseType> { CourseType.Multiply, CourseType.EssentialSkills, CourseType.SkillsBootcamp, CourseType.HTQs, CourseType.FreeCoursesForJobs, CourseType.TLevels };
 
             A.CallTo(() => repository.GetFilter<CourseType>()).Returns(returnList);
 
@@ -82,7 +101,24 @@ namespace DFC.App.FindACourse.Services.UnitTests
             var result = findACourseService.GetFilterByName<CourseType>();
 
             //Assert
-            Assert.Equal(4, result.Count);
+            Assert.Equal(6, result.Count);
+        }
+
+        [Fact]
+        public void CheckIntegerOfSectorsIsReturned()
+        {
+            //Arrange
+            var repository = A.Fake<IFindACourseRepository>();
+            var findACourseService = new FindACourseService(repository);
+            var returnList = new List<int> { 1, 2, 3 };
+
+            A.CallTo(() => repository.GetFilter<int>()).Returns(returnList);
+
+            //Act
+            var result = findACourseService.GetFilterByName<int>();
+
+            //Assert
+            Assert.Equal(3, result.Count);
         }
 
         [Fact]

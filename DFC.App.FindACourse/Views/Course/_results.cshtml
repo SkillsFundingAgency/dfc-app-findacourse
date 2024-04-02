@@ -18,6 +18,8 @@
     }
     var distance = Model.SideBar.DistanceValue;
     var courseType = Html.Raw(Json.Serialize(Model.SideBar.CourseType.SelectedIds));
+    var sectors = Html.Raw(Json.Serialize(Model.SideBar.Sectors.SelectedIds));
+    var learningMethod = Html.Raw(Json.Serialize(Model.SideBar.LearningMethod.SelectedIds));
     var courseHours = Html.Raw(Json.Serialize(Model.SideBar.CourseHours.SelectedIds));
     var courseStudyTime = Html.Raw(Json.Serialize(Model.SideBar.CourseStudyTime.SelectedIds));
     var startDate = Model.SideBar.StartDateValue;
@@ -32,6 +34,8 @@
     var parameters = $"{nameof(searchTerm)}={searchTerm}&" +
                      $"{nameof(town)}={town}&" +
                      $"{nameof(courseType)}={courseType}&" +
+                     $"{nameof(sectors)}={sectors}&" +
+                     $"{nameof(learningMethod)}={learningMethod}&" +
                      $"{nameof(courseHours)}={courseHours}&" +
                      $"{nameof(courseStudyTime)}={courseStudyTime}&" +
                      $"{nameof(startDate)}={startDate}&" +

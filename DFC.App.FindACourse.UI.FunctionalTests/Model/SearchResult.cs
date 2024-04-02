@@ -17,7 +17,7 @@ namespace DFC.App.FindACourse.UI.FunctionalTests.Model
 
         public string Provider { get; set; }
 
-        public string CourseType { get; set; }
+        public string LearningMethod { get; set; }
 
         public string Location { get; set; }
 
