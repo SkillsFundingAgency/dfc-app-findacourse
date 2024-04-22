@@ -7,11 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="StaticContentReloadService.cs" />
+    <Compile Remove="WebhooksService.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <AdditionalFiles Include="..\stylecop.json" Link="../stylecop.json" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Azure.Search.Documents" Version="11.4.0" />
+    <PackageReference Include="DFC.Common.SharedContent.Pkg.Netcore" Version="0.1.22" />
     <PackageReference Include="DFC.FindACourseClient" Version="51.2.10" />
     <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="7.0.0">
       <PrivateAssets>all</PrivateAssets>

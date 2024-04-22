@@ -2,20 +2,20 @@
 using DFC.App.FindACourse.Data.Models;
 using DFC.App.FindACourse.Services;
 using DFC.App.FindACourse.ViewModels;
-using DFC.Compui.Cosmos.Contracts;
+using DFC.Common.SharedContent.Pkg.Netcore.Interfaces;
+using DFC.Common.SharedContent.Pkg.Netcore.Model.ContentItems.SharedHtml;
 using DFC.Content.Pkg.Netcore.Data.Models.ClientOptions;
 using DFC.Logger.AppInsights.Contracts;
-using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Net.Http.Headers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using Constants = DFC.Common.SharedContent.Pkg.Netcore.Constant.ApplicationKeys;
 using SubRegion = DFC.CompositeInterfaceModels.FindACourseClient.SubRegion;
 
 namespace DFC.App.FindACourse.Controllers
@@ -24,22 +24,32 @@ namespace DFC.App.FindACourse.Controllers
     {
         private readonly ILogService logService;
         private readonly IFindACourseService findACourseService;
-        private readonly IDocumentService<StaticContentItemModel> staticContentDocumentService;
+        private readonly ISharedContentRedisInterface sharedContentRedis;
+        private readonly IConfiguration configuration;
         private readonly CmsApiClientOptions cmsApiClientOptions;
         private readonly IMapper mapper;
+        private string status;
 
         public DetailsController(
             ILogService logService,
             IFindACourseService findACourseService,
-            IDocumentService<StaticContentItemModel> staticContentDocumentService,
+            ISharedContentRedisInterface sharedContentRedis,
+            IConfiguration config,
             CmsApiClientOptions cmsApiClientOptions,
             IMapper mapper)
         {
             this.logService = logService;
             this.findACourseService = findACourseService;
-            this.staticContentDocumentService = staticContentDocumentService;
+            this.sharedContentRedis = sharedContentRedis;
             this.cmsApiClientOptions = cmsApiClientOptions;
             this.mapper = mapper;
+            configuration = config;
+            status = configuration?.GetSection("contentMode:contentMode").Get<string>();
+
+            if (string.IsNullOrEmpty(status))
+            {
+                status = "PUBLISHED";
+            }
         }
 
         [HttpGet]
@@ -85,7 +95,10 @@ namespace DFC.App.FindACourse.Controllers
 
                 model.CourseRegions = model.CourseDetails.SubRegions != null ? TransformSubRegionsToRegions(model.CourseDetails.SubRegions) : null;
                 model.DetailsRightBarViewModel.Provider = mapper.Map<ProviderViewModel>(model.CourseDetails.ProviderDetails);
-                model.DetailsRightBarViewModel.SpeakToAnAdviser = await staticContentDocumentService.GetByIdAsync(new Guid(cmsApiClientOptions.ContentIds), "shared-content").ConfigureAwait(false);
+
+                var sharedhtml = await sharedContentRedis.GetDataAsync<SharedHtml>(Constants.SpeakToAnAdviserSharedContent, status);
+                model.DetailsRightBarViewModel.SpeakToAnAdviser = sharedhtml.Html;
+
                 model.CourseDetails.CourseWebpageLink = CompareProviderLinkWithCourseLink(model?.CourseDetails?.CourseWebpageLink, model.CourseDetails?.ProviderDetails?.Website);
                 model.CourseDetails.HasCampaignCode = paramValues.CampaignCode == "LEVEL3_FREE";
             }
@@ -130,7 +143,8 @@ namespace DFC.App.FindACourse.Controllers
                 }
 
                 model.DetailsRightBarViewModel.Provider = mapper.Map<ProviderViewModel>(model.TlevelDetails.ProviderDetails);
-                model.DetailsRightBarViewModel.SpeakToAnAdviser = await staticContentDocumentService.GetByIdAsync(new Guid(cmsApiClientOptions.ContentIds), "shared-content").ConfigureAwait(false);
+                var sharedhtml = await sharedContentRedis.GetDataAsync<SharedHtml>(Constants.SpeakToAnAdviserSharedContent, status);
+                model.DetailsRightBarViewModel.SpeakToAnAdviser = sharedhtml.Html;
             }
             catch (Exception ex)
             {
@@ -158,6 +172,7 @@ namespace DFC.App.FindACourse.Controllers
             {
                 townSearchTerm = WebUtility.HtmlEncode(paramValues.Town);
             }
+
             var searchTerm = $"{nameof(paramValues.SearchTerm)}={paramValues.SearchTerm}&" +
                              $"{nameof(paramValues.Town)}={townSearchTerm}&" +
                              $"{nameof(paramValues.LearningMethod)}={paramValues.LearningMethod}&" +

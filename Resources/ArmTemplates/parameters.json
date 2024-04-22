@@ -1,117 +1,142 @@
 {
     "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
     "contentVersion": "1.0.0.0",
-    "parameters": {
-        "resourcePrefix": {
-            "value": "__resourcePrefix__"
-        },
-        "appSharedResourceGroup": {
-            "value": "__appSharedResourceGroup__"
-        },
-        "appSharedStorageAccountName": {
-            "value": "__appSharedStorageAccountName__"
-        },
-        "aseHostingEnvironmentName": {
-            "value": "__AseServiceName__"
-        },
-        "aseResourceGroup": {
-            "value": "__aseResourceGroup__"
-        },
-        "aspTier": {
-            "value": "__aspTier__"
-        },
-        "aspInstances": {
-            "value": __aspInstances__
-        },
-        "aspSize": {
-            "value": "__aspSize__"
-        },
-        "CosmosDbResourceGroup": {
-            "value": "__appSharedResourceGroup__"
-        },
-        "cosmosDBName": {
-            "value": "__appSharedCosmosDBName__"
-        },
-        "cosmosDbKey": {
-            "value": "__appSharedCosmosPrimaryKey__"
-        },
-        "facCosmosAuditCollectionName": {
-            "value": "__facCosmosAuditCollectionName__"
-        },
-        "facCosmosStaticContentCollectionName": {
-            "value": "__facCosmosStaticContentCollectionName__"
-        },
-        "facAppDatabaseNeedsCreation": {
-            "value": __CosmosDbDatabaseDoesntExist__
-        },
-        "facAppDatabaseThroughput": {
-            "value": __facAppDatabaseThroughput__
-        },
-        "courseProviderServiceEndpoint": {
-            "value": "__courseProviderServiceEndpoint__"
-        },
-        "courseProviderServiceApiKey": {
-            "value": "__courseProviderServiceApiKey__"
-        },
-        "Environment": {
-            "value": "__ReleaseEnvironmentName__"
-        },
-        "enableAlerts": {
-            "value": __EnableAzureMonitorAlerting__
-        },
-        "CmsApiClientOptionsBaseAddress": {
-            "value": "__CmsApiClientOptionsBaseAddress__"
-        },
-        "SubscriptionSettingsFilterIncludeEventTypes3": {
-            "value": "__SubscriptionSettingsFilterIncludeEventTypes3__"
-        },
-        "SubscriptionSettingsFilterIncludeEventTypes4": {
-            "value": "__SubscriptionSettingsFilterIncludeEventTypes4__"
-        },
-        "SubscriptionSettingsEndpoint": {
-            "value": "__SubscriptionSettingsEndpoint__"
-        },
-        "SubscriptionSettingsSubscriptionServiceEndpoint": {
-            "value": "__SubscriptionSettingsSubscriptionServiceEndpoint__"
-        },
-        "ApimResourceGroup": {
-            "value": "__SharedResourceGroupName__"
-        },
-        "ApimLoggerName": {
-            "value": "__ApimLoggerName__"
-        },
-        "ApimProductInstanceName": {
-            "value": "__ApimProductInstanceName__"
-        },
-        "ApimServiceName": {
-            "value": "__ApimServiceName__"
-        },
-        "ApiName": {
-            "value": "__ApiName__"
-        },
-        "ConfigurationApplicationName": {
-            "value": "__ConfigurationApplicationName__"
-        },
-        "AzureSearchEndpointUri": {
-            "value": "__AzureSearchServiceUri__"
-        },
-        "AzureSearchSearchServiceName": {
-            "value": "__AzureSearchServiceName__"
-        },
-        "AzureSearchSearchServiceAdminAPIKey": {
-            "value": "__LocationAPISearchKey__"
-        },
-        "AzureSearchMaxNumberToSuggest": {
-            "value": "__LocationMaxNumberToSuggest__"
-        },
-        "BrandingAssetsCdn": {
-            "value": "__BrandingAssetsCdn__"
-        },
-        "workspaceName": {
-            "value": "__sharedLogAnalyticsWorkspace__"
-        },
-        "workspaceResourceGroup": {
-            "value": "__sharedLogAnalyticsResourceGroup__"
-        }
+  "parameters": {
+    "resourcePrefix": {
+      "value": "__resourcePrefix__"
+    },
+    "appSharedResourceGroup": {
+      "value": "__appSharedResourceGroup__"
+    },
+    "appSharedStorageAccountName": {
+      "value": "__appSharedStorageAccountName__"
+    },
+    "aseHostingEnvironmentName": {
+      "value": "__AseServiceName__"
+    },
+    "aseResourceGroup": {
+      "value": "__aseResourceGroup__"
+    },
+    "aspTier": {
+      "value": "__aspTier__"
+    },
+    "aspInstances": {
+      "value": __aspInstances__
+    },
+    "aspSize": {
+      "value": "__aspSize__"
+    },
+    "contentMode": {
+      "value": "__contentMode__"
+    },
+    "CosmosDbResourceGroup": {
+      "value": "__appSharedResourceGroup__"
+    },
+    "cosmosDBName": {
+      "value": "__appSharedCosmosDBName__"
+    },
+    "cosmosDbKey": {
+      "value": "__appSharedCosmosPrimaryKey__"
+    },
+    "facCosmosAuditCollectionName": {
+      "value": "__facCosmosAuditCollectionName__"
+    },
+    "facCosmosStaticContentCollectionName": {
+      "value": "__facCosmosStaticContentCollectionName__"
+    },
+    "facAppDatabaseNeedsCreation": {
+      "value": __CosmosDbDatabaseDoesntExist__
+    },
+    "facAppDatabaseThroughput": {
+      "value": __facAppDatabaseThroughput__
+    },
+    "courseProviderServiceEndpoint": {
+      "value": "__courseProviderServiceEndpoint__"
+    },
+    "courseProviderServiceApiKey": {
+      "value": "__courseProviderServiceApiKey__"
+    },
+    "Environment": {
+      "value": "__ReleaseEnvironmentName__"
+    },
+    "enableAlerts": {
+      "value": __EnableAzureMonitorAlerting__
+    },
+    "CmsApiClientOptionsBaseAddress": {
+      "value": "__CmsApiClientOptionsBaseAddress__"
+    },
+    "SubscriptionSettingsFilterIncludeEventTypes3": {
+      "value": "__SubscriptionSettingsFilterIncludeEventTypes3__"
+    },
+    "SubscriptionSettingsFilterIncludeEventTypes4": {
+      "value": "__SubscriptionSettingsFilterIncludeEventTypes4__"
+    },
+    "SubscriptionSettingsEndpoint": {
+      "value": "__SubscriptionSettingsEndpoint__"
+    },
+    "SubscriptionSettingsSubscriptionServiceEndpoint": {
+      "value": "__SubscriptionSettingsSubscriptionServiceEndpoint__"
+    },
+    "ApimResourceGroup": {
+      "value": "__SharedResourceGroupName__"
+    },
+    "ApimLoggerName": {
+      "value": "__ApimLoggerName__"
+    },
+    "ApimProductInstanceName": {
+      "value": "__ApimProductInstanceName__"
+    },
+    "ApimServiceName": {
+      "value": "__ApimServiceName__"
+    },
+    "ApiName": {
+      "value": "__ApiName__"
+    },
+    "ConfigurationApplicationName": {
+      "value": "__ConfigurationApplicationName__"
+    },
+    "AzureSearchEndpointUri": {
+      "value": "__AzureSearchServiceUri__"
+    },
+    "AzureSearchSearchServiceName": {
+      "value": "__AzureSearchServiceName__"
+    },
+    "AzureSearchSearchServiceAdminAPIKey": {
+      "value": "__LocationAPISearchKey__"
+    },
+    "AzureSearchMaxNumberToSuggest": {
+      "value": "__LocationMaxNumberToSuggest__"
+    },
+    "BrandingAssetsCdn": {
+      "value": "__BrandingAssetsCdn__"
+    },
+    "workspaceName": {
+      "value": "__sharedLogAnalyticsWorkspace__"
+    },
+    "workspaceResourceGroup": {
+      "value": "__sharedLogAnalyticsResourceGroup__"
+    },
+
+    "CmsTokenEndPointUrl": {
+      "value": "__CmsTokenEndPointUrl__"
+    },
+    "CmsGraphApiUrl": {
+      "value": "__CmsGraphApiUrl__"
+    },
+    "CmsClientId": {
+      "value": "__CmsClientId__"
+    },
+    "CmsClientSecret": {
+      "value": "__CmsClientSecret__"
+    },
+    "CmsRedisCacheConnectionString": {
+      "value": "__CmsRedisCacheConnectionString__"
+    },
+    "WorkerThreads": {
+      "value": "__WorkerThreads__"
+    },
+    "IocpThreads": {
+        "value": "__IocpThreads__"
     }
+  }
 }
