@@ -11,14 +11,11 @@
     "appSharedStorageAccountName": {
       "value": "dfcdevappsharedstr"
     },
-    "aspSize": {
-      "value": "2"
+    "appServicePlanSuffix": {
+      "value": "-migrated"
     },
-    "aspTier": {
-      "value": "Standard"
-    },
-    "aspInstances": {
-      "value": 2
+    "appServiceName": {
+      "value": "dfc-foo-app-findacourse-as-ver"
     },
     "contentMode": {
       "value": "PUBLISHED"
