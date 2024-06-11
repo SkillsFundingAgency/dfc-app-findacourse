@@ -3,6 +3,7 @@ using DFC.App.FindACourse.Data.Models;
 using DFC.App.FindACourse.Services;
 using DFC.App.FindACourse.ViewModels;
 using DFC.CompositeInterfaceModels.FindACourseClient;
+using Fac = DFC.FindACourseClient;
 using FakeItEasy;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
@@ -183,6 +184,10 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
                     DistanceValue = "15 miles",
                     CourseType = new FiltersListViewModel
                     {
+                        SelectedIds = new List<string> { "Skills Bootcamp" },
+                    },
+                    LearningMethod = new FiltersListViewModel
+                    {
                         SelectedIds = new List<string> { "Online" },
                     },
                     CourseHours = new FiltersListViewModel
@@ -229,7 +234,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
             var paramValues = new ParamValues
             {
                 Town = town,
-                CourseType = "Online",
+                LearningMethod = "Online",
                 CourseHours = "Full time",
                 CourseStudyTime = "Daytime",
             };
@@ -262,7 +267,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
             var paramValues = new ParamValues
             {
                 Town = "town",
-                CourseType = "Online",
+                LearningMethod = "Online",
                 CourseHours = "Full time",
                 CourseStudyTime = "Daytime",
                 CampaignCode = CourseController.FreeSearchCampaignCode,
@@ -319,7 +324,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
             {
                 Town = townOrPostcode,
                 Coordinates = coordinates,
-                CourseType = "Online",
+                LearningMethod = "Online",
                 CourseHours = "Full time",
                 CourseStudyTime = "Daytime",
             };
@@ -336,10 +341,17 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
                 {
                     new Course { Title = "Maths", CourseId = "1", AttendancePattern = "Online", Description = "This is a test description - over 220 chars" + new string(' ', 220) },
                 },
+                AttachedSectorIds = new List<string> { "6", "7" },
+            };
+            var sectors = new List<Fac.Sector> {
+                new Fac.Sector { Id = 1, Code = "ENVIRONMENTAL", Description = "Agriculture, environmental and animal care" },
+                new Fac.Sector { Id = 6, Code = "CREATIVE", Description = "Creative and design" },
+                new Fac.Sector { Id = 7, Code = "DIGITAL", Description = "DIGITAL" },
             };
 
             A.CallTo(() => FakeFindACoursesService.GetFilteredData(A<CourseSearchFilters>.Ignored, A<CourseSearchOrderBy>.Ignored, A<int>.Ignored)).Returns(returnedCourseData);
             A.CallTo(() => FakeViewHelper.RenderViewAsync(A<CourseController>.Ignored, A<string>.Ignored, A<BodyViewModel>.Ignored, A<bool>.Ignored)).Returns("<p>some markup</p>");
+            A.CallTo(() => FakeFindACoursesService.GetSectors()).Returns(sectors);
 
             // act
             var result = await controller.AjaxChanged(appdata).ConfigureAwait(false);
@@ -411,7 +423,7 @@ namespace DFC.App.FindACourse.UnitTests.Controllers
             var paramValues = new ParamValues
             {
                 Town = "CV1 2WT",
-                CourseType = "Online",
+                LearningMethod = "Online",
                 CourseHours = "Full time",
                 CourseStudyTime = "Daytime",
             };

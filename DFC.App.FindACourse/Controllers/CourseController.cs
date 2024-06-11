@@ -1,5 +1,4 @@
-﻿using Antlr.Runtime.Misc;
-using DFC.App.FindACourse.Data.Domain;
+﻿using DFC.App.FindACourse.Data.Domain;
 using DFC.App.FindACourse.Data.Helpers;
 using DFC.App.FindACourse.Data.Models;
 using DFC.App.FindACourse.Extensions;
@@ -11,10 +10,7 @@ using DFC.Logger.AppInsights.Contracts;
 using GdsCheckboxList.Models;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.Documents;
-using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using NHibernate.Mapping;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -202,7 +198,9 @@ namespace DFC.App.FindACourse.Controllers
                 {
                     TownOrPostcode = WebUtility.HtmlEncode(paramValues.Town),
                     DistanceValue = paramValues.Distance,
+                    LearningMethod = ConvertStringToFiltersListViewModel(paramValues.LearningMethod),
                     CourseType = ConvertStringToFiltersListViewModel(paramValues.CourseType),
+                    Sectors = ConvertStringToFiltersListViewModel(paramValues.Sectors),
                     CourseHours = ConvertStringToFiltersListViewModel(paramValues.CourseHours),
                     CourseStudyTime = ConvertStringToFiltersListViewModel(paramValues.CourseStudyTime),
                     QualificationLevels = string.IsNullOrEmpty(paramValues.QualificationLevels) ? new FiltersListViewModel() : ConvertStringToFiltersListViewModel(paramValues.QualificationLevels),
@@ -260,7 +258,9 @@ namespace DFC.App.FindACourse.Controllers
                 {
                     TempData["params"] = $"{nameof(paramValues.SearchTerm)}={paramValues.SearchTerm}&" +
                                          $"{nameof(paramValues.Town)}={townSearchTerm}&" +
+                                         $"{nameof(paramValues.LearningMethod)}={paramValues.LearningMethod}&" +
                                          $"{nameof(paramValues.CourseType)}={paramValues.CourseType}&" +
+                                         $"{nameof(paramValues.Sectors)}={paramValues.Sectors}&" +
                                          $"{nameof(paramValues.CourseHours)}={paramValues.CourseHours}&" +
                                          $"{nameof(paramValues.CourseStudyTime)}={paramValues.CourseStudyTime}&" +
                                          $"{nameof(paramValues.StartDate)}={paramValues.StartDate}&" +
@@ -334,7 +334,7 @@ namespace DFC.App.FindACourse.Controllers
                 //If the user clicked on one of the suggested locations
                 var indexOfLocationSpliter = location.IndexOf("|", StringComparison.Ordinal);
                 model.SideBar.TownOrPostcode = location.Substring(0, indexOfLocationSpliter);
-                model.SideBar.Coordinates = location[(indexOfLocationSpliter + 1) ..];
+                model.SideBar.Coordinates = location[(indexOfLocationSpliter + 1)..];
             }
 
             CourseSearchFilters courseSearchFilters = GetCourseSearchFilters(searchTerm, model.SideBar.TownOrPostcode, model.SideBar.Coordinates);
@@ -402,12 +402,6 @@ namespace DFC.App.FindACourse.Controllers
         {
             logService.LogInformation($"{nameof(this.SearchCourse)} has been called");
 
-            if (string.IsNullOrWhiteSpace(searchTerm) && string.IsNullOrWhiteSpace(townOrPostcode))
-            {
-                logService.LogInformation($"{nameof(searchTerm)} and {nameof(townOrPostcode)} is null or whitespace");
-                return Body();
-            }
-
             var model = new BodyViewModel();
             CourseSearchFilters courseSearchFilters = GetCourseSearchFilters(searchTerm, townOrPostcode, sideBarCoordinates);
 
@@ -462,10 +456,22 @@ namespace DFC.App.FindACourse.Controllers
                 sideBarViewModel.QualificationLevels.SelectedIds = model.SideBar.QualificationLevels.SelectedIds;
             }
 
+            if (model.SideBar.LearningMethod != null && model.SideBar.LearningMethod.SelectedIds.Any())
+            {
+                model.SideBar.LearningMethod = CheckCheckboxState(model.SideBar.LearningMethod, sideBarViewModel.LearningMethod);
+                sideBarViewModel.LearningMethod.SelectedIds = model.SideBar.LearningMethod.SelectedIds;
+            }
+
             if (model.SideBar.CourseType != null && model.SideBar.CourseType.SelectedIds.Any())
             {
                 model.SideBar.CourseType = CheckCheckboxState(model.SideBar.CourseType, sideBarViewModel.CourseType);
                 sideBarViewModel.CourseType.SelectedIds = model.SideBar.CourseType.SelectedIds;
+            }
+
+            if (model.SideBar.Sectors != null && model.SideBar.Sectors.SelectedIds.Any())
+            {
+                model.SideBar.Sectors = CheckCheckboxState(model.SideBar.Sectors, sideBarViewModel.Sectors);
+                sideBarViewModel.Sectors.SelectedIds = model.SideBar.Sectors.SelectedIds;
             }
 
             if (model.SideBar.CourseHours != null && model.SideBar.CourseHours.SelectedIds.Any())
@@ -498,7 +504,9 @@ namespace DFC.App.FindACourse.Controllers
 
             var town = model.SideBar.TownOrPostcode;
             var distance = model.SideBar.DistanceValue;
+            var learningMethod = model.SideBar.LearningMethod != null && model.SideBar.LearningMethod.SelectedIds?.Count > 0 ? JsonConvert.SerializeObject(model.SideBar.LearningMethod.SelectedIds) : null;
             var courseType = model.SideBar.CourseType != null && model.SideBar.CourseType.SelectedIds?.Count > 0 ? JsonConvert.SerializeObject(model.SideBar.CourseType.SelectedIds) : null;
+            var sectors = model.SideBar.Sectors != null && model.SideBar.Sectors.SelectedIds?.Count > 0 ? JsonConvert.SerializeObject(model.SideBar.Sectors.SelectedIds) : null;
             var courseHours = model.SideBar.CourseHours != null && model.SideBar.CourseHours.SelectedIds?.Count > 0 ? JsonConvert.SerializeObject(model.SideBar.CourseHours.SelectedIds) : null;
             var courseStudyTime = model.SideBar.CourseStudyTime != null && model.SideBar.CourseStudyTime?.SelectedIds.Count > 0 ? JsonConvert.SerializeObject(model.SideBar.CourseStudyTime.SelectedIds) : null;
             var startDate = model.SideBar.StartDateValue;
@@ -519,14 +527,17 @@ namespace DFC.App.FindACourse.Controllers
                 {
                     townSearchTerm = WebUtility.HtmlEncode(town).Replace("&amp;#39;", "%27");
                     townSearchTerm = townSearchTerm.Replace("&#39;", "%27");
-                } else
+                }
+                else
                 {
                     townSearchTerm = WebUtility.HtmlEncode(town);
                 }
 
                 TempData["params"] = $"{nameof(searchTerm)}={searchTerm}&" +
                                      $"{nameof(town)}={townSearchTerm}&" +
+                                     $"{nameof(learningMethod)}={learningMethod}&" +
                                      $"{nameof(courseType)}={courseType}&" +
+                                     $"{nameof(sectors)}={sectors}&" +
                                      $"{nameof(courseHours)}={courseHours}&" +
                                      $"{nameof(courseStudyTime)}={courseStudyTime}&" +
                                      $"{nameof(startDate)}={startDate}&" +
@@ -558,6 +569,7 @@ namespace DFC.App.FindACourse.Controllers
             var courseSearchFilters = new CourseSearchFilters
             {
                 CourseType = new List<CourseType> { CourseType.All },
+                LearningMethod = new List<LearningMethod> { LearningMethod.All },
                 CourseHours = new List<CourseHours> { CourseHours.All },
                 StartDate = StartDate.Anytime,
                 CourseStudyTime = new List<Fac.AttendancePattern> { Fac.AttendancePattern.Undefined },
@@ -673,7 +685,9 @@ namespace DFC.App.FindACourse.Controllers
                     TownOrPostcode = WebUtility.HtmlEncode(paramValues.Town),
                     SuggestedLocation = WebUtility.HtmlEncode(paramValues.Town),
                     DistanceValue = paramValues.Distance,
+                    LearningMethod = ConvertStringToFiltersListViewModel(paramValues.LearningMethod),
                     CourseType = ConvertStringToFiltersListViewModel(paramValues.CourseType),
+                    Sectors = ConvertStringToFiltersListViewModel(paramValues.Sectors),
                     CourseHours = ConvertStringToFiltersListViewModel(paramValues.CourseHours),
                     CourseStudyTime = ConvertStringToFiltersListViewModel(paramValues.CourseStudyTime),
                     StartDateValue = paramValues.StartDate,
@@ -757,6 +771,7 @@ namespace DFC.App.FindACourse.Controllers
             try
             {
                 model.Results = await findACourseService.GetFilteredData(newBodyViewModel.CourseSearchFilters, newBodyViewModel.CourseSearchOrderBy, model.RequestPage).ConfigureAwait(false);
+
                 foreach (var item in model.Results.Courses)
                 {
                     if (item.Description != null && item.Description.Contains("&lt;a href"))
@@ -764,6 +779,7 @@ namespace DFC.App.FindACourse.Controllers
                         item.Description = HttpUtility.HtmlDecode(item.Description);
                     }
                 }
+
                 model.UsingAutoSuggestedLocation = newBodyViewModel.UsingAutoSuggestedLocation;
                 model.SideBar.DidYouMeanLocations = newBodyViewModel.SideBar.DidYouMeanLocations;
             }
@@ -779,15 +795,30 @@ namespace DFC.App.FindACourse.Controllers
         private async Task<BodyViewModel> GenerateModelAsync(BodyViewModel model)
         {
             logService.LogInformation($"{nameof(GenerateModelAsync)} has been called");
-
             var courseTypeList = new List<CourseType>();
+            var sectorsList = new List<int>();
+            var learningMethodList = new List<LearningMethod>();
             var courseHoursList = new List<CourseHours>();
             var courseStudyTimeList = new List<Fac.AttendancePattern>();
             var selectedStartDateValue = StartDate.Anytime;
 
+            if (model.SideBar.LearningMethod != null && model.SideBar.LearningMethod.SelectedIds.Any())
+            {
+                learningMethodList = ConvertToEnumList<LearningMethod>(model.SideBar.LearningMethod.SelectedIds);
+            }
+
             if (model.SideBar.CourseType != null && model.SideBar.CourseType.SelectedIds.Any())
             {
                 courseTypeList = ConvertToEnumList<CourseType>(model.SideBar.CourseType.SelectedIds);
+            }
+
+            if (model.SideBar.Sectors != null && model.SideBar.Sectors.SelectedIds.Any())
+            {
+                sectorsList = model.SideBar.Sectors.SelectedIds
+                .Select(s => { int i; return int.TryParse(s, out i) ? i : (int?)null; })
+                .Where(i => i.HasValue)
+                    .Select(i => i.Value)
+                    .ToList();
             }
 
             if (model.SideBar.CourseHours != null && model.SideBar.CourseHours.SelectedIds.Any())
@@ -814,7 +845,9 @@ namespace DFC.App.FindACourse.Controllers
             model.CourseSearchFilters ??= new CourseSearchFilters();
 
             model.CourseSearchFilters.SearchTerm = model.CurrentSearchTerm;
+            model.CourseSearchFilters.LearningMethod = learningMethodList;
             model.CourseSearchFilters.CourseType = courseTypeList;
+            model.CourseSearchFilters.SectorIds = sectorsList;
             model.CourseSearchFilters.CourseHours = courseHoursList;
             model.CourseSearchFilters.StartDate = selectedStartDateValue;
             model.CourseSearchFilters.CourseStudyTime = courseStudyTimeList;
@@ -1009,9 +1042,12 @@ namespace DFC.App.FindACourse.Controllers
         private SideBarViewModel GetSideBarViewModel()
         {
             logService.LogInformation($"{nameof(GetSideBarViewModel)} has been called");
+
             var sideBarViewModel = new SideBarViewModel
             {
                 CourseType = MapFilter("courseType", "Course type", ListFilters.GetCourseTypeList()),
+                Sectors = MapFilter("sectors", "Sectors", GetSectorsList().Result),
+                LearningMethod = MapFilter("learningMethod", "Learning method", ListFilters.GetLearningMethodList()),
                 CourseHours = MapFilter("courseHours", "Course hours", ListFilters.GetHoursList()),
                 CourseStudyTime = MapFilter("courseStudyTime", "Course study time", ListFilters.GetStudyTimeList()),
                 QualificationLevels = MapFilter("qualificationLevels", "Course qualification level", ListFilters.GetLevelList()),
@@ -1021,6 +1057,13 @@ namespace DFC.App.FindACourse.Controllers
 
             logService.LogInformation($"{nameof(this.GetSideBarViewModel)} generated the model and ready to pass to the view");
             return sideBarViewModel;
+        }
+
+        private async Task<List<Filter>> GetSectorsList()
+        {
+            var sectors = await findACourseService.GetSectors();
+
+            return sectors?.Select(s => new Filter { Id = s.Id.ToString(), Text = s.Description }).ToList() ?? new List<Filter>();
         }
     }
 }
