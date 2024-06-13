@@ -15,7 +15,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="AutoMapper" Version="9.0.0" />
-		<PackageReference Include="DFC.Common.SharedContent.Pkg.Netcore" Version="0.1.107" />
+		<PackageReference Include="DFC.Common.SharedContent.Pkg.Netcore" Version="0.1.110" />
 		<PackageReference Include="DFC.Compui.Cosmos" Version="1.0.67" />
 		<PackageReference Include="DFC.Compui.Telemetry" Version="1.0.31" />
 		<PackageReference Include="DFC.Logger.AppInsights" Version="1.0.8" />
