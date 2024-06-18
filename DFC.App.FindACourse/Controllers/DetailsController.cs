@@ -30,7 +30,7 @@ namespace DFC.App.FindACourse.Controllers
         private readonly CmsApiClientOptions cmsApiClientOptions;
         private readonly IMapper mapper;
         private string status;
-        private double expiry = 4;
+        private double expiryInHours = 4;
 
         public DetailsController(
             ILogService logService,
@@ -56,7 +56,10 @@ namespace DFC.App.FindACourse.Controllers
             if (this.configuration != null)
             {
                 string expiryAppString = this.configuration.GetSection(ExpiryAppSettings).Get<string>();
-                this.expiry = double.Parse(string.IsNullOrEmpty(expiryAppString) ? "4" : expiryAppString);
+                if (double.TryParse(expiryAppString, out var expiryAppStringParseResult))
+                {
+                    expiryInHours = expiryAppStringParseResult;
+                }
             }
         }
 
@@ -104,7 +107,7 @@ namespace DFC.App.FindACourse.Controllers
                 model.CourseRegions = model.CourseDetails.SubRegions != null ? TransformSubRegionsToRegions(model.CourseDetails.SubRegions) : null;
                 model.DetailsRightBarViewModel.Provider = mapper.Map<ProviderViewModel>(model.CourseDetails.ProviderDetails);
 
-                var sharedhtml = await sharedContentRedis.GetDataAsyncWithExpiry<SharedHtml>(Constants.SpeakToAnAdviserSharedContent, status, expiry);
+                var sharedhtml = await sharedContentRedis.GetDataAsyncWithExpiry<SharedHtml>(Constants.SpeakToAnAdviserSharedContent, status, expiryInHours);
                 model.DetailsRightBarViewModel.SpeakToAnAdviser = sharedhtml.Html;
 
                 model.CourseDetails.CourseWebpageLink = CompareProviderLinkWithCourseLink(model?.CourseDetails?.CourseWebpageLink, model.CourseDetails?.ProviderDetails?.Website);
@@ -151,7 +154,7 @@ namespace DFC.App.FindACourse.Controllers
                 }
 
                 model.DetailsRightBarViewModel.Provider = mapper.Map<ProviderViewModel>(model.TlevelDetails.ProviderDetails);
-                var sharedhtml = await sharedContentRedis.GetDataAsyncWithExpiry<SharedHtml>(Constants.SpeakToAnAdviserSharedContent, status, expiry);
+                var sharedhtml = await sharedContentRedis.GetDataAsyncWithExpiry<SharedHtml>(Constants.SpeakToAnAdviserSharedContent, status, expiryInHours);
                 model.DetailsRightBarViewModel.SpeakToAnAdviser = sharedhtml.Html;
             }
             catch (Exception ex)
