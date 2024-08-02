@@ -78,13 +78,17 @@ namespace DFC.App.FindACourse
                 var option = new GraphQLHttpClientOptions()
                 {
                     EndPoint = new Uri(Configuration.GetSection(GraphApiUrlAppSettings).Get<string>()),
-                    HttpMessageHandler = new CmsRequestHandler(s.GetService<IHttpClientFactory>(), s.GetService<IConfiguration>(), s.GetService<IHttpContextAccessor>()),
+                    HttpMessageHandler = new CmsRequestHandler(
+                        s.GetService<IHttpClientFactory>(),
+                        s.GetService<IConfiguration>(),
+                        s.GetService<IHttpContextAccessor>(),
+                        s.GetService<IMemoryCache>()),
                 };
                 var client = new GraphQLHttpClient(option, new NewtonsoftJsonSerializer());
                 return client;
             });
 
-            services.AddSingleton<ISharedContentRedisInterfaceStrategy<SharedHtml>, SharedHtmlQueryStrategy>();
+            services.AddSingleton<ISharedContentRedisInterfaceStrategyWithRedisExpiry<SharedHtml>, SharedHtmlQueryStrategy>();
 
             services.AddSingleton<ISharedContentRedisInterfaceStrategyFactory, SharedContentRedisStrategyFactory>();
 
@@ -96,7 +100,7 @@ namespace DFC.App.FindACourse
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddAutoMapper(typeof(Startup).Assembly, typeof(DFC.FindACourseClient.FindACourseProfile).Assembly);
+            services.AddAutoMapper(typeof(Startup).Assembly, typeof(FindACourseProfile).Assembly);
             services.AddScoped<ICorrelationIdProvider, CorrelationIdProvider>();
             services.AddSingleton<IFindACourseService, FindACourseService>();
             services.AddSingleton<IFindACourseRepository, FindACourseRepository>();
