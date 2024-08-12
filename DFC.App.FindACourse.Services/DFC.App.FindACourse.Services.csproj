@@ -1,36 +1,36 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <CodeAnalysisRuleSet>../DFC.Digital.CodeAnalysis.ruleset</CodeAnalysisRuleSet>
-	  <ProjectGuid>{92efaaa8-dae4-4f6a-8b3b-234dc26227ac}</ProjectGuid>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<CodeAnalysisRuleSet>../DFC.Digital.CodeAnalysis.ruleset</CodeAnalysisRuleSet>
+		<ProjectGuid>{92efaaa8-dae4-4f6a-8b3b-234dc26227ac}</ProjectGuid>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="StaticContentReloadService.cs" />
-    <Compile Remove="WebhooksService.cs" />
-  </ItemGroup>
+	<ItemGroup>
+		<Compile Remove="StaticContentReloadService.cs" />
+		<Compile Remove="WebhooksService.cs" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <AdditionalFiles Include="..\stylecop.json" Link="../stylecop.json" />
-  </ItemGroup>
+	<ItemGroup>
+		<AdditionalFiles Include="..\stylecop.json" Link="../stylecop.json" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Azure.Search.Documents" Version="11.4.0" />
-    <PackageReference Include="DFC.Common.SharedContent.Pkg.Netcore" Version="0.1.22" />
-    <PackageReference Include="DFC.FindACourseClient" Version="51.2.10" />
-    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="7.0.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Azure.Search.Documents" Version="11.4.0" />
+		<PackageReference Include="DFC.Common.SharedContent.Pkg.Netcore" Version="0.1.107" />
+		<PackageReference Include="DFC.FindACourseClient" Version="51.2.10" />
+		<PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="7.0.0">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\DFC.App.FindACourse.Repositories\DFC.App.FindACourse.Repository.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\DFC.App.FindACourse.Repositories\DFC.App.FindACourse.Repository.csproj" />
+	</ItemGroup>
 
 </Project>
