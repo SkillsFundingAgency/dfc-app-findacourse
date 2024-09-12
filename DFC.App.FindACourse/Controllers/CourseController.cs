@@ -10,6 +10,7 @@ using DFC.Logger.AppInsights.Contracts;
 using GdsCheckboxList.Models;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Azure.Documents.SystemFunctions;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Newtonsoft.Json;
 using System;
@@ -403,7 +404,7 @@ namespace DFC.App.FindACourse.Controllers
         {
             logService.LogInformation($"{nameof(this.SearchCourse)} has been called");
 
-            if (!ContainsNoSpecialCharacters(townOrPostcode))
+            if (ContainsNoSpecialCharacters(townOrPostcode) == false)
             {
                 return BadRequest();
             }
@@ -1086,6 +1087,11 @@ namespace DFC.App.FindACourse.Controllers
 
         private static bool ContainsNoSpecialCharacters(string input)
         {
+            if (string.IsNullOrEmpty(input))
+            {
+                return true;
+            }
+
             string pattern = "^[a-zA-Z0-9 ]+$";
             return Regex.IsMatch(input, pattern);
         }
