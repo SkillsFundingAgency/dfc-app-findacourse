@@ -10,6 +10,7 @@ using DFC.Logger.AppInsights.Contracts;
 using GdsCheckboxList.Models;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -393,11 +394,6 @@ namespace DFC.App.FindACourse.Controllers
             return postcode.IsPostcode();
         }
 
-        private static string RemoveSpecialCharacters(string input)
-        {
-            return Regex.Replace(input, "[^a-zA-Z0-9 ]", "");
-        }
-
         [HttpGet]
         [Route("find-a-course/course/body/course/searchcourse")]
         [Route("find-a-course/course/body")]
@@ -407,7 +403,11 @@ namespace DFC.App.FindACourse.Controllers
         {
             logService.LogInformation($"{nameof(this.SearchCourse)} has been called");
 
-            townOrPostcode = RemoveSpecialCharacters(townOrPostcode);
+            if (!ContainsNoSpecialCharacters(townOrPostcode))
+            {
+                return BadRequest();
+            }
+            searchTerm = RemoveSpecialCharacters(searchTerm);
 
             var model = new BodyViewModel();
             CourseSearchFilters courseSearchFilters = GetCourseSearchFilters(searchTerm, townOrPostcode, sideBarCoordinates);
@@ -422,7 +422,11 @@ namespace DFC.App.FindACourse.Controllers
         {
             logService.LogInformation($"{nameof(this.SearchFreeCourse)} has been called");
 
-            townOrPostcode = RemoveSpecialCharacters(townOrPostcode);
+            if (!ContainsNoSpecialCharacters(townOrPostcode))
+            {
+                return BadRequest();
+            }
+            searchTerm = RemoveSpecialCharacters(searchTerm);
 
             var model = new BodyViewModel();
             CourseSearchFilters courseSearchFilters = GetCourseSearchFilters(searchTerm, townOrPostcode, sideBarCoordinates);
@@ -1073,6 +1077,17 @@ namespace DFC.App.FindACourse.Controllers
             var sectors = await findACourseService.GetSectors();
 
             return sectors?.Select(s => new Filter { Id = s.Id.ToString(), Text = s.Description }).ToList() ?? new List<Filter>();
+        }
+
+        private static string RemoveSpecialCharacters(string input)
+        {
+            return Regex.Replace(input, "[^a-zA-Z0-9 ]", "");
+        }
+
+        private static bool ContainsNoSpecialCharacters(string input)
+        {
+            string pattern = "^[a-zA-Z0-9 ]+$";
+            return Regex.IsMatch(input, pattern);
         }
     }
 }
