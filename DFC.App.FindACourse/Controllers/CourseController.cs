@@ -393,6 +393,11 @@ namespace DFC.App.FindACourse.Controllers
             return postcode.IsPostcode();
         }
 
+        private static string RemoveSpecialCharacters(string input)
+        {
+            return Regex.Replace(input, "[^a-zA-Z0-9 ]", "");
+        }
+
         [HttpGet]
         [Route("find-a-course/course/body/course/searchcourse")]
         [Route("find-a-course/course/body")]
@@ -401,6 +406,8 @@ namespace DFC.App.FindACourse.Controllers
         public async Task<IActionResult> SearchCourse(string searchTerm, string townOrPostcode, string sideBarCoordinates, string sideBarSuggestedLocation)
         {
             logService.LogInformation($"{nameof(this.SearchCourse)} has been called");
+
+            townOrPostcode = RemoveSpecialCharacters(townOrPostcode);
 
             var model = new BodyViewModel();
             CourseSearchFilters courseSearchFilters = GetCourseSearchFilters(searchTerm, townOrPostcode, sideBarCoordinates);
@@ -414,6 +421,8 @@ namespace DFC.App.FindACourse.Controllers
         public async Task<IActionResult> SearchFreeCourse(string searchTerm, string townOrPostcode, string sideBarCoordinates, string sideBarSuggestedLocation)
         {
             logService.LogInformation($"{nameof(this.SearchFreeCourse)} has been called");
+
+            townOrPostcode = RemoveSpecialCharacters(townOrPostcode);
 
             var model = new BodyViewModel();
             CourseSearchFilters courseSearchFilters = GetCourseSearchFilters(searchTerm, townOrPostcode, sideBarCoordinates);
