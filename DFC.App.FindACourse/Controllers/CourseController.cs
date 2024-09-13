@@ -404,8 +404,8 @@ namespace DFC.App.FindACourse.Controllers
         {
             logService.LogInformation($"{nameof(this.SearchCourse)} has been called");
 
-            if (ContainsNoSpecialCharacters(searchTerm) == false ||
-                ContainsNoSpecialCharacters(townOrPostcode) == false)
+            if (ContainsNoDisallowedCharacters(searchTerm) == false ||
+                ContainsNoDisallowedCharacters(townOrPostcode) == false)
             {
                 return BadRequest();
             }
@@ -423,8 +423,8 @@ namespace DFC.App.FindACourse.Controllers
         {
             logService.LogInformation($"{nameof(this.SearchFreeCourse)} has been called");
 
-            searchTerm = RemoveSpecialCharacters(searchTerm);
-            townOrPostcode = RemoveSpecialCharacters(townOrPostcode);
+            searchTerm = HttpUtility.HtmlEncode(RemoveDisallowedCharacters(searchTerm));
+            townOrPostcode = HttpUtility.HtmlEncode(RemoveDisallowedCharacters(townOrPostcode));
 
             var model = new BodyViewModel();
             CourseSearchFilters courseSearchFilters = GetCourseSearchFilters(searchTerm, townOrPostcode, sideBarCoordinates);
@@ -1077,19 +1077,19 @@ namespace DFC.App.FindACourse.Controllers
             return sectors?.Select(s => new Filter { Id = s.Id.ToString(), Text = s.Description }).ToList() ?? new List<Filter>();
         }
 
-        private static string RemoveSpecialCharacters(string input)
+        private static string RemoveDisallowedCharacters(string input)
         {
-            return Regex.Replace(input, "[^a-zA-Z0-9 ]", string.Empty);
+            return Regex.Replace(input, "[^a-zA-Z0-9 ,:-]", string.Empty);
         }
 
-        private static bool ContainsNoSpecialCharacters(string input)
+        private static bool ContainsNoDisallowedCharacters(string input)
         {
             if (string.IsNullOrEmpty(input))
             {
                 return true;
             }
 
-            string pattern = "^[a-zA-Z0-9 ]+$";
+            string pattern = "^[a-zA-Z0-9 ,:-]+$";
             return Regex.IsMatch(input, pattern);
         }
     }
