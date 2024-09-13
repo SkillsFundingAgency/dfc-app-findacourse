@@ -1079,7 +1079,7 @@ namespace DFC.App.FindACourse.Controllers
 
         private static string RemoveDisallowedCharacters(string input)
         {
-            return Regex.Replace(input, "[^a-zA-Z0-9 ,:-]", string.Empty);
+            return Regex.Replace(input, "[^a-zA-Z0-9 ]", string.Empty);
         }
 
         private static bool ContainsNoDisallowedCharacters(string input)
@@ -1089,7 +1089,7 @@ namespace DFC.App.FindACourse.Controllers
                 return true;
             }
 
-            string pattern = "^[a-zA-Z0-9 ,:-]+$";
+            string pattern = "^[a-zA-Z0-9 ]+$";
             return Regex.IsMatch(input, pattern);
         }
     }
