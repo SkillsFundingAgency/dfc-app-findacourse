@@ -404,11 +404,11 @@ namespace DFC.App.FindACourse.Controllers
         {
             logService.LogInformation($"{nameof(this.SearchCourse)} has been called");
 
-            if (ContainsNoSpecialCharacters(townOrPostcode) == false)
+            if (ContainsNoSpecialCharacters(searchTerm) == false ||
+                ContainsNoSpecialCharacters(townOrPostcode) == false)
             {
                 return BadRequest();
             }
-            searchTerm = RemoveSpecialCharacters(searchTerm);
 
             var model = new BodyViewModel();
             CourseSearchFilters courseSearchFilters = GetCourseSearchFilters(searchTerm, townOrPostcode, sideBarCoordinates);
@@ -423,11 +423,8 @@ namespace DFC.App.FindACourse.Controllers
         {
             logService.LogInformation($"{nameof(this.SearchFreeCourse)} has been called");
 
-            if (!ContainsNoSpecialCharacters(townOrPostcode))
-            {
-                return BadRequest();
-            }
             searchTerm = RemoveSpecialCharacters(searchTerm);
+            townOrPostcode = RemoveSpecialCharacters(townOrPostcode);
 
             var model = new BodyViewModel();
             CourseSearchFilters courseSearchFilters = GetCourseSearchFilters(searchTerm, townOrPostcode, sideBarCoordinates);
@@ -1082,7 +1079,7 @@ namespace DFC.App.FindACourse.Controllers
 
         private static string RemoveSpecialCharacters(string input)
         {
-            return Regex.Replace(input, "[^a-zA-Z0-9 ]", "");
+            return Regex.Replace(input, "[^a-zA-Z0-9 ]", string.Empty);
         }
 
         private static bool ContainsNoSpecialCharacters(string input)
