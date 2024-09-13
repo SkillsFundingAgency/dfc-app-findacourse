@@ -423,8 +423,8 @@ namespace DFC.App.FindACourse.Controllers
         {
             logService.LogInformation($"{nameof(this.SearchFreeCourse)} has been called");
 
-            searchTerm = HttpUtility.HtmlEncode(RemoveDisallowedCharacters(searchTerm));
-            townOrPostcode = HttpUtility.HtmlEncode(RemoveDisallowedCharacters(townOrPostcode));
+            searchTerm = RemoveDisallowedCharacters(searchTerm);
+            townOrPostcode = RemoveDisallowedCharacters(townOrPostcode);
 
             var model = new BodyViewModel();
             CourseSearchFilters courseSearchFilters = GetCourseSearchFilters(searchTerm, townOrPostcode, sideBarCoordinates);
