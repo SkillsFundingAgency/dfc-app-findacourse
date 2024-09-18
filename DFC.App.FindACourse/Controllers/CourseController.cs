@@ -10,6 +10,8 @@ using DFC.Logger.AppInsights.Contracts;
 using GdsCheckboxList.Models;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Azure.Documents.SystemFunctions;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -402,6 +404,12 @@ namespace DFC.App.FindACourse.Controllers
         {
             logService.LogInformation($"{nameof(this.SearchCourse)} has been called");
 
+            if (ContainsNoDisallowedCharacters(searchTerm) == false ||
+                ContainsNoDisallowedCharacters(townOrPostcode) == false)
+            {
+                return BadRequest();
+            }
+
             var model = new BodyViewModel();
             CourseSearchFilters courseSearchFilters = GetCourseSearchFilters(searchTerm, townOrPostcode, sideBarCoordinates);
 
@@ -414,6 +422,9 @@ namespace DFC.App.FindACourse.Controllers
         public async Task<IActionResult> SearchFreeCourse(string searchTerm, string townOrPostcode, string sideBarCoordinates, string sideBarSuggestedLocation)
         {
             logService.LogInformation($"{nameof(this.SearchFreeCourse)} has been called");
+
+            searchTerm = RemoveDisallowedCharacters(searchTerm);
+            townOrPostcode = RemoveDisallowedCharacters(townOrPostcode);
 
             var model = new BodyViewModel();
             CourseSearchFilters courseSearchFilters = GetCourseSearchFilters(searchTerm, townOrPostcode, sideBarCoordinates);
@@ -1064,6 +1075,22 @@ namespace DFC.App.FindACourse.Controllers
             var sectors = await findACourseService.GetSectors();
 
             return sectors?.Select(s => new Filter { Id = s.Id.ToString(), Text = s.Description }).ToList() ?? new List<Filter>();
+        }
+
+        private static string RemoveDisallowedCharacters(string input)
+        {
+            return Regex.Replace(input, "[^a-zA-Z0-9 ]", string.Empty);
+        }
+
+        private static bool ContainsNoDisallowedCharacters(string input)
+        {
+            if (string.IsNullOrEmpty(input))
+            {
+                return true;
+            }
+
+            string pattern = "^[a-zA-Z0-9 ]+$";
+            return Regex.IsMatch(input, pattern);
         }
     }
 }
