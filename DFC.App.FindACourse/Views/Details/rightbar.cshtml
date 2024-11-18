@@ -27,14 +27,6 @@
             </li>
         }
     </ul>
-    @if (Model.Provider.LearnerSatisfaction > 0 && Model.Provider.EmployerSatisfaction > 0)
-    {
-        <h2 class="govuk-heading-m">Provider performance information</h2>
-        <p class="govuk-body govuk-!-font-size-48 govuk-!-font-weight-bold govuk-!-margin-bottom-2">@Model.Provider.LearnerSatisfaction</p>
-        <p class="govuk-body-s govuk-!-font-weight-bold">out of 10 for learner satisfaction</p>
-        <p class="govuk-body govuk-!-font-size-48 govuk-!-font-weight-bold govuk-!-margin-bottom-2">@Model.Provider.EmployerSatisfaction</p>
-        <p class="govuk-body-s govuk-!-font-weight-bold">out of 10 for employer satisfaction</p>
-    }
 </div>
 
 @if (Model.SpeakToAnAdviser != null)

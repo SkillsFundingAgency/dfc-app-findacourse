@@ -12,13 +12,5 @@ namespace DFC.App.FindACourse.ViewModels
         public string EmailAddress { get; set; }
 
         public string PhoneNumber { get; set; }
-
-        public double EmployerSatisfaction { get; set; }
-
-        public bool EmployerSatisfactionSpecified { get; set; }
-
-        public double LearnerSatisfaction { get; set; }
-
-        public bool LearnerSatisfactionSpecified { get; set; }
     }
 }
