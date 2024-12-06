@@ -1,6 +1,9 @@
-# Digital First Careers - Find a Course App
+# National Careers Service - Find a Course
 
 This project provides a Find A Course app, which is a part of the Composite UI (Shell application).
+
+> [!IMPORTANT]
+> Following a successful release into Production, this repository has now been migrated into Azure DevOps. For all future changes, please visit ADO [here](https://sfa-gov-uk.visualstudio.com/National%20Careers%20Service%20(NCS)/_git/dfe-ncs-web-fac). 
 
 Details of the Composite UI application may be found here https://github.com/SkillsFundingAgency/dfc-composite-shell
 
